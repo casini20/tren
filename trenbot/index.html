@@ -159,16 +159,16 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
   <nav class="sidebar" id="sidebar">
     <div class="s-logo">tren<span>.</span></div>
     <div class="s-nav">
-      <a class="s-item" href="https://trenai.vercel.app/live-signals"><span class="s-ic"><span class="live-dot-nav"></span></span><span>Live Signals</span></a>
-      <a class="s-item" href="https://trenai.vercel.app/overview"><span class="s-ic">📊</span><span>Overview</span></a>
-      <a class="s-item" href="https://trenai.vercel.app/signals"><span class="s-ic">⚡</span><span>Recent Trades</span></a>
-      <a class="s-item" href="https://trenai.vercel.app/journal"><span class="s-ic">📓</span><span>Journal</span></a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/live-signals')" href="#"><span class="s-ic"><span class="live-dot-nav"></span></span><span>Live Signals</span></a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/overview')" href="#"><span class="s-ic">📊</span><span>Overview</span></a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/signals')" href="#"><span class="s-ic">⚡</span><span>Recent Trades</span></a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/journal')" href="#"><span class="s-ic">📓</span><span>Journal</span></a>
       <div class="s-divider"></div>
-      <a class="s-item gold" href="https://trenai.vercel.app/upgrade"><span class="s-ic">👑</span><span>Upgrade</span><span class="s-badge gd">PRO</span></a>
-      <a class="s-item on" href="https://trenai.vercel.app/trenbot"><span class="s-ic">🤖</span><span>TrenBot</span></a>
-      <a class="s-item" href="https://trenai.vercel.app/autosignals"><span class="s-ic">⚡</span><span>AutoSignals</span></a>
-      <a class="s-item" href="https://trenai.vercel.app/indicator"><span class="s-ic">📈</span><span>Indicator</span></a>
-      <a class="s-item" href="https://trenai.vercel.app/settings"><span class="s-ic">⚙</span><span>Settings</span></a>
+      <a class="s-item gold" onclick="navTo('https://trenai.vercel.app/upgrade')" href="#"><span class="s-ic">👑</span><span>Upgrade</span><span class="s-badge gd">PRO</span></a>
+      <a class="s-item on" onclick="navTo('https://trenai.vercel.app/trenbot')" href="#"><span class="s-ic">🤖</span><span>TrenBot</span></a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/autosignals')" href="#"><span class="s-ic">⚡</span><span>AutoSignals</span></a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/indicator')" href="#"><span class="s-ic">📈</span><span>Indicator</span></a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/settings')" href="#"><span class="s-ic">⚙</span><span>Settings</span></a>
     </div>
     <div class="s-bot">
       <div class="trial-card" id="trial-card">
@@ -369,6 +369,15 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 </div><!-- end .shell -->
 
 <script>
+
+function navTo(url){
+  try{
+    const s=localStorage.getItem('tren_session');
+    if(s){const encoded=encodeURIComponent(btoa(s));url+=(url.includes('?')?'&':'?')+'_t='+encoded;}
+  }catch(e){}
+  window.location.href=url;
+}
+
 // ── CORE ──────────────────────────────────────────────────────────
 const SUPABASE_AUTH_URL='https://sjntsmzbiqvtstvofcnx.supabase.co';
 const SUPABASE_AUTH_KEY='sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg';
