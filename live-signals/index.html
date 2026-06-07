@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Tren – Live Signals</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="prefetch" href="https://tren.framer.ai/overview">
-<link rel="prefetch" href="https://tren.framer.ai/signals">
-<link rel="prefetch" href="https://tren.framer.ai/journal">
-<link rel="prefetch" href="https://tren.framer.ai/settings">
-<link rel="prefetch" href="https://tren.framer.ai/upgrade">
-<link rel="prefetch" href="https://tren.framer.ai/trenbot">
-<link rel="prefetch" href="https://tren.framer.ai/autosignals">
-<link rel="prefetch" href="https://tren.framer.ai/indicator">
+<link rel="prefetch" href="https://trenai.vercel.app/overview">
+<link rel="prefetch" href="https://trenai.vercel.app/signals">
+<link rel="prefetch" href="https://trenai.vercel.app/journal">
+<link rel="prefetch" href="https://trenai.vercel.app/settings">
+<link rel="prefetch" href="https://trenai.vercel.app/upgrade">
+<link rel="prefetch" href="https://trenai.vercel.app/trenbot">
+<link rel="prefetch" href="https://trenai.vercel.app/autosignals">
+<link rel="prefetch" href="https://trenai.vercel.app/indicator">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
@@ -192,34 +192,34 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
   <nav class="sidebar" id="sidebar">
     <div class="s-logo">tren<span>.</span></div>
     <div class="s-nav">
-      <a class="s-item on" onclick="navTo('https://tren.framer.ai/live-signals')">
+      <a class="s-item on" onclick="navTo('https://trenai.vercel.app/live-signals')">
         <span class="s-ic"><span class="live-dot-nav"></span></span>
         <span>Live Signals</span>
       </a>
-      <a class="s-item" onclick="navTo('https://tren.framer.ai/overview')">
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/overview')">
         <span class="s-ic">📊</span><span>Overview</span>
       </a>
-      <a class="s-item" onclick="navTo('https://tren.framer.ai/signals')">
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/signals')">
         <span class="s-ic">⚡</span><span>Recent Trades</span>
       </a>
-      <a class="s-item" onclick="navTo('https://tren.framer.ai/journal')">
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/journal')">
         <span class="s-ic">📓</span><span>Journal</span>
       </a>
       <div class="s-divider"></div>
-      <a class="s-item gold" onclick="navTo('https://tren.framer.ai/upgrade')">
+      <a class="s-item gold" onclick="navTo('https://trenai.vercel.app/upgrade')">
         <span class="s-ic">👑</span><span>Upgrade</span>
         <span class="s-badge gd">PRO</span>
       </a>
-      <a class="s-item" onclick="navTo('https://tren.framer.ai/trenbot')">
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/trenbot')">
         <span class="s-ic">🤖</span><span>TrenBot</span>
       </a>
-      <a class="s-item" onclick="navTo('https://tren.framer.ai/autosignals')">
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/autosignals')">
         <span class="s-ic">⚡</span><span>AutoSignals</span>
       </a>
-      <a class="s-item" onclick="navTo('https://tren.framer.ai/indicator')">
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/indicator')">
         <span class="s-ic">📈</span><span>Indicator</span>
       </a>
-      <a class="s-item" onclick="navTo('https://tren.framer.ai/settings')">
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/settings')">
         <span class="s-ic">⚙</span><span>Settings</span>
       </a>
     </div>
@@ -227,9 +227,9 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
       <div class="trial-card" id="trial-card">
         <h4>🔥 <span id="trial-days-left">7</span> Days Left</h4>
         <p>Your free trial ends soon. Upgrade to keep full access.</p>
-        <button class="up-mini" onclick="window.open('https://tren.framer.ai/checkout-trenbot','_blank')">Upgrade Now</button>
+        <button class="up-mini" onclick="window.open('https://trenai.vercel.app/checkout-trenbot','_blank')">Upgrade Now</button>
       </div>
-      <a class="u-row" onclick="navTo('https://tren.framer.ai/settings')">
+      <a class="u-row" onclick="navTo('https://trenai.vercel.app/settings')">
         <div class="u-av" id="s-av">T</div>
         <div class="u-info">
           <div class="u-name" id="s-nm">Trader</div>
@@ -266,7 +266,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
               <div class="prof-menu-name" id="prof-menu-name">Trader</div>
               <div class="prof-menu-email" id="prof-menu-email">—</div>
             </div>
-            <a class="prof-menu-item" onclick="navTo('https://tren.framer.ai/settings')">👤 Profile settings</a>
+            <a class="prof-menu-item" onclick="navTo('https://trenai.vercel.app/settings')">👤 Profile settings</a>
             <div class="prof-menu-item danger" onclick="doLogout()">→ Sign out</div>
           </div>
         </div>
@@ -329,7 +329,7 @@ function navTo(url){
 }
 
 let _session=window.__trenSession||(()=>{try{const r=sessionStorage.getItem(SESSION_KEY);return r?JSON.parse(r):null;}catch{return null;}})();
-if(!(_session&&_session.access_token)){window.location.href='https://tren.framer.ai/login-page';}
+if(!(_session&&_session.access_token)){window.location.href='https://trenai.vercel.app/login-page';}
 
 let _subData=null,_autoSubData=null,_autoSignalsSubData=null;
 try{_subData=JSON.parse(sessionStorage.getItem('tren_sub')||'null');}catch(e){}
@@ -352,7 +352,7 @@ async function doLogout(){
   sessionStorage.removeItem(SESSION_KEY);
   ['tren_sub','tren_prefs','tren_auto_sub','tren_autosignals_sub','tren_trenbot_sub'].forEach(k=>sessionStorage.removeItem(k));
   try{fetch(`${SUPABASE_AUTH_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':'Bearer '+tok}}).catch(()=>{});}catch(e){}
-  window.location.href='https://tren.framer.ai/login-page';
+  window.location.href='https://trenai.vercel.app/login-page';
 }
 
 function initUserInfo(){
