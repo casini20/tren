@@ -116,7 +116,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .blur-wrap{position:relative;}
 .blur-content{transition:filter .4s ease,opacity .4s ease;}
 .blur-wrap.locked .blur-content{filter:blur(20px) brightness(0.25);pointer-events:none;user-select:none;}
-.blur-overlay{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;pointer-events:auto;}
+.blur-overlay{position:fixed;top:0;left:var(--sw);right:0;bottom:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;pointer-events:auto;}
 .blur-box{background:linear-gradient(145deg,#0d1628,#080e1a);border:1px solid rgba(245,158,11,.35);border-radius:22px;padding:2.4rem 2.2rem;max-width:420px;width:92%;box-shadow:0 0 80px rgba(245,158,11,.15),0 20px 60px rgba(0,0,0,.5);position:relative;overflow:hidden;}
 .blur-box::before{content:'';position:absolute;top:-70px;left:50%;transform:translateX(-50%);width:220px;height:220px;background:radial-gradient(circle,rgba(245,158,11,.18),transparent 70%);pointer-events:none;}
 .blur-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(245,158,11,.13);border:1px solid rgba(245,158,11,.3);color:var(--gold);font-size:11px;font-weight:700;padding:4px 13px;border-radius:20px;margin-bottom:1.3rem;letter-spacing:.6px;text-transform:uppercase;}
