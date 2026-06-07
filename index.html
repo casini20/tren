@@ -513,7 +513,7 @@ footer { padding: 2rem 2.5rem; margin: 2rem auto; }
 <nav>
   <a href="/" class="logo">tren<span>.</span></a>
   <div class="nav-links">
-    <a href="https://trenai.vercel.app/overview">Dashboard</a>
+    <a href="#" onclick="goToDashboard(event)">Dashboard</a>
     <a href="#pricing">Pricing</a>
     <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
     <a href="https://trenai.vercel.app/contact">Contact</a>
@@ -606,7 +606,7 @@ footer { padding: 2rem 2.5rem; margin: 2rem auto; }
       </div>
       <div class="stats-footer">
         <div class="stat-updated" id="stat-updated-time">Fetching…</div>
-        <a href="https://trenai.vercel.app/overview" class="dashboard-link" target="_blank">View full dashboard</a>
+        <a href="#" onclick="goToDashboard(event)" class="dashboard-link" target="_blank">View full dashboard</a>
       </div>
     </div>
   </div>
@@ -1365,6 +1365,16 @@ fetchBentoTrades();
 setInterval(fetchHeroFeed, 30000);
 setInterval(fetchLiveStats, 60000);
 setInterval(fetchBentoTrades, 60000);
+</script>
+<script>
+  function goToDashboard(e) {
+    e.preventDefault();
+    if (sessionStorage.getItem('tren_session')) {
+      window.location.href = '/overview';
+    } else {
+      window.location.href = '/login-page';
+    }
+  }
 </script>
 </body>
 </html>

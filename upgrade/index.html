@@ -168,7 +168,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <span class="s-ic"><span class="live-dot-nav"></span></span>
         <span>Live Signals</span>
       </a>
-      <a class="s-item" href="https://trenai.vercel.app/overview">
+      <a class="s-item" href="#" onclick="goToDashboard(event)">
         <span class="s-ic">📊</span><span>Overview</span>
       </a>
       <a class="s-item" href="https://trenai.vercel.app/signals">
@@ -454,6 +454,16 @@ function updatePrices(){
 // ── INIT ──────────────────────────────────────────────────────────
 initUserInfo();
 initSubUI();
+</script>
+<script>
+  function goToDashboard(e) {
+    e.preventDefault();
+    if (sessionStorage.getItem('tren_session')) {
+      window.location.href = '/overview';
+    } else {
+      window.location.href = '/login-page';
+    }
+  }
 </script>
 </body>
 </html>

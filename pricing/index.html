@@ -717,7 +717,7 @@ footer {
 <nav>
   <a href="#" class="logo">tren<span>.</span></a>
   <div class="nav-links">
-    <a href="https://trenai.vercel.app/overview">Dashboard</a>
+    <a href="#" onclick="goToDashboard(event)">Dashboard</a>
     <a href="https://trenai.vercel.app/pricing">Pricing</a>
     <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
     <a href="https://trenai.vercel.app/contact">Contact</a>
@@ -1002,5 +1002,15 @@ document.querySelectorAll('.animate-in').forEach(el => {
 updateUpgradePrices();
 </script>
 
+<script>
+  function goToDashboard(e) {
+    e.preventDefault();
+    if (sessionStorage.getItem('tren_session')) {
+      window.location.href = '/overview';
+    } else {
+      window.location.href = '/login-page';
+    }
+  }
+</script>
 </body>
 </html>

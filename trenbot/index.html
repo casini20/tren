@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Tren – Live Signals</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="prefetch" href="https://trenai.vercel.app/overview">
+<link rel="prefetch" href="#" onclick="goToDashboard(event)">
 <link rel="prefetch" href="https://trenai.vercel.app/signals">
 <link rel="prefetch" href="https://trenai.vercel.app/journal">
 <link rel="prefetch" href="https://trenai.vercel.app/settings">
@@ -519,6 +519,16 @@ if(!lhc||(Date.now()-parseInt(lhc))>86400000){
 }
 loadLiveTrades();
 setInterval(loadLiveTrades,10000);
+</script>
+<script>
+  function goToDashboard(e) {
+    e.preventDefault();
+    if (sessionStorage.getItem('tren_session')) {
+      window.location.href = '/overview';
+    } else {
+      window.location.href = '/login-page';
+    }
+  }
 </script>
 </body>
 </html>
