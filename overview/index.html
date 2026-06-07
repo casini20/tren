@@ -353,7 +353,7 @@ function navTo(url){
 }
 
 let _session=window.__trenSession||(()=>{try{const r=sessionStorage.getItem(SESSION_KEY);return r?JSON.parse(r):null;}catch{return null;}})();
-if(!(_session&&_session.access_token)){window.location.href='https://trenai.vercel.app/login-page';}
+
 
 let _subData=null,_autoSubData=null,_autoSignalsSubData=null;
 try{_subData=JSON.parse(sessionStorage.getItem('tren_sub')||'null');}catch(e){}
