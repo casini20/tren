@@ -1,0 +1,1370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tren — Your Edge Starts Here</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:   #04080f;
+  --bg2:  #080e1a;
+  --bg3:  #0c1525;
+  --bg4:  #101d30;
+  --border: rgba(255,255,255,0.07);
+  --border-b: rgba(255,255,255,0.14);
+  --accent: #2563eb;
+  --accent-l: #3b82f6;
+  --green: #10b981;
+  --green-bg: rgba(16,185,129,0.1);
+  --red: #ef4444;
+  --red-bg: rgba(239,68,68,0.1);
+  --amber: #f59e0b;
+  --text: #f0f4ff;
+  --ts: rgba(240,244,255,0.55);
+  --tm: rgba(240,244,255,0.3);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px; line-height: 1.6;
+  overflow-x: hidden;
+}
+
+.bg-layer {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 50% at 75% 5%, rgba(37,99,235,0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 15% 85%, rgba(16,185,129,0.07) 0%, transparent 55%),
+    var(--bg);
+}
+.grid-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.022;
+  background-image: linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.page { position: relative; z-index: 1; padding-top: 60px; }
+
+/* NAV */
+nav {
+  width: 100vw; margin-left: calc(-50vw + 50%);
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.1rem 3rem; border-bottom: 1px solid var(--border);
+  position: fixed; top: 0; left: 0; right: 0;
+  background: rgba(4,8,15,0.95); backdrop-filter: blur(20px);
+  z-index: 99999; box-shadow: 0 4px 30px rgba(0,0,0,0.4);
+}
+.logo { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 21px; font-weight: 800; letter-spacing: -0.03em; color: var(--text); text-decoration: none; }
+.logo span { color: var(--accent-l); }
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-links a { font-size: 13px; font-weight: 500; color: var(--ts); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+a.nav-cta { background: var(--accent); color: rgb(255,255,255) !important; font-size: 13px; font-weight: 500; padding: 8px 18px; border-radius: 6px; text-decoration: none; border: 1px solid var(--accent); transition: box-shadow 0.3s, transform 0.15s; }
+a.nav-cta:hover { box-shadow: 0 0 20px rgba(37,99,235,0.5), 0 0 40px rgba(37,99,235,0.3); transform: translateY(-1px); }
+
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; }
+.hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+.mobile-menu { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; gap: 0; background: rgba(4,8,15,0.95); backdrop-filter: blur(20px); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1rem 3rem; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-size: 14px; font-weight: 500; color: var(--ts); text-decoration: none; padding: 12px 0; border-bottom: 1px solid var(--border); transition: color 0.2s; }
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu a:hover { color: var(--text); }
+
+/* SHARED */
+.section { max-width: 1160px; margin: 0 auto; padding: 5rem 2.5rem; }
+.section-sm { max-width: 1160px; margin: 0 auto; padding: 3.5rem 2.5rem; }
+.tag { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 1.25rem; }
+.tag-green { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); color: #34d399; }
+.tag-blue  { background: rgba(37,99,235,0.1);   border: 1px solid rgba(37,99,235,0.25); color: var(--accent-l); }
+.tag-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+h2.section-title { font-family: 'Plus Jakarta Sans', sans-serif; font-size: clamp(28px, 4vw, 42px); font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; color: var(--text); margin-bottom: 0.75rem; }
+h2.section-title em { font-style: normal; color: var(--accent-l); }
+.section-sub { font-size: 16px; color: var(--ts); line-height: 1.7; max-width: 520px; margin-bottom: 2.5rem; }
+.btn-primary { display: inline-block; background: var(--accent); color: #fff; font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 500; padding: 12px 26px; border-radius: 8px; border: none; text-decoration: none; cursor: pointer; transition: background 0.2s, transform 0.15s, box-shadow 0.2s; }
+.btn-primary:hover { background: var(--accent-l); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,0.3); }
+.btn-ghost { display: inline-block; background: transparent; color: var(--ts); font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 500; padding: 12px 22px; border-radius: 8px; border: 1px solid var(--border-b); text-decoration: none; cursor: pointer; transition: color 0.2s, border-color 0.2s, transform 0.15s; }
+.btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.25); transform: translateY(-2px); }
+
+/* HERO */
+.hero { display: grid; grid-template-columns: 1fr 1fr; gap: 3.5rem; align-items: center; padding: 3rem 2.5rem 4rem; max-width: 1160px; margin: 0 auto; }
+.hero-left { animation: fadeUp 0.7s ease both; }
+.hero-right { animation: fadeUp 0.7s 0.15s ease both; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+h1 { font-size: clamp(38px, 5.5vw, 62px); font-weight: 800; line-height: 1.1; letter-spacing: -0.035em; color: var(--text); margin-bottom: 1.25rem; }
+h1 em { font-style: normal; color: var(--accent-l); }
+.hero-sub { font-size: 16px; color: var(--ts); max-width: 430px; line-height: 1.75; margin-bottom: 2rem; }
+.cta-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-bottom: 2rem; }
+.avatars { display: flex; }
+.av { width: 28px; height: 28px; border-radius: 50%; border: 2px solid var(--bg); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 600; margin-left: -8px; flex-shrink: 0; }
+.avatars .av:first-child { margin-left: 0; }
+.social-row { display: flex; align-items: center; gap: 10px; }
+.social-text { font-size: 13px; color: var(--ts); }
+.social-text strong { color: var(--text); font-weight: 500; }
+.signal-panel { background: var(--bg2); border: 1px solid var(--border-b); border-radius: 14px; overflow: hidden; }
+.panel-header { background: var(--bg3); padding: 11px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.panel-title { font-size: 11px; font-weight: 500; color: var(--ts); letter-spacing: 0.07em; text-transform: uppercase; }
+.live-badge { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--green); font-weight: 500; }
+.live-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); animation: pulse 1.5s infinite; }
+.signal-list { padding: 10px; display: flex; flex-direction: column; gap: 7px; }
+.sig-card { background: var(--bg3); border: 1px solid var(--border); border-radius: 9px; padding: 11px 13px; display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: start; }
+.sig-card.win  { border-left: 2px solid var(--green); }
+.sig-card.loss { border-left: 2px solid var(--red); }
+.sig-top { display: flex; align-items: center; gap: 7px; margin-bottom: 6px; }
+.sig-market { font-size: 13px; font-weight: 700; color: var(--text); }
+.sig-dir { font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 3px; letter-spacing: 0.05em; }
+.sig-dir.short { background: var(--red-bg); color: var(--red); }
+.sig-dir.long  { background: var(--green-bg); color: var(--green); }
+.sig-date { font-size: 10px; color: var(--tm); }
+.sig-data { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; }
+.sig-field-label { font-size: 9px; color: var(--tm); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 1px; }
+.sig-field-val { font-size: 11px; font-weight: 500; color: var(--text); font-variant-numeric: tabular-nums; }
+.sig-result { text-align: right; }
+.sig-pnl { font-size: 15px; font-weight: 700; }
+.sig-pnl.pos { color: var(--green); }
+.sig-pnl.neg { color: var(--red); }
+.sig-ticks { font-size: 10px; color: var(--tm); margin-top: 2px; }
+.delivery-strip { border-top: 1px solid var(--border); padding: 11px 16px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--ts); }
+.d-icon { width: 22px; height: 22px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+.d-discord { background: rgba(88,101,242,0.2); }
+.d-tg      { background: rgba(37,99,235,0.15); }
+.empty-state { padding: 2rem; text-align: center; color: var(--tm); font-size: 13px; }
+
+/* STATS */
+.stats-wrapper { padding: 0 2.5rem; max-width: 1160px; margin: 0 auto; }
+.stats-card { position: relative; border-radius: 18px; padding: 1.5px; background: linear-gradient(135deg, rgba(37,99,235,0.55) 0%, rgba(16,185,129,0.3) 50%, rgba(37,99,235,0.15) 100%); }
+.stats-card-inner { background: #060c18; border-radius: 17px; overflow: hidden; }
+.stats-topbar { display: flex; align-items: center; justify-content: space-between; padding: 11px 22px; border-bottom: 1px solid rgba(255,255,255,0.055); }
+.stats-live-indicator { display: flex; align-items: center; gap: 7px; font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--green); }
+.stats-live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 7px var(--green); animation: pulse 1.8s ease-in-out infinite; }
+.stats-period { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(240,244,255,0.22); letter-spacing: 0.08em; }
+.stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+.stat-cell { padding: 2rem 2rem 1.75rem; position: relative; transition: background 0.2s; }
+.stat-cell:hover { background: rgba(255,255,255,0.015); }
+.stat-cell + .stat-cell { border-left: 1px solid rgba(255,255,255,0.055); }
+.stat-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.13em; text-transform: uppercase; color: rgba(240,244,255,0.28); margin-bottom: 14px; }
+.stat-value { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 12px; }
+.stat-value.g { color: var(--green); }
+.stat-value.r { color: var(--red); }
+.stat-note { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(240,244,255,0.22); letter-spacing: 0.05em; margin-bottom: 14px; }
+.stat-bar-track { height: 2px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; }
+.stat-bar-fill { height: 100%; border-radius: 2px; transition: width 0.9s cubic-bezier(0.4,0,0.2,1); }
+.stat-bar-fill.green { background: var(--green); opacity: 0.65; }
+.stat-bar-fill.blue  { background: var(--accent-l); opacity: 0.65; }
+.stats-footer { border-top: 1px solid rgba(255,255,255,0.055); padding: 11px 22px; display: flex; align-items: center; justify-content: space-between; }
+.stat-updated { font-family: 'DM Mono', monospace; font-size: 10px; color: rgba(240,244,255,0.18); letter-spacing: 0.06em; }
+.dashboard-link { display: inline-flex; align-items: center; gap: 5px; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; color: var(--accent-l); text-decoration: none; transition: color 0.2s; }
+.dashboard-link:hover { color: #93c5fd; }
+.dashboard-link::after { content: '→'; font-size: 12px; }
+.stat-loading { animation: shimmer 1.4s ease infinite; color: rgba(240,244,255,0.15) !important; }
+@keyframes shimmer { 0%{opacity:.3} 50%{opacity:.65} 100%{opacity:.3} }
+
+/* HOW IT WORKS */
+.how-paths-v3 { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 1rem; max-width: 1100px; margin: 0 auto; align-items: start; }
+.hv2-card { border-radius: 20px; padding: 1.75rem 1.75rem 1.5rem; display: flex; flex-direction: column; }
+.hv2-blue { background: linear-gradient(160deg, #0d1b35 0%, #080e1a 100%); border: 1px solid rgba(37,99,235,0.4); box-shadow: 0 0 50px rgba(37,99,235,0.08); }
+.hv2-green { background: linear-gradient(160deg, #071a12 0%, #040e09 100%); border: 2px solid rgba(16,185,129,0.5); box-shadow: 0 0 50px rgba(16,185,129,0.1); }
+.hv2-gold { background: linear-gradient(160deg, #1a1204 0%, #0f0d07 100%); border: 1px solid rgba(245,158,11,0.45); box-shadow: 0 0 50px rgba(245,158,11,0.08); }
+.hv2-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 8px; }
+.hv2-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; padding: 5px 13px; border-radius: 100px; }
+.hv2-badge-blue { background: rgba(37,99,235,0.15); color: #60a5fa; border: 1px solid rgba(37,99,235,0.3); }
+.hv2-badge-green { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.35); }
+.hv2-badge-gold { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.35); }
+.hv2-flow { position: relative; flex: 1; margin-bottom: 2rem; }
+.hv2-flow svg { display: block; width: 100%; aspect-ratio: 300 / 400; overflow: visible; }
+.hv2-btn { display: block; text-align: center; font-size: 13px; font-weight: 600; padding: 13px 20px; border-radius: 10px; text-decoration: none; cursor: pointer; transition: transform 0.15s, box-shadow 0.2s; border: none; width: 100%; }
+.hv2-btn-blue { background: var(--accent); color: #fff; box-shadow: 0 4px 20px rgba(37,99,235,0.3); }
+.hv2-btn-blue:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(37,99,235,0.45); }
+.hv2-btn-green { background: linear-gradient(135deg, #10b981, #059669); color: #fff; box-shadow: 0 4px 20px rgba(16,185,129,0.3); }
+.hv2-btn-green:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(16,185,129,0.45); }
+.hv2-btn-gold { background: linear-gradient(135deg, #f59e0b, #ea580c); color: #fff; box-shadow: 0 4px 20px rgba(245,158,11,0.35); }
+.hv2-btn-gold:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(245,158,11,0.5); }
+.hv2-or { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 0 0.1rem; margin-top: 90px; }
+.hv2-or-line { width: 1px; flex: 1; min-height: 50px; background: linear-gradient(to bottom, transparent, var(--border-b), transparent); }
+.hv2-or-text { font-size: 10px; font-weight: 700; color: var(--tm); text-transform: uppercase; letter-spacing: 0.15em; }
+
+/* PERFORMANCE */
+#results { max-width: 1160px; margin: 0 auto; padding: 5rem 2.5rem; }
+.perf-intro { display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; margin-bottom: 2.5rem; flex-wrap: wrap; }
+.perf-intro-right { font-size: 12px; color: var(--tm); max-width: 280px; text-align: right; line-height: 1.7; padding-bottom: 4px; }
+.perf-intro-right a { color: var(--accent-l); text-decoration: none; }
+.perf-intro-right a:hover { text-decoration: underline; }
+.bento { display: grid; grid-template-columns: repeat(12, 1fr); grid-auto-rows: auto; gap: 12px; }
+.bento-chart { grid-column: span 8; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
+.bento-chart-header { display: flex; align-items: center; justify-content: space-between; }
+.bento-chart-title { font-size: 13px; font-weight: 600; color: var(--text); }
+.bento-chart-sub { font-size: 11px; color: var(--tm); }
+.equity-svg { width: 100%; }
+.bento-streak { grid-column: span 4; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem 1.5rem; display: flex; flex-direction: column; gap: 10px; }
+.streak-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.streak-row { display: flex; align-items: center; gap: 3px; flex-wrap: wrap; }
+.streak-pip { width: 18px; height: 18px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: 700; }
+.streak-pip.w { background: var(--green-bg); color: var(--green); }
+.streak-pip.l { background: var(--red-bg); color: var(--red); }
+.streak-legend { display: flex; gap: 12px; margin-top: 4px; }
+.streak-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--tm); }
+.streak-legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+.bento-trade { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 1.25rem; position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 12px; transition: border-color 0.2s, transform 0.15s; }
+.bento-trade:hover { border-color: var(--border-b); transform: translateY(-2px); }
+.bento-trade.win  { border-top: 2px solid var(--green); }
+.bento-trade.loss { border-top: 2px solid var(--red); }
+.bento-trade.win::after  { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 40px; background: linear-gradient(to bottom, rgba(16,185,129,0.06), transparent); pointer-events: none; }
+.bento-trade.loss::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 40px; background: linear-gradient(to bottom, rgba(239,68,68,0.06), transparent); pointer-events: none; }
+.bento-trade-header { display: flex; align-items: center; justify-content: space-between; }
+.bt-market { font-size: 15px; font-weight: 700; color: var(--text); }
+.bt-dir { font-size: 9px; font-weight: 700; letter-spacing: 0.07em; padding: 3px 8px; border-radius: 4px; text-transform: uppercase; }
+.bt-dir.long  { background: var(--green-bg); color: var(--green); }
+.bt-dir.short { background: var(--red-bg); color: var(--red); }
+.bt-pnl { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 28px; font-weight: 800; letter-spacing: -0.03em; line-height: 1; }
+.bt-pnl.pos { color: var(--green); }
+.bt-pnl.neg { color: var(--red); }
+.bt-fields { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; padding-top: 10px; border-top: 1px solid var(--border); }
+.bt-field-label { font-size: 9px; color: var(--tm); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+.bt-field-val { font-size: 12px; font-weight: 500; color: var(--ts); font-variant-numeric: tabular-nums; }
+.bt-date { font-size: 11px; color: var(--tm); display: flex; align-items: center; gap: 5px; }
+.bt-date-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--tm); }
+.bento-trade.span-4 { grid-column: span 4; }
+.bento-trades-label { grid-column: span 12; display: flex; align-items: center; gap: 10px; padding-top: 0.5rem; }
+.bento-trades-label .tag { margin-bottom: 0; }
+.bento-trades-label-line { flex: 1; height: 1px; background: var(--border); }
+
+/* TESTIMONIALS */
+.testimonials-section { max-width: 1160px; margin: 0 auto; padding: 5rem 2.5rem; }
+.t2-intro { margin-bottom: 3rem; }
+.t2-grid { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: auto auto; gap: 1px; background: var(--border); border-radius: 16px; overflow: hidden; border: 1px solid var(--border); }
+.t2-card { background: var(--bg2); padding: 2rem; display: flex; flex-direction: column; gap: 1rem; transition: background 0.2s; }
+.t2-card:hover { background: var(--bg3); }
+.t2-top { display: flex; align-items: flex-start; justify-content: space-between; }
+.t2-stars { color: var(--amber); font-size: 12px; letter-spacing: 2px; }
+.t2-quote-mark { font-size: 48px; line-height: 0.7; color: rgba(255,255,255,0.06); font-family: Georgia, serif; font-weight: 700; }
+.t2-text { font-size: 14px; color: var(--ts); line-height: 1.7; flex: 1; }
+.t2-text em { font-style: normal; color: var(--text); font-weight: 500; }
+.t2-author { display: flex; align-items: center; gap: 10px; padding-top: 1rem; border-top: 1px solid var(--border); margin-top: auto; }
+.t2-av { width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
+.t2-name { font-size: 13px; font-weight: 600; color: var(--text); }
+.t2-role { font-size: 11px; color: var(--tm); margin-top: 1px; }
+.t2-featured { grid-column: span 2; background: linear-gradient(135deg, rgba(37,99,235,0.07) 0%, rgba(16,185,129,0.04) 100%); }
+.t2-featured .t2-text { font-size: 16px; }
+.t2-card.t2-bottom { grid-column: span 1; }
+.social-proof-bar { margin-top: 2.5rem; display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+.sp-cell { background: var(--bg2); padding: 1.25rem 1.5rem; text-align: center; }
+.sp-num { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.03em; margin-bottom: 4px; }
+.sp-label { font-size: 11px; color: var(--tm); }
+
+/* TRUST BAR */
+.trust-bar { padding: 0 2.5rem; margin: 0 auto 0; }
+.trust-bar-inner { max-width: 1160px; margin: 0 auto; padding: 1.1rem 2rem; display: flex; flex-direction: column; align-items: center; gap: 10px; background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; }
+.trust-top { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; justify-content: center; }
+.trust-disclaimer { width: 100%; text-align: center; font-size: 11px; color: var(--tm); line-height: 1.5; border-top: 1px solid var(--border); padding-top: 10px; max-width: 900px; }
+.trust-item { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--ts); }
+.trust-sep { width: 1px; height: 18px; background: var(--border); flex-shrink: 0; }
+
+/* ─── PRICING ─── */
+.pricing-section { max-width: 1160px; margin: 0 auto; padding: 5rem 2.5rem; }
+.pricing-intro { text-align: center; margin-bottom: 3rem; }
+.pricing-intro .section-sub { margin: 0.5rem auto; }
+
+/* Billing toggle */
+.billing-toggle-wrap { display: flex; align-items: center; justify-content: center; gap: 12px; margin-bottom: 2rem; }
+.billing-toggle { position: relative; width: 48px; height: 26px; }
+.billing-toggle input { opacity: 0; width: 0; height: 0; }
+.billing-slider { position: absolute; inset: 0; background: rgba(255,255,255,0.1); border: 1px solid var(--border-b); border-radius: 26px; cursor: pointer; transition: background 0.25s; }
+.billing-slider::before { content: ''; position: absolute; width: 18px; height: 18px; left: 3px; top: 3px; background: #fff; border-radius: 50%; transition: transform 0.25s; }
+.billing-toggle input:checked + .billing-slider { background: var(--accent); border-color: var(--accent); }
+.billing-toggle input:checked + .billing-slider::before { transform: translateX(22px); }
+.billing-label { font-size: 13px; font-weight: 500; color: var(--ts); cursor: pointer; transition: color 0.2s; }
+.billing-label.active { color: var(--text); }
+.billing-save-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 9px; border-radius: 100px; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #34d399; }
+
+.pricing-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.pcard {
+  border-radius: 20px;
+  padding: 2rem 1.75rem 1.5rem;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  transition: transform 0.2s;
+}
+.pcard:hover { transform: translateY(-3px); }
+
+.pcard-blue {
+  background: linear-gradient(155deg, #0d1d3a 0%, #070c18 100%);
+  border: 1px solid rgba(59,130,246,0.32);
+}
+.pcard-blue::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 5%, rgba(59,130,246,0.7) 50%, transparent 95%);
+}
+
+.pcard-green {
+  background: linear-gradient(155deg, #071a12 0%, #040e09 100%);
+  border: 2px solid rgba(16,185,129,0.5);
+  box-shadow: 0 0 0 1px rgba(16,185,129,0.1), 0 12px 50px rgba(16,185,129,0.1);
+}
+.pcard-green::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 5%, rgba(16,185,129,0.85) 50%, transparent 95%);
+}
+
+.pcard-gold {
+  background: linear-gradient(155deg, #1c1404 0%, #0e0b06 100%);
+  border: 1px solid rgba(245,158,11,0.36);
+}
+.pcard-gold::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 5%, rgba(245,158,11,0.75) 50%, transparent 95%);
+}
+
+.pcard-header {
+  display: flex; align-items: flex-start;
+  justify-content: space-between; margin-bottom: 1.5rem; gap: 6px;
+}
+.pcard-name { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(240,244,255,0.45); }
+.pcard-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
+.pcard-badge.blue  { background: #2563eb; color: #fff; }
+.pcard-badge.green { background: #059669; color: #fff; }
+.pcard-badge.gold  { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; }
+
+.pcard-price-block { margin-bottom: 1.25rem; min-height: 80px; }
+.pcard-strike { font-size: 12px; color: rgba(240,244,255,0.28); text-decoration: line-through; margin-bottom: 2px; min-height: 16px; }
+.pcard-price-row { display: flex; align-items: baseline; gap: 5px; margin-bottom: 3px; }
+.pcard-price-num { font-size: 46px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: #f0f4ff; }
+.pcard-price-period { font-size: 13px; font-weight: 400; color: rgba(240,244,255,0.4); }
+.pcard-billing { font-size: 11px; color: rgba(240,244,255,0.3); min-height: 14px; }
+
+.pcard-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 1rem 0; }
+.pcard-desc { font-size: 12px; color: rgba(240,244,255,0.5); line-height: 1.65; margin-bottom: 1rem; }
+
+.pcard-features { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; flex: 1; }
+.pcard-features li { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: rgba(240,244,255,0.62); line-height: 1.45; }
+.pf-icon { width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; flex-shrink: 0; margin-top: 1px; }
+.pf-icon.check  { background: rgba(37,99,235,0.18); color: #60a5fa; }
+.pf-icon.mirror { background: rgba(16,185,129,0.14); color: #10b981; }
+.pf-icon.star   { background: rgba(245,158,11,0.14); color: #f59e0b; }
+li.pf-inherit { color: rgba(240,244,255,0.88) !important; font-weight: 700; }
+.pf-icon.inherit { width: 17px; height: 17px; font-size: 9px; background: rgba(255,255,255,0.06); color: rgba(240,244,255,0.65); border: 1px solid rgba(255,255,255,0.13); }
+
+.pcard-cta {
+  display: block; text-align: center;
+  font-size: 13px; font-weight: 700; padding: 13px;
+  border-radius: 12px; text-decoration: none; cursor: pointer;
+  border: none; transition: transform 0.15s, box-shadow 0.2s;
+  letter-spacing: 0.01em;
+}
+.pcard-cta:hover { transform: translateY(-2px); }
+.pcard-cta.blue  { background: #2563eb; color: #fff; }
+.pcard-cta.blue:hover  { box-shadow: 0 8px 28px rgba(37,99,235,0.42); }
+.pcard-cta.green { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
+.pcard-cta.green:hover { box-shadow: 0 8px 28px rgba(16,185,129,0.4); }
+.pcard-cta.gold  { background: linear-gradient(135deg, #f59e0b, #ea580c); color: #fff; }
+.pcard-cta.gold:hover  { box-shadow: 0 8px 28px rgba(245,158,11,0.4); }
+
+.pcard-cancel { text-align: center; margin-top: 8px; font-size: 10px; color: rgba(240,244,255,0.25); }
+
+.free-signals-link { text-align: center; margin-top: 2rem; }
+.free-signals-link a {
+  font-size: 13px; color: rgba(240,244,255,0.45); text-decoration: none;
+  border-bottom: 1px solid rgba(240,244,255,0.15); padding-bottom: 1px;
+  transition: color 0.2s;
+}
+.free-signals-link a:hover { color: rgba(240,244,255,0.8); }
+
+.plan-compare { max-width: 1000px; margin: 1.5rem auto 0; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+.plan-compare-cell { text-align: center; font-size: 11px; color: var(--tm); padding: 0 0.5rem; line-height: 1.5; }
+
+/* ─── INDICATOR ─── */
+.indicator-section { max-width: 1160px; margin: 0 auto; padding: 5rem 2.5rem; }
+.ind-card {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0; border-radius: 22px; overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.ind-left {
+  background: linear-gradient(155deg, #0a1120 0%, #06090f 100%);
+  padding: 2.5rem 2.25rem; display: flex; flex-direction: column; justify-content: center;
+}
+.ind-right {
+  background: #080e1a;
+  display: flex; align-items: center; justify-content: center;
+  padding: 2rem; position: relative; overflow: hidden;
+}
+.ind-right::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 60%, #080e1a 100%);
+  z-index: 1; pointer-events: none;
+}
+.ind-right img { width: 100%; display: block; border-radius: 8px; position: relative; z-index: 0; }
+.ind-new-badge {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 3px 10px; border-radius: 6px; margin-bottom: 1.25rem;
+  background: rgba(37,99,235,0.14); border: 1px solid rgba(59,130,246,0.28); color: #60a5fa;
+  width: fit-content;
+}
+.ind-title { font-size: 30px; font-weight: 800; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 0.75rem; color: #f0f4ff; }
+.ind-title em { font-style: normal; color: #60a5fa; }
+.ind-sub { font-size: 13px; color: rgba(240,244,255,0.5); line-height: 1.7; margin-bottom: 1.5rem; }
+.ind-features { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.75rem; }
+.ind-features li { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; color: rgba(240,244,255,0.62); line-height: 1.5; }
+.ind-price-row { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; }
+.ind-price-num { font-size: 44px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: #f0f4ff; }
+.ind-price-label { font-size: 14px; color: rgba(240,244,255,0.4); }
+.ind-lifetime { font-size: 12px; color: #10b981; font-weight: 500; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 5px; }
+.ind-cta {
+  display: inline-block; text-align: center;
+  font-size: 14px; font-weight: 700; padding: 13px 28px;
+  border-radius: 12px; text-decoration: none; cursor: pointer;
+  background: #2563eb; color: #fff; border: none;
+  transition: transform 0.15s, box-shadow 0.2s; letter-spacing: 0.01em;
+}
+.ind-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,0.4); }
+
+/* FOOTER */
+footer { padding: 2rem 2.5rem; margin: 2rem auto; }
+.footer-inner { max-width: 1160px; margin: 0 auto; background: var(--bg2); border: 1px solid var(--border); border-radius: 16px; padding: 2.5rem 2.5rem 2rem; overflow: hidden; }
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2.5rem; margin-bottom: 2.5rem; }
+.footer-brand .logo { font-size: 20px; margin-bottom: 0.75rem; display: block; }
+.footer-brand p { font-size: 13px; color: var(--ts); line-height: 1.7; max-width: 240px; }
+.footer-col h4 { font-size: 12px; font-weight: 600; color: var(--text); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; }
+.footer-col a { display: block; font-size: 13px; color: var(--ts); text-decoration: none; margin-bottom: 8px; transition: color 0.2s; }
+.footer-col a:hover { color: var(--text); }
+.footer-bottom { border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.footer-copy { font-size: 12px; color: var(--tm); }
+.footer-risk { font-size: 11px; color: var(--tm); max-width: 500px; line-height: 1.5; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .how-paths-v3 { grid-template-columns: 1fr; }
+  .hv2-or { flex-direction: row; margin-top: 0; padding: 0.5rem 0; }
+  .hv2-or-line { width: auto; height: 1px; min-height: auto; flex: 1; background: linear-gradient(to right, transparent, var(--border-b), transparent); }
+  .pricing-layout { grid-template-columns: 1fr; max-width: 420px; }
+  .plan-compare { grid-template-columns: 1fr; }
+}
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.25rem; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .hero { grid-template-columns: 1fr; padding: 3rem 1.25rem 2rem; gap: 2rem; }
+  .section { padding: 3rem 1.25rem; }
+  .section-sm { padding: 2rem 1.25rem; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .stat-cell + .stat-cell { border-left: none; border-top: 1px solid rgba(255,255,255,0.055); }
+  .stats-wrapper { padding: 0 1.25rem; }
+  #results { padding: 3rem 1.25rem; }
+  .bento { gap: 8px; }
+  .bento-trade.span-4 { grid-column: span 12; }
+  .bento-chart { grid-column: span 12; }
+  .bento-streak { grid-column: span 12; }
+  .t2-grid { grid-template-columns: 1fr; }
+  .t2-featured { grid-column: span 1; }
+  .t2-card.t2-bottom { grid-column: span 1; }
+  .social-proof-bar { grid-template-columns: repeat(2, 1fr); }
+  .pricing-section { padding: 3rem 1.25rem; }
+  .ind-card { grid-template-columns: 1fr; }
+  .ind-right { display: none; }
+  .indicator-section { padding: 3rem 1.25rem; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .trust-bar { padding: 0 1.25rem; }
+  .trust-sep { display: none; }
+  .testimonials-section { padding: 3rem 1.25rem; }
+}
+@media (max-width: 580px) {
+  .social-proof-bar { grid-template-columns: 1fr 1fr; }
+  .footer-top { grid-template-columns: 1fr; }
+  .pcard-price-num { font-size: 38px; }
+}
+</style>
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="grid-bg"></div>
+
+<div class="page">
+
+<!-- NAV -->
+<nav>
+  <a href="/" class="logo">tren<span>.</span></a>
+  <div class="nav-links">
+    <a href="https://tren.vercel.app/dashboard">Dashboard</a>
+    <a href="#pricing">Pricing</a>
+    <a href="https://tren.vercel.app/affiliate">Affiliate</a>
+    <a href="https://tren.vercel.app/contact">Contact</a>
+    <a href="https://tren.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="https://tren.vercel.app/login-page">Dashboard</a>
+    <a href="#pricing">Pricing</a>
+    <a href="https://tren.vercel.app/affiliate">Affiliate</a>
+    <a href="https://tren.vercel.app/contact">Contact</a>
+    <a href="https://tren.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-left">
+    <div class="tag tag-green"><span class="tag-dot"></span>Live · 100+ active traders</div>
+    <h1>Your <em>edge</em><br><span>starts here</span></h1>
+    <p class="hero-sub">Advanced trading automation that executes signals in under 1 second. Built by traders, verified by real results — not promises.</p>
+    <div class="cta-row">
+      <a href="https://tren.vercel.app/checkout-premium" class="btn-primary">Start free 7-day trial</a>
+      <a href="https://tren.vercel.app/login-page" class="btn-ghost">View live results →</a>
+    </div>
+    <div class="social-row">
+      <div class="avatars">
+        <div class="av" style="background:#1e3a5f;color:#60a5fa;">JK</div>
+        <div class="av" style="background:#1a3a2a;color:#34d399;">SR</div>
+        <div class="av" style="background:#3b2a1a;color:#fbbf24;">MT</div>
+        <div class="av" style="background:#3a1a2a;color:#f472b6;">AL</div>
+        <div class="av" style="background:#1e1e3a;color:#a78bfa;">DV</div>
+      </div>
+      <div class="social-text">
+        <span style="color:var(--amber)">★★★★★</span>
+        &nbsp;<strong>4.8</strong> · Joined by 100+ traders this year
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="signal-panel">
+      <div class="panel-header">
+        <span class="panel-title">Recent trades</span>
+        <span class="live-badge"><span class="live-dot"></span>Live feed</span>
+      </div>
+      <div class="signal-list" id="signal-list">
+        <div class="empty-state">Loading trades…</div>
+      </div>
+      <div class="delivery-strip">
+        <div class="d-icon d-discord">💬</div>
+        <div class="d-icon d-tg">✈</div>
+        Signals delivered via Discord &amp; Tren-Dashboard in real time
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-wrapper">
+  <div class="stats-card">
+    <div class="stats-card-inner">
+      <div class="stats-topbar">
+        <div class="stats-live-indicator">
+          <div class="stats-live-dot"></div>
+          Live data
+        </div>
+        <div class="stats-period">Last 14 days · 3 NQ contracts</div>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-cell">
+          <div class="stat-label">Total P&amp;L</div>
+          <div class="stat-value g stat-loading" id="hp-pnl">…</div>
+          <div class="stat-note" id="hp-pnl-note">loading…</div>
+          <div class="stat-bar-track"><div class="stat-bar-fill green" id="hp-pnl-bar" style="width:0%"></div></div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Win rate</div>
+          <div class="stat-value g stat-loading" id="hp-wr">…</div>
+          <div class="stat-note" id="hp-wr-note">loading…</div>
+          <div class="stat-bar-track"><div class="stat-bar-fill blue" id="hp-wr-bar" style="width:0%"></div></div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-label">Best single day</div>
+          <div class="stat-value g stat-loading" id="hp-bd">…</div>
+          <div class="stat-note" id="hp-bd-note">Single day · 3 contracts</div>
+          <div class="stat-bar-track"><div class="stat-bar-fill green" id="hp-bd-bar" style="width:0%"></div></div>
+        </div>
+      </div>
+      <div class="stats-footer">
+        <div class="stat-updated" id="stat-updated-time">Fetching…</div>
+        <a href="https://tren.vercel.app/dashboard" class="dashboard-link" target="_blank">View full dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div id="how" class="section">
+  <div style="text-align:center;margin-bottom:3rem;">
+    <div class="tag tag-blue" style="margin:0 auto 1rem;">How it works</div>
+    <h2 class="section-title">Three ways to<br><em>trade with Tren</em></h2>
+    <p class="section-sub" style="margin:0.5rem auto;max-width:640px;text-align:center;">Choose your path — trade manually from signals, auto-copy every signal to your broker, or go fully automated with NinjaTrader.</p>
+  </div>
+  <div class="how-paths-v3">
+
+    <!-- PREMIUM SIGNALS -->
+    <div class="hv2-card hv2-blue">
+      <div class="hv2-header"><span class="hv2-badge hv2-badge-blue">⚡ Premium Signals</span></div>
+      <div class="hv2-flow">
+        <svg viewBox="0 0 300 460" xmlns="http://www.w3.org/2000/svg">
+          <defs><mask id="mask-blue"><rect width="300" height="460" fill="white"/><circle cx="27" cy="60" r="32" fill="black"/><circle cx="273" cy="165" r="32" fill="black"/><circle cx="27" cy="270" r="32" fill="black"/><circle cx="150" cy="375" r="37" fill="black"/></mask></defs>
+          <path d="M 27 60 C 27 112, 273 112, 273 165 C 273 218, 27 218, 27 270 C 27 322, 150 322, 150 375" fill="none" stroke="rgba(59,130,246,0.55)" stroke-width="2.2" stroke-dasharray="7 5" stroke-linecap="round" mask="url(#mask-blue)"/>
+          <circle cx="27" cy="60" r="30" fill="#0a1632"/><circle cx="27" cy="60" r="30" fill="none" stroke="rgba(59,130,246,0.6)" stroke-width="2"/>
+          <foreignObject x="4" y="37" width="46" height="46"><div xmlns="http://www.w3.org/1999/xhtml" style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:21px;">📡</div></foreignObject>
+          <text x="68" y="56" font-family="Plus Jakarta Sans,sans-serif" font-size="13" font-weight="700" fill="#f0f4ff">Signal detected</text>
+          <text x="68" y="73" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="rgba(240,244,255,0.55)">Pattern confirmed</text>
+          <circle cx="273" cy="165" r="30" fill="#0a1632"/><circle cx="273" cy="165" r="30" fill="none" stroke="rgba(59,130,246,0.6)" stroke-width="2"/>
+          <foreignObject x="250" y="142" width="46" height="46"><div xmlns="http://www.w3.org/1999/xhtml" style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:21px;">⚡</div></foreignObject>
+          <text x="234" y="161" font-family="Plus Jakarta Sans,sans-serif" font-size="13" font-weight="700" fill="#f0f4ff" text-anchor="end">Instant alert</text>
+          <text x="234" y="178" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="rgba(240,244,255,0.55)" text-anchor="end">Discord &amp; Dashboard &lt;1s</text>
+          <circle cx="27" cy="270" r="30" fill="#0a1632"/><circle cx="27" cy="270" r="30" fill="none" stroke="rgba(59,130,246,0.6)" stroke-width="2"/>
+          <foreignObject x="4" y="247" width="46" height="46"><div xmlns="http://www.w3.org/1999/xhtml" style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:21px;">👆</div></foreignObject>
+          <text x="68" y="266" font-family="Plus Jakarta Sans,sans-serif" font-size="13" font-weight="700" fill="#f0f4ff">You trade</text>
+          <text x="68" y="283" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="rgba(240,244,255,0.55)">Manual entry, best price</text>
+          <circle cx="150" cy="375" r="35" fill="rgba(16,185,129,0.10)"/><circle cx="150" cy="375" r="35" fill="none" stroke="#10b981" stroke-width="2"/>
+          <foreignObject x="126" y="351" width="48" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:23px;">💰</div></foreignObject>
+          <text x="150" y="455" font-family="Plus Jakarta Sans,sans-serif" font-size="13" font-weight="700" fill="#10b981" text-anchor="middle">Profit</text>
+          <text x="150" y="473" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="rgba(240,244,255,0.55)" text-anchor="middle">TP hit, trade logged</text>
+        </svg>
+      </div>
+      <a href="https://tren.vercel.app/checkout-premium" class="hv2-btn hv2-btn-blue">Start free trial</a>
+    </div>
+
+    <div class="hv2-or">
+      <div class="hv2-or-line"></div>
+      <div class="hv2-or-text">or</div>
+      <div class="hv2-or-line"></div>
+    </div>
+
+    <!-- MIRROR TRADER -->
+    <div class="hv2-card hv2-green">
+      <div class="hv2-header"><span class="hv2-badge hv2-badge-green">⚡ AutoSignals</span></div>
+      <div class="hv2-flow">
+        <svg viewBox="0 0 300 460" xmlns="http://www.w3.org/2000/svg">
+          <defs><mask id="mask-green"><rect width="300" height="460" fill="white"/><circle cx="150" cy="60" r="32" fill="black"/><circle cx="27" cy="165" r="32" fill="black"/><circle cx="273" cy="165" r="32" fill="black"/><circle cx="150" cy="375" r="37" fill="black"/></mask></defs>
+          <path d="M 150 60 C 150 112, 27 112, 27 165" fill="none" stroke="rgba(16,185,129,0.5)" stroke-width="2.2" stroke-dasharray="7 5" stroke-linecap="round"/>
+          <path d="M 150 60 C 150 112, 273 112, 273 165" fill="none" stroke="rgba(16,185,129,0.5)" stroke-width="2.2" stroke-dasharray="7 5" stroke-linecap="round"/>
+          <path d="M 27 165 C 27 270, 150 300, 150 375" fill="none" stroke="rgba(16,185,129,0.5)" stroke-width="2.2" stroke-dasharray="7 5" stroke-linecap="round"/>
+          <path d="M 273 165 C 273 270, 150 300, 150 375" fill="none" stroke="rgba(16,185,129,0.5)" stroke-width="2.2" stroke-dasharray="7 5" stroke-linecap="round"/>
+          <circle cx="150" cy="60" r="30" fill="#071a12"/><circle cx="150" cy="60" r="30" fill="none" stroke="rgba(16,185,129,0.7)" stroke-width="2"/>
+          <foreignObject x="127" y="37" width="46" height="46"><div xmlns="http://www.w3.org/1999/xhtml" style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:21px;">⚡</div></foreignObject>
+          <text x="150" y="108" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="rgba(240,244,255,0.55)" text-anchor="middle">Signal fires</text>
+          <circle cx="27" cy="165" r="30" fill="#071a12"/><circle cx="27" cy="165" r="30" fill="none" stroke="rgba(16,185,129,0.6)" stroke-width="2"/>
+          <foreignObject x="4" y="142" width="46" height="46"><div xmlns="http://www.w3.org/1999/xhtml" style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:21px;">🔔</div></foreignObject>
+          <text x="68" y="161" font-family="Plus Jakarta Sans,sans-serif" font-size="12" font-weight="700" fill="#f0f4ff">Your alert</text>
+          <text x="68" y="178" font-family="Plus Jakarta Sans,sans-serif" font-size="10" fill="rgba(240,244,255,0.5)">Discord notif</text>
+          <circle cx="273" cy="165" r="30" fill="#071a12"/><circle cx="273" cy="165" r="30" fill="none" stroke="rgba(16,185,129,0.6)" stroke-width="2"/>
+          <foreignObject x="250" y="142" width="46" height="46"><div xmlns="http://www.w3.org/1999/xhtml" style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:21px;">🤝</div></foreignObject>
+          <text x="234" y="161" font-family="Plus Jakarta Sans,sans-serif" font-size="12" font-weight="700" fill="#f0f4ff" text-anchor="end">Auto copy</text>
+          <text x="234" y="178" font-family="Plus Jakarta Sans,sans-serif" font-size="10" fill="rgba(240,244,255,0.5)" text-anchor="end">Broker executes</text>
+          <circle cx="150" cy="375" r="35" fill="rgba(16,185,129,0.12)"/><circle cx="150" cy="375" r="35" fill="none" stroke="#10b981" stroke-width="2"/>
+          <foreignObject x="126" y="351" width="48" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:23px;">💰</div></foreignObject>
+          <text x="150" y="455" font-family="Plus Jakarta Sans,sans-serif" font-size="13" font-weight="700" fill="#10b981" text-anchor="middle">Profit</text>
+          <text x="150" y="473" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="rgba(240,244,255,0.55)" text-anchor="middle">Hands-free copy</text>
+        </svg>
+      </div>
+      <a href="https://tren.vercel.app/checkout-autosignals" class="hv2-btn hv2-btn-green">Get AutoSignals</a>
+    </div>
+
+    <div class="hv2-or">
+      <div class="hv2-or-line"></div>
+      <div class="hv2-or-text">or</div>
+      <div class="hv2-or-line"></div>
+    </div>
+
+    <!-- AUTOMATED BOT -->
+    <div class="hv2-card hv2-gold">
+      <div class="hv2-header"><span class="hv2-badge hv2-badge-gold">🤖 TrenBot</span></div>
+      <div class="hv2-flow">
+        <svg viewBox="0 0 300 460" xmlns="http://www.w3.org/2000/svg">
+          <defs><mask id="mask-gold"><rect width="300" height="460" fill="white"/><circle cx="273" cy="60" r="32" fill="black"/><circle cx="27" cy="165" r="32" fill="black"/><circle cx="273" cy="270" r="32" fill="black"/><circle cx="150" cy="375" r="37" fill="black"/></mask></defs>
+          <path d="M 273 60 C 273 112, 27 112, 27 165 C 27 218, 273 218, 273 270 C 273 322, 150 322, 150 375" fill="none" stroke="rgba(245,158,11,0.6)" stroke-width="2.2" stroke-dasharray="7 5" stroke-linecap="round" mask="url(#mask-gold)"/>
+          <circle cx="273" cy="60" r="30" fill="#1a1204"/><circle cx="273" cy="60" r="30" fill="none" stroke="rgba(245,158,11,0.6)" stroke-width="2"/>
+          <foreignObject x="250" y="37" width="46" height="46"><div xmlns="http://www.w3.org/1999/xhtml" style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:21px;">🔗</div></foreignObject>
+          <text x="234" y="56" font-family="Plus Jakarta Sans,sans-serif" font-size="13" font-weight="700" fill="#f0f4ff" text-anchor="end">NinjaTrader</text>
+          <text x="234" y="73" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="rgba(240,244,255,0.55)" text-anchor="end">Secure API link</text>
+          <circle cx="27" cy="165" r="30" fill="#1a1204"/><circle cx="27" cy="165" r="30" fill="none" stroke="rgba(245,158,11,0.6)" stroke-width="2"/>
+          <foreignObject x="4" y="142" width="46" height="46"><div xmlns="http://www.w3.org/1999/xhtml" style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:21px;">⚙️</div></foreignObject>
+          <text x="68" y="161" font-family="Plus Jakarta Sans,sans-serif" font-size="13" font-weight="700" fill="#f0f4ff">Customized</text>
+          <text x="68" y="178" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="rgba(240,244,255,0.55)">Risk rules, contracts</text>
+          <circle cx="273" cy="270" r="30" fill="#1a1204"/><circle cx="273" cy="270" r="30" fill="none" stroke="rgba(245,158,11,0.6)" stroke-width="2"/>
+          <foreignObject x="250" y="247" width="46" height="46"><div xmlns="http://www.w3.org/1999/xhtml" style="width:46px;height:46px;display:flex;align-items:center;justify-content:center;font-size:21px;">🤖</div></foreignObject>
+          <text x="234" y="266" font-family="Plus Jakarta Sans,sans-serif" font-size="13" font-weight="700" fill="#f0f4ff" text-anchor="end">High-frequency</text>
+          <text x="234" y="283" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="rgba(240,244,255,0.55)" text-anchor="end">More trades, more alpha</text>
+          <circle cx="150" cy="375" r="35" fill="rgba(245,158,11,0.10)"/><circle cx="150" cy="375" r="35" fill="none" stroke="#f59e0b" stroke-width="2"/>
+          <foreignObject x="126" y="351" width="48" height="48"><div xmlns="http://www.w3.org/1999/xhtml" style="width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:23px;">💰</div></foreignObject>
+          <text x="150" y="455" font-family="Plus Jakarta Sans,sans-serif" font-size="13" font-weight="700" fill="#f59e0b" text-anchor="middle">Profit</text>
+          <text x="150" y="473" font-family="Plus Jakarta Sans,sans-serif" font-size="11" fill="rgba(240,244,255,0.55)" text-anchor="middle">Full control, hands-free</text>
+        </svg>
+      </div>
+      <a href="https://tren.vercel.app/checkout-trenbot" class="hv2-btn hv2-btn-gold">Get TrenBot</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- PERFORMANCE -->
+<div id="results">
+  <div class="perf-intro">
+    <div class="perf-intro-left">
+      <div class="tag tag-blue">Verified results</div>
+      <h2 class="section-title">Every trade.<br><em>No cherry-picking.</em></h2>
+    </div>
+    <div class="perf-intro-right">
+      Wins and losses logged automatically via NinjaTrader.
+      <br><a href="https://tren.vercel.app/login-page">View full trade log →</a>
+    </div>
+  </div>
+  <div class="bento">
+    <div class="bento-chart">
+      <div class="bento-chart-header">
+        <div>
+          <div class="bento-chart-title">Cumulative P&L — last 14 days</div>
+          <div class="bento-chart-sub">3 contracts · NinjaTrader live account</div>
+        </div>
+      </div>
+      <svg class="equity-svg" viewBox="0 0 620 120" preserveAspectRatio="none" style="height:110px;">
+        <defs>
+          <linearGradient id="eq-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#10b981" stop-opacity="0.25"/>
+            <stop offset="100%" stop-color="#10b981" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+        <path d="M0,100 L40,95 L80,88 L110,92 L140,80 L180,65 L210,70 L240,55 L270,45 L300,38 L330,42 L360,28 L390,32 L420,20 L460,15 L500,18 L540,10 L580,5 L620,8" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M0,100 L40,95 L80,88 L110,92 L140,80 L180,65 L210,70 L240,55 L270,45 L300,38 L330,42 L360,28 L390,32 L420,20 L460,15 L500,18 L540,10 L580,5 L620,8 L620,120 L0,120 Z" fill="url(#eq-grad)"/>
+        <text x="0" y="118" font-family="DM Mono,monospace" font-size="8" fill="rgba(240,244,255,0.25)">Day 1</text>
+        <text x="290" y="118" font-family="DM Mono,monospace" font-size="8" fill="rgba(240,244,255,0.25)" text-anchor="middle">Day 7</text>
+        <text x="615" y="118" font-family="DM Mono,monospace" font-size="8" fill="rgba(240,244,255,0.25)" text-anchor="end">Day 14</text>
+      </svg>
+    </div>
+    <div class="bento-streak">
+      <div class="streak-title">Last 20 trades</div>
+      <div class="streak-row" id="streak-row"></div>
+      <div class="streak-legend">
+        <div class="streak-legend-item"><div class="streak-legend-dot" style="background:var(--green-bg);border:1px solid var(--green);"></div>Win</div>
+        <div class="streak-legend-item"><div class="streak-legend-dot" style="background:var(--red-bg);border:1px solid var(--red);"></div>Loss</div>
+      </div>
+      <div style="margin-top:auto;padding-top:1rem;border-top:1px solid var(--border);">
+        <a href="https://tren.vercel.app/login-page" style="font-size:12px;color:var(--accent-l);text-decoration:none;">Full history →</a>
+      </div>
+    </div>
+    <div class="bento-trades-label">
+      <div class="tag tag-green" style="margin-bottom:0;"><span class="tag-dot"></span>Most recent trades</div>
+      <div class="bento-trades-label-line"></div>
+    </div>
+    <div class="bento-trade win span-4" id="tc-0">
+      <div class="bento-trade-header"><span class="bt-market">NQ</span><span class="bt-dir long">LONG</span></div>
+      <div class="bt-pnl pos">+$1,260</div>
+      <div class="bt-fields">
+        <div><div class="bt-field-label">Entry</div><div class="bt-field-val">—</div></div>
+        <div><div class="bt-field-label">Exit</div><div class="bt-field-val">—</div></div>
+        <div><div class="bt-field-label">Ticks</div><div class="bt-field-val">—</div></div>
+      </div>
+      <div class="bt-date"><span class="bt-date-dot"></span>—</div>
+    </div>
+    <div class="bento-trade loss span-4" id="tc-1">
+      <div class="bento-trade-header"><span class="bt-market">NQ</span><span class="bt-dir short">SHORT</span></div>
+      <div class="bt-pnl neg">−$420</div>
+      <div class="bt-fields">
+        <div><div class="bt-field-label">Entry</div><div class="bt-field-val">—</div></div>
+        <div><div class="bt-field-label">Exit</div><div class="bt-field-val">—</div></div>
+        <div><div class="bt-field-label">Ticks</div><div class="bt-field-val">—</div></div>
+      </div>
+      <div class="bt-date"><span class="bt-date-dot"></span>—</div>
+    </div>
+    <div class="bento-trade win span-4" id="tc-2">
+      <div class="bento-trade-header"><span class="bt-market">NQ</span><span class="bt-dir long">LONG</span></div>
+      <div class="bt-pnl pos">+$840</div>
+      <div class="bt-fields">
+        <div><div class="bt-field-label">Entry</div><div class="bt-field-val">—</div></div>
+        <div><div class="bt-field-label">Exit</div><div class="bt-field-val">—</div></div>
+        <div><div class="bt-field-label">Ticks</div><div class="bt-field-val">—</div></div>
+      </div>
+      <div class="bt-date"><span class="bt-date-dot"></span>—</div>
+    </div>
+  </div>
+  <p style="margin-top:1.5rem;font-size:12px;color:var(--tm);text-align:center;">
+    ⚠ Past performance does not guarantee future results. All figures from live account execution via NinjaTrader.
+  </p>
+</div>
+
+<!-- TESTIMONIALS -->
+<div class="testimonials-section">
+  <div class="t2-intro">
+    <div class="tag tag-green"><span class="tag-dot"></span>Traders who use Tren</div>
+    <h2 class="section-title">Real accounts.<br><em>Real feedback.</em></h2>
+  </div>
+  <div class="t2-grid">
+    <div class="t2-card t2-featured">
+      <div class="t2-top">
+        <div class="t2-stars">★★★★★</div>
+        <div class="t2-quote-mark">"</div>
+      </div>
+      <div class="t2-text">
+        "Been running it for about a month. Entries are fast and results have been consistent.
+        <em>First bot I've used that actually shows its losing trades</em> — that's what made me trust it."
+      </div>
+      <div class="t2-author">
+        <div class="t2-av" style="background:#1e3a5f;color:#60a5fa;">MR</div>
+        <div>
+          <div class="t2-name">Miguel R.</div>
+          <div class="t2-role">TrenBot · Using since Feb 2026</div>
+        </div>
+      </div>
+    </div>
+    <div class="t2-card">
+      <div class="t2-top">
+        <div class="t2-stars">★★★★☆</div>
+        <div class="t2-quote-mark">"</div>
+      </div>
+      <div class="t2-text">
+        "Really good signals overall. <em>Execution speed is what makes the difference.</em> Way better than the others I tried."
+      </div>
+      <div class="t2-author">
+        <div class="t2-av" style="background:#1a3a2a;color:#34d399;">NK</div>
+        <div>
+          <div class="t2-name">Nathan K.</div>
+          <div class="t2-role">Premium Signals · Amsterdam</div>
+        </div>
+      </div>
+    </div>
+    <div class="t2-card t2-bottom">
+      <div class="t2-top">
+        <div class="t2-stars">★★★★★</div>
+        <div class="t2-quote-mark">"</div>
+      </div>
+      <div class="t2-text">"<em>AutoSignals was exactly what I needed.</em> Setup took 10 minutes. Just set my size and it copies everything automatically."</div>
+      <div class="t2-author">
+        <div class="t2-av" style="background:#073a22;color:#34d399;">AD</div>
+        <div>
+          <div class="t2-name">Adrian D.</div>
+          <div class="t2-role">AutoSignals · Using since Jan 2026</div>
+        </div>
+      </div>
+    </div>
+    <div class="t2-card t2-bottom">
+      <div class="t2-top">
+        <div class="t2-stars">★★★★★</div>
+        <div class="t2-quote-mark">"</div>
+      </div>
+      <div class="t2-text">"<em>No emotions involved.</em> I used to close trades early — now I just let it run. Changed how I trade completely."</div>
+      <div class="t2-author">
+        <div class="t2-av" style="background:#1e1e3a;color:#a78bfa;">MK</div>
+        <div>
+          <div class="t2-name">Mark K.</div>
+          <div class="t2-role">TrenBot · Rotterdam</div>
+        </div>
+      </div>
+    </div>
+    <div class="t2-card t2-bottom">
+      <div class="t2-top">
+        <div class="t2-stars">★★★★★</div>
+        <div class="t2-quote-mark">"</div>
+      </div>
+      <div class="t2-text">"Execution speed is crazy fast. <em>That's honestly what makes the difference</em> versus doing it manually."</div>
+      <div class="t2-author">
+        <div class="t2-av" style="background:#1a3a2a;color:#34d399;">JV</div>
+        <div>
+          <div class="t2-name">Joris V.</div>
+          <div class="t2-role">AutoSignals · Using since Mar 2026</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="social-proof-bar">
+    <div class="sp-cell">
+      <div class="sp-num">100+</div>
+      <div class="sp-label">Active traders</div>
+    </div>
+    <div class="sp-cell">
+      <div class="sp-num">4.8 ★</div>
+      <div class="sp-label">Average rating</div>
+    </div>
+    <div class="sp-cell">
+      <div class="sp-num">&lt;1s</div>
+      <div class="sp-label">Signal delivery</div>
+    </div>
+    <div class="sp-cell">
+      <div class="sp-num" id="sp-wr">—</div>
+      <div class="sp-label">Win rate (14 days)</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-bar-inner">
+    <div class="trust-top">
+      <div class="trust-item">🔒 NinjaTrader secure connection</div>
+      <div class="trust-sep"></div>
+      <div class="trust-item">📊 Full trade history logged</div>
+      <div class="trust-sep"></div>
+      <div class="trust-item">↩ Cancel anytime, no lock-in</div>
+    </div>
+    <div class="trust-disclaimer">Trading involves risk. Past results do not guarantee future returns. Only trade with capital you can afford to lose.</div>
+  </div>
+</div>
+
+<!-- PRICING — 3 plans with Monthly/Annual toggle -->
+<div class="pricing-section" id="pricing">
+  <div class="pricing-intro">
+    <div class="tag tag-blue" style="margin:0 auto 1rem;">Pricing</div>
+    <h2 class="section-title">Pick your plan.<br><em>Start in minutes.</em></h2>
+    <p class="section-sub">Three levels of access — from signals you trade yourself, to full automation with deep customisation.</p>
+  </div>
+
+  <!-- Billing toggle -->
+  <div class="billing-toggle-wrap">
+    <span class="billing-label active" id="lbl-monthly">Monthly</span>
+    <label class="billing-toggle">
+      <input type="checkbox" id="billing-switch" onchange="toggleBilling()">
+      <span class="billing-slider"></span>
+    </label>
+    <span class="billing-label" id="lbl-annual">Annual</span>
+    <span class="billing-save-badge">Save up to 15%</span>
+  </div>
+
+  <div class="pricing-layout">
+
+    <!-- 1. Premium Signals -->
+    <div class="pcard pcard-blue">
+      <div class="pcard-header">
+        <span class="pcard-name">Premium Signals</span>
+        <span class="pcard-badge blue">Free trial</span>
+      </div>
+      <div class="pcard-price-block">
+        <div class="pcard-strike" id="ps-strike">&nbsp;</div>
+        <div class="pcard-price-row">
+          <span class="pcard-price-num" id="ps-price">$0</span>
+          <span class="pcard-price-period" id="ps-period">/ 7 days</span>
+        </div>
+        <div class="pcard-billing" id="ps-billing">then $29.99/mo billed monthly</div>
+      </div>
+      <div class="pcard-divider"></div>
+      <p class="pcard-desc">Real-time alerts sent to Discord and your dashboard. You pick the entry and execute manually.</p>
+      <ul class="pcard-features">
+        <li><span class="pf-icon check">✓</span> Instant signals, &lt;1s delivery</li>
+        <li><span class="pf-icon check">✓</span> Best manual entry prices</li>
+        <li><span class="pf-icon check">✓</span> Full signal access</li>
+        <li><span class="pf-icon check">✓</span> Priority Discord role</li>
+        <li><span class="pf-icon check">✓</span> Live trade dashboard</li>
+        <li><span class="pf-icon check">✓</span> Trading journal included</li>
+        <li><span class="pf-icon check">✓</span> Performance analytics</li>
+      </ul>
+      <a href="#" id="ps-cta" class="pcard-cta blue">Start free trial</a>
+      <p class="pcard-cancel">Cancel anytime, no questions asked</p>
+    </div>
+
+    <!-- 2. AutoSignals -->
+    <div class="pcard pcard-green">
+      <div class="pcard-header">
+        <span class="pcard-name">AutoSignals</span>
+        <span class="pcard-badge green">Most Popular</span>
+      </div>
+      <div class="pcard-price-block">
+        <div class="pcard-strike" id="as-strike">$49.99/mo</div>
+        <div class="pcard-price-row">
+          <span class="pcard-price-num" id="as-price">$49.99</span>
+          <span class="pcard-price-period">/mo</span>
+        </div>
+        <div class="pcard-billing" id="as-billing">billed monthly</div>
+      </div>
+      <div class="pcard-divider"></div>
+      <p class="pcard-desc">Every premium signal is automatically copied to your broker. Simple setup, no NinjaTrader required, no coding.</p>
+      <ul class="pcard-features">
+        <li class="pf-inherit"><span class="pf-icon inherit">✦</span> Everything in Premium</li>
+        <li><span class="pf-icon mirror">✓</span> Auto-copies every signal</li>
+        <li><span class="pf-icon mirror">✓</span> Works with major brokers</li>
+        <li><span class="pf-icon mirror">✓</span> NinjaTrader required</li>
+        <li><span class="pf-icon mirror">✓</span> Set position size once</li>
+        <li><span class="pf-icon mirror">✓</span> Emotion-free execution</li>
+        <li><span class="pf-icon mirror">✓</span> Priority support access</li>
+      </ul>
+      <a href="#" id="as-cta" class="pcard-cta green">Get AutoSignals</a>
+      <p class="pcard-cancel">Cancel anytime, no questions asked</p>
+    </div>
+
+    <!-- 3. TrenBot -->
+    <div class="pcard pcard-gold">
+      <div class="pcard-header">
+        <span class="pcard-name">TrenBot</span>
+        <span class="pcard-badge gold">Pro</span>
+      </div>
+      <div class="pcard-price-block">
+        <div class="pcard-strike" id="tb-strike">$79.99/mo</div>
+        <div class="pcard-price-row">
+          <span class="pcard-price-num" id="tb-price">$79.99</span>
+          <span class="pcard-price-period">/mo</span>
+        </div>
+        <div class="pcard-billing" id="tb-billing">billed monthly</div>
+      </div>
+      <div class="pcard-divider"></div>
+      <p class="pcard-desc">Full NinjaTrader integration. Higher trade frequency, deep parameter customisation, and multi-contract scaling.</p>
+      <ul class="pcard-features">
+        <li class="pf-inherit"><span class="pf-icon inherit">✦</span> Everything in AutoSignals</li>
+        <li><span class="pf-icon star">★</span> Higher trade frequency</li>
+        <li><span class="pf-icon star">★</span> Full NinjaTrader integration</li>
+        <li><span class="pf-icon star">★</span> Deep parameter customisation</li>
+        <li><span class="pf-icon star">★</span> Multi-contract scaling</li>
+        <li><span class="pf-icon star">★</span> Custom risk rules per trade</li>
+        <li><span class="pf-icon star">★</span> Dedicated onboarding call</li>
+      </ul>
+      <a href="#" id="tb-cta" class="pcard-cta gold">Get TrenBot</a>
+      <p class="pcard-cancel">Cancel anytime, no questions asked</p>
+    </div>
+
+  </div>
+
+  <div class="plan-compare">
+    <div class="plan-compare-cell">Best for traders who want to stay in control of every entry.</div>
+    <div class="plan-compare-cell">Best for traders who want automation without the technical setup.</div>
+    <div class="plan-compare-cell">Best for power users who want full customisation and maximum trade volume.</div>
+  </div>
+
+  <div class="free-signals-link">
+    <a href="https://discord.gg/Ygwf8xfEXS" target="_blank">or start with free signals on Discord →</a>
+  </div>
+</div>
+
+<!-- INDICATOR -->
+<div class="indicator-section">
+  <div class="ind-card">
+    <div class="ind-left">
+      <span class="ind-new-badge">New</span>
+      <h2 class="ind-title">TradingView<br><em>Indicator</em></h2>
+      <p class="ind-sub">Buy/sell signals with automatic TP and SL levels drawn right on your chart. One look, instant decision.</p>
+      <ul class="ind-features">
+        <li><span class="pf-icon check">✓</span> Clear buy and sell labels on the chart</li>
+        <li><span class="pf-icon check">✓</span> Automatic TP1, TP2, TP3 and stop loss levels</li>
+        <li><span class="pf-icon check">✓</span> Clean visual setups for faster decisions</li>
+        <li><span class="pf-icon check">✓</span> Lifetime access, one-time purchase</li>
+      </ul>
+      <div class="ind-price-row">
+        <span class="ind-price-num">$99</span>
+        <span class="ind-price-label">/ Lifetime</span>
+      </div>
+      <div class="ind-lifetime">✓ Pay once, use forever. No subscription.</div>
+      <a href="https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=P-216499032T727480WNGZ3ZOY" class="ind-cta">Purchase indicator</a>
+    </div>
+    <div class="ind-right">
+      <img src="https://i.imgur.com/mZOrAlm.png" alt="Tren TradingView Indicator">
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="/" class="logo">tren<span>.</span></a>
+        <p>Intelligent trading automation and precision signals for NinjaTrader. Built by traders, for traders.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="https://tren.vercel.app/login-page">Dashboard</a>
+        <a href="#pricing">Pricing</a>
+        <a href="https://tren.vercel.app/affiliate">Affiliate</a>
+        <a href="https://tren.vercel.app/contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <a href="https://discord.gg/Ygwf8xfEXS" target="_blank">Discord</a>
+        <a href="https://www.tiktok.com/@trentrades0" target="_blank">TikTok</a>
+        <a href="https://www.instagram.com/tren/" target="_blank">Instagram</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="https://tren.vercel.app/terms-conditions">Terms of service</a>
+        <a href="https://tren.vercel.app/privacy-policy">Privacy policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Tren. All rights reserved.</div>
+      <div class="footer-risk">Trading involves significant risk of loss. Past performance is not indicative of future results. This is not financial advice.</div>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /page -->
+
+<script>
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('active');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+/* ── PAYPAL PLAN IDs ── */
+const PLANS = {
+  premium: {
+    monthly:         'P-1TE49765UF4478324NHVCQWI',   // $29.99/mo
+    annual:          'P-1W065668RR969374CNHVDUAY',    // $25.49/mo → $305.88/yr
+    discountMonthly: 'P-9WC47905VV0850427NHVDIDA',    // $26.99/mo
+    discountAnnual:  'P-5GD7768190663772ANHVDVPI',    // $22.94/mo → $275.29/yr
+  },
+  autosignals: {
+    monthly:         'P-1DW3507463018312TNIIXCGQ',    // $49.99/mo
+    annual:          'P-4XP564380W259192KNIIXE2Q',    // $42.49/mo → $509.88/yr
+    discountMonthly: 'P-3D954951892901506NIIXDII',    // $44.99/mo
+    discountAnnual:  'P-0KL04351CX243694SNIIXF5A',    // $38.24/mo → $458.88/yr
+  },
+  trenbot: {
+    monthly:         'P-532973756S002890NNIIXG5I',    // $79.99/mo
+    annual:          'P-0TM12065N7929813VNIIXJHA',    // $67.99/mo → $815.88/yr
+    discountMonthly: 'P-19N53376UV5596107NIIXHRQ',    // $71.99/mo
+    discountAnnual:  'P-8BS62429RA7399346NIIXIRY',    // $61.19/mo → $734.28/yr
+  },
+  indicator: {
+    lifetime:        'P-216499032T727480WNGZ3ZOY',    // $99
+    discountLifetime:'P-0NL69043U6031300JNHB2NNQ',    // $89
+  }
+};
+
+function ppLink(planId) {
+  return 'https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=' + planId;
+}
+
+/* Premium Signals free-trial stays as direct checkout link;
+   after trial it converts to the chosen billing cycle */
+const PS_TRIAL_URL = 'https://tren.vercel.app/checkout-premium';
+
+let isAnnual = true;
+
+function toggleBilling() {
+  isAnnual = document.getElementById('billing-switch').checked;
+  document.getElementById('lbl-monthly').classList.toggle('active', !isAnnual);
+  document.getElementById('lbl-annual').classList.toggle('active', isAnnual);
+  updatePricing();
+}
+
+function updatePricing() {
+  /* ── Premium Signals ── */
+  if (isAnnual) {
+    document.getElementById('ps-strike').textContent  = '$29.99/mo';
+    document.getElementById('ps-price').textContent   = '$25.49';
+    document.getElementById('ps-period').textContent  = '/mo';
+    document.getElementById('ps-billing').textContent = '$305.88 billed annually · save $54/yr';
+    document.getElementById('ps-cta').href            = ppLink(PLANS.premium.annual);
+    document.getElementById('ps-cta').textContent     = 'Start free trial';
+  } else {
+    document.getElementById('ps-strike').innerHTML    = '&nbsp;';
+    document.getElementById('ps-price').textContent   = '$0';
+    document.getElementById('ps-period').textContent  = '/ 7 days';
+    document.getElementById('ps-billing').textContent = 'then $29.99/mo billed monthly';
+    document.getElementById('ps-cta').href            = PS_TRIAL_URL;
+    document.getElementById('ps-cta').textContent     = 'Start free trial';
+  }
+
+  /* ── AutoSignals ── */
+  if (isAnnual) {
+    document.getElementById('as-strike').textContent  = '$49.99/mo';
+    document.getElementById('as-price').textContent   = '$42.49';
+    document.getElementById('as-billing').textContent = '$509.88 billed annually · save $90/yr';
+    document.getElementById('as-cta').href            = ppLink(PLANS.autosignals.annual);
+  } else {
+    document.getElementById('as-strike').textContent  = '$49.99/mo';
+    document.getElementById('as-price').textContent   = '$49.99';
+    document.getElementById('as-billing').textContent = 'billed monthly';
+    document.getElementById('as-cta').href            = ppLink(PLANS.autosignals.monthly);
+  }
+
+  /* ── TrenBot ── */
+  if (isAnnual) {
+    document.getElementById('tb-strike').textContent  = '$79.99/mo';
+    document.getElementById('tb-price').textContent   = '$67.99';
+    document.getElementById('tb-billing').textContent = '$815.88 billed annually · save $144/yr';
+    document.getElementById('tb-cta').href            = ppLink(PLANS.trenbot.annual);
+  } else {
+    document.getElementById('tb-strike').textContent  = '$79.99/mo';
+    document.getElementById('tb-price').textContent   = '$79.99';
+    document.getElementById('tb-billing').textContent = 'billed monthly';
+    document.getElementById('tb-cta').href            = ppLink(PLANS.trenbot.monthly);
+  }
+}
+
+/* Init pricing on load — default to annual */
+document.getElementById('billing-switch').checked = true;
+document.getElementById('lbl-monthly').classList.remove('active');
+document.getElementById('lbl-annual').classList.add('active');
+updatePricing();
+
+/* ── SUPABASE LIVE DATA ── */
+const SUPABASE_URL = 'https://rjzteejovzmytfeupeaa.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_p0W2wgXC1zc73-50mSx2ew_OBOCMSXJ';
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function fmtNum(n, dec) {
+  return Number(n).toLocaleString('en-US', {minimumFractionDigits: dec, maximumFractionDigits: dec});
+}
+function fmtDate(iso) {
+  const d = new Date(iso), now = new Date();
+  const diffMin = Math.floor((now - d) / 60000);
+  const diffHr  = Math.floor((now - d) / 3600000);
+  if (diffMin < 60) return diffMin <= 1 ? 'just now' : diffMin + 'm ago';
+  if (diffHr < 24)  return diffHr + 'h ago';
+  return d.toLocaleDateString('en-GB', {day:'numeric',month:'short'});
+}
+function fmtPnl(pnl) {
+  const v = parseFloat(pnl || 0);
+  const pos = v >= 0;
+  return { sign: pos ? '+' : '−', abs: Math.abs(v), pos };
+}
+
+async function fetchHeroFeed() {
+  const list = document.getElementById('signal-list');
+  if (!list) return;
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/trades?order=executed_at.desc&limit=5`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const trades = await res.json();
+    if (!trades.length) { list.innerHTML = '<div class="empty-state">No trades yet.</div>'; return; }
+    list.innerHTML = trades.map(t => {
+      const {sign, abs, pos} = fmtPnl(t.pnl);
+      return `<div class="sig-card ${pos?'win':'loss'}">
+        <div>
+          <div class="sig-top">
+            <span class="sig-market">${escHtml(t.market||'—')}</span>
+            <span class="sig-dir ${(t.direction||'').toLowerCase()}">${escHtml(t.direction||'—')}</span>
+            <span class="sig-date">${fmtDate(t.executed_at)}</span>
+          </div>
+          <div class="sig-data">
+            <div><div class="sig-field-label">Entry</div><div class="sig-field-val">${t.entry?fmtNum(t.entry,2):'—'}</div></div>
+            <div><div class="sig-field-label">Exit</div><div class="sig-field-val">${t.exit?fmtNum(t.exit,2):'—'}</div></div>
+            <div><div class="sig-field-label">Ticks</div><div class="sig-field-val">${t.ticks||'—'}</div></div>
+          </div>
+        </div>
+        <div class="sig-result">
+          <div class="sig-pnl ${pos?'pos':'neg'}">${sign}$${abs.toLocaleString('en-US',{maximumFractionDigits:0})}</div>
+          <div class="sig-ticks">${t.duration||(pos?'':'SL hit')}</div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e) {
+    console.error('Hero feed error:', e);
+    list.innerHTML = '<div class="empty-state">Could not load trades.</div>';
+  }
+}
+
+async function fetchLiveStats() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/trades?order=executed_at.desc&limit=500`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const cutoff = new Date(); cutoff.setDate(cutoff.getDate()-14); cutoff.setHours(0,0,0,0);
+    const d14 = data.filter(t => t.executed_at && new Date(t.executed_at) >= cutoff);
+
+    const totalPnl = d14.reduce((a,t) => a + parseFloat(t.pnl||0), 0);
+    const pnlEl = document.getElementById('hp-pnl');
+    if (pnlEl) { pnlEl.textContent = (totalPnl>=0?'+':'') + '$' + Math.abs(totalPnl).toLocaleString('en-US',{maximumFractionDigits:0}); pnlEl.className='stat-value '+(totalPnl>=0?'g':'r'); }
+    const pnlN = document.getElementById('hp-pnl-note'); if(pnlN) pnlN.textContent = `${d14.length} trades · 3 NQ contracts`;
+    const pnlB = document.getElementById('hp-pnl-bar'); if(pnlB) pnlB.style.width = Math.min(100,Math.max(0,(totalPnl/15000)*100))+'%';
+
+    const closed = d14.filter(t=>t.exit);
+    const wins = closed.filter(t=>parseFloat(t.pnl||0)>0).length;
+    const wr = closed.length ? Math.round(wins/closed.length*100) : 0;
+
+    const wrEl = document.getElementById('hp-wr');
+    if(wrEl) { wrEl.textContent = wr+'%'; wrEl.className='stat-value '+(wr>=50?'g':'r'); }
+    const wrN = document.getElementById('hp-wr-note'); if(wrN) wrN.textContent = `${closed.length} closed trades · last 14 days`;
+    const wrB = document.getElementById('hp-wr-bar'); if(wrB) wrB.style.width = wr+'%';
+
+    const spWr = document.getElementById('sp-wr');
+    if(spWr) spWr.textContent = wr > 0 ? wr+'%' : '—';
+
+    const dayMap={};
+    d14.forEach(t=>{ if(!t.executed_at) return; const d=t.executed_at.slice(0,10); dayMap[d]=(dayMap[d]||0)+parseFloat(t.pnl||0); });
+    const bestDay = Object.values(dayMap).length ? Math.max(...Object.values(dayMap)) : 0;
+    const bdEl = document.getElementById('hp-bd');
+    if(bdEl) { bdEl.textContent=(bestDay>=0?'+':'')+'$'+Math.abs(bestDay).toLocaleString('en-US',{maximumFractionDigits:0}); bdEl.className='stat-value '+(bestDay>=0?'g':'r'); }
+    const bdB = document.getElementById('hp-bd-bar'); if(bdB) bdB.style.width = Math.min(100,Math.max(0,(bestDay/3000)*100))+'%';
+
+    const upd = document.getElementById('stat-updated-time');
+    if(upd) upd.textContent = 'Updated '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+
+    const recentClosed = data.filter(t=>t.exit).slice(0,20);
+    const row = document.getElementById('streak-row');
+    if(row && recentClosed.length) {
+      row.innerHTML = recentClosed.map(t => {
+        const w = parseFloat(t.pnl||0) > 0;
+        return `<div class="streak-pip ${w?'w':'l'}" title="${w?'Win':'Loss'}">${w?'W':'L'}</div>`;
+      }).join('');
+    }
+  } catch(e) {
+    console.error('Stats error:', e);
+    const fb = { 'hp-pnl':'$9,415','hp-wr':'83%','hp-bd':'$1,685' };
+    Object.entries(fb).forEach(([id,v])=>{ const el=document.getElementById(id); if(el){el.textContent=v;el.className='stat-value g';} });
+    const spWr = document.getElementById('sp-wr'); if(spWr) spWr.textContent = '83%';
+    const row = document.getElementById('streak-row');
+    if(row) {
+      const pattern = [1,1,1,0,1,1,0,1,1,1,1,0,1,1,1,0,1,1,1,1];
+      row.innerHTML = pattern.map(w=>`<div class="streak-pip ${w?'w':'l'}">${w?'W':'L'}</div>`).join('');
+    }
+  }
+}
+
+async function fetchBentoTrades() {
+  try {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/trades?order=executed_at.desc&limit=3`, {
+      headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const trades = await res.json();
+    trades.forEach((t, i) => {
+      const el = document.getElementById('tc-' + i);
+      if (!el) return;
+      const {sign, abs, pos} = fmtPnl(t.pnl);
+      const dir = (t.direction||'').toLowerCase();
+      el.className = `bento-trade ${pos?'win':'loss'} span-4`;
+      el.innerHTML = `
+        <div class="bento-trade-header">
+          <span class="bt-market">${escHtml(t.market||'NQ')}</span>
+          <span class="bt-dir ${dir}">${escHtml(t.direction||'—')}</span>
+        </div>
+        <div class="bt-pnl ${pos?'pos':'neg'}">${sign}$${abs.toLocaleString('en-US',{maximumFractionDigits:0})}</div>
+        <div class="bt-fields">
+          <div><div class="bt-field-label">Entry</div><div class="bt-field-val">${t.entry?fmtNum(t.entry,2):'—'}</div></div>
+          <div><div class="bt-field-label">Exit</div><div class="bt-field-val">${t.exit?fmtNum(t.exit,2):'—'}</div></div>
+          <div><div class="bt-field-label">Ticks</div><div class="bt-field-val">${t.ticks||'—'}</div></div>
+        </div>
+        <div class="bt-date"><span class="bt-date-dot"></span>${fmtDate(t.executed_at)}</div>
+      `;
+    });
+  } catch(e) {
+    console.error('Bento trades error:', e);
+  }
+}
+
+fetchHeroFeed();
+fetchLiveStats();
+fetchBentoTrades();
+setInterval(fetchHeroFeed, 30000);
+setInterval(fetchLiveStats, 60000);
+setInterval(fetchBentoTrades, 60000);
+</script>
+</body>
+</html>
