@@ -299,10 +299,10 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
     const p=new URLSearchParams(window.location.search);
     const t=p.get('_t');
     if(t){
-      const existing=sessionStorage.getItem('tren_session');
+      const existing=localStorage.getItem('tren_session');
       if(!existing){
         const decoded=JSON.parse(atob(decodeURIComponent(t)));
-        sessionStorage.setItem('tren_session',JSON.stringify(decoded));
+        localStorage.setItem('tren_session',JSON.stringify(decoded));
       }
       window.history.replaceState({},'',window.location.pathname);
     }
@@ -319,7 +319,7 @@ const SESSION_KEY='tren_session';
 // ── NAV WITH SESSION PASSTHROUGH ─────────────────────────────────
 function navTo(url){
   try{
-    const s=sessionStorage.getItem(SESSION_KEY);
+    const s=localStorage.getItem(SESSION_KEY);
     if(s){
       const encoded=encodeURIComponent(btoa(s));
       url+=(url.includes('?')?'&':'?')+'_t='+encoded;
@@ -328,17 +328,17 @@ function navTo(url){
   window.location.href=url;
 }
 
-let _session=window.__trenSession||(()=>{try{const r=sessionStorage.getItem(SESSION_KEY);return r?JSON.parse(r):null;}catch{return null;}})();
+let _session=window.__trenSession||(()=>{try{const r=localStorage.getItem(SESSION_KEY);return r?JSON.parse(r):null;}catch{return null;}})();
 if(!(_session&&_session.access_token)){window.location.href='https://trenai.vercel.app/login-page';}
 
 let _subData=null,_autoSubData=null,_autoSignalsSubData=null;
-try{_subData=JSON.parse(sessionStorage.getItem('tren_sub')||'null');}catch(e){}
-try{_autoSubData=JSON.parse(sessionStorage.getItem('tren_trenbot_sub')||'null');}catch(e){}
-try{_autoSignalsSubData=JSON.parse(sessionStorage.getItem('tren_autosignals_sub')||'null');}catch(e){}
+try{_subData=JSON.parse(localStorage.getItem('tren_sub')||'null');}catch(e){}
+try{_autoSubData=JSON.parse(localStorage.getItem('tren_trenbot_sub')||'null');}catch(e){}
+try{_autoSignalsSubData=JSON.parse(localStorage.getItem('tren_autosignals_sub')||'null');}catch(e){}
 
 function getSessionEmail(){return _session&&_session.user&&_session.user.email?_session.user.email:'—';}
 function getSessionFullName(){if(_session&&_session.user){const m=_session.user.user_metadata||{};if(m.full_name)return m.full_name;if(m.name)return m.name;if(_session.user.email)return _session.user.email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());}return'Trader';}
-function getPrefs(){return JSON.parse(sessionStorage.getItem('tren_prefs')||'{}');}
+function getPrefs(){return JSON.parse(localStorage.getItem('tren_prefs')||'{}');}
 function getUserDisplayName(){const e=getSessionEmail(),p=getPrefs(),u=p.display_names||{};return u[e]||getSessionFullName();}
 function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmtNum(n,d){return Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});}
@@ -349,8 +349,8 @@ function showToast(icon,title,msg){const ex=document.querySelector('.toast');if(
 
 async function doLogout(){
   const tok=_session?_session.access_token:'';
-  sessionStorage.removeItem(SESSION_KEY);
-  ['tren_sub','tren_prefs','tren_auto_sub','tren_autosignals_sub','tren_trenbot_sub'].forEach(k=>sessionStorage.removeItem(k));
+  localStorage.removeItem(SESSION_KEY);
+  ['tren_sub','tren_prefs','tren_auto_sub','tren_autosignals_sub','tren_trenbot_sub'].forEach(k=>localStorage.removeItem(k));
   try{fetch(`${SUPABASE_AUTH_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':'Bearer '+tok}}).catch(()=>{});}catch(e){}
   window.location.href='https://trenai.vercel.app/login-page';
 }
@@ -395,13 +395,13 @@ function toggleSidebar(){document.getElementById('sidebar').classList.toggle('op
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sb-overlay').classList.remove('open');}
 
 // ── NOTIFICATIONS ─────────────────────────────────────────────────
-let notifEnabled=sessionStorage.getItem('tren_notif')==='true';
+let notifEnabled=localStorage.getItem('tren_notif')==='true';
 async function requestNotifPermission(){if(!('Notification'in window))return false;if(Notification.permission==='granted')return true;if(Notification.permission==='denied')return false;return(await Notification.requestPermission())==='granted';}
 function sendNotif(title,body){if(!notifEnabled||Notification.permission!=='granted')return;new Notification(title,{body,tag:'tren-trade',requireInteraction:true});}
 function toggleNotifications(){
   const btn=document.getElementById('notif-btn');
-  if(!notifEnabled){requestNotifPermission().then(g=>{if(g){notifEnabled=true;sessionStorage.setItem('tren_notif','true');btn.classList.add('on');showToast('🔔','Notifications Enabled','You will receive alerts when new trades are entered.');}else{showToast('⚠️','Permission Denied','Allow notifications in your browser settings.');}});}
-  else{notifEnabled=false;sessionStorage.setItem('tren_notif','false');btn.classList.remove('on');showToast('🔕','Notifications Disabled','');}
+  if(!notifEnabled){requestNotifPermission().then(g=>{if(g){notifEnabled=true;localStorage.setItem('tren_notif','true');btn.classList.add('on');showToast('🔔','Notifications Enabled','You will receive alerts when new trades are entered.');}else{showToast('⚠️','Permission Denied','Allow notifications in your browser settings.');}});}
+  else{notifEnabled=false;localStorage.setItem('tren_notif','false');btn.classList.remove('on');showToast('🔕','Notifications Disabled','');}
 }
 
 // ── LIVE LOGIC ────────────────────────────────────────────────────
@@ -462,7 +462,7 @@ async function loadLiveTrades(){
   try{
     const data=await sbFetch('live_trades?order=timestamp.desc&limit=20');
     const fresh=data.filter(t=>!isTradeExpired(t.timestamp));
-    const hidden=new Set(JSON.parse(sessionStorage.getItem('tren_hidden_live')||'[]'));
+    const hidden=new Set(JSON.parse(localStorage.getItem('tren_hidden_live')||'[]'));
     const visible=fresh.filter(t=>!hidden.has(t.id));
     const curIds=new Set(visible.map(t=>String(t.id)));
     const newT=visible.filter(t=>!liveLastSeenIds.has(String(t.id)));
@@ -495,9 +495,9 @@ async function loadLiveTrades(){
 function clearLiveTrades(){
   if(!confirm('Clear all live trades from view?'))return;
   const grid=document.getElementById('live-grid');
-  let hidden=JSON.parse(sessionStorage.getItem('tren_hidden_live')||'[]');
+  let hidden=JSON.parse(localStorage.getItem('tren_hidden_live')||'[]');
   Array.from(grid.children).forEach(c=>{const id=c.dataset.id;if(id&&!hidden.includes(id))hidden.push(id);});
-  sessionStorage.setItem('tren_hidden_live',JSON.stringify(hidden));
+  localStorage.setItem('tren_hidden_live',JSON.stringify(hidden));
   grid.innerHTML='';document.getElementById('live-empty').style.display='block';liveLastSeenIds.clear();
   showToast('🗑️','Cleared','Live trades cleared from view.');
 }
@@ -509,10 +509,10 @@ if(notifEnabled&&typeof Notification!=='undefined'&&Notification.permission==='g
   document.getElementById('notif-btn').classList.add('on');
 }
 // Auto-clear hidden list after 24h
-const lhc=sessionStorage.getItem('tren_hidden_cleared');
+const lhc=localStorage.getItem('tren_hidden_cleared');
 if(!lhc||(Date.now()-parseInt(lhc))>86400000){
-  sessionStorage.removeItem('tren_hidden_live');
-  sessionStorage.setItem('tren_hidden_cleared',String(Date.now()));
+  localStorage.removeItem('tren_hidden_live');
+  localStorage.setItem('tren_hidden_cleared',String(Date.now()));
 }
 loadLiveTrades();
 setInterval(loadLiveTrades,10000);
@@ -520,7 +520,7 @@ setInterval(loadLiveTrades,10000);
 <script>
   function goToDashboard(e) {
     e.preventDefault();
-    if (sessionStorage.getItem('tren_session')) {
+    if (localStorage.getItem('tren_session')) {
       window.location.href = '/overview';
     } else {
       window.location.href = '/login-page';

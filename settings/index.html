@@ -423,18 +423,18 @@ const SUPABASE_AUTH_URL='https://sjntsmzbiqvtstvofcnx.supabase.co';
 const SUPABASE_AUTH_KEY='sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg';
 const SESSION_KEY='tren_session';
 
-let _session=window.__trenSession||(()=>{try{const r=sessionStorage.getItem(SESSION_KEY);return r?JSON.parse(r):null;}catch{return null;}})();
+let _session=window.__trenSession||(()=>{try{const r=localStorage.getItem(SESSION_KEY);return r?JSON.parse(r):null;}catch{return null;}})();
 if(!(_session&&_session.access_token)){window.location.href='https://trenai.vercel.app/login-page';}
 
 let _subData=null,_autoSubData=null,_autoSignalsSubData=null;
-try{_subData=JSON.parse(sessionStorage.getItem('tren_sub')||'null');}catch(e){}
-try{_autoSubData=JSON.parse(sessionStorage.getItem('tren_trenbot_sub')||'null');}catch(e){}
-try{_autoSignalsSubData=JSON.parse(sessionStorage.getItem('tren_autosignals_sub')||'null');}catch(e){}
+try{_subData=JSON.parse(localStorage.getItem('tren_sub')||'null');}catch(e){}
+try{_autoSubData=JSON.parse(localStorage.getItem('tren_trenbot_sub')||'null');}catch(e){}
+try{_autoSignalsSubData=JSON.parse(localStorage.getItem('tren_autosignals_sub')||'null');}catch(e){}
 
 function getSessionEmail(){return _session&&_session.user&&_session.user.email?_session.user.email:'—';}
 function getSessionFullName(){if(_session&&_session.user){const m=_session.user.user_metadata||{};if(m.full_name)return m.full_name;if(m.name)return m.name;if(_session.user.email)return _session.user.email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());}return'Trader';}
-function getPrefs(){return JSON.parse(sessionStorage.getItem('tren_prefs')||'{}');}
-function savePrefs(p){sessionStorage.setItem('tren_prefs',JSON.stringify(p));}
+function getPrefs(){return JSON.parse(localStorage.getItem('tren_prefs')||'{}');}
+function savePrefs(p){localStorage.setItem('tren_prefs',JSON.stringify(p));}
 function savePref(k,v){const p=getPrefs();p[k]=v;savePrefs(p);}
 function getUserDisplayName(){const e=getSessionEmail(),p=getPrefs(),u=p.display_names||{};return u[e]||getSessionFullName();}
 function getTrades(){return JSON.parse(localStorage.getItem('tren_journal')||'[]');}
@@ -445,8 +445,8 @@ function dlFile(content,filename,type){const blob=new Blob([content],{type});con
 
 async function doLogout(){
   const tok=_session?_session.access_token:'';
-  sessionStorage.removeItem(SESSION_KEY);
-  ['tren_sub','tren_prefs','tren_auto_sub','tren_autosignals_sub','tren_trenbot_sub'].forEach(k=>sessionStorage.removeItem(k));
+  localStorage.removeItem(SESSION_KEY);
+  ['tren_sub','tren_prefs','tren_auto_sub','tren_autosignals_sub','tren_trenbot_sub'].forEach(k=>localStorage.removeItem(k));
   try{fetch(`${SUPABASE_AUTH_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':'Bearer '+tok}}).catch(()=>{});}catch(e){}
   window.location.href='https://trenai.vercel.app/login-page';
 }
@@ -500,7 +500,7 @@ function initStats(){
 function initToggles(){
   const p=getPrefs();
   if(document.getElementById('tog-wknd'))document.getElementById('tog-wknd').checked=!!p.show_weekends;
-  const no=sessionStorage.getItem('tren_notif')==='true';
+  const no=localStorage.getItem('tren_notif')==='true';
   if(document.getElementById('tog-notif-main'))document.getElementById('tog-notif-main').checked=no;
   if(p.accent)document.querySelectorAll('.accent-sw').forEach(s=>s.classList.toggle('on',s.dataset.color===p.accent));
   if(p.theme)document.querySelectorAll('.theme-chip').forEach(c=>c.classList.toggle('on',c.dataset.theme===p.theme));
@@ -558,8 +558,8 @@ async function handleNotifToggle(checked){
   if(checked){
     const g=await(async()=>{if(!('Notification'in window))return false;if(Notification.permission==='granted')return true;if(Notification.permission==='denied')return false;return(await Notification.requestPermission())==='granted';})();
     if(!g){document.getElementById('tog-notif-main').checked=false;showToast('⚠️','Permission Denied','Allow notifications in your browser settings.');}
-    else{sessionStorage.setItem('tren_notif','true');showToast('🔔','Notifications On','');}
-  }else{sessionStorage.setItem('tren_notif','false');showToast('🔕','Notifications Off','');}
+    else{localStorage.setItem('tren_notif','true');showToast('🔔','Notifications On','');}
+  }else{localStorage.setItem('tren_notif','false');showToast('🔕','Notifications Off','');}
 }
 
 function exportCSV(){
@@ -595,12 +595,12 @@ function clearJournal(){
   initStats();
 }
 function clearHiddenTrades(){
-  sessionStorage.removeItem('tren_hidden_live');
+  localStorage.removeItem('tren_hidden_live');
   showToast('✅','Restored','Hidden live trades will reappear on the Live Signals page.');
 }
 function resetSettings(){
   if(!confirm('Reset all settings to defaults? Your journal will NOT be affected.'))return;
-  sessionStorage.removeItem('tren_prefs');
+  localStorage.removeItem('tren_prefs');
   document.documentElement.removeAttribute('style');
   showToast('🔄','Settings Reset','');
   setTimeout(()=>{initToggles();},300);
@@ -615,7 +615,7 @@ initToggles();
 <script>
   function goToDashboard(e) {
     e.preventDefault();
-    if (sessionStorage.getItem('tren_session')) {
+    if (localStorage.getItem('tren_session')) {
       window.location.href = '/overview';
     } else {
       window.location.href = '/login-page';

@@ -352,25 +352,25 @@ const SUPABASE_AUTH_URL='https://sjntsmzbiqvtstvofcnx.supabase.co';
 const SUPABASE_AUTH_KEY='sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg';
 const SESSION_KEY='tren_session';
 
-let _session=window.__trenSession||(()=>{try{const r=sessionStorage.getItem(SESSION_KEY);return r?JSON.parse(r):null;}catch{return null;}})();
+let _session=window.__trenSession||(()=>{try{const r=localStorage.getItem(SESSION_KEY);return r?JSON.parse(r):null;}catch{return null;}})();
 if(!(_session&&_session.access_token)){window.location.href='https://trenai.vercel.app/login-page';}
 
 let _subData=null,_autoSubData=null,_autoSignalsSubData=null;
-try{_subData=JSON.parse(sessionStorage.getItem('tren_sub')||'null');}catch(e){}
-try{_autoSubData=JSON.parse(sessionStorage.getItem('tren_trenbot_sub')||'null');}catch(e){}
-try{_autoSignalsSubData=JSON.parse(sessionStorage.getItem('tren_autosignals_sub')||'null');}catch(e){}
+try{_subData=JSON.parse(localStorage.getItem('tren_sub')||'null');}catch(e){}
+try{_autoSubData=JSON.parse(localStorage.getItem('tren_trenbot_sub')||'null');}catch(e){}
+try{_autoSignalsSubData=JSON.parse(localStorage.getItem('tren_autosignals_sub')||'null');}catch(e){}
 
 function getSessionEmail(){return _session&&_session.user&&_session.user.email?_session.user.email:'—';}
 function getSessionFullName(){if(_session&&_session.user){const m=_session.user.user_metadata||{};if(m.full_name)return m.full_name;if(m.name)return m.name;if(_session.user.email)return _session.user.email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());}return'Trader';}
-function getPrefs(){return JSON.parse(sessionStorage.getItem('tren_prefs')||'{}');}
+function getPrefs(){return JSON.parse(localStorage.getItem('tren_prefs')||'{}');}
 function getUserDisplayName(){const e=getSessionEmail(),p=getPrefs(),u=p.display_names||{};return u[e]||getSessionFullName();}
 function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function showToast(icon,title,msg){const ex=document.querySelector('.toast');if(ex)ex.remove();const t=document.createElement('div');t.className='toast';t.innerHTML=`<div class="toast-icon">${icon}</div><div class="toast-body"><div class="toast-title">${escHtml(title)}</div><div class="toast-msg">${escHtml(msg)}</div></div><button class="toast-close" onclick="this.parentElement.remove()">✕</button>`;document.body.appendChild(t);setTimeout(()=>{if(t.parentElement)t.remove();},5000);}
 
 async function doLogout(){
   const tok=_session?_session.access_token:'';
-  sessionStorage.removeItem(SESSION_KEY);
-  ['tren_sub','tren_prefs','tren_auto_sub','tren_autosignals_sub','tren_trenbot_sub'].forEach(k=>sessionStorage.removeItem(k));
+  localStorage.removeItem(SESSION_KEY);
+  ['tren_sub','tren_prefs','tren_auto_sub','tren_autosignals_sub','tren_trenbot_sub'].forEach(k=>localStorage.removeItem(k));
   try{fetch(`${SUPABASE_AUTH_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':'Bearer '+tok}}).catch(()=>{});}catch(e){}
   window.location.href='https://trenai.vercel.app/login-page';
 }
@@ -458,7 +458,7 @@ initSubUI();
 <script>
   function goToDashboard(e) {
     e.preventDefault();
-    if (sessionStorage.getItem('tren_session')) {
+    if (localStorage.getItem('tren_session')) {
       window.location.href = '/overview';
     } else {
       window.location.href = '/login-page';

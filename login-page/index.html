@@ -406,7 +406,7 @@ body {
 // ─── CAPTURE HASH IMMEDIATELY before Framer wipes it ─────────────────────────
 const _savedHash = window.location.hash;
 if (_savedHash.includes('access_token')) {
-  sessionStorage.setItem('tren_reset_hash', _savedHash);
+  localStorage.setItem('tren_reset_hash', _savedHash);
 }
 
 // ─── ⚙️  CONFIGURATION ────────────────────────────────────────────────────────
@@ -594,13 +594,13 @@ function showDashboard(session) {
       user_metadata: session.user?.user_metadata || {}
     }
   };
-  sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionPayload));
+  localStorage.setItem(SESSION_KEY, JSON.stringify(sessionPayload));
   window.location.replace(DASHBOARD_URL);
 }
 
 async function logout() {
   await sb.auth.signOut();
-  sessionStorage.removeItem(SESSION_KEY);
+  localStorage.removeItem(SESSION_KEY);
   document.getElementById('dashboard').classList.remove('show');
   show('login');
   document.getElementById('login-email').value = '';
@@ -630,9 +630,9 @@ sb.auth.onAuthStateChange((event, session) => {
 
 // ─── INIT ─────────────────────────────────────────────────────────────────────
 (async function init() {
-  // Read hash from sessionStorage (saved at top of script) or directly from URL
-  const hash = sessionStorage.getItem('tren_reset_hash') || window.location.hash;
-  sessionStorage.removeItem('tren_reset_hash');
+  // Read hash from localStorage (saved at top of script) or directly from URL
+  const hash = localStorage.getItem('tren_reset_hash') || window.location.hash;
+  localStorage.removeItem('tren_reset_hash');
 
   if (hash && hash.includes('access_token')) {
     const params = new URLSearchParams(hash.substring(1));

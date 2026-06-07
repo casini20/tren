@@ -1182,7 +1182,7 @@ setBilling('yearly');
 <script>
   function goToDashboard(e) {
     e.preventDefault();
-    if (sessionStorage.getItem('tren_session')) {
+    if (localStorage.getItem('tren_session')) {
       window.location.href = '/overview';
     } else {
       window.location.href = '/login-page';
