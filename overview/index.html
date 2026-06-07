@@ -104,6 +104,12 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .page{flex:1;overflow-y:auto;padding:1.8rem 2.4rem;scrollbar-width:none;}
 .page::-webkit-scrollbar{display:none;}
 
+/* ── TIMEFRAME SELECTOR ── */
+.tf-seg{display:flex;align-items:center;gap:1px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:2px;}
+.tf-btn{padding:4px 10px;border-radius:6px;font-size:11.5px;font-weight:600;color:var(--sub);cursor:pointer;transition:all .15s;border:none;font-family:'Plus Jakarta Sans',sans-serif;background:none;letter-spacing:.2px;}
+.tf-btn:hover{color:var(--sub2);}
+.tf-btn.active{background:rgba(255,255,255,.08);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.3);}
+
 /* ── OVERVIEW COMPONENTS ── */
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:1.8rem;}
 .sc{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:1.1rem 1.3rem;transition:border-color .18s;}
@@ -128,6 +134,8 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .mb::before{content:attr(data-pnl);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) scale(.9);background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:all .18s;z-index:10;}
 .mb:hover::before{opacity:1;transform:translateX(-50%) scale(1);}
 .mb::after{content:attr(data-date) ' ' attr(data-day);position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);font-size:9px;color:var(--sub);letter-spacing:.3px;white-space:nowrap;opacity:.55;}
+/* hide date labels on larger timeframes to avoid crowding */
+.mb.hide-label::after{display:none;}
 .sig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:13px;}
 .sig-card{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:1.1rem;transition:border-color .2s,transform .2s;cursor:pointer;position:relative;overflow:hidden;}
 .sig-card:hover{border-color:var(--border2);transform:translateY(-2px);}
@@ -158,6 +166,9 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .skel{background:rgba(255,255,255,.04);border-radius:8px;animation:sk 1.4s ease infinite;}
 @keyframes sk{0%,100%{opacity:.4}50%{opacity:.9}}
 
+/* ── LOADING OVERLAY for re-renders ── */
+.stats-loading{opacity:.5;pointer-events:none;transition:opacity .2s;}
+
 /* ── TOAST ── */
 .toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:linear-gradient(145deg,var(--bg3),var(--bg2));border:1px solid var(--border2);border-radius:14px;padding:1.1rem 1.4rem;box-shadow:0 12px 40px rgba(0,0,0,.4);display:flex;align-items:center;gap:12px;animation:toastIn .4s ease;max-width:380px;}
 @keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
@@ -187,6 +198,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
   .sig-grid{grid-template-columns:1fr;}
   .sig-meta{grid-template-columns:1fr 1fr;}
   .page{padding:1rem;}
+
 }
 </style>
 
@@ -280,25 +292,36 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 
     <!-- PAGE CONTENT -->
     <div class="page">
-      <div style="display:flex;align-items:center;gap:8px;background:rgba(37,99,235,.08);border:1px solid rgba(37,99,235,.18);border-radius:10px;padding:9px 14px;margin-bottom:1.2rem;">
-        <span style="font-size:14px;">📅</span>
-        <span style="font-size:12px;color:var(--sub2);">Stats below reflect the <strong style="color:var(--al);">last 14 days</strong> of trading activity.</span>
+
+      <!-- PAGE HEADER ROW -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.4rem;">
+        <div>
+          <div style="font-size:13px;font-weight:600;color:var(--text);">Performance</div>
+          <div style="font-size:11px;color:var(--sub);margin-top:2px;" id="tf-sublabel">Last 14 days</div>
+        </div>
+        <div class="tf-seg" role="group" aria-label="Timeframe">
+          <button class="tf-btn" onclick="setTimeframe(7)">7D</button>
+          <button class="tf-btn active" onclick="setTimeframe(14)">14D</button>
+          <button class="tf-btn" onclick="setTimeframe(30)">30D</button>
+          <button class="tf-btn" onclick="setTimeframe(90)">90D</button>
+          <button class="tf-btn" onclick="setTimeframe(365)">1Y</button>
+        </div>
       </div>
 
       <div class="sg">
-        <div class="sc"><div class="sc-lbl">Total P&amp;L <span class="sc-lbl-sub">14 days</span></div><div class="sc-val g" id="ov-pnl">—</div><div class="sc-ch" id="ov-pc">Loading…</div></div>
-        <div class="sc"><div class="sc-lbl">Win Rate <span class="sc-lbl-sub">14 days</span></div><div class="sc-val" id="ov-wr">—</div><div class="sc-ch" id="ov-wc">Loading…</div></div>
-        <div class="sc"><div class="sc-lbl">Best Day <span class="sc-lbl-sub">14 days</span></div><div class="sc-val g" id="ov-bd">—</div><div class="sc-ch">Single day</div></div>
+        <div class="sc"><div class="sc-lbl">Total P&amp;L <span class="sc-lbl-sub" id="lbl-pnl">14 days</span></div><div class="sc-val g" id="ov-pnl">—</div><div class="sc-ch" id="ov-pc">Loading…</div></div>
+        <div class="sc"><div class="sc-lbl">Win Rate <span class="sc-lbl-sub" id="lbl-wr">14 days</span></div><div class="sc-val" id="ov-wr">—</div><div class="sc-ch" id="ov-wc">Loading…</div></div>
+        <div class="sc"><div class="sc-lbl">Best Day <span class="sc-lbl-sub" id="lbl-bd">14 days</span></div><div class="sc-val g" id="ov-bd">—</div><div class="sc-ch">Single day</div></div>
         <div class="sc"><div class="sc-lbl">Live Signals</div><div class="sc-val" id="ov-live-count">—</div><div class="sc-ch u" id="ov-live-sub">Loading…</div></div>
       </div>
 
       <div class="ca">
-        <div class="sh" style="margin-bottom:0"><div class="st">P&amp;L Performance</div><div style="font-size:11.5px;color:var(--sub)">Last 14 days</div></div>
+        <div class="sh" style="margin-bottom:0"><div class="st">P&amp;L Performance</div><div style="font-size:11.5px;color:var(--sub)" id="chart-range-label">Last 14 days</div></div>
         <div class="mc" id="ov-chart"><div class="skel" style="width:100%;height:60px;border-radius:6px;"></div></div>
       </div>
 
       <div class="sh">
-        <div class="st">Latest Signals <span style="font-size:11px;color:var(--sub);font-weight:400;">(last 14 days)</span></div>
+        <div class="st">Latest Signals <span style="font-size:11px;color:var(--sub);font-weight:400;" id="sigs-range-label">(last 14 days)</span></div>
         <a class="sa" onclick="navTo('https://trenai.vercel.app/signals')">View all →</a>
       </div>
       <div class="sig-grid" id="ov-sigs">
@@ -336,6 +359,41 @@ const SUPABASE_URL='https://rjzteejovzmytfeupeaa.supabase.co';
 const SUPABASE_KEY='sb_publishable_p0W2wgXC1zc73-50mSx2ew_OBOCMSXJ';
 const SESSION_KEY='tren_session';
 
+// ── TIMEFRAME STATE ───────────────────────────────────────────────
+let _activeDays = parseInt(localStorage.getItem('tren_ov_tf') || '14', 10);
+let _allTradesCache = null;
+let _renderDebounce = null;
+
+const TF_LABELS = {7:'7 days',14:'14 days',30:'30 days',90:'90 days',365:'1 year'};
+
+function setTimeframe(days){
+  _activeDays = days;
+  localStorage.setItem('tren_ov_tf', String(days));
+
+  // Update button states
+  document.querySelectorAll('.tf-btn').forEach(btn => {
+    const v = btn.textContent === '1Y' ? 365 : parseInt(btn.textContent);
+    btn.classList.toggle('active', v === days);
+  });
+
+  // Update labels
+  const lbl = TF_LABELS[days] || days + ' days';
+  const sub = document.getElementById('tf-sublabel');
+  if(sub) sub.textContent = 'Last ' + lbl;
+  ['lbl-pnl','lbl-wr','lbl-bd'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = lbl;
+  });
+  document.getElementById('chart-range-label').textContent = 'Last ' + lbl;
+  document.getElementById('sigs-range-label').textContent = '(last ' + lbl + ')';
+
+  if(_allTradesCache){
+    renderFromData(_allTradesCache);
+  } else {
+    renderOvStats();
+  }
+}
+
 // ── NAV WITH SESSION PASSTHROUGH + DEBOUNCE ──────────────────────
 let _navLock=false;
 function navTo(url){
@@ -353,7 +411,6 @@ function navTo(url){
 }
 
 let _session=window.__trenSession||(()=>{try{const r=localStorage.getItem(SESSION_KEY);return r?JSON.parse(r):null;}catch{return null;}})();
-
 
 let _subData=null,_autoSubData=null,_autoSignalsSubData=null;
 try{_subData=JSON.parse(localStorage.getItem('tren_sub')||'null');}catch(e){}
@@ -447,38 +504,94 @@ function buildSignalCard(t){
   </div>`;
 }
 
+function renderFromData(data){
+  const days = _activeDays;
+  const cutoff=new Date();cutoff.setDate(cutoff.getDate()-days);cutoff.setHours(0,0,0,0);
+  const filtered=data.filter(t=>t.executed_at&&new Date(t.executed_at)>=cutoff);
+
+  // P&L
+  const totalPnl=filtered.reduce((a,t)=>a+parseFloat(t.pnl||0),0);
+  const pe=document.getElementById('ov-pnl');
+  pe.textContent=(totalPnl>=0?'+':'')+'$'+Math.abs(totalPnl).toLocaleString('en-US',{maximumFractionDigits:0});
+  pe.className='sc-val '+(totalPnl>=0?'g':'r');
+  document.getElementById('ov-pc').textContent=`${filtered.length} trades last ${TF_LABELS[days]||days+' days'}`;
+
+  // Win rate
+  const closed=filtered.filter(t=>t.exit);
+  const wins=closed.filter(t=>parseFloat(t.pnl||0)>0).length;
+  const wr=closed.length?Math.round(wins/closed.length*100):0;
+  const we=document.getElementById('ov-wr');
+  we.textContent=wr+'%';we.className='sc-val '+(wr>=50?'g':'r');
+  document.getElementById('ov-wc').textContent=`${closed.length} closed (${TF_LABELS[days]||days+' days'})`;
+
+  // Best day
+  const dm={};filtered.forEach(t=>{if(!t.executed_at)return;const k=t.executed_at.slice(0,10);dm[k]=(dm[k]||0)+parseFloat(t.pnl||0);});
+  const bd=Object.values(dm).length?Math.max(...Object.values(dm)):0;
+  document.getElementById('ov-bd').textContent='+$'+bd.toLocaleString('en-US',{maximumFractionDigits:0});
+
+  // Live signals
+  const lc=data.filter(t=>!t.exit).length;
+  const today=getTodayLocal();const tc=data.filter(t=>t.executed_at&&t.executed_at.startsWith(today)).length;
+  document.getElementById('ov-live-count').textContent=lc;
+  document.getElementById('ov-live-sub').textContent=`↑ ${tc} new today`;
+
+  // Chart — group by day for the selected range
+  const today2=new Date();
+  const chartDays=[];
+  for(let i=days-1;i>=0;i--){const d=new Date(today2);d.setDate(today2.getDate()-i);chartDays.push(toLocalISO(d));}
+
+  const vals=chartDays.map(k=>filtered.filter(t=>t.executed_at&&t.executed_at.startsWith(k)).reduce((a,t)=>a+parseFloat(t.pnl||0),0));
+  const mx=Math.max(...vals.map(Math.abs),1);
+  const DL=['SU','MO','TU','WE','TH','FR','SA'];
+
+  // For larger timeframes, only show labels on every Nth bar to avoid clutter
+  const labelEvery = days <= 14 ? 1 : days <= 30 ? 3 : days <= 90 ? 7 : 14;
+
+  document.getElementById('ov-chart').innerHTML=vals.map((v,i)=>{
+    const h=Math.max(4,Math.round(Math.abs(v)/mx*72));
+    const d=new Date(chartDays[i]+'T12:00:00');
+    const ds=d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'});
+    const dw=d.getDay();const iw=(dw===0||dw===6);
+    let bc,pd;
+    if(iw){bc='wknd';pd='Weekend';}
+    else{bc=v>=0?'g':'r';pd=(v>=0?'+':'')+'$'+v.toFixed(0);}
+    const hideLabel = (i % labelEvery !== 0) ? ' hide-label' : '';
+    return`<div class="mb ${bc}${hideLabel}" style="height:${h}px" data-pnl="${pd}" data-date="${ds}" data-day="${DL[dw]}"></div>`;
+  }).join('');
+
+  // Signals list
+  document.getElementById('ov-sigs').innerHTML=(filtered||[]).slice(0,8).map(buildSignalCard).join('');
+}
+
 async function renderOvStats(){
   try{
-    const data=await sbFetch('trades?order=executed_at.desc&limit=500');
-    const cutoff=new Date();cutoff.setDate(cutoff.getDate()-14);cutoff.setHours(0,0,0,0);
-    const d14=data.filter(t=>t.executed_at&&new Date(t.executed_at)>=cutoff);
-    const totalPnl=d14.reduce((a,t)=>a+parseFloat(t.pnl||0),0);
-    const pe=document.getElementById('ov-pnl');pe.textContent=(totalPnl>=0?'+':'')+'$'+Math.abs(totalPnl).toLocaleString('en-US',{maximumFractionDigits:0});pe.className='sc-val '+(totalPnl>=0?'g':'r');
-    document.getElementById('ov-pc').textContent=`${d14.length} trades last 14 days`;
-    const closed=d14.filter(t=>t.exit);const wins=closed.filter(t=>parseFloat(t.pnl||0)>0).length;const wr=closed.length?Math.round(wins/closed.length*100):0;
-    const we=document.getElementById('ov-wr');we.textContent=wr+'%';we.className='sc-val '+(wr>=50?'g':'r');
-    document.getElementById('ov-wc').textContent=`${closed.length} closed (14 days)`;
-    const dm={};d14.forEach(t=>{if(!t.executed_at)return;const k=t.executed_at.slice(0,10);dm[k]=(dm[k]||0)+parseFloat(t.pnl||0);});
-    const bd=Object.values(dm).length?Math.max(...Object.values(dm)):0;
-    document.getElementById('ov-bd').textContent='+$'+bd.toLocaleString('en-US',{maximumFractionDigits:0});
-    const lc=data.filter(t=>!t.exit).length;const today=getTodayLocal();const tc=data.filter(t=>t.executed_at&&t.executed_at.startsWith(today)).length;
-    document.getElementById('ov-live-count').textContent=lc;document.getElementById('ov-live-sub').textContent=`↑ ${tc} new today`;
-    const today2=new Date();const days=[];
-    for(let i=13;i>=0;i--){const d=new Date(today2);d.setDate(today2.getDate()-i);days.push(toLocalISO(d));}
-    const vals=days.map(k=>d14.filter(t=>t.executed_at&&t.executed_at.startsWith(k)).reduce((a,t)=>a+parseFloat(t.pnl||0),0));
-    const mx=Math.max(...vals.map(Math.abs),1);const DL=['SU','MO','TU','WE','TH','FR','SA'];
-    document.getElementById('ov-chart').innerHTML=vals.map((v,i)=>{
-      const h=Math.max(4,Math.round(Math.abs(v)/mx*72));const d=new Date(days[i]+'T12:00:00');const ds=d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'});const dw=d.getDay();const iw=(dw===0||dw===6);
-      let bc,pd;if(iw){bc='wknd';pd='Weekend';}else{bc=v>=0?'g':'r';pd=(v>=0?'+':'')+'$'+v.toFixed(0);}
-      return`<div class="mb ${bc}" style="height:${h}px" data-pnl="${pd}" data-date="${ds}" data-day="${DL[dw]}"></div>`;
-    }).join('');
-    document.getElementById('ov-sigs').innerHTML=(d14||[]).slice(0,8).map(buildSignalCard).join('');
+    // Fetch enough data for the largest possible timeframe (365 days)
+    const data=await sbFetch('trades?order=executed_at.desc&limit=2000');
+    _allTradesCache = data;
+    renderFromData(data);
   }catch(e){
     ['ov-pnl','ov-wr','ov-bd','ov-live-count'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
   }
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
+// Restore saved timeframe preference and sync UI
+(function initTF(){
+  const saved = _activeDays;
+  document.querySelectorAll('.tf-btn').forEach(btn => {
+    const v = btn.textContent === '1Y' ? 365 : parseInt(btn.textContent);
+    btn.classList.toggle('active', v === saved);
+  });
+  const lbl = TF_LABELS[saved] || saved + ' days';
+  document.getElementById('tf-label').textContent = 'last ' + lbl;
+  ['lbl-pnl','lbl-wr','lbl-bd'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = lbl;
+  });
+  document.getElementById('chart-range-label').textContent = 'Last ' + lbl;
+  document.getElementById('sigs-range-label').textContent = '(last ' + lbl + ')';
+})();
+
 initUserInfo();
 initSubUI();
 renderOvStats();
