@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="refresh" content="0; url=https://trenai.vercel.app/">
+<script>window.location.replace("https://trenai.vercel.app/");</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tren – AutoSignals</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
+:root{
+  --bg:#04080f;--bg2:#080e1a;--bg3:#0c1525;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --accent:#2563eb;--al:#3b82f6;--green:#10b981;--red:#ef4444;--gold:#f59e0b;
+  --text:#f0f4ff;--sub:rgba(240,244,255,0.45);--sub2:rgba(240,244,255,0.72);
+  --sw:220px;
+}
+.shell{position:fixed;inset:0;display:flex;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--bg);}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sw);min-width:var(--sw);height:100vh;border-right:1px solid var(--border);background:linear-gradient(180deg,#080e1a,#04080f);display:flex;flex-direction:column;padding:1.6rem .9rem 0;position:relative;z-index:20;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;}
+.sidebar::-webkit-scrollbar{display:none;}
+.s-logo{font-size:20px;font-weight:800;padding:0 .6rem;margin-bottom:2rem;display:flex;align-items:center;gap:6px;}
+.s-logo span{color:var(--al);}
+.s-logo::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);}
+.s-nav{flex:1;display:flex;flex-direction:column;gap:2px;}
+.s-item{display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:500;color:var(--sub2);cursor:pointer;transition:all .2s;margin-bottom:1px;border:1px solid transparent;position:relative;text-decoration:none;}
+.s-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%) scaleY(0);width:3px;height:20px;background:var(--accent);border-radius:0 3px 3px 0;transition:transform .2s;}
+.s-item:hover{background:rgba(255,255,255,.04);color:var(--text);}
+.s-item:hover::before{transform:translateY(-50%) scaleY(.6);}
+.s-item.on{background:rgba(37,99,235,.1);border-color:rgba(37,99,235,.15);color:var(--al);}
+.s-item.on::before{transform:translateY(-50%) scaleY(1);box-shadow:0 0 8px var(--accent);}
+.s-item.gold{color:var(--gold);}
+.s-item.gold:hover{background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.35);}
+.s-item.gold.on{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.25);}
+.s-item.gold.on::before{background:var(--gold);}
+.s-ic{font-size:16px;width:22px;text-align:center;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;padding:3px 8px;border-radius:20px;font-weight:700;min-width:22px;text-align:center;}
+.s-badge.gd{background:var(--gold);color:#000;}
+.s-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:1.2rem .5rem .8rem;}
+.s-bot{position:sticky;bottom:0;width:100%;background:rgba(4,8,15,.95);backdrop-filter:blur(20px);padding:14px .6rem 16px;border-top:1px solid var(--border);z-index:20;margin-top:auto;flex-shrink:0;}
+.trial-card{background:linear-gradient(135deg,rgba(37,99,235,.15),rgba(59,130,246,.06));border:1px solid rgba(37,99,235,.2);border-radius:12px;padding:14px;margin-bottom:12px;}
+.trial-card h4{font-size:12px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.trial-card p{font-size:11px;color:var(--sub);margin-bottom:12px;line-height:1.5;}
+.up-mini{width:100%;padding:9px;border:none;border-radius:9px;background:linear-gradient(90deg,var(--accent),var(--al));color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+.u-row{display:flex;align-items:center;gap:10px;padding:8px;border-radius:10px;cursor:pointer;transition:background .2s;text-decoration:none;}
+.u-row:hover{background:rgba(255,255,255,.04);}
+.u-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;color:#fff;}
+.u-info{min-width:0;flex:1;display:flex;flex-direction:column;gap:1px;}
+.u-name{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.u-email{font-size:10px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sub-status-badge{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:2px;letter-spacing:.3px;}
+.sub-status-badge.trial{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:var(--gold);}
+.sub-status-badge.premium{background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.3);color:var(--al);}
+.sub-status-badge.automated{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:var(--gold);}
+.sub-status-badge.autosignals{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:var(--green);}
+.s-logout{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;font-size:12px;font-weight:500;color:rgba(239,68,68,.7);cursor:pointer;transition:all .2s;margin-top:6px;border:1px solid transparent;}
+.s-logout:hover{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.18);color:var(--red);}
+.live-dot-nav{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);animation:flicker 3.5s infinite;box-shadow:0 0 6px var(--green);}
+@keyframes flicker{0%,100%{opacity:1;transform:scale(1);}15%{opacity:.88;transform:scale(.95);}30%{opacity:1;transform:scale(1.03);}45%{opacity:.92;transform:scale(.97);}60%{opacity:1;transform:scale(1.06);}75%{opacity:.9;transform:scale(.94);}90%{opacity:1;transform:scale(1.02);}}
+
+/* ── MAIN ── */
+.main-wrap{flex:1;display:flex;flex-direction:column;min-width:0;height:100vh;overflow:hidden;}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.4rem;border-bottom:1px solid var(--border);background:rgba(4,8,15,.88);backdrop-filter:blur(20px);flex-shrink:0;position:relative;z-index:10;}
+.tb-title{font-size:17px;font-weight:700;}
+.tb-right{display:flex;align-items:center;gap:11px;}
+.t-pill{display:flex;align-items:center;gap:5px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:var(--gold);font-size:11.5px;font-weight:600;padding:5px 13px;border-radius:20px;}
+.t-pill.premium{background:rgba(37,99,235,.12);border-color:rgba(37,99,235,.3);color:var(--al);}
+.t-pill.autosignals{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.3);color:var(--green);}
+.t-pill.automated{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3);color:var(--gold);}
+.nb{width:33px;height:33px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:border-color .2s;}
+.nb:hover{border-color:var(--border2);}
+.prof-wrap{position:relative;}
+.prof-av{width:33px;height:33px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;cursor:pointer;border:2px solid transparent;transition:border-color .2s;color:#fff;}
+.prof-av:hover{border-color:rgba(255,255,255,.2);}
+.prof-av.open{border-color:var(--al);}
+.prof-menu{position:absolute;top:calc(100% + 10px);right:0;background:linear-gradient(145deg,#0d1628,#080e1a);border:1px solid rgba(255,255,255,.12);border-radius:13px;padding:6px;min-width:190px;z-index:200;box-shadow:0 12px 40px rgba(0,0,0,.55);display:none;}
+.prof-menu.open{display:block;animation:pf .2s ease;}
+@keyframes pf{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.prof-menu-header{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:5px;}
+.prof-menu-name{font-size:13px;font-weight:700;color:var(--text);}
+.prof-menu-email{font-size:11px;color:var(--sub);margin-top:2px;}
+.prof-menu-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;font-size:13px;font-weight:500;color:var(--sub2);cursor:pointer;transition:all .15s;text-decoration:none;}
+.prof-menu-item:hover{background:rgba(255,255,255,.06);color:var(--text);}
+.prof-menu-item.danger{color:rgba(239,68,68,.75);}
+.prof-menu-item.danger:hover{background:rgba(239,68,68,.09);color:var(--red);}
+.page{flex:1;overflow-y:auto;padding:1.8rem 2.4rem;scrollbar-width:none;}
+.page::-webkit-scrollbar{display:none;}
+
+/* ── SETUP CARDS ── */
+.jp{background:linear-gradient(145deg,var(--bg3),rgba(255,255,255,.02));border:1px solid var(--border);border-radius:15px;padding:1.5rem;margin-bottom:1.2rem;position:relative;overflow:hidden;}
+.jp-bar{position:absolute;top:0;left:0;right:0;height:3px;}
+.jp-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.jp h3{font-size:16px;font-weight:700;margin-bottom:6px;}
+.jp p{font-size:13px;color:var(--sub2);line-height:1.7;margin-bottom:1rem;}
+.step-row{display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:12.5px;color:var(--sub2);}
+.step-num{background:var(--accent);color:#fff;font-size:10px;font-weight:700;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.menu-path{font-size:12.5px;color:var(--sub2);line-height:1.8;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin-bottom:1rem;}
+.menu-path-title{font-weight:600;color:var(--text);margin-bottom:6px;font-size:13px;}
+.broker-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1rem;}
+.broker-card{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;}
+.broker-card .bi{font-size:20px;margin-bottom:6px;}
+.broker-card .bn{font-size:12px;font-weight:600;}
+.broker-card .bs{font-size:11px;color:var(--sub);margin-top:2px;}
+.check-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:1rem;}
+.check-item{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:9px;padding:10px 12px;}
+.check-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.check-item span{font-size:12px;}
+.success-bar{display:flex;align-items:center;gap:8px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:10px 14px;}
+.warn-bar{display:flex;align-items:center;gap:8px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.18);border-radius:10px;padding:10px 14px;}
+.dl-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(90deg,var(--accent),var(--al));color:#fff;font-size:13px;font-weight:600;padding:10px 18px;border-radius:10px;text-decoration:none;}
+.must-set{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--sub2);margin-bottom:4px;}
+.must-set .req{color:var(--red);font-weight:700;}
+
+/* ── BLUR OVERLAY ── */
+.blur-wrap{position:relative;}
+.blur-content{transition:filter .4s ease,opacity .4s ease;}
+.blur-wrap.locked .blur-content{filter:blur(20px) brightness(0.25);pointer-events:none;user-select:none;}
+.blur-overlay{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;pointer-events:auto;}
+.blur-box{background:linear-gradient(145deg,#0d1628,#080e1a);border:1px solid rgba(16,185,129,.35);border-radius:22px;padding:2.4rem 2.2rem;max-width:420px;width:92%;box-shadow:0 0 80px rgba(16,185,129,.15),0 20px 60px rgba(0,0,0,.5);position:relative;overflow:hidden;}
+.blur-box::before{content:'';position:absolute;top:-70px;left:50%;transform:translateX(-50%);width:220px;height:220px;background:radial-gradient(circle,rgba(16,185,129,.18),transparent 70%);pointer-events:none;}
+.blur-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(16,185,129,.13);border:1px solid rgba(16,185,129,.3);color:var(--green);font-size:11px;font-weight:700;padding:4px 13px;border-radius:20px;margin-bottom:1.3rem;letter-spacing:.6px;text-transform:uppercase;}
+.blur-box h2{font-size:1.9rem;font-weight:800;margin-bottom:.65rem;line-height:1.2;}
+.blur-box h2 span{color:var(--green);}
+.blur-box p{color:var(--sub2);font-size:13px;line-height:1.75;margin-bottom:1.6rem;}
+.blur-feats{display:flex;flex-direction:column;gap:8px;margin-bottom:1.6rem;text-align:left;}
+.blur-feat{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--sub2);}
+.blur-feat .ic{width:22px;height:22px;border-radius:6px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.25);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.blur-btn{width:100%;padding:14px;border:none;border-radius:11px;background:linear-gradient(90deg,#10b981,#059669);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14.5px;font-weight:700;cursor:pointer;box-shadow:0 0 30px rgba(16,185,129,.3);transition:box-shadow .2s,transform .15s;text-decoration:none;display:inline-block;}
+.blur-btn:hover{box-shadow:0 0 45px rgba(16,185,129,.5);transform:translateY(-1px);}
+.blur-terms{font-size:11px;color:var(--sub);margin-top:10px;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:linear-gradient(145deg,var(--bg3),var(--bg2));border:1px solid var(--border2);border-radius:14px;padding:1.1rem 1.4rem;box-shadow:0 12px 40px rgba(0,0,0,.4);display:flex;align-items:center;gap:12px;animation:toastIn .4s ease;max-width:380px;}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+.toast-icon{font-size:24px;}.toast-body{flex:1;}.toast-title{font-size:14px;font-weight:700;margin-bottom:2px;}.toast-msg{font-size:12px;color:var(--sub2);}.toast-close{background:none;border:none;color:var(--sub);cursor:pointer;font-size:16px;padding:4px;}
+
+/* ── MOBILE ── */
+.mobile-toggle{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;flex-shrink:0;}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:19;}
+@media(max-width:850px){
+  .mobile-toggle{display:flex;}
+  .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:20;box-shadow:4px 0 30px rgba(0,0,0,.5);}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-overlay.open{display:block;}
+  .main-wrap{width:100%;}
+  .topbar{padding:1rem 1.2rem;}
+  .page{padding:1.2rem 1.4rem;}
+  .t-pill{display:none;}
+}
+@media(max-width:600px){.page{padding:1rem;}.broker-grid{grid-template-columns:1fr 1fr;}.check-grid{grid-template-columns:1fr;}}
+</style>
+<base target="_blank">
+</head>
+<body>
+<div class="shell">
+  <div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <div class="s-logo">tren<span>.</span></div>
+    <div class="s-nav">
+      <a class="s-item" href="https://trenai.vercel.app/live-signals"><span class="s-ic"><span class="live-dot-nav"></span></span><span>Live Signals</span></a>
+      <a class="s-item" href="https://trenai.vercel.app/overview"><span class="s-ic">📊</span><span>Overview</span></a>
+      <a class="s-item" href="https://trenai.vercel.app/signals"><span class="s-ic">⚡</span><span>Recent Trades</span></a>
+      <a class="s-item" href="https://trenai.vercel.app/journal"><span class="s-ic">📓</span><span>Journal</span></a>
+      <div class="s-divider"></div>
+      <a class="s-item gold" href="https://trenai.vercel.app/upgrade"><span class="s-ic">👑</span><span>Upgrade</span><span class="s-badge gd">PRO</span></a>
+      <a class="s-item" href="https://trenai.vercel.app/trenbot"><span class="s-ic">🤖</span><span>TrenBot</span></a>
+      <a class="s-item on" href="https://trenai.vercel.app/autosignals"><span class="s-ic">⚡</span><span>AutoSignals</span></a>
+      <a class="s-item" href="https://trenai.vercel.app/indicator"><span class="s-ic">📈</span><span>Indicator</span></a>
+      <a class="s-item" href="https://trenai.vercel.app/settings"><span class="s-ic">⚙</span><span>Settings</span></a>
+    </div>
+    <div class="s-bot">
+      <div class="trial-card" id="trial-card">
+        <h4>🔥 <span id="trial-days-left">7</span> Days Left</h4>
+        <p>Your free trial ends soon. Upgrade to keep full access.</p>
+        <button class="up-mini" onclick="window.open('https://trenai.vercel.app/checkout-autosignals','_blank')">Upgrade Now</button>
+      </div>
+      <a class="u-row" href="https://trenai.vercel.app/settings">
+        <div class="u-av" id="s-av">T</div>
+        <div class="u-info">
+          <div class="u-name" id="s-nm">Trader</div>
+          <div class="u-email" id="s-email-display">—</div>
+          <span class="sub-status-badge trial" id="sidebar-plan-badge">⏱ Trial</span>
+        </div>
+      </a>
+      <div class="s-logout" onclick="doLogout()"><span style="font-size:14px">→</span> Sign out</div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main-wrap">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+        <div>
+          <div class="tb-title">AutoSignals</div>
+          <div style="font-size:12px;color:var(--sub);margin-top:2px;">Get AutoSignals running on NinjaTrader in under 5 minutes</div>
+        </div>
+      </div>
+      <div class="tb-right">
+        <div class="t-pill" id="trial-pill">⏱ <span id="pill-days">7</span> days left in trial</div>
+        <div class="nb">🔔</div>
+        <div class="prof-wrap">
+          <div class="prof-av" id="prof-av-btn" onclick="toggleProfileMenu()">T</div>
+          <div class="prof-menu" id="prof-menu">
+            <div class="prof-menu-header">
+              <div class="prof-menu-name" id="prof-menu-name">Trader</div>
+              <div class="prof-menu-email" id="prof-menu-email">—</div>
+            </div>
+            <a class="prof-menu-item" href="https://trenai.vercel.app/settings">👤 Profile settings</a>
+            <div class="prof-menu-item danger" onclick="doLogout()">→ Sign out</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE -->
+    <div class="page">
+      <div class="blur-wrap locked" id="blur-wrap">
+        <div class="blur-content">
+
+          <!-- STEP 1 -->
+          <div class="jp" style="background:linear-gradient(145deg,var(--bg3),rgba(16,185,129,.04));">
+            <div class="jp-bar" style="background:linear-gradient(90deg,var(--green),var(--al));"></div>
+            <div style="display:flex;align-items:flex-start;gap:16px;">
+              <div class="jp-icon" style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.25);">1️⃣</div>
+              <div style="flex:1;min-width:0;">
+                <h3>Download the AutoSignals File</h3>
+                <p>Download the latest <strong>AutoSignals</strong> NinjaScript add-on directly. This is the file you'll import into NinjaTrader to enable automated signal copying.</p>
+                <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:1rem;">
+                  <a href="https://sjntsmzbiqvtstvofcnx.supabase.co/storage/v1/object/public/downloads%20dashboard/Autosignals.zip" download class="dl-btn">⬇️ Download AutoSignals.zip</a>
+                  <span style="font-size:11px;color:var(--sub);">~ 163 KB · NinjaScript Add-On</span>
+                </div>
+                <div class="warn-bar">
+                  <span style="font-size:16px;">💡</span>
+                  <span style="font-size:12px;color:var(--sub2);">Make sure you have <a href="https://account.ninjatrader.com/welcome" target="_blank" style="color:var(--al);text-decoration:none;font-weight:600;">NinjaTrader Desktop</a> installed before proceeding.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 2 -->
+          <div class="jp">
+            <div class="jp-bar" style="background:linear-gradient(90deg,var(--al),rgba(59,130,246,.5));"></div>
+            <div style="display:flex;align-items:flex-start;gap:16px;">
+              <div class="jp-icon" style="background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.25);">2️⃣</div>
+              <div style="flex:1;min-width:0;">
+                <h3>Import into NinjaTrader</h3>
+                <p>Open NinjaTrader (Desktop version required). If you don't have it yet, <a href="https://account.ninjatrader.com/welcome" target="_blank" style="color:var(--al);text-decoration:none;font-weight:600;">download it here</a>.</p>
+                <div class="menu-path">
+                  <div class="menu-path-title">Menu Path</div>
+                  <div class="step-row"><span class="step-num">1</span> Control Center → Tools</div>
+                  <div class="step-row"><span class="step-num">2</span> Import → NinjaScript Add-On</div>
+                  <div class="step-row"><span class="step-num">3</span> Select <strong>AutoSignals.zip</strong> from your Downloads</div>
+                </div>
+                <div class="success-bar"><span style="font-size:18px">✅</span><span style="font-size:12.5px;color:var(--sub2);">Wait for: <strong style="color:var(--green)">Import Successful</strong></span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 3 -->
+          <div class="jp">
+            <div class="jp-bar" style="background:linear-gradient(90deg,var(--gold),#f97316);"></div>
+            <div style="display:flex;align-items:flex-start;gap:16px;">
+              <div class="jp-icon" style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.25);">3️⃣</div>
+              <div style="flex:1;min-width:0;">
+                <h3>Connect Your Account</h3>
+                <p>Link your broker or data feed so AutoSignals can execute trades. You must see a green connection icon for copying to work.</p>
+                <div class="broker-grid">
+                  <div class="broker-card"><div class="bi">📊</div><div class="bn">Simulated Data</div><div class="bs">Practice only</div></div>
+                  <div class="broker-card"><div class="bi">🏦</div><div class="bn">Tradovate</div><div class="bs">Futures broker</div></div>
+                  <div class="broker-card"><div class="bi">⚡</div><div class="bn">Rithmic</div><div class="bs">Data + execution</div></div>
+                  <div class="broker-card"><div class="bi">🔌</div><div class="bn">Your Broker</div><div class="bs">Any supported</div></div>
+                </div>
+                <div class="success-bar"><span style="font-size:18px">✅</span><span style="font-size:12.5px;color:var(--sub2);">Green icon = Ready to trade. Red = Check your connection.</span></div>
+                <div style="font-size:11px;color:var(--sub);margin-top:8px;">Menu: Connections → [your connection name]</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 4 -->
+          <div class="jp">
+            <div class="jp-bar" style="background:linear-gradient(90deg,#8b5cf6,#a78bfa);"></div>
+            <div style="display:flex;align-items:flex-start;gap:16px;">
+              <div class="jp-icon" style="background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.25);">4️⃣</div>
+              <div style="flex:1;min-width:0;">
+                <h3>Open Your Chart</h3>
+                <p>Create a new chart with the <strong style="color:var(--red)">exact</strong> settings below. These are <strong style="color:var(--red)">required</strong> — AutoSignals will not copy correctly without them.</p>
+                <div class="broker-grid" style="grid-template-columns:1fr 1fr;">
+                  <div class="broker-card"><div class="bi">📈</div><div class="bn">Instrument</div><div class="bs"><strong style="color:var(--red)">Required:</strong> NQ or MNQ futures</div></div>
+                  <div class="broker-card"><div class="bi">⏱️</div><div class="bn">Timeframe</div><div class="bs"><strong style="color:var(--red)">5 minute</strong> (required)</div></div>
+                </div>
+                <div style="font-size:11px;color:var(--sub);">Menu: New → Chart → Select instrument → Set timeframe → Click OK</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- STEP 5 -->
+          <div class="jp">
+            <div class="jp-bar" style="background:linear-gradient(90deg,var(--al),rgba(59,130,246,.5));"></div>
+            <div style="display:flex;align-items:flex-start;gap:16px;">
+              <div class="jp-icon" style="background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.25);">5️⃣</div>
+              <div style="flex:1;min-width:0;">
+                <h3>Enable AutoSignals on Chart</h3>
+                <p>Attach the strategy to your chart and configure the essential settings.</p>
+                <div class="menu-path">
+                  <div class="menu-path-title">On the Chart</div>
+                  <div class="step-row"><span class="step-num">1</span> Right click → Strategies</div>
+                  <div class="step-row"><span class="step-num">2</span> Find <strong>AutoSignals</strong> → Double click</div>
+                  <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);">
+                    <div class="menu-path-title">Strategy Panel — Must Set</div>
+                    <div class="must-set"><span class="req">*</span> Account → Select your account</div>
+                    <div class="must-set"><span class="req">*</span> Enabled → Set to <strong style="color:var(--green)">TRUE</strong></div>
+                    <div class="must-set"><span class="req">*</span> Auto-Copy → Set to <strong style="color:var(--green)">TRUE</strong></div>
+                    <div class="must-set"><span style="color:var(--sub);font-weight:700;">○</span> Contract Size → Lots per trade</div>
+                  </div>
+                </div>
+                <div class="success-bar"><span style="font-size:18px">✅</span><span style="font-size:12.5px;color:var(--sub2);">Click <strong style="color:var(--green)">Apply</strong> to activate — every signal will now auto-copy</span></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TROUBLESHOOT -->
+          <div class="jp" style="background:linear-gradient(145deg,rgba(239,68,68,.08),var(--bg3));border:1px solid rgba(239,68,68,.2);">
+            <div class="jp-bar" style="background:linear-gradient(90deg,var(--red),#f97316);"></div>
+            <div style="display:flex;align-items:flex-start;gap:16px;">
+              <div class="jp-icon" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.25);">🚨</div>
+              <div style="flex:1;min-width:0;">
+                <h3 style="color:var(--red);">Not Copying? Check This List</h3>
+                <p>Every item below must be correct. Go through each one carefully.</p>
+                <div class="check-grid">
+                  <div class="check-item"><div class="check-dot"></div><span>Connected = <strong style="color:var(--green)">YES</strong></span></div>
+                  <div class="check-item"><div class="check-dot"></div><span>Strategy Enabled = <strong style="color:var(--green)">TRUE</strong></span></div>
+                  <div class="check-item"><div class="check-dot"></div><span>Auto-Copy = <strong style="color:var(--green)">TRUE</strong></span></div>
+                  <div class="check-item"><div class="check-dot"></div><span>No errors in <strong>Log</strong> tab</span></div>
+                  <div class="check-item"><div class="check-dot"></div><span>Correct instrument &amp; 5m timeframe</span></div>
+                  <div class="check-item"><div class="check-dot"></div><span>Contract size &gt; <strong>0</strong></span></div>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                  <span style="font-size:13px;color:var(--sub2);">📩 Still not working?</span>
+                  <a href="https://trenai.vercel.app/contact" target="_blank" style="display:inline-flex;align-items:center;gap:6px;background:rgba(88,101,242,.15);border:1px solid rgba(88,101,242,.3);color:#818cf8;font-size:12px;font-weight:600;padding:8px 14px;border-radius:8px;text-decoration:none;">💬 Contact us — we'll help you ASAP</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div><!-- end .blur-content -->
+
+        <!-- UPGRADE OVERLAY -->
+        <div class="blur-overlay" id="blur-overlay">
+          <div class="blur-box">
+            <div class="blur-badge">🔒 AutoSignals Only</div>
+            <h2>Upgrade to <span>AutoSignals</span></h2>
+            <p>Auto-copy every premium signal to your broker in under 1 second. No manual execution required.</p>
+            <div class="blur-feats">
+              <div class="blur-feat"><div class="ic">✓</div>Instant trade copying to your broker</div>
+              <div class="blur-feat"><div class="ic">✓</div>Works with NinjaTrader &amp; major brokers</div>
+              <div class="blur-feat"><div class="ic">✓</div>Everything in Premium Signals included</div>
+              <div class="blur-feat"><div class="ic">✓</div>Set position size once, trade forever</div>
+            </div>
+            <a href="https://trenai.vercel.app/checkout-autosignals" target="_blank" class="blur-btn">Upgrade to AutoSignals — $42.49/mo</a>
+            <div class="blur-terms">Cancel anytime</div>
+          </div>
+        </div>
+
+      </div><!-- end .blur-wrap -->
+    </div><!-- end .page -->
+  </div><!-- end .main-wrap -->
+</div><!-- end .shell -->
+
+<script>
+// ── CORE ──────────────────────────────────────────────────────────
+const SUPABASE_AUTH_URL='https://sjntsmzbiqvtstvofcnx.supabase.co';
+const SUPABASE_AUTH_KEY='sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg';
+const SESSION_KEY='tren_session';
+
+let _session=window.__trenSession||(()=>{try{const r=sessionStorage.getItem(SESSION_KEY);return r?JSON.parse(r):null;}catch{return null;}})();
+if(!(_session&&_session.access_token)){window.location.href='https://trenai.vercel.app/login-page';}
+
+let _subData=null,_autoSubData=null,_autoSignalsSubData=null;
+try{_subData=JSON.parse(sessionStorage.getItem('tren_sub')||'null');}catch(e){}
+try{_autoSubData=JSON.parse(sessionStorage.getItem('tren_trenbot_sub')||'null');}catch(e){}
+try{_autoSignalsSubData=JSON.parse(sessionStorage.getItem('tren_autosignals_sub')||'null');}catch(e){}
+
+function getSessionEmail(){return _session&&_session.user&&_session.user.email?_session.user.email:'—';}
+function getSessionFullName(){if(_session&&_session.user){const m=_session.user.user_metadata||{};if(m.full_name)return m.full_name;if(m.name)return m.name;if(_session.user.email)return _session.user.email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());}return'Trader';}
+function getPrefs(){return JSON.parse(sessionStorage.getItem('tren_prefs')||'{}');}
+function getUserDisplayName(){const e=getSessionEmail(),p=getPrefs(),u=p.display_names||{};return u[e]||getSessionFullName();}
+function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function showToast(icon,title,msg){const ex=document.querySelector('.toast');if(ex)ex.remove();const t=document.createElement('div');t.className='toast';t.innerHTML=`<div class="toast-icon">${icon}</div><div class="toast-body"><div class="toast-title">${escHtml(title)}</div><div class="toast-msg">${escHtml(msg)}</div></div><button class="toast-close" onclick="this.parentElement.remove()">✕</button>`;document.body.appendChild(t);setTimeout(()=>{if(t.parentElement)t.remove();},5000);}
+
+async function doLogout(){
+  const tok=_session?_session.access_token:'';
+  sessionStorage.removeItem(SESSION_KEY);
+  ['tren_sub','tren_prefs','tren_auto_sub','tren_autosignals_sub','tren_trenbot_sub'].forEach(k=>sessionStorage.removeItem(k));
+  try{fetch(`${SUPABASE_AUTH_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':'Bearer '+tok}}).catch(()=>{});}catch(e){}
+  window.location.href='https://trenai.vercel.app/login-page';
+}
+
+// ── LIVE SUPABASE ACCESS CHECKS ───────────────────────────────────
+async function checkAutoSignalsAccess(){
+  const email=getSessionEmail();if(!email||email==='—')return false;
+  if(_autoSignalsSubData?.status==='active'&&_autoSignalsSubData?.plan==='auto')return true;
+  try{
+    const res=await fetch(
+      `${SUPABASE_AUTH_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&plan=eq.auto&status=eq.active&select=*`,
+      {headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}}
+    );
+    const rows=await res.json();
+    if(rows&&rows.length>0&&rows[0].status==='active'){
+      _autoSignalsSubData=rows[0];
+      sessionStorage.setItem('tren_autosignals_sub',JSON.stringify(_autoSignalsSubData));
+      return true;
+    }
+  }catch(e){console.error('AutoSignals check failed:',e);}
+  return false;
+}
+
+async function checkTrenBotAccess(){
+  const email=getSessionEmail();if(!email||email==='—')return false;
+  if(_autoSubData?.status==='active'&&_autoSubData?.plan==='trenbot')return true;
+  try{
+    const res=await fetch(
+      `${SUPABASE_AUTH_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&plan=eq.trenbot&status=eq.active&select=*`,
+      {headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}}
+    );
+    const rows=await res.json();
+    if(rows&&rows.length>0&&rows[0].status==='active'){
+      _autoSubData=rows[0];
+      sessionStorage.setItem('tren_trenbot_sub',JSON.stringify(_autoSubData));
+      return true;
+    }
+  }catch(e){console.error('TrenBot check failed:',e);}
+  return false;
+}
+
+async function checkPremiumAccess(){
+  const email=getSessionEmail();if(!email||email==='—')return false;
+  if(_subData?.status==='active'&&_subData?.plan==='premium')return true;
+  try{
+    const res=await fetch(
+      `${SUPABASE_AUTH_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&plan=eq.premium&status=eq.active&select=*`,
+      {headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}}
+    );
+    const rows=await res.json();
+    if(rows&&rows.length>0&&rows[0].status==='active'){
+      _subData=rows[0];
+      sessionStorage.setItem('tren_sub',JSON.stringify(_subData));
+      return true;
+    }
+  }catch(e){console.error('Premium check failed:',e);}
+  return false;
+}
+
+function initUserInfo(){
+  const name=getUserDisplayName(),email=getSessionEmail(),init=name.charAt(0).toUpperCase();
+  ['s-nm','prof-menu-name'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=name;});
+  ['s-av','prof-av-btn'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=init;});
+  const se=document.getElementById('s-email-display');if(se)se.textContent=email;
+  const pe=document.getElementById('prof-menu-email');if(pe)pe.textContent=email;
+}
+
+function applyAccessUI(hasTB,hasAS,hasP){
+  const tc=document.getElementById('trial-card'),tp=document.getElementById('trial-pill'),sb=document.getElementById('sidebar-plan-badge');
+  const wrap=document.getElementById('blur-wrap'),overlay=document.getElementById('blur-overlay');
+  if(hasTB||hasAS||hasP){
+    if(tc)tc.style.display='none';
+    let lbl='⚡ Premium',cls='premium';
+    if(hasTB){lbl='⚡ TrenBot';cls='automated';}
+    else if(hasAS){lbl='⚡ AutoSignals';cls='autosignals';}
+    if(tp){tp.textContent=lbl+' Active';tp.className='t-pill '+cls;}
+    if(sb){sb.textContent=lbl;sb.className='sub-status-badge '+cls;}
+  }
+  // AutoSignals OR TrenBot (superset) both unlock this page
+  if(hasAS||hasTB){
+    wrap.classList.remove('locked');
+    overlay.style.display='none';
+  }else{
+    wrap.classList.add('locked');
+    overlay.style.display='flex';
+  }
+}
+
+function toggleProfileMenu(){
+  const m=document.getElementById('prof-menu'),b=document.getElementById('prof-av-btn');
+  const o=m.classList.contains('open');m.classList.toggle('open',!o);b.classList.toggle('open',!o);
+}
+document.addEventListener('click',e=>{
+  const pw=document.querySelector('.prof-wrap');
+  if(pw&&!pw.contains(e.target)){document.getElementById('prof-menu').classList.remove('open');document.getElementById('prof-av-btn').classList.remove('open');}
+  const sb=document.getElementById('sidebar');
+  if(window.innerWidth<=850&&sb.classList.contains('open')&&!sb.contains(e.target)&&!document.querySelector('.mobile-toggle').contains(e.target)){closeSidebar();}
+});
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sb-overlay').classList.toggle('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sb-overlay').classList.remove('open');}
+
+// ── INIT ──────────────────────────────────────────────────────────
+initUserInfo();
+
+// Step 1: apply cache instantly
+const cachedTB=_autoSubData?.status==='active'&&_autoSubData?.plan==='trenbot';
+const cachedAS=_autoSignalsSubData?.status==='active'&&_autoSignalsSubData?.plan==='auto';
+const cachedP=_subData?.status&&_subData.status!=='inactive'&&_subData.status!=='cancelled';
+applyAccessUI(cachedTB,cachedAS,cachedP);
+
+// Step 2: verify live from Supabase
+(async()=>{
+  const [hasTB,hasAS,hasP]=await Promise.all([checkTrenBotAccess(),checkAutoSignalsAccess(),checkPremiumAccess()]);
+  applyAccessUI(hasTB,hasAS,hasP);
+})();
+</script>
+</body>
+</html>

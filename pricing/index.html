@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing — Tren</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #04080f;
+  --bg2: #080e1a;
+  --bg3: #0c1525;
+  --bg4: #101d30;
+  --border: rgba(255,255,255,0.07);
+  --border-b: rgba(255,255,255,0.14);
+  --accent: #2563eb;
+  --accent-l: #3b82f6;
+  --accent-glow: rgba(37,99,235,0.4);
+  --green: #10b981;
+  --green-bg: rgba(16,185,129,0.1);
+  --green-glow: rgba(16,185,129,0.3);
+  --red: #ef4444;
+  --gold: #f59e0b;
+  --gold-dark: #d97706;
+  --text: #f0f4ff;
+  --ts: rgba(240,244,255,0.55);
+  --tm: rgba(240,244,255,0.3);
+  --td: rgba(240,244,255,0.15);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px; line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Animated Background */
+.bg-layer {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 0%, rgba(37,99,235,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 30% at 10% 90%, rgba(16,185,129,0.06) 0%, transparent 50%),
+    var(--bg);
+}
+.grid-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.02;
+  background-image: 
+    linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 70%);
+}
+
+.page { position: relative; z-index: 1; }
+
+/* NAV */
+nav {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.1rem 3rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: rgba(4,8,15,0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  z-index: 1000;
+}
+.logo {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 22px; font-weight: 800; letter-spacing: -0.03em; color: var(--text);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.logo:hover { opacity: 0.8; }
+.logo span { color: var(--accent-l); }
+.nav-links { display: flex; gap: 2.2rem; align-items: center; }
+.nav-links a {
+  font-size: 13.5px; font-weight: 500; color: var(--ts);
+  text-decoration: none; transition: color 0.2s;
+  position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 2px; background: var(--accent-l);
+  transition: width 0.3s ease;
+  border-radius: 2px;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-links a:hover::after { width: 100%; }
+a.nav-cta {
+  background: var(--accent); color: #fff !important;
+  font-size: 13px; font-weight: 600; padding: 9px 20px;
+  border-radius: 8px; text-decoration: none; border: none;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+a.nav-cta::after { display: none; }
+a.nav-cta:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 20px var(--accent-glow), 0 0 0 1px rgba(59,130,246,0.3);
+}
+a.nav-cta:active { transform: translateY(0); }
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  background: none;
+  border: none;
+}
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; transform: translateX(-10px); }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+.mobile-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  flex-direction: column;
+  gap: 0;
+  background: rgba(4,8,15,0.98);
+  backdrop-filter: blur(30px);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 2rem;
+  transform: translateY(-10px);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+.mobile-menu.open { 
+  display: flex; 
+  transform: translateY(0);
+  opacity: 1;
+}
+.mobile-menu a {
+  font-size: 15px; font-weight: 500; color: var(--ts);
+  text-decoration: none; padding: 14px 0;
+  border-bottom: 1px solid var(--border); transition: all 0.2s;
+}
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu a:hover { color: var(--text); padding-left: 8px; }
+.mobile-menu a.nav-cta { 
+  margin-top: 12px; 
+  text-align: center; 
+  padding: 12px;
+  border: none;
+}
+
+/* SECTIONS */
+.section { max-width: 1200px; margin: 0 auto; padding: 4rem 2.5rem; }
+
+/* TAGS */
+.tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; padding: 5px 14px; border-radius: 100px;
+  margin-bottom: 1.25rem;
+  backdrop-filter: blur(10px);
+}
+.tag-blue  { 
+  background: rgba(37,99,235,0.12);   
+  border: 1px solid rgba(37,99,235,0.25); 
+  color: var(--accent-l); 
+}
+.tag-gold {
+  background: rgba(245,158,11,0.12);
+  border: 1px solid rgba(245,158,11,0.25);
+  color: var(--gold);
+}
+
+h2.section-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(32px, 5vw, 48px); font-weight: 800;
+  letter-spacing: -0.03em; line-height: 1.05;
+  color: var(--text); margin-bottom: 0.75rem;
+}
+h2.section-title em { font-style: normal; color: var(--accent-l); }
+.section-sub {
+  font-size: 17px; color: var(--ts); line-height: 1.7;
+  max-width: 540px; margin-bottom: 2.5rem;
+}
+
+/* BUTTONS */
+.btn-primary {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: var(--accent); color: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 600;
+  padding: 13px 28px; border-radius: 10px; border: none;
+  text-decoration: none; cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.btn-primary:hover { 
+  background: var(--accent-l); 
+  transform: translateY(-2px); 
+  box-shadow: 0 12px 32px rgba(37,99,235,0.35), 0 0 0 1px rgba(59,130,246,0.2);
+}
+.btn-primary:hover::before { opacity: 1; }
+.btn-primary:active { transform: translateY(0); }
+.btn-ghost {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: transparent; color: var(--ts);
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 600;
+  padding: 13px 24px; border-radius: 10px;
+  border: 1.5px solid var(--border-b); text-decoration: none; cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-ghost:hover { 
+  color: var(--text); 
+  border-color: rgba(255,255,255,0.3); 
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.03);
+}
+.btn-gold {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark)); 
+  color: #000;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700;
+  padding: 13px 28px; border-radius: 10px; border: none;
+  text-decoration: none; cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(245,158,11,0.3);
+}
+
+/* PRICING TOGGLE */
+.pricing-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin-bottom: 2.5rem;
+  padding: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.pt-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ts);
+  padding: 8px 18px;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  user-select: none;
+}
+.pt-label:hover { color: var(--text); }
+.pt-label.on {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 16px rgba(37,99,235,0.3);
+}
+.pt-save {
+  display: inline-flex;
+  align-items: center;
+  background: var(--green-bg);
+  border: 1px solid var(--green-glow);
+  color: var(--green);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin-left: 6px;
+}
+
+/* PRICING GRID */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+/* PRICE CARDS */
+.price-card {
+  background: var(--bg2);
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.price-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+}
+.price-card:hover {
+  border-color: var(--border-b);
+  transform: translateY(-4px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.price-card.popular {
+  border: 2px solid var(--accent);
+  background: linear-gradient(180deg, var(--bg2) 0%, rgba(37,99,235,0.05) 100%);
+  transform: scale(1.03);
+  box-shadow: 0 0 60px rgba(37,99,235,0.1), 0 20px 60px rgba(0,0,0,0.3);
+}
+.price-card.popular:hover {
+  transform: scale(1.03) translateY(-4px);
+  box-shadow: 0 0 80px rgba(37,99,235,0.15), 0 25px 70px rgba(0,0,0,0.4);
+}
+.price-card.automated {
+  border: 1.5px solid rgba(245,158,11,0.3);
+  background: linear-gradient(180deg, var(--bg2) 0%, rgba(245,158,11,0.03) 100%);
+}
+.price-card.automated:hover {
+  border-color: rgba(245,158,11,0.5);
+}
+
+.card-badge {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 5px 16px;
+  border-radius: 0 0 12px 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.card-badge.popular-badge {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(37,99,235,0.4);
+}
+.card-badge.value-badge {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: #000;
+  box-shadow: 0 4px 20px rgba(245,158,11,0.3);
+}
+
+.card-header {
+  margin-bottom: 1.5rem;
+  padding-top: 0.5rem;
+}
+.card-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ts);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+}
+.price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.price-strike {
+  font-size: 16px;
+  color: var(--tm);
+  text-decoration: line-through;
+  font-weight: 500;
+}
+.price-amount {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.price-period {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--ts);
+}
+.price-note {
+  font-size: 12px;
+  color: var(--green);
+  font-weight: 600;
+  margin-bottom: 4px;
+  min-height: 18px;
+}
+.price-desc {
+  font-size: 13px;
+  color: var(--tm);
+  line-height: 1.6;
+}
+
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 2rem;
+  flex: 1;
+}
+.feature-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--ts);
+  line-height: 1.5;
+}
+.feature-list li .check {
+  color: var(--green);
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--green-bg);
+  border-radius: 50%;
+}
+.feature-list li .check svg {
+  width: 12px;
+  height: 12px;
+}
+
+/* INDICATOR SECTION */
+.indicator-section {
+  position: relative;
+  overflow: hidden;
+}
+.indicator-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -20%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(37,99,235,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+.indicator-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  max-width: 1160px;
+  margin: 0 auto;
+}
+.indicator-visual {
+  position: relative;
+  background: var(--bg2);
+  border: 1.5px solid var(--border-b);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 25px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.indicator-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
+  pointer-events: none;
+}
+.indicator-mock {
+  background: var(--bg3);
+  min-height: 320px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 24px;
+  position: relative;
+}
+.indicator-mock img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s ease;
+}
+.indicator-visual:hover .indicator-mock img {
+  transform: scale(1.02);
+}
+.indicator-price {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 1.5rem 0;
+  padding: 1rem 1.5rem;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  width: fit-content;
+}
+.indicator-price .amount {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.indicator-price .period {
+  font-size: 14px;
+  color: var(--ts);
+  font-weight: 500;
+}
+.indicator-price .badge {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--green);
+  background: var(--green-bg);
+  padding: 3px 10px;
+  border-radius: 100px;
+  margin-left: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* TRUST BADGES */
+.trust-badges {
+  display: flex;
+  gap: 2rem;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+.trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--tm);
+}
+.trust-badge svg {
+  width: 18px;
+  height: 18px;
+  color: var(--green);
+}
+
+/* FOOTER */
+footer {
+  padding: 2rem 2.5rem;
+  margin-top: 2rem;
+}
+.footer-inner {
+  max-width: 1160px; margin: 0 auto;
+  background: var(--bg2); 
+  border: 1px solid var(--border);
+  border-radius: 20px; 
+  padding: 3rem 3rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.footer-inner::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+}
+.footer-top { 
+  display: grid; 
+  grid-template-columns: 2fr 1fr 1fr 1fr; 
+  gap: 3rem; 
+  margin-bottom: 2.5rem; 
+}
+.footer-brand .logo { 
+  font-size: 22px; 
+  margin-bottom: 1rem; 
+  display: block; 
+}
+.footer-brand p { 
+  font-size: 13.5px; 
+  color: var(--ts); 
+  line-height: 1.7; 
+  max-width: 260px; 
+}
+.footer-col h4 { 
+  font-size: 12px; 
+  font-weight: 700; 
+  color: var(--text); 
+  letter-spacing: 0.08em; 
+  text-transform: uppercase; 
+  margin-bottom: 1.2rem; 
+}
+.footer-col a { 
+  display: block; 
+  font-size: 13.5px; 
+  color: var(--ts); 
+  text-decoration: none; 
+  margin-bottom: 10px; 
+  transition: all 0.2s;
+  width: fit-content;
+}
+.footer-col a:hover { 
+  color: var(--text); 
+  transform: translateX(2px);
+}
+.footer-bottom {
+  border-top: 1px solid var(--border); 
+  padding-top: 1.5rem;
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center;
+  flex-wrap: wrap; 
+  gap: 12px;
+}
+.footer-copy { 
+  font-size: 12px; 
+  color: var(--tm); 
+}
+.footer-risk { 
+  font-size: 11px; 
+  color: var(--tm); 
+  max-width: 500px; 
+  line-height: 1.5; 
+}
+
+/* ANIMATIONS */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-in {
+  animation: fadeInUp 0.6s ease forwards;
+}
+.delay-1 { animation-delay: 0.1s; opacity: 0; }
+.delay-2 { animation-delay: 0.2s; opacity: 0; }
+.delay-3 { animation-delay: 0.3s; opacity: 0; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .pricing-grid { grid-template-columns: 1fr; max-width: 480px; }
+  .price-card.popular { transform: scale(1); }
+  .price-card.popular:hover { transform: translateY(-4px); }
+  .indicator-grid { grid-template-columns: 1fr; gap: 3rem; }
+  .indicator-visual { order: -1; }
+}
+
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; width: 100vw; margin-left: calc(-50vw + 50%); }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .section { padding: 2.5rem 1.5rem; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .trust-badges { justify-content: center; }
+}
+
+@media (max-width: 580px) {
+  .pricing-grid { max-width: 100%; }
+  .price-card { padding: 1.5rem; }
+  .price-amount { font-size: 36px; }
+  .btn-primary, .btn-ghost, .btn-gold { width: 100%; text-align: center; }
+  .footer-top { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+  .pricing-toggle { width: 100%; max-width: 320px; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+</style>
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="grid-bg"></div>
+
+<div class="page">
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">tren<span>.</span></a>
+  <div class="nav-links">
+    <a href="https://trenai.vercel.app/dashboard">Dashboard</a>
+    <a href="https://trenai.vercel.app/pricing">Pricing</a>
+    <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+    <a href="https://trenai.vercel.app/contact">Contact</a>
+    <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="https://trenai.vercel.app/login-page">Dashboard</a>
+    <a href="https://trenai.vercel.app/pricing">Pricing</a>
+    <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+    <a href="https://trenai.vercel.app/contact">Contact</a>
+    <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
+  </div>
+</nav>
+
+
+
+<!-- PRICING -->
+<div id="pricing" class="section" style="padding-top:5rem;">
+  <div style="text-align:center;max-width:560px;margin:0 auto 3rem" class="animate-in">
+    <div class="tag tag-gold">Choose Your Plan</div>
+    <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(28px,5vw,44px);font-weight:800;margin-bottom:12px;line-height:1.1;letter-spacing:-0.03em;">Unlock your full potential</h2>
+    <p style="color:var(--ts);font-size:16px;line-height:1.7;max-width:460px;margin:0 auto;">Premium signals, unlimited journal, advanced analytics. Cancel anytime — no questions asked.</p>
+  </div>
+
+  <div class="pricing-toggle animate-in delay-1">
+    <span class="pt-label" id="up-lbl-mo" onclick="setUpgradeBilling('monthly')">Monthly</span>
+    <span class="pt-label on" id="up-lbl-yr" onclick="setUpgradeBilling('yearly')">
+      Yearly 
+      <span class="pt-save">Save 15%</span>
+    </span>
+  </div>
+
+  <div class="pricing-grid">
+    <!-- Free -->
+    <div class="price-card animate-in delay-1">
+      <div class="card-header">
+        <div class="card-name">Free Signals</div>
+        <div class="price-row">
+          <span class="price-amount">$0</span>
+        </div>
+        <div class="price-note" style="color:var(--tm);">Forever free</div>
+        <div class="price-desc">Perfect for getting started and exploring our community.</div>
+      </div>
+      <ul class="feature-list">
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Delayed signals (3 min)</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Discord community access</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Full signal access</li>
+      </ul>
+      <a href="https://discord.gg/7rbYPuRfcN" class="btn-ghost" target="_blank">Get access</a>
+    </div>
+
+    <!-- Premium -->
+    <div class="price-card popular animate-in delay-2">
+      <div class="card-badge popular-badge">Most Popular</div>
+      <div class="card-header">
+        <div class="card-name">Premium Signals</div>
+        <div class="price-row">
+          <span class="price-strike" id="up-premium-strike">$29.99</span>
+          <span class="price-amount" id="up-premium-amount">$25.49</span>
+          <span class="price-period">/mo</span>
+        </div>
+        <div class="price-note" id="up-bill-premium">Billed annually — Save 15%</div>
+        <div class="price-desc" id="up-ppe-premium">Instant signals with the best possible entry prices. No delay.</div>
+      </div>
+      <ul class="feature-list">
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Instant signals — zero delay</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Best entry prices</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Full signal access</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Priority Discord role</li>
+      </ul>
+      <a href="https://trenai.vercel.app/checkout-premium" class="btn-primary">Subscribe to Premium</a>
+    </div>
+
+    <!-- Automated -->
+    <div class="price-card automated animate-in delay-3">
+      <div class="card-badge value-badge">Best Value</div>
+      <div class="card-header">
+        <div class="card-name">Automated Trading</div>
+        <div class="price-row">
+          <span class="price-strike" id="up-auto-strike">$49.99</span>
+          <span class="price-amount" id="up-auto-amount">$42.49</span>
+          <span class="price-period">/mo</span>
+        </div>
+        <div class="price-note" id="up-bill-auto">Billed annually — Save 15%</div>
+        <div class="price-desc" id="up-ppe-auto">Fully automated execution via NinjaTrader.</div>
+      </div>
+      <ul class="feature-list">
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Everything in Premium</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Instant trade execution</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Emotion-free trading</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Advanced customization</li>
+      </ul>
+      <a href="https://trenai.vercel.app/checkout-automated" class="btn-gold">Get Automated Access</a>
+    </div>
+  </div>
+
+  <!-- Trust Badges -->
+  <div class="trust-badges animate-in delay-3">
+    <div class="trust-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Secure SSL Checkout
+    </div>
+    <div class="trust-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+      Cancel Anytime
+    </div>
+    <div class="trust-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      100+ Active Traders
+    </div>
+  </div>
+</div>
+
+
+<!-- INDICATOR -->
+<div class="section indicator-section" style="padding-top:4rem;padding-bottom:4rem;">
+  <div class="indicator-grid">
+    <div class="animate-in">
+      <div class="tag tag-blue">New Release</div>
+      <h2 class="section-title">TradingView<br><em>Indicator</em></h2>
+      <p class="section-sub">The Tren indicator shows clear buy and sell signals with automatic take profit and stop loss levels directly on your TradingView chart.</p>
+      <ul class="feature-list">
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Clear buy and sell labels on the chart</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Automatic TP1, TP2, TP3 and stop loss levels</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Clean visual trade setups for faster decisions</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Lifetime access — one-time purchase</li>
+      </ul>
+      <div class="indicator-price">
+        <span class="amount">$99</span>
+        <span class="period">/ Lifetime</span>
+        <span class="badge">One-time</span>
+      </div>
+      <a href="#" class="btn-primary">Purchase Indicator</a>
+    </div>
+    <div class="indicator-visual animate-in delay-2">
+      <div class="indicator-mock">
+        <img src="https://i.imgur.com/mZOrAlm.png" alt="Tren TradingView Indicator showing buy/sell signals with TP and SL levels">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="logo">tren<span>.</span></a>
+        <p>Intelligent trading automation and precision signals for NinjaTrader. Built by traders, for traders.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="https://trenai.vercel.app/login-page">Dashboard</a>
+        <a href="https://trenai.vercel.app/pricing">Pricing</a>
+        <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+        <a href="https://trenai.vercel.app/contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <a href="https://discord.gg/Ygwf8xfEXS" target="_blank">Discord</a>
+        <a href="https://www.tiktok.com/@trentrades0" target="_blank">TikTok</a>
+        <a href="https://www.instagram.com/trenai.vercel.app/" target="_blank">Instagram</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="https://trenai.vercel.app/terms-conditions">Terms of Service</a>
+        <a href="https://trenai.vercel.app/privacy-policy">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Tren. All rights reserved.</div>
+      <div class="footer-risk">Trading involves significant risk of loss. Past performance is not indicative of future results. This is not financial advice.</div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script>
+function toggleMenu() {
+  const menu = document.getElementById('mobileMenu');
+  const btn = document.getElementById('hamburger');
+  menu.classList.toggle('open');
+  btn.classList.toggle('active');
+  document.body.style.overflow = menu.classList.contains('open') ? 'hidden' : '';
+}
+
+document.querySelectorAll('.mobile-menu a').forEach(link => {
+  link.addEventListener('click', () => {
+    const menu = document.getElementById('mobileMenu');
+    const btn = document.getElementById('hamburger');
+    menu.classList.remove('open');
+    btn.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+});
+
+document.addEventListener('click', (e) => {
+  const menu = document.getElementById('mobileMenu');
+  const btn = document.getElementById('hamburger');
+  if (menu.classList.contains('open') && !menu.contains(e.target) && !btn.contains(e.target)) {
+    menu.classList.remove('open');
+    btn.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+});
+
+// Pricing toggle
+const PRICES = {
+  premium: { monthly: 29.99, yearly: 25.49 },
+  auto: { monthly: 49.99, yearly: 42.49 }
+};
+let upgradeBilling = 'yearly';
+
+function formatPrice(n) { return '$' + n.toFixed(2); }
+
+function setUpgradeBilling(mode) {
+  upgradeBilling = mode;
+  document.getElementById('up-lbl-mo').classList.toggle('on', mode === 'monthly');
+  document.getElementById('up-lbl-yr').classList.toggle('on', mode === 'yearly');
+  updateUpgradePrices();
+}
+
+function updateUpgradePrices() {
+  const premStrike = document.getElementById('up-premium-strike');
+  const premAmount = document.getElementById('up-premium-amount');
+  const autoStrike = document.getElementById('up-auto-strike');
+  const autoAmount = document.getElementById('up-auto-amount');
+  const premBill = document.getElementById('up-bill-premium');
+  const autoBill = document.getElementById('up-bill-auto');
+  const premPpe = document.getElementById('up-ppe-premium');
+  const autoPpe = document.getElementById('up-ppe-auto');
+
+  if (upgradeBilling === 'yearly') {
+    if (premStrike) premStrike.style.display = 'inline';
+    if (premAmount) premAmount.textContent = formatPrice(PRICES.premium.yearly);
+    if (autoStrike) autoStrike.style.display = 'inline';
+    if (autoAmount) autoAmount.textContent = formatPrice(PRICES.auto.yearly);
+    if (premBill) { premBill.innerHTML = 'Billed annually — Save 15%'; premBill.style.color = 'var(--green)'; }
+    if (autoBill) { autoBill.innerHTML = 'Billed annually — Save 15%'; autoBill.style.color = 'var(--green)'; }
+    if (premPpe) premPpe.innerHTML = `Instant signals with the best possible entry prices. No delay.<span style="font-size:11px;color:var(--tm);display:block;margin-top:4px;font-weight:500;">${formatPrice(PRICES.premium.yearly * 12)}/year</span>`;
+    if (autoPpe) autoPpe.innerHTML = `Fully automated execution via NinjaTrader.<span style="font-size:11px;color:var(--tm);display:block;margin-top:4px;font-weight:500;">${formatPrice(PRICES.auto.yearly * 12)}/year</span>`;
+  } else {
+    if (premStrike) premStrike.style.display = 'none';
+    if (premAmount) premAmount.textContent = formatPrice(PRICES.premium.monthly);
+    if (autoStrike) autoStrike.style.display = 'none';
+    if (autoAmount) autoAmount.textContent = formatPrice(PRICES.auto.monthly);
+    if (premBill) { premBill.innerHTML = 'Billed monthly'; premBill.style.color = 'var(--ts)'; }
+    if (autoBill) { autoBill.innerHTML = 'Billed monthly'; autoBill.style.color = 'var(--ts)'; }
+    if (premPpe) premPpe.innerHTML = 'Instant signals with the best possible entry prices. No delay.';
+    if (autoPpe) autoPpe.innerHTML = 'Fully automated execution via NinjaTrader.';
+  }
+}
+
+// Intersection Observer for scroll animations
+const observerOptions = {
+  threshold: 0.1,
+  rootMargin: '0px 0px -50px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.animate-in').forEach(el => {
+  el.style.opacity = '0';
+  el.style.transform = 'translateY(30px)';
+  el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  observer.observe(el);
+});
+
+// Initialize
+updateUpgradePrices();
+</script>
+
+</body>
+</html>

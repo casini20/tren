@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="refresh" content="0; url=https://trenai.vercel.app/">
+<script>window.location.replace("https://trenai.vercel.app/");</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Affiliate Program — Tren</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:   #04080f;
+  --bg2:  #080e1a;
+  --bg3:  #0c1525;
+  --bg4:  #101d30;
+  --border: rgba(255,255,255,0.07);
+  --border-b: rgba(255,255,255,0.14);
+  --accent: #2563eb;
+  --accent-l: #3b82f6;
+  --green: #10b981;
+  --green-bg: rgba(16,185,129,0.1);
+  --green-border: rgba(16,185,129,0.2);
+  --red: #ef4444;
+  --red-bg: rgba(239,68,68,0.1);
+  --amber: #f59e0b;
+  --text: #f0f4ff;
+  --ts: rgba(240,244,255,0.55);
+  --tm: rgba(240,244,255,0.3);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px; line-height: 1.6;
+  overflow-x: hidden;
+}
+
+.bg-layer {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(37,99,235,0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 80%, rgba(16,185,129,0.09) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 35% at 50% 50%, rgba(37,99,235,0.04) 0%, transparent 60%),
+    var(--bg);
+}
+.grid-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.022;
+  background-image: linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.page { position: relative; z-index: 1; }
+
+/* NAV */
+nav {
+  width: 100vw; margin-left: calc(-50vw + 50%);
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.1rem 3rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0;
+  background: rgba(4,8,15,0.85);
+  backdrop-filter: blur(14px); z-index: 1000;
+}
+.logo { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 21px; font-weight: 800; letter-spacing: -0.03em; color: var(--text); text-decoration: none; }
+.logo span { color: var(--accent-l); }
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-links a { font-size: 13px; font-weight: 500; color: var(--ts); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+a.nav-cta {
+  background: var(--accent); color: rgb(255,255,255) !important;
+  font-size: 13px; font-weight: 500; padding: 8px 18px;
+  border-radius: 6px; text-decoration: none; border: 1px solid var(--accent);
+  transition: box-shadow 0.3s, transform 0.15s;
+}
+a.nav-cta:hover { box-shadow: 0 0 20px rgba(37,99,235,0.5), 0 0 40px rgba(37,99,235,0.3); transform: translateY(-1px); }
+
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; }
+.hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+.mobile-menu { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; background: rgba(4,8,15,0.95); backdrop-filter: blur(20px); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1rem 3rem; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-size: 14px; font-weight: 500; color: var(--ts); text-decoration: none; padding: 12px 0; border-bottom: 1px solid var(--border); transition: color 0.2s; }
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu a:hover { color: var(--text); }
+.mobile-menu a.nav-cta { margin-top: 8px; text-align: center; }
+
+/* TAGS */
+.tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 1.25rem;
+}
+.tag-green { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); color: #34d399; }
+.tag-blue  { background: rgba(37,99,235,0.1);   border: 1px solid rgba(37,99,235,0.25); color: var(--accent-l); }
+.tag-amber { background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.2); color: #fbbf24; }
+.tag-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+
+/* HERO */
+.aff-hero {
+  max-width: 1160px; margin: 0 auto;
+  padding: 5.5rem 2.5rem 2rem;
+  text-align: center;
+  animation: fadeUp 0.7s ease both;
+}
+.aff-hero h1 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(38px, 5.5vw, 64px);
+  font-weight: 800; line-height: 1.08;
+  letter-spacing: -0.035em; color: var(--text);
+  margin-bottom: 1.25rem;
+}
+.aff-hero h1 em { font-style: normal; color: var(--accent-l); }
+.aff-hero h1 .g { color: var(--green); }
+.aff-hero p { font-size: 17px; color: var(--ts); max-width: 520px; margin: 0 auto 2.5rem; line-height: 1.75; }
+
+/* COMMISSION STRIP */
+.commission-strip {
+  display: flex; justify-content: center; gap: 14px;
+  flex-wrap: wrap; margin-bottom: 4rem;
+  padding: 0 2.5rem;
+}
+.c-pill {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--bg2); border: 1px solid var(--border-b);
+  border-radius: 100px; padding: 10px 20px;
+  font-size: 14px; font-weight: 500; color: var(--text);
+}
+.c-pill .pill-icon { font-size: 16px; }
+.c-pill .pill-highlight { color: var(--green); font-weight: 700; }
+.c-pill .pill-highlight-blue { color: var(--accent-l); font-weight: 700; }
+
+/* HOW IT WORKS STEPS */
+.how-section { max-width: 1160px; margin: 0 auto; padding: 0 2.5rem 5rem; }
+.how-section-header { text-align: center; margin-bottom: 2.5rem; }
+.how-section-header h2 {
+  font-size: clamp(26px, 3.5vw, 38px); font-weight: 800;
+  letter-spacing: -0.03em; color: var(--text); margin-bottom: 0.5rem;
+}
+.how-section-header h2 em { font-style: normal; color: var(--accent-l); }
+.how-section-header p { font-size: 15px; color: var(--ts); }
+
+.steps-row {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 14px; margin-bottom: 3rem;
+}
+.step-block {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.75rem;
+  position: relative; overflow: hidden;
+  transition: border-color 0.2s;
+}
+.step-block:hover { border-color: var(--border-b); }
+.step-block::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+}
+.step-block.s1::before { background: linear-gradient(90deg, var(--accent), transparent); }
+.step-block.s2::before { background: linear-gradient(90deg, var(--green), transparent); }
+.step-block.s3::before { background: linear-gradient(90deg, var(--amber), transparent); }
+.step-num-large {
+  font-size: 48px; font-weight: 800; letter-spacing: -0.04em;
+  margin-bottom: 12px; line-height: 1;
+}
+.s1 .step-num-large { color: rgba(37,99,235,0.25); }
+.s2 .step-num-large { color: rgba(16,185,129,0.25); }
+.s3 .step-num-large { color: rgba(245,158,11,0.25); }
+.step-block h3 { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+.step-block p  { font-size: 13px; color: var(--ts); line-height: 1.65; }
+
+/* EARNINGS VISUAL */
+.earnings-visual {
+  background: var(--bg2); border: 1px solid var(--border-b);
+  border-radius: 16px; padding: 2rem;
+  margin-bottom: 5rem;
+}
+.earnings-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 12px; }
+.earnings-title { font-size: 15px; font-weight: 600; color: var(--text); }
+.earnings-sub   { font-size: 12px; color: var(--ts); margin-top: 2px; }
+.earnings-grid  { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+.earn-card {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1.25rem; text-align: center;
+}
+.earn-card .ref-count { font-size: 12px; color: var(--tm); margin-bottom: 6px; }
+.earn-card .earn-amount {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 26px; font-weight: 800; color: var(--green);
+  letter-spacing: -0.03em; margin-bottom: 4px;
+}
+.earn-card .earn-label { font-size: 11px; color: var(--tm); }
+.earn-note { font-size: 11px; color: var(--tm); text-align: center; margin-top: 14px; }
+
+/* MAIN GRID */
+.aff-grid {
+  display: grid; grid-template-columns: 1fr 1.4fr;
+  gap: 2.5rem;
+  max-width: 1160px; margin: 0 auto;
+  padding: 0 2.5rem 5rem;
+}
+
+/* LEFT */
+.aff-info { display: flex; flex-direction: column; gap: 14px; }
+
+.info-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.5rem;
+  transition: border-color 0.2s;
+}
+.info-card:hover { border-color: var(--border-b); }
+.info-card-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; margin-bottom: 12px;
+}
+.ic-green  { background: rgba(16,185,129,0.1);  border: 1px solid rgba(16,185,129,0.2); }
+.ic-blue   { background: rgba(37,99,235,0.12);  border: 1px solid rgba(37,99,235,0.2); }
+.ic-amber  { background: rgba(245,158,11,0.1);  border: 1px solid rgba(245,158,11,0.2); }
+.info-card h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+.info-card p  { font-size: 13px; color: var(--ts); line-height: 1.6; }
+
+.perks-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+.perks-list li { display: flex; align-items: flex-start; gap: 9px; font-size: 13px; color: var(--ts); line-height: 1.5; }
+.perk-check { color: var(--green); flex-shrink: 0; margin-top: 1px; font-size: 14px; }
+
+.code-example {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 14px 16px; margin-top: 10px;
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.code-text { font-size: 20px; font-weight: 800; letter-spacing: 0.08em; color: var(--accent-l); }
+.code-sub  { font-size: 11px; color: var(--tm); margin-top: 2px; }
+.code-badge { font-size: 10px; font-weight: 600; background: var(--green-bg); border: 1px solid var(--green-border); color: var(--green); padding: 4px 10px; border-radius: 6px; white-space: nowrap; }
+
+/* RIGHT — FORM */
+.aff-form-wrap {
+  background: var(--bg2); border: 1px solid var(--border-b);
+  border-radius: 16px; padding: 2.25rem;
+  animation: fadeUp 0.7s 0.1s ease both;
+}
+.form-header { margin-bottom: 2rem; }
+.form-header h2 { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 5px; letter-spacing: -0.02em; }
+.form-header p  { font-size: 13px; color: var(--ts); }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.form-group label { font-size: 12px; font-weight: 500; color: var(--ts); letter-spacing: 0.03em; }
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: var(--bg3); border: 1px solid var(--border-b);
+  border-radius: 8px; padding: 11px 14px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px; color: var(--text);
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%; -webkit-appearance: none;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: var(--tm); }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: rgba(37,99,235,0.5);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+}
+.form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(240,244,255,0.3)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+  padding-right: 36px; cursor: pointer;
+}
+.form-group select option { background: #0c1525; color: var(--text); }
+.form-group textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+
+.form-group .input-prefix-wrap { position: relative; }
+.form-group .input-prefix-wrap input { padding-left: 38px; }
+.form-group .input-prefix {
+  position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+  font-size: 13px; color: var(--tm); pointer-events: none;
+}
+
+.form-divider { border: none; border-top: 1px solid var(--border); margin: 4px 0 18px; }
+
+.form-section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--tm); margin-bottom: 14px; }
+
+.checkbox-group { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 18px; }
+.checkbox-group input[type="checkbox"] {
+  width: 16px; height: 16px; min-width: 16px;
+  accent-color: var(--accent); cursor: pointer; margin-top: 2px;
+  background: var(--bg3); border: 1px solid var(--border-b);
+  border-radius: 4px;
+}
+.checkbox-group label { font-size: 13px; color: var(--ts); line-height: 1.55; cursor: pointer; }
+.checkbox-group label a { color: var(--accent-l); text-decoration: none; }
+.checkbox-group label a:hover { text-decoration: underline; }
+
+.btn-submit {
+  width: 100%; background: var(--accent); color: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 600;
+  padding: 13px 26px; border-radius: 8px; border: none;
+  cursor: pointer; transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-submit:hover { background: var(--accent-l); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,0.35); }
+.btn-submit:active { transform: translateY(0); }
+.form-footer-note { text-align: center; font-size: 11px; color: var(--tm); margin-top: 12px; }
+
+/* SUCCESS */
+.success-state {
+  display: none; flex-direction: column; align-items: center;
+  justify-content: center; text-align: center;
+  padding: 3rem 2rem; gap: 14px;
+}
+.success-icon {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--green-bg); border: 1px solid var(--green-border);
+  display: flex; align-items: center; justify-content: center; font-size: 24px;
+}
+.success-state h3 { font-size: 20px; font-weight: 700; color: var(--text); }
+.success-state p { font-size: 14px; color: var(--ts); line-height: 1.7; max-width: 320px; }
+
+/* TRUST BAR */
+.trust-bar { padding: 0 2.5rem; margin: 0 auto 2rem; }
+.trust-bar-inner {
+  max-width: 1160px; margin: 0 auto; padding: 1.1rem 2rem;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+}
+.trust-top { display: flex; align-items: center; gap: 2rem; flex-wrap: wrap; justify-content: center; }
+.trust-item { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--ts); }
+.trust-sep { width: 1px; height: 18px; background: var(--border); flex-shrink: 0; }
+.trust-disclaimer { width: 100%; text-align: center; font-size: 11px; color: var(--tm); line-height: 1.5; border-top: 1px solid var(--border); padding-top: 10px; max-width: 900px; }
+
+/* FOOTER */
+footer { padding: 2rem 2.5rem; margin: 2rem auto; }
+.footer-inner {
+  max-width: 1160px; margin: 0 auto;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 16px; padding: 2.5rem 2.5rem 2rem; overflow: hidden;
+}
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2.5rem; margin-bottom: 2.5rem; }
+.footer-brand .logo { font-size: 20px; margin-bottom: 0.75rem; display: block; }
+.footer-brand p { font-size: 13px; color: var(--ts); line-height: 1.7; max-width: 240px; }
+.footer-col h4 { font-size: 12px; font-weight: 600; color: var(--text); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; }
+.footer-col a { display: block; font-size: 13px; color: var(--ts); text-decoration: none; margin-bottom: 8px; transition: color 0.2s; }
+.footer-col a:hover { color: var(--text); }
+.footer-bottom { border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.footer-copy { font-size: 12px; color: var(--tm); }
+.footer-risk { font-size: 11px; color: var(--tm); max-width: 500px; line-height: 1.5; }
+
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.25rem; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .aff-hero { padding: 3rem 1.25rem 2rem; }
+  .how-section { padding: 0 1.25rem 3rem; }
+  .steps-row { grid-template-columns: 1fr; }
+  .earnings-grid { grid-template-columns: repeat(2,1fr); }
+  .aff-grid { grid-template-columns: 1fr; padding: 0 1.25rem 4rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .trust-sep { display: none; }
+  .commission-strip { padding: 0 1.25rem; }
+}
+@media (max-width: 580px) {
+  .footer-top { grid-template-columns: 1fr; }
+  .earnings-grid { grid-template-columns: repeat(2,1fr); }
+}
+</style>
+<base target="_blank">
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="grid-bg"></div>
+
+<div style="position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--bg3);border-bottom:1px solid var(--border);padding:1rem;text-align:center;font-size:14px;color:var(--ts);">
+  This page has moved to <a href="https://trenai.vercel.app/" style="color:var(--accent-l);font-weight:600;">trenai.vercel.app</a>. Redirecting now...
+</div>
+<div style="height:60px;"></div>
+<div class="page">
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">tren<span>.</span></a>
+  <div class="nav-links">
+    <a href="https://trenai.vercel.app/dashboard">Dashboard</a>
+    <a href="https://trenai.vercel.app/pricing">Pricing</a>
+    <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+    <a href="https://trenai.vercel.app/contact">Contact</a>
+    <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="https://trenai.vercel.app/login-page">Dashboard</a>
+    <a href="https://trenai.vercel.app/pricing">Pricing</a>
+    <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+    <a href="https://trenai.vercel.app/contact">Contact</a>
+    <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="aff-hero">
+  <div class="tag tag-amber"><span class="tag-dot"></span>Affiliate program · Now open</div>
+  <h1>Earn while your<br>audience <em>trades smarter</em></h1>
+  <p>Refer traders to Tren and earn 10% on every subscription they take out — recurring, for as long as they stay. Your audience gets 10% off too.</p>
+</div>
+
+<!-- COMMISSION PILLS -->
+<div class="commission-strip">
+  <div class="c-pill">
+    <span class="pill-icon">💰</span>
+    You earn <span class="pill-highlight">&nbsp;10% commission&nbsp;</span> on every sale
+  </div>
+  <div class="c-pill">
+    <span class="pill-icon">🎁</span>
+    Your audience gets <span class="pill-highlight-blue">&nbsp;10% off&nbsp;</span> with your code
+  </div>
+  <div class="c-pill">
+    <span class="pill-icon">♻️</span>
+    Recurring — paid every month they stay
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-section">
+  <div class="how-section-header">
+    <div class="tag tag-blue" style="margin: 0 auto 1rem;">How it works</div>
+    <h2>Three steps to <em>start earning</em></h2>
+    <p>Apply below, get your code, and start sharing. That's it.</p>
+  </div>
+
+  <div class="steps-row">
+    <div class="step-block s1">
+      <div class="step-num-large">01</div>
+      <h3>Apply</h3>
+      <p>Fill in the form below with your details and audience info. We review every application and get back to you within 48 hours.</p>
+    </div>
+    <div class="step-block s2">
+      <div class="step-num-large">02</div>
+      <h3>Get your code</h3>
+      <p>Once approved, we send you a personal discount code — your audience uses it for 10% off, and every sale is tracked back to you automatically.</p>
+    </div>
+    <div class="step-block s3">
+      <div class="step-num-large">03</div>
+      <h3>Earn monthly</h3>
+      <p>10% of every subscription payment, paid out monthly. The longer your referrals stay subscribed, the more you earn — no cap.</p>
+    </div>
+  </div>
+
+  <!-- EARNINGS TABLE -->
+  <div class="earnings-visual">
+    <div class="earnings-header">
+      <div>
+        <div class="earnings-title">Estimated monthly earnings</div>
+        <div class="earnings-sub">Based on Premium plan ($29.99/mo) · 10% recurring commission</div>
+      </div>
+      <div class="tag tag-green" style="margin:0;"><span class="tag-dot"></span>10% per sale</div>
+    </div>
+    <div class="earnings-grid">
+      <div class="earn-card">
+        <div class="ref-count">50 referrals</div>
+        <div class="earn-amount">$150</div>
+        <div class="earn-label">per month</div>
+      </div>
+      <div class="earn-card">
+        <div class="ref-count">100 referrals</div>
+        <div class="earn-amount">$300</div>
+        <div class="earn-label">per month</div>
+      </div>
+      <div class="earn-card">
+        <div class="ref-count">500 referrals</div>
+        <div class="earn-amount">$1,500</div>
+        <div class="earn-label">per month</div>
+      </div>
+      <div class="earn-card">
+        <div class="ref-count">1,000 referrals</div>
+        <div class="earn-amount">$3,000</div>
+        <div class="earn-label">per month</div>
+      </div>
+    </div>
+    <div class="earn-note">Figures are illustrative. Actual earnings depend on plan mix and referral retention.</div>
+  </div>
+</div>
+
+<!-- MAIN GRID -->
+<div class="aff-grid">
+
+  <!-- LEFT — PERKS -->
+  <div class="aff-info">
+
+    <div class="info-card">
+      <div class="info-card-icon ic-green">💸</div>
+      <h3>What you get</h3>
+      <ul class="perks-list">
+        <li><span class="perk-check">✓</span> 10% recurring commission on every subscription</li>
+        <li><span class="perk-check">✓</span> Personal discount code for your audience (10% off)</li>
+        <li><span class="perk-check">✓</span> Monthly payouts via PayPal</li>
+        <li><span class="perk-check">✓</span> Real-time tracking of clicks, signups, and earnings</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-icon ic-blue">🎯</div>
+      <h3>Who's a good fit</h3>
+      <p style="margin-bottom:10px;">We work with creators, traders, and community managers who have an engaged audience interested in trading, finance, or passive income.</p>
+      <ul class="perks-list">
+        <li><span class="perk-check">✓</span> YouTube / TikTok trading creators</li>
+        <li><span class="perk-check">✓</span> Discord or Telegram trading communities</li>
+        <li><span class="perk-check">✓</span> Finance & investing newsletters or blogs</li>
+        <li><span class="perk-check">✓</span> Twitter / X trading accounts</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-icon ic-amber">🏷️</div>
+      <h3>How your code looks</h3>
+      <p>Your personal code is easy to remember and share. Example:</p>
+      <div class="code-example">
+        <div>
+          <div class="code-text">ALEX10</div>
+          <div class="code-sub">Your audience enters this at checkout</div>
+        </div>
+        <div class="code-badge">10% off</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- RIGHT — FORM -->
+  <div class="aff-form-wrap">
+
+    <div id="formView">
+      <div class="form-header">
+        <h2>Apply to become an affiliate</h2>
+        <p>Takes 2 minutes. We'll review and get back to you within 48 hours.</p>
+      </div>
+
+      <div class="form-section-label">Your details</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fname">First name</label>
+          <input type="text" id="fname" placeholder="Alex" autocomplete="given-name">
+        </div>
+        <div class="form-group">
+          <label for="lname">Last name</label>
+          <input type="text" id="lname" placeholder="Johnson" autocomplete="family-name">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label for="country">Country</label>
+        <select id="country">
+          <option value="" disabled selected>Select your country…</option>
+          <option>Netherlands</option>
+          <option>United Kingdom</option>
+          <option>United States</option>
+          <option>Germany</option>
+          <option>Belgium</option>
+          <option>France</option>
+          <option>Spain</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <hr class="form-divider">
+      <div class="form-section-label">Your audience</div>
+
+      <div class="form-group">
+        <label for="platform">Primary platform</label>
+        <select id="platform">
+          <option value="" disabled selected>Where is your audience?</option>
+          <option>YouTube</option>
+          <option>TikTok</option>
+          <option>Instagram</option>
+          <option>Twitter / X</option>
+          <option>Discord community</option>
+          <option>Telegram channel</option>
+          <option>Newsletter / Blog</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="handle">Profile / channel link</label>
+        <div class="input-prefix-wrap">
+          <span class="input-prefix">🔗</span>
+          <input type="url" id="handle" placeholder="https://youtube.com/@yourchannel" style="padding-left:36px;">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="audience">Approximate audience size</label>
+        <select id="audience">
+          <option value="" disabled selected>How many followers / subscribers?</option>
+          <option>Under 1,000</option>
+          <option>1,000 – 5,000</option>
+          <option>5,000 – 20,000</option>
+          <option>20,000 – 100,000</option>
+          <option>100,000+</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="promo">How would you promote Tren? <span style="color:var(--tm);font-weight:400;">(optional)</span></label>
+        <textarea id="promo" placeholder="e.g. dedicated review video, mention in weekly stream, newsletter feature…"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="code">Preferred affiliate code <span style="color:var(--tm);font-weight:400;">(optional)</span></label>
+        <input type="text" id="code" placeholder="e.g. ALEX10" style="text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()">
+      </div>
+
+      <hr class="form-divider">
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="terms">
+        <label for="terms">I understand that Tren reviews all applications and that acceptance is not guaranteed. I agree to promote Tren honestly and in line with the <a href="https://trenai.vercel.app/affiliate-terms" target="_blank">affiliate terms</a>.</label>
+      </div>
+
+      <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">
+        <span id="btnText">Submit application</span>
+        <span id="btnArrow">→</span>
+      </button>
+      <div class="form-footer-note">No commitment. We'll reply within 48 hours.</div>
+    </div>
+
+    <div class="success-state" id="successView">
+      <div class="success-icon">✓</div>
+      <h3>Application received!</h3>
+      <p>Thanks for applying. We'll review your details and get back to you at your email address within 48 hours.</p>
+      <p style="font-size:13px;color:var(--tm);">Questions in the meantime? Reach us on <a href="https://discord.gg/Ygwf8xfEXS" target="_blank" style="color:var(--accent-l);text-decoration:none;">Discord</a> or via our <a href="https://trenai.vercel.app/contact" target="_blank" style="color:var(--accent-l);text-decoration:none;">contact page</a>.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-bar-inner">
+    <div class="trust-top">
+      <div class="trust-item">💸 10% recurring commission</div>
+      <div class="trust-sep"></div>
+      <div class="trust-item">🎁 10% off for your audience</div>
+      <div class="trust-sep"></div>
+      <div class="trust-item">↩ Cancel anytime, no lock-in</div>
+    </div>
+    <div class="trust-disclaimer">
+      Trading involves risk. Past results do not guarantee future returns. Affiliate commissions are based on active, paid subscriptions only.
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="logo">tren<span>.</span></a>
+        <p>Intelligent trading automation and precision signals for NinjaTrader. Built by traders, for traders.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="https://trenai.vercel.app/login-page">Dashboard</a>
+        <a href="https://trenai.vercel.app/pricing">Pricing</a>
+        <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+        <a href="https://trenai.vercel.app/contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <a href="https://discord.gg/Ygwf8xfEXS" target="_blank">Discord</a>
+        <a href="https://www.tiktok.com/@trentrades0" target="_blank">TikTok</a>
+        <a href="https://www.instagram.com/trenai.vercel.app/" target="_blank">Instagram</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="https://trenai.vercel.app/terms-conditions">Terms of service</a>
+        <a href="https://trenai.vercel.app/privacy-policy">Privacy policy</a>
+        <a href="https://trenai.vercel.app/affiliate-terms">Affiliate terms</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Tren. All rights reserved.</div>
+      <div class="footer-risk">Trading involves significant risk of loss. Past performance is not indicative of future results. This is not financial advice.</div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script>
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('active');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+async function handleSubmit() {
+  const fname    = document.getElementById('fname').value.trim();
+  const lname    = document.getElementById('lname').value.trim();
+  const email    = document.getElementById('email').value.trim();
+  const country  = document.getElementById('country').value;
+  const platform = document.getElementById('platform').value;
+  const handle   = document.getElementById('handle').value.trim();
+  const audience = document.getElementById('audience').value;
+  const promo    = document.getElementById('promo').value.trim();
+  const code     = document.getElementById('code').value.trim();
+  const terms    = document.getElementById('terms').checked;
+
+  const btn = document.getElementById('submitBtn');
+
+  if (!fname || !email || !platform || !audience) {
+    btn.style.background = '#7f1d1d';
+    btn.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.2)';
+    document.getElementById('btnText').textContent = 'Please fill in required fields';
+    setTimeout(() => {
+      btn.style.background = '';
+      btn.style.boxShadow = '';
+      document.getElementById('btnText').textContent = 'Submit application';
+    }, 2500);
+    return;
+  }
+
+  if (!terms) {
+    btn.style.background = '#7f1d1d';
+    btn.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.2)';
+    document.getElementById('btnText').textContent = 'Please accept the terms';
+    setTimeout(() => {
+      btn.style.background = '';
+      btn.style.boxShadow = '';
+      document.getElementById('btnText').textContent = 'Submit application';
+    }, 2500);
+    return;
+  }
+
+  btn.disabled = true;
+  document.getElementById('btnText').textContent = 'Submitting\u2026';
+  document.getElementById('btnArrow').textContent = '';
+
+  try {
+    const res = await fetch('https://formspree.io/f/xdaybldk', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: `${fname} ${lname}`,
+        email,
+        country,
+        platform,
+        profile_link: handle,
+        audience_size: audience,
+        promotion_plan: promo || 'Not specified',
+        preferred_code: code || 'Not specified',
+        type: 'Affiliate Application'
+      })
+    });
+
+    if (res.ok) {
+      document.getElementById('formView').style.display = 'none';
+      document.getElementById('successView').style.display = 'flex';
+    } else {
+      throw new Error('Server error');
+    }
+  } catch (e) {
+    btn.disabled = false;
+    btn.style.background = '#7f1d1d';
+    btn.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.2)';
+    document.getElementById('btnText').textContent = 'Something went wrong \u2014 try again';
+    document.getElementById('btnArrow').textContent = '';
+    setTimeout(() => {
+      btn.style.background = '';
+      btn.style.boxShadow = '';
+      btn.disabled = false;
+      document.getElementById('btnText').textContent = 'Submit application';
+      document.getElementById('btnArrow').textContent = '\u2192';
+    }, 3000);
+  }
+}
+</script>
+
+</body>
+</html>

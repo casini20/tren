@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="refresh" content="0; url=https://trenai.vercel.app/">
+<script>window.location.replace("https://trenai.vercel.app/");</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Tren</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:   #04080f;
+  --bg2:  #080e1a;
+  --bg3:  #0c1525;
+  --bg4:  #101d30;
+  --border: rgba(255,255,255,0.07);
+  --border-b: rgba(255,255,255,0.14);
+  --accent: #2563eb;
+  --accent-l: #3b82f6;
+  --green: #10b981;
+  --green-bg: rgba(16,185,129,0.1);
+  --red: #ef4444;
+  --red-bg: rgba(239,68,68,0.1);
+  --amber: #f59e0b;
+  --text: #f0f4ff;
+  --ts: rgba(240,244,255,0.55);
+  --tm: rgba(240,244,255,0.3);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px; line-height: 1.6;
+  overflow-x: hidden;
+}
+
+.bg-layer {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 50% at 75% 5%, rgba(37,99,235,0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 15% 85%, rgba(16,185,129,0.07) 0%, transparent 55%),
+    var(--bg);
+}
+.grid-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.022;
+  background-image: linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.page { position: relative; z-index: 1; }
+
+/* NAV */
+nav {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.1rem 3rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: rgba(4,8,15,0.85);
+  backdrop-filter: blur(14px);
+  z-index: 1000;
+}
+.logo {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 21px; font-weight: 800; letter-spacing: -0.03em; color: var(--text);
+  text-decoration: none;
+}
+.logo span { color: var(--accent-l); }
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-links a {
+  font-size: 13px; font-weight: 500; color: var(--ts);
+  text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+a.nav-cta {
+  background: var(--accent); color: rgb(255,255,255) !important;
+  font-size: 13px; font-weight: 500; padding: 8px 18px;
+  border-radius: 6px; text-decoration: none; border: 1px solid var(--accent);
+  transition: box-shadow 0.3s, transform 0.15s;
+}
+a.nav-cta:hover {
+  background: var(--accent); color: rgb(255,255,255) !important; border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(37,99,235,0.5), 0 0 40px rgba(37,99,235,0.3);
+  transform: translateY(-1px);
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  background: none;
+  border: none;
+}
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+.mobile-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  flex-direction: column;
+  background: rgba(4,8,15,0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 3rem;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  font-size: 14px; font-weight: 500; color: var(--ts);
+  text-decoration: none; padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  transition: color 0.2s;
+}
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu a:hover { color: var(--text); }
+.mobile-menu a.nav-cta { margin-top: 8px; text-align: center; }
+
+/* TAGS */
+.tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 4px 12px; border-radius: 100px;
+  margin-bottom: 1.25rem;
+}
+.tag-green { background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.2); color: #34d399; }
+.tag-blue  { background: rgba(37,99,235,0.1);   border: 1px solid rgba(37,99,235,0.25); color: var(--accent-l); }
+.tag-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+@keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+
+/* HERO */
+.contact-hero {
+  max-width: 1160px; margin: 0 auto;
+  padding: 5rem 2.5rem 3rem;
+  animation: fadeUp 0.7s ease both;
+}
+.contact-hero h1 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: clamp(36px, 5vw, 58px);
+  font-weight: 800; line-height: 1.1;
+  letter-spacing: -0.035em;
+  color: var(--text); margin-bottom: 1rem;
+}
+.contact-hero h1 em { font-style: normal; color: var(--accent-l); }
+.contact-hero p { font-size: 16px; color: var(--ts); max-width: 460px; line-height: 1.75; }
+
+/* MAIN GRID */
+.contact-grid {
+  display: grid; grid-template-columns: 1fr 1.4fr;
+  gap: 2.5rem;
+  max-width: 1160px; margin: 0 auto;
+  padding: 0 2.5rem 5rem;
+}
+
+/* LEFT — info cards */
+.contact-info { display: flex; flex-direction: column; gap: 14px; }
+
+.info-card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.5rem;
+  transition: border-color 0.2s;
+}
+.info-card:hover { border-color: var(--border-b); }
+.info-card-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; margin-bottom: 12px;
+}
+.ic-discord { background: rgba(88,101,242,0.15); border: 1px solid rgba(88,101,242,0.25); }
+.ic-email   { background: rgba(37,99,235,0.12);  border: 1px solid rgba(37,99,235,0.2); }
+.ic-response { background: rgba(16,185,129,0.1);  border: 1px solid rgba(16,185,129,0.2); }
+.info-card h3 { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+.info-card p  { font-size: 13px; color: var(--ts); line-height: 1.6; }
+.info-card a  { color: var(--accent-l); text-decoration: none; font-size: 13px; font-weight: 500; display: inline-block; margin-top: 8px; transition: color 0.2s; }
+.info-card a:hover { color: var(--text); }
+
+.faq-mini { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; overflow: hidden; }
+.faq-mini-title {
+  padding: 1rem 1.5rem; font-size: 12px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.07em; color: var(--ts);
+  border-bottom: 1px solid var(--border);
+}
+.faq-item {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.faq-item:last-child { border-bottom: none; }
+.faq-item:hover { background: var(--bg3); }
+.faq-q {
+  font-size: 13px; font-weight: 500; color: var(--text);
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+}
+.faq-q .chevron { color: var(--tm); font-size: 11px; transition: transform 0.2s; }
+.faq-item.open .chevron { transform: rotate(180deg); }
+.faq-a { font-size: 12px; color: var(--ts); line-height: 1.65; margin-top: 8px; display: none; }
+.faq-item.open .faq-a { display: block; }
+
+/* RIGHT — form */
+.contact-form-wrap {
+  background: var(--bg2); border: 1px solid var(--border-b);
+  border-radius: 16px; padding: 2.25rem;
+  animation: fadeUp 0.7s 0.1s ease both;
+  align-self: start;
+}
+.form-header { margin-bottom: 2rem; }
+.form-header h2 { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 5px; letter-spacing: -0.02em; }
+.form-header p  { font-size: 13px; color: var(--ts); }
+
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+.form-group label { font-size: 12px; font-weight: 500; color: var(--ts); letter-spacing: 0.03em; }
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  background: var(--bg3); border: 1px solid var(--border-b);
+  border-radius: 8px; padding: 11px 14px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px; color: var(--text);
+  outline: none; transition: border-color 0.2s, box-shadow 0.2s;
+  width: 100%;
+  -webkit-appearance: none;
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: var(--tm); }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: rgba(37,99,235,0.5);
+  box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
+}
+.form-group select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(240,244,255,0.3)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+.form-group select option { background: #0c1525; color: var(--text); }
+.form-group textarea { resize: vertical; min-height: 90px; line-height: 1.6; }
+
+.form-notice {
+  background: rgba(37,99,235,0.07); border: 1px solid rgba(37,99,235,0.15);
+  border-radius: 8px; padding: 11px 14px;
+  font-size: 12px; color: var(--ts); line-height: 1.6;
+  margin-bottom: 18px; display: flex; gap: 8px; align-items: flex-start;
+}
+.notice-icon { color: var(--accent-l); flex-shrink: 0; margin-top: 1px; }
+
+.btn-submit {
+  width: 100%; background: var(--accent); color: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 600;
+  padding: 13px 26px; border-radius: 8px; border: none;
+  cursor: pointer; transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-submit:hover { background: var(--accent-l); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,99,235,0.35); }
+.btn-submit:active { transform: translateY(0); }
+.btn-submit.sent { background: #059669; }
+
+.form-footer-note { text-align: center; font-size: 11px; color: var(--tm); margin-top: 12px; }
+
+/* SUCCESS STATE */
+.success-state {
+  display: none; flex-direction: column; align-items: center;
+  justify-content: center; text-align: center;
+  padding: 3rem 2rem; gap: 14px;
+}
+.success-icon {
+  width: 56px; height: 56px; border-radius: 50%;
+  background: var(--green-bg); border: 1px solid rgba(16,185,129,0.3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+}
+.success-state h3 { font-size: 20px; font-weight: 700; color: var(--text); }
+.success-state p { font-size: 14px; color: var(--ts); line-height: 1.7; max-width: 320px; }
+
+/* TRUST BAR */
+.trust-bar { padding: 0 2.5rem; margin: 0 auto 2rem; }
+.trust-bar-inner {
+  max-width: 1160px; margin: 0 auto;
+  padding: 1.1rem 2rem;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+}
+.trust-top {
+  display: flex; align-items: center; gap: 2rem;
+  flex-wrap: wrap; justify-content: center;
+}
+.trust-item { display: flex; align-items: center; gap: 7px; font-size: 13px; color: var(--ts); }
+.trust-sep { width: 1px; height: 18px; background: var(--border); flex-shrink: 0; }
+.trust-disclaimer {
+  width: 100%; text-align: center; font-size: 11px; color: var(--tm);
+  line-height: 1.5; border-top: 1px solid var(--border);
+  padding-top: 10px; max-width: 900px;
+}
+
+/* FOOTER */
+footer { padding: 2rem 2.5rem; margin: 2rem auto; }
+.footer-inner {
+  max-width: 1160px; margin: 0 auto;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 16px; padding: 2.5rem 2.5rem 2rem; overflow: hidden;
+}
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2.5rem; margin-bottom: 2.5rem; }
+.footer-brand .logo { font-size: 20px; margin-bottom: 0.75rem; display: block; }
+.footer-brand p { font-size: 13px; color: var(--ts); line-height: 1.7; max-width: 240px; }
+.footer-col h4 { font-size: 12px; font-weight: 600; color: var(--text); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; }
+.footer-col a { display: block; font-size: 13px; color: var(--ts); text-decoration: none; margin-bottom: 8px; transition: color 0.2s; }
+.footer-col a:hover { color: var(--text); }
+.footer-bottom {
+  border-top: 1px solid var(--border); padding-top: 1.5rem;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+}
+.footer-copy { font-size: 12px; color: var(--tm); }
+.footer-risk { font-size: 11px; color: var(--tm); max-width: 500px; line-height: 1.5; }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.25rem; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .contact-hero { padding: 3rem 1.25rem 2rem; }
+  .contact-grid { grid-template-columns: 1fr; padding: 0 1.25rem 4rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+  .trust-sep { display: none; }
+}
+@media (max-width: 580px) {
+  .footer-top { grid-template-columns: 1fr; }
+}
+</style>
+<base target="_blank">
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="grid-bg"></div>
+
+<div style="position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--bg3);border-bottom:1px solid var(--border);padding:1rem;text-align:center;font-size:14px;color:var(--ts);">
+  This page has moved to <a href="https://trenai.vercel.app/" style="color:var(--accent-l);font-weight:600;">trenai.vercel.app</a>. Redirecting now...
+</div>
+<div style="height:60px;"></div>
+<div class="page">
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">tren<span>.</span></a>
+  <div class="nav-links">
+    <a href="https://trenai.vercel.app/dashboard">Dashboard</a>
+    <a href="https://trenai.vercel.app/pricing">Pricing</a>
+    <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+    <a href="https://trenai.vercel.app/contact">Contact</a>
+    <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="https://trenai.vercel.app/login-page">Dashboard</a>
+    <a href="https://trenai.vercel.app/pricing">Pricing</a>
+    <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+    <a href="https://trenai.vercel.app/contact">Contact</a>
+    <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="contact-hero">
+  <div class="tag tag-green"><span class="tag-dot"></span>We're here to help</div>
+  <h1>Get in <em>touch</em></h1>
+  <p>Have a question about Tren, need help with your setup, or want to know more before joining? We'll get back to you fast.</p>
+</div>
+
+<!-- MAIN GRID -->
+<div class="contact-grid">
+
+  <!-- LEFT -->
+  <div class="contact-info">
+
+    <div class="info-card">
+      <div class="info-card-icon ic-discord">💬</div>
+      <h3>Join our Discord</h3>
+      <p>The fastest way to get help. Our community and team are active daily — questions answered in minutes, not days.</p>
+      <a href="https://discord.gg/Ygwf8xfEXS" target="_blank">Join the server →</a>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-icon ic-email">✉️</div>
+      <h3>Email support</h3>
+      <p>Prefer email? Send us a message and we'll reply within one business day. Best for billing, account, or detailed setup questions.</p>
+      <a href="mailto:trenhelp@outlook.com">trenhelp@outlook.com →</a>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-icon ic-response">⚡</div>
+      <h3>Typical response time</h3>
+      <p>Discord: usually within a few hours. Email: within 1 business day. We read everything — no ticket systems, just real replies.</p>
+    </div>
+
+    <div class="faq-mini">
+      <div class="faq-mini-title">Common questions</div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Does Tren work with my broker? <span class="chevron">▼</span></div>
+        <div class="faq-a">Tren integrates directly with NinjaTrader 8. As long as your broker is supported by NinjaTrader, you're good to go. Most major futures brokers work seamlessly.</div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Can I cancel my subscription anytime? <span class="chevron">▼</span></div>
+        <div class="faq-a">Yes — no lock-in, no cancellation fees. Cancel from your dashboard whenever you want and you keep access until the end of your billing period.</div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">How long does setup take? <span class="chevron">▼</span></div>
+        <div class="faq-a">Most traders are up and running in under 15 minutes. We provide a step-by-step guide and our Discord community is available to walk you through it live.</div>
+      </div>
+
+      <div class="faq-item" onclick="toggleFaq(this)">
+        <div class="faq-q">Is the 7-day free trial risk-free? <span class="chevron">▼</span></div>
+        <div class="faq-a">Yes. No charge during the trial period. You can cancel before it ends and you won't be billed. We don't ask for a card upfront on the free signals plan.</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- RIGHT — FORM -->
+  <div class="contact-form-wrap">
+
+    <div id="formView">
+      <div class="form-header">
+        <h2>Send us a message</h2>
+        <p>Fill in the form below and we'll get back to you as soon as possible.</p>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fname">First name</label>
+          <input type="text" id="fname" placeholder="Alex" autocomplete="given-name">
+        </div>
+        <div class="form-group">
+          <label for="lname">Last name</label>
+          <input type="text" id="lname" placeholder="Johnson" autocomplete="family-name">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email address</label>
+        <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label for="topic">Topic</label>
+        <select id="topic">
+          <option value="" disabled selected>Select a topic…</option>
+          <option value="setup">Setup &amp; onboarding</option>
+          <option value="billing">Billing &amp; subscription</option>
+          <option value="signals">Signals &amp; performance</option>
+          <option value="indicator">TradingView indicator</option>
+          <option value="technical">Technical issue</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="message">Message</label>
+        <textarea id="message" placeholder="Tell us what's on your mind — the more detail, the faster we can help…"></textarea>
+      </div>
+
+      <div class="form-notice">
+        <span class="notice-icon">ℹ</span>
+        <span>For urgent help or setup issues, our <a href="https://discord.gg/Ygwf8xfEXS" target="_blank" style="color:var(--accent-l);text-decoration:none;">Discord server</a> is often faster — you'll get a response from the community within minutes.</span>
+      </div>
+
+      <button class="btn-submit" id="submitBtn" onclick="handleSubmit()">
+        <span id="btnText">Send message</span>
+        <span id="btnArrow">→</span>
+      </button>
+      <div class="form-footer-note">We read every message. No auto-replies.</div>
+    </div>
+
+    <div class="success-state" id="successView">
+      <div class="success-icon">✓</div>
+      <h3>Message sent!</h3>
+      <p>Thanks for reaching out. We'll get back to you within one business day — usually much sooner.</p>
+      <p style="font-size:13px;color:var(--tm);">In the meantime, feel free to join our <a href="https://discord.gg/Ygwf8xfEXS" target="_blank" style="color:var(--accent-l);text-decoration:none;">Discord</a> for instant community support.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-bar-inner">
+    <div class="trust-top">
+      <div class="trust-item">🔒 NinjaTrader secure connection</div>
+      <div class="trust-sep"></div>
+      <div class="trust-item">📊 Full trade history logged</div>
+      <div class="trust-sep"></div>
+      <div class="trust-item">↩ Cancel anytime, no lock-in</div>
+    </div>
+    <div class="trust-disclaimer">
+      Trading involves risk. Past results do not guarantee future returns. Only trade with capital you can afford to lose.
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="logo">tren<span>.</span></a>
+        <p>Intelligent trading automation and precision signals for NinjaTrader. Built by traders, for traders.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="https://trenai.vercel.app/login-page">Dashboard</a>
+        <a href="https://trenai.vercel.app/pricing">Pricing</a>
+        <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+        <a href="https://trenai.vercel.app/contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <a href="https://discord.gg/Ygwf8xfEXS" target="_blank">Discord</a>
+        <a href="https://www.tiktok.com/@trentrades0" target="_blank">TikTok</a>
+        <a href="https://www.instagram.com/trenai.vercel.app/" target="_blank">Instagram</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="https://trenai.vercel.app/terms-conditions">Terms of service</a>
+        <a href="https://trenai.vercel.app/privacy-policy">Privacy policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Tren. All rights reserved.</div>
+      <div class="footer-risk">Trading involves significant risk of loss. Past performance is not indicative of future results. This is not financial advice.</div>
+    </div>
+  </div>
+</footer>
+
+</div><!-- end .page -->
+
+<script>
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('active');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+function toggleFaq(el) {
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+async function handleSubmit() {
+  const fname   = document.getElementById('fname').value.trim();
+  const lname   = document.getElementById('lname').value.trim();
+  const email   = document.getElementById('email').value.trim();
+  const topic   = document.getElementById('topic').value;
+  const message = document.getElementById('message').value.trim();
+
+  if (!fname || !email || !topic || !message) {
+    const btn = document.getElementById('submitBtn');
+    btn.style.background = '#7f1d1d';
+    btn.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.2)';
+    document.getElementById('btnText').textContent = 'Please fill in all fields';
+    setTimeout(() => {
+      btn.style.background = '';
+      btn.style.boxShadow = '';
+      document.getElementById('btnText').textContent = 'Send message';
+    }, 2000);
+    return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true;
+  document.getElementById('btnText').textContent = 'Sending…';
+  document.getElementById('btnArrow').textContent = '';
+
+  try {
+    const res = await fetch('https://formspree.io/f/xdaybldk', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: `${fname} ${lname}`, email, topic, message })
+    });
+
+    if (res.ok) {
+      document.getElementById('formView').style.display = 'none';
+      document.getElementById('successView').style.display = 'flex';
+    } else {
+      throw new Error('Server error');
+    }
+  } catch (e) {
+    btn.disabled = false;
+    btn.style.background = '#7f1d1d';
+    btn.style.boxShadow = '0 0 0 3px rgba(239,68,68,0.2)';
+    document.getElementById('btnText').textContent = 'Something went wrong — try again';
+    document.getElementById('btnArrow').textContent = '';
+    setTimeout(() => {
+      btn.style.background = '';
+      btn.style.boxShadow = '';
+      btn.disabled = false;
+      document.getElementById('btnText').textContent = 'Send message';
+      document.getElementById('btnArrow').textContent = '→';
+    }, 3000);
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #04080f; --bg2: #080e1a; --bg3: #0c1525;
+  --border: rgba(255,255,255,0.07); --border-b: rgba(255,255,255,0.14);
+  --accent: #2563eb; --accent-l: #3b82f6; --green: #10b981;
+  --green-bg: rgba(16,185,129,0.1); --gold: #f59e0b; --gold-dark: #d97706;
+  --text: #f0f4ff; --ts: rgba(240,244,255,0.55); --tm: rgba(240,244,255,0.3);
+}
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--text);
+  font-size: 16px; line-height: 1.6; min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 2rem 1.25rem;
+}
+.bg-layer {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse 70% 50% at 50% -10%, rgba(37,99,235,0.12) 0%, transparent 60%), radial-gradient(ellipse 40% 30% at 10% 90%, rgba(16,185,129,0.06) 0%, transparent 50%), var(--bg);
+}
+.card {
+  position: relative; z-index: 1; background: var(--bg2); border: 1.5px solid var(--border);
+  border-radius: 24px; padding: 3rem 2.5rem; max-width: 520px; width: 100%;
+  text-align: center; box-shadow: 0 25px 80px rgba(0,0,0,0.5);
+  animation: fadeUp 0.5s ease both;
+}
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.success-icon {
+  width: 72px; height: 72px; margin: 0 auto 1.5rem; background: var(--green-bg);
+  border: 2px solid rgba(16,185,129,0.25); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  animation: scaleIn 0.4s 0.15s ease both;
+}
+@keyframes scaleIn { from { opacity: 0; transform: scale(0.8); } to { opacity: 1; transform: scale(1); } }
+.success-icon svg { width: 32px; height: 32px; color: var(--green); }
+.tag {
+  display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; padding: 5px 14px; border-radius: 100px;
+  margin-bottom: 1.25rem; background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); color: var(--gold);
+}
+h1 { font-size: clamp(24px, 4vw, 30px); font-weight: 800; letter-spacing: -0.03em; margin-bottom: 0.5rem; line-height: 1.2; }
+.subtitle { font-size: 15px; color: var(--ts); margin-bottom: 2rem; line-height: 1.6; }
+.divider { height: 1px; background: var(--border); margin: 1.75rem 0; }
+.cta-box {
+  background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(245,158,11,0.03));
+  border: 1.5px solid rgba(245,158,11,0.25); border-radius: 16px; padding: 1.75rem;
+  margin-bottom: 1.5rem; text-align: left;
+}
+.cta-box h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+.cta-box p { font-size: 13px; color: var(--ts); margin-bottom: 1rem; line-height: 1.6; }
+.btn-gold {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; width: 100%;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark)); color: #000;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700;
+  padding: 14px; border-radius: 10px; border: none; text-decoration: none; cursor: pointer; transition: all 0.3s;
+}
+.btn-gold:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(245,158,11,0.3); }
+.link-box {
+  display: flex; align-items: center; gap: 8px; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 10px 14px; margin-top: 0.75rem;
+}
+.link-box input { flex: 1; background: transparent; border: none; color: var(--text); font-family: monospace; font-size: 12px; outline: none; }
+.link-box button { background: var(--bg2); border: 1px solid var(--border-b); color: var(--ts); padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; }
+.link-box button:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.link-box button.copied { color: var(--green); border-color: rgba(16,185,129,0.3); }
+.steps { text-align: left; margin-top: 1.5rem; }
+.steps h4 { font-size: 12px; font-weight: 700; color: var(--text); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 1rem; }
+.step { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
+.step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--bg3); border: 1px solid var(--border-b); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: var(--accent-l); flex-shrink: 0; }
+.step p { font-size: 13.5px; color: var(--ts); line-height: 1.5; padding-top: 3px; }
+.step p strong { color: var(--text); font-weight: 600; }
+.footer-note { margin-top: 2rem; font-size: 12px; color: var(--tm); line-height: 1.6; }
+.footer-note a { color: var(--accent-l); text-decoration: none; }
+.footer-note a:hover { text-decoration: underline; }
+@media (max-width: 480px) { .card { padding: 2rem 1.5rem; } .cta-box { padding: 1.25rem; } }
+</style>
+<base target="_blank">
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="card">
+  <div class="success-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <div class="tag">Lifetime Access</div>
+  <h1>Your Indicator is Ready</h1>
+  <p class="subtitle">Add it to TradingView in one click. Lifetime access — no subscription needed.</p>
+  <div class="cta-box">
+    <h3>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Add to TradingView
+    </h3>
+    <p>One click to import the indicator into your TradingView account.</p>
+    <a href="https://www.tradingview.com/script/FLMXYQOx-Tren-indicator-5m/" class="btn-gold" target="_blank">Open Indicator</a>
+    <div class="link-box">
+      <input type="text" value="https://www.tradingview.com/script/FLMXYQOx-Tren-indicator-5m/" id="linkInput" readonly>
+      <button onclick="copyLink()" id="copyBtn">Copy</button>
+    </div>
+  </div>
+  <div class="steps">
+    <h4>Quick Setup</h4>
+    <div class="step"><span class="step-num">1</span><p>Click the button above to open the indicator on TradingView</p></div>
+    <div class="step"><span class="step-num">2</span><p>Click <strong>"Add to Favorite"</strong> or <strong>"Add to Chart"</strong></p></div>
+    <div class="step"><span class="step-num">3</span><p>Apply to the <strong>NQ</strong> chart (5m timeframe recommended)</p></div>
+    <div class="step"><span class="step-num">4</span><p>Wait for the next signal — buy/sell labels appear automatically</p></div>
+  </div>
+  <div class="divider"></div>
+  <p class="footer-note">Questions? <a href="https://discord.gg/Ygwf8xfEXS" target="_blank">Join our Discord</a> or <a href="https://trenai.vercel.app/contact" target="_blank">contact support</a>.</p>
+</div>
+<script>
+function copyLink() {
+  var input = document.getElementById('linkInput');
+  var btn = document.getElementById('copyBtn');
+  input.select();
+  input.setSelectionRange(0, 99999);
+  navigator.clipboard.writeText(input.value).then(function() {
+    btn.textContent = 'Copied!';
+    btn.classList.add('copied');
+    setTimeout(function() { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tren — Auth</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- ─── SCROLLBAR & FRAMER FIXES ───────────────────────────────────────────── -->
+<style>
+  /* Kill all scrollbars everywhere */
+  html, body, div, nav, aside, main, section, article, iframe {
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+  ::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
+  
+  /* Hide Framer watermark/badge elements */
+  .framer-badge, .framer-canvas, .framer-watermark,
+  [class*="framer-badge"], [class*="Watermark"], [class*="watermark"],
+  [class*="framer-branding"], [class*="framer-footer"],
+  #__framer-badge-container, .framer-badge-container,
+  div[data-framer-generated], iframe[src*="framer"] + div,
+  body > div[class*="framer"]:not(.bg-layer):not(.grid-bg):not(.cards-wrapper):not(#dashboard),
+  nav[class*="framer"], header[class*="framer"], footer[class*="framer"],
+  .framer-1p59q8c, .framer-1yfv4j9, .framer-1q7h2q9,
+  a[href*="framer.com"], a[href*="framer.website"] {
+    display: none !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    width: 0 !important;
+    position: absolute !important;
+  }
+</style>
+
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --bg:#04080f;
+  --bg2:#080e1a;
+  --border:rgba(255,255,255,0.07);
+  --accent:#2563eb;
+  --accent-l:#3b82f6;
+  --text:#f0f4ff;
+  --sub:rgba(240,244,255,0.6);
+  --error:#ef4444;
+  --success:#10b981;
+}
+
+body {
+  font-family:'DM Sans',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+}
+
+.bg-layer {
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 75% 5%, rgba(37,99,235,0.15), transparent 60%),
+    radial-gradient(ellipse 40% 40% at 15% 85%, rgba(16,185,129,0.08), transparent 55%),
+    var(--bg);
+}
+
+.grid-bg {
+  position:fixed;
+  inset:0;
+  opacity:0.03;
+  background-image:
+    linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px);
+  background-size:60px 60px;
+}
+
+.cards-wrapper {
+  position:relative;
+  z-index:2;
+  width:360px;
+}
+
+.card {
+  width:100%;
+  padding:2.2rem;
+  border-radius:16px;
+  background:rgba(8,14,26,0.88);
+  backdrop-filter:blur(18px);
+  border:1px solid var(--border);
+  box-shadow:0 0 40px rgba(37,99,235,0.15);
+  animation: fadeUp 0.35s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(16px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+
+.logo {
+  font-family:'Syne',sans-serif;
+  font-size:26px;
+  font-weight:800;
+  text-align:center;
+  margin-bottom:1.2rem;
+}
+.logo span { color:var(--accent-l); }
+
+.title {
+  text-align:center;
+  font-size:20px;
+  font-weight:600;
+}
+.sub {
+  text-align:center;
+  font-size:13px;
+  color:var(--sub);
+  margin-bottom:1.8rem;
+  margin-top:4px;
+}
+
+.group { margin-bottom:1rem; }
+
+.label {
+  font-size:12px;
+  color:var(--sub);
+  margin-bottom:6px;
+  display:block;
+}
+
+.input {
+  width:100%;
+  padding:11px;
+  border-radius:8px;
+  border:1px solid var(--border);
+  background:#0c1525;
+  color:var(--text);
+  outline:none;
+  font-family:'DM Sans',sans-serif;
+  font-size:14px;
+  transition: border-color 0.2s;
+}
+.input::placeholder { color: rgba(240,244,255,0.3); }
+.input:focus { border-color:var(--accent); }
+.input.error-field { border-color:var(--error); }
+
+.btn {
+  width:100%;
+  margin-top:10px;
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  background:linear-gradient(90deg,var(--accent),var(--accent-l));
+  color:#fff;
+  font-weight:600;
+  font-size:14px;
+  font-family:'DM Sans',sans-serif;
+  cursor:pointer;
+  transition: box-shadow 0.2s, opacity 0.2s;
+  letter-spacing:0.3px;
+}
+.btn:hover { box-shadow:0 0 20px rgba(37,99,235,0.45); }
+.btn:active { opacity:0.88; }
+.btn:disabled { opacity:0.5; cursor:default; box-shadow:none; }
+
+.footer {
+  margin-top:1.3rem;
+  text-align:center;
+  font-size:12px;
+  color:var(--sub);
+  line-height:2;
+}
+.footer a {
+  color:var(--accent-l);
+  text-decoration:none;
+  cursor:pointer;
+}
+.footer a:hover { text-decoration:underline; }
+
+.alert {
+  border-radius:8px;
+  padding:10px 12px;
+  font-size:12.5px;
+  margin-bottom:1rem;
+  display:none;
+}
+.alert.show { display:block; }
+.alert-error { background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; }
+.alert-success { background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.3); color:#6ee7b7; }
+
+.strength-bar {
+  height:3px;
+  border-radius:2px;
+  background:rgba(255,255,255,0.08);
+  margin-top:6px;
+  overflow:hidden;
+}
+.strength-fill {
+  height:100%;
+  border-radius:2px;
+  transition:width 0.3s, background 0.3s;
+  width:0%;
+}
+
+#dashboard {
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:50;
+  background:var(--bg);
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1.5rem;
+  animation:fadeUp 0.4s ease both;
+}
+#dashboard.show { display:flex; }
+
+.dash-logo {
+  font-family:'Syne',sans-serif;
+  font-size:32px;
+  font-weight:800;
+}
+.dash-logo span { color:var(--accent-l); }
+
+.dash-welcome { text-align:center; }
+.dash-welcome h2 { font-size:22px; font-weight:600; margin-bottom:6px; }
+.dash-welcome p { color:var(--sub); font-size:14px; }
+
+.dash-card {
+  background:rgba(8,14,26,0.88);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:1.5rem 2rem;
+  text-align:center;
+  min-width:280px;
+}
+
+.dash-email { font-size:13px; color:var(--sub); margin-top:4px; }
+
+.btn-outline {
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  padding:10px 28px;
+  border-radius:8px;
+  cursor:pointer;
+  font-size:14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.btn-outline:hover { border-color:var(--accent-l); box-shadow:0 0 12px rgba(37,99,235,0.2); }
+
+.hint { font-size:11px; color:var(--sub); margin-top:4px; }
+
+/* Loading spinner inside button */
+.btn .spinner {
+  display:inline-block;
+  width:13px; height:13px;
+  border:2px solid rgba(255,255,255,0.3);
+  border-top-color:#fff;
+  border-radius:50%;
+  animation:spin 0.6s linear infinite;
+  vertical-align:middle;
+  margin-right:6px;
+}
+@keyframes spin { to { transform:rotate(360deg); } }
+</style>
+<base target="_blank">
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="grid-bg"></div>
+
+<!-- ===== DASHBOARD ===== -->
+<div id="dashboard">
+  <div class="dash-logo">tren<span>.</span></div>
+  <div class="dash-welcome">
+    <h2>You're logged in 🎉</h2>
+    <p>Welcome to your dashboard</p>
+  </div>
+  <div class="dash-card">
+    <div style="font-size:13px;color:var(--sub);margin-bottom:4px;">Signed in as</div>
+    <div id="dash-email" class="dash-email" style="font-weight:600;font-size:15px;margin-top:0;"></div>
+  </div>
+  <button class="btn-outline" onclick="logout()">Sign out</button>
+</div>
+
+<!-- ===== CARDS ===== -->
+<div class="cards-wrapper">
+
+  <!-- LOGIN -->
+  <div id="card-login" class="card">
+    <div class="logo">tren<span>.</span></div>
+    <div class="title">Welcome back</div>
+    <div class="sub">Login to access your dashboard</div>
+
+    <div class="alert alert-error" id="login-error"></div>
+
+    <div class="group">
+      <label class="label">Email</label>
+      <input class="input" id="login-email" type="email" placeholder="you@example.com">
+    </div>
+    <div class="group">
+      <label class="label">Password</label>
+      <input class="input" id="login-password" type="password" placeholder="••••••••">
+    </div>
+
+    <button class="btn" id="btn-login" onclick="doLogin()">Login</button>
+
+    <div class="footer">
+      Don't have an account? <a onclick="show('signup')">Sign up</a><br>
+      <a onclick="show('forgot')">Forgot password?</a>
+    </div>
+  </div>
+
+  <!-- SIGN UP -->
+  <div id="card-signup" class="card" style="display:none;">
+    <div class="logo">tren<span>.</span></div>
+    <div class="title">Create account</div>
+    <div class="sub">Join tren and start tracking</div>
+
+    <div class="alert alert-error" id="signup-error"></div>
+    <div class="alert alert-success" id="signup-success"></div>
+
+    <div class="group">
+      <label class="label">Full Name</label>
+      <input class="input" id="signup-name" type="text" placeholder="Your name">
+    </div>
+    <div class="group">
+      <label class="label">Email</label>
+      <input class="input" id="signup-email" type="email" placeholder="you@example.com">
+    </div>
+    <div class="group">
+      <label class="label">Password</label>
+      <input class="input" id="signup-password" type="password" placeholder="Min. 8 characters" oninput="checkStrength(this.value)">
+      <div class="strength-bar"><div class="strength-fill" id="strength-fill"></div></div>
+      <div class="hint" id="strength-label"></div>
+    </div>
+    <div class="group">
+      <label class="label">Confirm Password</label>
+      <input class="input" id="signup-confirm" type="password" placeholder="Repeat password">
+    </div>
+
+    <button class="btn" id="btn-signup" onclick="doSignup()">Create Account</button>
+
+    <div class="footer">
+      Already have an account? <a onclick="show('login')">Login</a>
+    </div>
+  </div>
+
+  <!-- FORGOT PASSWORD -->
+  <div id="card-forgot" class="card" style="display:none;">
+    <div class="logo">tren<span>.</span></div>
+    <div class="title">Reset password</div>
+    <div class="sub">Enter your email and we'll send a reset link</div>
+
+    <div class="alert alert-error" id="forgot-error"></div>
+    <div class="alert alert-success" id="forgot-success"></div>
+
+    <div class="group">
+      <label class="label">Email</label>
+      <input class="input" id="forgot-email" type="email" placeholder="you@example.com">
+    </div>
+
+    <button class="btn" id="btn-forgot" onclick="doForgot()">Send Reset Link</button>
+
+    <div class="footer">
+      <a onclick="show('login')">← Back to login</a>
+    </div>
+  </div>
+
+  <!-- RESET PASSWORD (Supabase redirects here with #access_token in URL) -->
+  <div id="card-reset" class="card" style="display:none;">
+    <div class="logo">tren<span>.</span></div>
+    <div class="title">New password</div>
+    <div class="sub">Choose a strong new password</div>
+
+    <div class="alert alert-error" id="reset-error"></div>
+    <div class="alert alert-success" id="reset-success"></div>
+
+    <div class="group">
+      <label class="label">New Password</label>
+      <input class="input" id="reset-password" type="password" placeholder="Min. 8 characters">
+    </div>
+    <div class="group">
+      <label class="label">Confirm New Password</label>
+      <input class="input" id="reset-confirm" type="password" placeholder="Repeat password">
+    </div>
+
+    <button class="btn" id="btn-reset" onclick="doReset()">Update Password</button>
+  </div>
+
+</div>
+
+<!-- Supabase JS SDK (v2) via CDN -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+// ─── CAPTURE HASH IMMEDIATELY before Framer wipes it ─────────────────────────
+const _savedHash = window.location.hash;
+if (_savedHash.includes('access_token')) {
+  sessionStorage.setItem('tren_reset_hash', _savedHash);
+}
+
+// ─── ⚙️  CONFIGURATION ────────────────────────────────────────────────────────
+const SUPABASE_URL  = 'https://sjntsmzbiqvtstvofcnx.supabase.co';
+const SUPABASE_ANON = 'sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg';
+// ─────────────────────────────────────────────────────────────────────────────
+
+const { createClient } = supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON, {
+  auth: {
+    persistSession: false,
+    autoRefreshToken: false
+  }
+});
+
+const SESSION_KEY = 'tren_session';
+const DASHBOARD_URL = 'https://trenai.vercel.app/dashboard';
+
+// ─── CARD SWITCHER ────────────────────────────────────────────────────────────
+function show(card) {
+  ['login','signup','forgot','reset'].forEach(id => {
+    const el = document.getElementById('card-' + id);
+    el.style.display = 'none';
+    el.style.animation = 'none';
+  });
+  clearAlerts();
+  const target = document.getElementById('card-' + card);
+  target.style.display = 'block';
+  void target.offsetWidth;
+  target.style.animation = 'fadeUp 0.32s ease both';
+}
+
+function clearAlerts() {
+  document.querySelectorAll('.alert').forEach(a => {
+    a.classList.remove('show');
+    a.textContent = '';
+  });
+}
+
+function showAlert(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
+  el.classList.add('show');
+}
+
+function setLoading(btnId, loading) {
+  const btn = document.getElementById(btnId);
+  if (loading) {
+    btn.disabled = true;
+    btn.dataset.orig = btn.textContent;
+    btn.innerHTML = '<span class="spinner"></span> Please wait...';
+  } else {
+    btn.disabled = false;
+    btn.textContent = btn.dataset.orig || btn.textContent;
+  }
+}
+
+// ─── PASSWORD STRENGTH ────────────────────────────────────────────────────────
+function checkStrength(val) {
+  const fill  = document.getElementById('strength-fill');
+  const label = document.getElementById('strength-label');
+  if (!val) { fill.style.width='0%'; label.textContent=''; return; }
+  let score = 0;
+  if (val.length >= 8)           score++;
+  if (/[A-Z]/.test(val))         score++;
+  if (/[0-9]/.test(val))         score++;
+  if (/[^A-Za-z0-9]/.test(val))  score++;
+  const levels = [
+    {w:'15%', bg:'#ef4444', t:'Too short'},
+    {w:'35%', bg:'#f97316', t:'Weak'},
+    {w:'60%', bg:'#eab308', t:'Fair'},
+    {w:'82%', bg:'#22c55e', t:'Good'},
+    {w:'100%',bg:'#10b981', t:'Strong'},
+  ];
+  const l = levels[score];
+  fill.style.width = l.w;
+  fill.style.background = l.bg;
+  label.textContent = l.t;
+  label.style.color  = l.bg;
+}
+
+// ─── LOGIN ────────────────────────────────────────────────────────────────────
+async function doLogin() {
+  const email    = document.getElementById('login-email').value.trim().toLowerCase();
+  const password = document.getElementById('login-password').value;
+
+  if (!email || !password) return showAlert('login-error', 'Please fill in all fields.');
+
+  setLoading('btn-login', true);
+  const { data, error } = await sb.auth.signInWithPassword({ email, password });
+  setLoading('btn-login', false);
+
+  if (error) return showAlert('login-error', error.message);
+
+  showDashboard(data.session);
+}
+
+// ─── SIGN UP ──────────────────────────────────────────────────────────────────
+async function doSignup() {
+  const name     = document.getElementById('signup-name').value.trim();
+  const email    = document.getElementById('signup-email').value.trim().toLowerCase();
+  const password = document.getElementById('signup-password').value;
+  const confirm  = document.getElementById('signup-confirm').value;
+
+  if (!name || !email || !password || !confirm)
+    return showAlert('signup-error', 'Please fill in all fields.');
+  if (!email.includes('@') || !email.includes('.'))
+    return showAlert('signup-error', 'Please enter a valid email address.');
+  if (password.length < 8)
+    return showAlert('signup-error', 'Password must be at least 8 characters.');
+  if (password !== confirm)
+    return showAlert('signup-error', 'Passwords do not match.');
+
+  setLoading('btn-signup', true);
+
+  const { data, error } = await sb.auth.signUp({
+    email,
+    password,
+    options: { data: { full_name: name } }
+  });
+
+  setLoading('btn-signup', false);
+
+  if (error) return showAlert('signup-error', error.message);
+
+  if (data.session) {
+    showDashboard(data.session);
+  } else {
+    showAlert('signup-success', '✓ Account created! Check your email to confirm your address, then log in.');
+    setTimeout(() => show('login'), 3000);
+  }
+}
+
+// ─── FORGOT PASSWORD ──────────────────────────────────────────────────────────
+async function doForgot() {
+  const email = document.getElementById('forgot-email').value.trim().toLowerCase();
+  if (!email) return showAlert('forgot-error', 'Please enter your email address.');
+
+  setLoading('btn-forgot', true);
+
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: 'https://trenai.vercel.app/login-page'
+  });
+
+  setLoading('btn-forgot', false);
+
+  if (error) return showAlert('forgot-error', error.message);
+
+  showAlert('forgot-success', '✓ Reset link sent! Check your inbox.');
+}
+
+// ─── RESET PASSWORD ───────────────────────────────────────────────────────────
+async function doReset() {
+  const password = document.getElementById('reset-password').value;
+  const confirm  = document.getElementById('reset-confirm').value;
+
+  if (!password || !confirm) return showAlert('reset-error', 'Please fill in both fields.');
+  if (password.length < 8)   return showAlert('reset-error', 'Password must be at least 8 characters.');
+  if (password !== confirm)  return showAlert('reset-error', 'Passwords do not match.');
+
+  setLoading('btn-reset', true);
+
+  const { data, error } = await sb.auth.updateUser({ password });
+
+  setLoading('btn-reset', false);
+
+  if (error) return showAlert('reset-error', error.message);
+
+  showAlert('reset-success', '✓ Password updated! Redirecting...');
+  setTimeout(() => {
+    sb.auth.getSession().then(({ data: { session } }) => {
+      if (session) showDashboard(session);
+      else show('login');
+    });
+  }, 1500);
+}
+
+// ─── DASHBOARD ────────────────────────────────────────────────────────────────
+function showDashboard(session) {
+  const sessionPayload = {
+    access_token: session.access_token,
+    user: {
+      email: session.user?.email || '',
+      id: session.user?.id || '',
+      user_metadata: session.user?.user_metadata || {}
+    }
+  };
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify(sessionPayload));
+  window.location.replace(DASHBOARD_URL);
+}
+
+async function logout() {
+  await sb.auth.signOut();
+  sessionStorage.removeItem(SESSION_KEY);
+  document.getElementById('dashboard').classList.remove('show');
+  show('login');
+  document.getElementById('login-email').value = '';
+  document.getElementById('login-password').value = '';
+}
+
+// ─── ENTER KEY ────────────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key !== 'Enter') return;
+  if (document.getElementById('card-login').style.display  !== 'none') doLogin();
+  else if (document.getElementById('card-signup').style.display !== 'none') doSignup();
+  else if (document.getElementById('card-forgot').style.display !== 'none') doForgot();
+  else if (document.getElementById('card-reset').style.display  !== 'none') doReset();
+});
+
+// ─── AUTH STATE LISTENER ──────────────────────────────────────────────────────
+sb.auth.onAuthStateChange((event, session) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    show('reset');
+  } else if (event === 'SIGNED_IN' && session) {
+    const resetCard = document.getElementById('card-reset');
+    if (resetCard.style.display === 'none' || resetCard.style.display === '') {
+      showDashboard(session);
+    }
+  }
+});
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+(async function init() {
+  // Read hash from sessionStorage (saved at top of script) or directly from URL
+  const hash = sessionStorage.getItem('tren_reset_hash') || window.location.hash;
+  sessionStorage.removeItem('tren_reset_hash');
+
+  if (hash && hash.includes('access_token')) {
+    const params = new URLSearchParams(hash.substring(1));
+    const access_token = params.get('access_token');
+    const refresh_token = params.get('refresh_token');
+    const type = params.get('type');
+
+    if (type === 'recovery' && access_token) {
+      const { data, error } = await sb.auth.setSession({ access_token, refresh_token });
+      if (!error && data.session) {
+        show('reset');
+        return;
+      }
+    }
+  }
+
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) showDashboard(session);
+})();
+</script>
+</body>
+</html>

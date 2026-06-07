@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="refresh" content="0; url=https://trenai.vercel.app/">
+<script>window.location.replace("https://trenai.vercel.app/");</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Affiliate Terms — Tren</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:   #04080f;
+  --bg2:  #080e1a;
+  --bg3:  #0c1525;
+  --bg4:  #101d30;
+  --border: rgba(255,255,255,0.07);
+  --border-b: rgba(255,255,255,0.14);
+  --accent: #2563eb;
+  --accent-l: #3b82f6;
+  --green: #10b981;
+  --green-bg: rgba(16,185,129,0.1);
+  --green-border: rgba(16,185,129,0.2);
+  --red: #ef4444;
+  --amber: #f59e0b;
+  --text: #f0f4ff;
+  --ts: rgba(240,244,255,0.55);
+  --tm: rgba(240,244,255,0.3);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px; line-height: 1.6;
+  overflow-x: hidden;
+}
+
+.bg-layer {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 10%, rgba(37,99,235,0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 40% at 10% 80%, rgba(16,185,129,0.09) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 35% at 50% 50%, rgba(37,99,235,0.04) 0%, transparent 60%),
+    var(--bg);
+}
+.grid-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.022;
+  background-image: linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.page { position: relative; z-index: 1; }
+
+/* NAV */
+nav {
+  width: 100vw; margin-left: calc(-50vw + 50%);
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.1rem 3rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0;
+  background: rgba(4,8,15,0.85);
+  backdrop-filter: blur(14px); z-index: 1000;
+}
+.logo { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 21px; font-weight: 800; letter-spacing: -0.03em; color: var(--text); text-decoration: none; }
+.logo span { color: var(--accent-l); }
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-links a { font-size: 13px; font-weight: 500; color: var(--ts); text-decoration: none; transition: color 0.2s; }
+.nav-links a:hover { color: var(--text); }
+a.nav-cta {
+  background: var(--accent); color: rgb(255,255,255) !important;
+  font-size: 13px; font-weight: 500; padding: 8px 18px;
+  border-radius: 6px; text-decoration: none; border: 1px solid var(--accent);
+  transition: box-shadow 0.3s, transform 0.15s;
+}
+a.nav-cta:hover { box-shadow: 0 0 20px rgba(37,99,235,0.5), 0 0 40px rgba(37,99,235,0.3); transform: translateY(-1px); }
+
+.hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 8px; background: none; border: none; }
+.hamburger span { display: block; width: 22px; height: 2px; background: var(--text); border-radius: 2px; transition: all 0.3s; }
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+.mobile-menu { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; background: rgba(4,8,15,0.95); backdrop-filter: blur(20px); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 1rem 3rem; }
+.mobile-menu.open { display: flex; }
+.mobile-menu a { font-size: 14px; font-weight: 500; color: var(--ts); text-decoration: none; padding: 12px 0; border-bottom: 1px solid var(--border); transition: color 0.2s; }
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu a:hover { color: var(--text); }
+.mobile-menu a.nav-cta { margin-top: 8px; text-align: center; }
+
+/* TAG */
+.tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 4px 12px; border-radius: 100px; margin-bottom: 1.25rem;
+}
+.tag-blue { background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.25); color: var(--accent-l); }
+
+@keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
+
+/* HERO */
+.terms-hero {
+  max-width: 800px; margin: 0 auto;
+  padding: 5rem 2.5rem 3rem;
+  animation: fadeUp 0.7s ease both;
+}
+.terms-hero h1 {
+  font-size: clamp(30px, 4vw, 46px); font-weight: 800;
+  letter-spacing: -0.035em; color: var(--text); margin-bottom: 1rem; line-height: 1.1;
+}
+.terms-hero h1 em { font-style: normal; color: var(--accent-l); }
+.terms-meta {
+  display: flex; gap: 2rem; flex-wrap: wrap; margin-top: 1.25rem;
+}
+.terms-meta-item { font-size: 13px; color: var(--tm); display: flex; align-items: center; gap: 6px; }
+
+/* LAYOUT */
+.terms-layout {
+  max-width: 1160px; margin: 0 auto;
+  padding: 0 2.5rem 5rem;
+  display: grid; grid-template-columns: 220px 1fr;
+  gap: 3rem; align-items: start;
+}
+
+/* SIDEBAR TOC */
+.toc {
+  position: sticky; top: 90px;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 1.25rem;
+}
+.toc-title { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--tm); margin-bottom: 12px; }
+.toc a {
+  display: block; font-size: 12.5px; color: var(--ts); text-decoration: none;
+  padding: 6px 10px; border-radius: 6px; line-height: 1.4;
+  transition: background 0.15s, color 0.15s; margin-bottom: 2px;
+}
+.toc a:hover { color: var(--text); background: rgba(255,255,255,0.04); }
+.toc a.active { color: var(--accent-l); background: rgba(37,99,235,0.08); }
+.toc-num { color: var(--tm); margin-right: 6px; font-size: 11px; }
+
+/* CONTENT */
+.terms-content { animation: fadeUp 0.7s 0.1s ease both; }
+
+.terms-section {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 2rem 2.25rem; margin-bottom: 14px;
+  scroll-margin-top: 90px;
+}
+.terms-section:hover { border-color: var(--border-b); transition: border-color 0.2s; }
+
+.section-head {
+  display: flex; align-items: center; gap: 12px; margin-bottom: 1.25rem;
+  padding-bottom: 1rem; border-bottom: 1px solid var(--border);
+}
+.section-num {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: rgba(37,99,235,0.1); border: 1px solid rgba(37,99,235,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: var(--accent-l); flex-shrink: 0;
+}
+.section-head h2 { font-size: 16px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+
+.terms-section p {
+  font-size: 14px; color: var(--ts); line-height: 1.8; margin-bottom: 1rem;
+}
+.terms-section p:last-child { margin-bottom: 0; }
+
+.terms-section ul, .terms-section ol {
+  padding-left: 1.25rem; margin-bottom: 1rem;
+}
+.terms-section li {
+  font-size: 14px; color: var(--ts); line-height: 1.8; margin-bottom: 6px;
+}
+.terms-section li::marker { color: var(--accent-l); }
+.terms-section strong { color: var(--text); font-weight: 600; }
+
+.terms-section h3 {
+  font-size: 14px; font-weight: 600; color: var(--text);
+  margin: 1.25rem 0 0.5rem; letter-spacing: -0.01em;
+}
+.terms-section h3:first-of-type { margin-top: 0; }
+
+/* HIGHLIGHT BOX */
+.highlight-box {
+  background: rgba(37,99,235,0.06); border: 1px solid rgba(37,99,235,0.18);
+  border-radius: 10px; padding: 1rem 1.25rem; margin: 1rem 0;
+}
+.highlight-box p { font-size: 13.5px; color: var(--ts); margin: 0; }
+.highlight-box strong { color: var(--accent-l); }
+
+.warn-box {
+  background: rgba(245,158,11,0.06); border: 1px solid rgba(245,158,11,0.18);
+  border-radius: 10px; padding: 1rem 1.25rem; margin: 1rem 0;
+}
+.warn-box p { font-size: 13.5px; color: var(--ts); margin: 0; }
+
+/* CONTACT STRIP */
+.contact-strip {
+  background: var(--bg2); border: 1px solid var(--border-b);
+  border-radius: 14px; padding: 1.75rem 2.25rem;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; flex-wrap: wrap; margin-bottom: 14px;
+}
+.contact-strip h3 { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.contact-strip p  { font-size: 13px; color: var(--ts); }
+.contact-links { display: flex; gap: 10px; flex-wrap: wrap; }
+.contact-link {
+  font-size: 13px; font-weight: 500; color: var(--accent-l);
+  text-decoration: none; background: rgba(37,99,235,0.1);
+  border: 1px solid rgba(37,99,235,0.2); border-radius: 6px;
+  padding: 7px 14px; transition: background 0.2s;
+}
+.contact-link:hover { background: rgba(37,99,235,0.18); }
+
+/* FOOTER */
+footer { padding: 2rem 2.5rem; margin: 2rem auto; }
+.footer-inner {
+  max-width: 1160px; margin: 0 auto;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 16px; padding: 2.5rem 2.5rem 2rem; overflow: hidden;
+}
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2.5rem; margin-bottom: 2.5rem; }
+.footer-brand .logo { font-size: 20px; margin-bottom: 0.75rem; display: block; }
+.footer-brand p { font-size: 13px; color: var(--ts); line-height: 1.7; max-width: 240px; }
+.footer-col h4 { font-size: 12px; font-weight: 600; color: var(--text); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; }
+.footer-col a { display: block; font-size: 13px; color: var(--ts); text-decoration: none; margin-bottom: 8px; transition: color 0.2s; }
+.footer-col a:hover { color: var(--text); }
+.footer-bottom { border-top: 1px solid var(--border); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.footer-copy { font-size: 12px; color: var(--tm); }
+.footer-risk { font-size: 11px; color: var(--tm); max-width: 500px; line-height: 1.5; }
+
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.25rem; }
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .terms-hero { padding: 3rem 1.25rem 2rem; }
+  .terms-layout { grid-template-columns: 1fr; gap: 1.5rem; padding: 0 1.25rem 4rem; }
+  .toc { position: static; }
+  .footer-top { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 580px) {
+  .footer-top { grid-template-columns: 1fr; }
+  .terms-section { padding: 1.5rem; }
+}
+</style>
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="grid-bg"></div>
+
+<div class="page">
+
+<!-- NAV -->
+<nav>
+  <a href="https://trenai.vercel.app" class="logo">tren<span>.</span></a>
+  <div class="nav-links">
+    <a href="https://trenai.vercel.app/dashboard">Dashboard</a>
+    <a href="https://trenai.vercel.app/pricing">Pricing</a>
+    <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+    <a href="https://trenai.vercel.app/contact">Contact</a>
+    <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="https://trenai.vercel.app/login-page">Dashboard</a>
+    <a href="https://trenai.vercel.app/pricing">Pricing</a>
+    <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+    <a href="https://trenai.vercel.app/contact">Contact</a>
+    <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="terms-hero">
+  <div class="tag tag-blue">Legal · Affiliate Program</div>
+  <h1>Affiliate <em>Terms &amp; Conditions</em></h1>
+  <p style="font-size:15px;color:var(--ts);margin-top:0.75rem;line-height:1.75;max-width:580px;">Please read these terms carefully before applying to the Tren Affiliate Program. By submitting an application or using your affiliate code, you agree to be bound by these terms.</p>
+  <div class="terms-meta">
+    <span class="terms-meta-item">📅 Effective date: 1 January 2026</span>
+    <span class="terms-meta-item">📝 Last updated: 25 April 2026</span>
+    <span class="terms-meta-item">🌍 Applies globally</span>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="terms-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="toc" id="toc">
+    <div class="toc-title">Contents</div>
+    <a href="#s1" class="active"><span class="toc-num">01</span>Definitions</a>
+    <a href="#s2"><span class="toc-num">02</span>Eligibility</a>
+    <a href="#s3"><span class="toc-num">03</span>Application & Approval</a>
+    <a href="#s4"><span class="toc-num">04</span>Commission Structure</a>
+    <a href="#s5"><span class="toc-num">05</span>Tracking & Attribution</a>
+    <a href="#s6"><span class="toc-num">06</span>Payouts</a>
+    <a href="#s7"><span class="toc-num">07</span>Affiliate Code Usage</a>
+    <a href="#s8"><span class="toc-num">08</span>Prohibited Conduct</a>
+    <a href="#s9"><span class="toc-num">09</span>Intellectual Property</a>
+    <a href="#s10"><span class="toc-num">10</span>Confidentiality</a>
+    <a href="#s11"><span class="toc-num">11</span>Termination</a>
+    <a href="#s12"><span class="toc-num">12</span>Disclaimers</a>
+    <a href="#s13"><span class="toc-num">13</span>Limitation of Liability</a>
+    <a href="#s14"><span class="toc-num">14</span>Modifications</a>
+    <a href="#s15"><span class="toc-num">15</span>Governing Law</a>
+    <a href="#s16"><span class="toc-num">16</span>Contact</a>
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="terms-content">
+
+    <!-- 1 -->
+    <div class="terms-section" id="s1">
+      <div class="section-head">
+        <div class="section-num">01</div>
+        <h2>Definitions</h2>
+      </div>
+      <p>In these Affiliate Terms &amp; Conditions, the following terms have the meanings set out below:</p>
+      <ul>
+        <li><strong>"Tren", "we", "us", "our"</strong> refers to Tren, the operator of the trading automation platform accessible at trenai.vercel.app and associated services.</li>
+        <li><strong>"Affiliate", "you", "your"</strong> refers to any individual or entity that has applied to and been accepted into the Tren Affiliate Program.</li>
+        <li><strong>"Affiliate Program"</strong> means the program described on the Tren affiliate page under which approved Affiliates earn commission for referring new paying customers.</li>
+        <li><strong>"Affiliate Code"</strong> means the unique discount code assigned to an approved Affiliate, which is used by referred customers at checkout.</li>
+        <li><strong>"Referred Customer"</strong> means a person who purchases a paid Tren subscription using an Affiliate Code and was not previously a Tren subscriber.</li>
+        <li><strong>"Qualifying Sale"</strong> means a successful, paid, non-refunded subscription payment made by a Referred Customer that is attributable to an Affiliate.</li>
+        <li><strong>"Commission"</strong> means the fee payable to an Affiliate for each Qualifying Sale, as set out in Section 4.</li>
+        <li><strong>"Platform"</strong> refers to all Tren products, software, signals, and services.</li>
+      </ul>
+    </div>
+
+    <!-- 2 -->
+    <div class="terms-section" id="s2">
+      <div class="section-head">
+        <div class="section-num">02</div>
+        <h2>Eligibility</h2>
+      </div>
+      <p>To be eligible to participate in the Tren Affiliate Program, you must:</p>
+      <ul>
+        <li>Be at least 18 years of age (or the age of majority in your jurisdiction, whichever is higher).</li>
+        <li>Have a legitimate, publicly accessible platform, channel, community, or audience (e.g. YouTube, TikTok, Twitter/X, Discord, Telegram, newsletter, or blog).</li>
+        <li>Not be a current employee, contractor, or director of Tren.</li>
+        <li>Not be located in or subject to the laws of a jurisdiction where participation in affiliate or referral programs is prohibited.</li>
+        <li>Agree to and comply with these Terms in full.</li>
+      </ul>
+      <p>Tren reserves the right to decline any application without giving a reason. Eligibility does not guarantee approval.</p>
+    </div>
+
+    <!-- 3 -->
+    <div class="terms-section" id="s3">
+      <div class="section-head">
+        <div class="section-num">03</div>
+        <h2>Application &amp; Approval</h2>
+      </div>
+      <p>To join the Affiliate Program, you must complete and submit the affiliate application form on the Tren affiliate page. By submitting the form, you confirm that all information provided is accurate, complete, and not misleading.</p>
+      <p>Tren will review your application and respond within approximately <strong>48 hours</strong>. Approval is at Tren's sole discretion. We may approve, decline, or request additional information before making a decision.</p>
+      <p>Upon approval, you will receive:</p>
+      <ul>
+        <li>A confirmation email to the address you registered with.</li>
+        <li>Your personal Affiliate Code (either your preferred code or one assigned by Tren).</li>
+        <li>Any relevant onboarding materials or instructions.</li>
+      </ul>
+      <div class="highlight-box">
+        <p><strong>Note:</strong> Your Affiliate Code will not be active and will not track referrals until you have received written approval from Tren. Do not share your code or claim commissions before approval is confirmed.</p>
+      </div>
+    </div>
+
+    <!-- 4 -->
+    <div class="terms-section" id="s4">
+      <div class="section-head">
+        <div class="section-num">04</div>
+        <h2>Commission Structure</h2>
+      </div>
+      <h3>Commission rate</h3>
+      <p>Approved Affiliates earn a commission of <strong>10% of the net subscription value</strong> for each Qualifying Sale attributable to their Affiliate Code. The "net subscription value" is the amount received by Tren after any applicable payment processor fees and excluding taxes.</p>
+
+      <h3>Recurring commissions</h3>
+      <p>Commissions are recurring — you earn 10% for each month a Referred Customer remains on an active, paid subscription. Commission payments stop if a Referred Customer cancels, fails to renew, or receives a refund.</p>
+
+      <h3>Customer discount</h3>
+      <p>When a Referred Customer uses your Affiliate Code at checkout, they receive <strong>10% off</strong> their subscription. This discount applies to the first payment and subsequent recurring payments for as long as the code remains valid.</p>
+
+      <h3>No cap</h3>
+      <p>There is no cap on the number of referrals or total commissions you can earn, subject to these Terms.</p>
+
+      <h3>Changes to commission rates</h3>
+      <p>Tren may adjust commission rates at any time by providing written notice (email) to active Affiliates at least <strong>14 days</strong> in advance. Commissions already earned on Qualifying Sales that occurred before the change take effect will be paid at the original rate.</p>
+    </div>
+
+    <!-- 5 -->
+    <div class="terms-section" id="s5">
+      <div class="section-head">
+        <div class="section-num">05</div>
+        <h2>Tracking &amp; Attribution</h2>
+      </div>
+      <p>Referrals are tracked exclusively via your Affiliate Code, which Referred Customers enter at checkout. It is your responsibility to ensure your audience uses your code correctly. Tren is not responsible for referrals where a code was not entered or was entered incorrectly.</p>
+      <p>A sale is attributed to you if and only if:</p>
+      <ul>
+        <li>Your Affiliate Code is entered by the customer at the time of checkout.</li>
+        <li>The customer is a new subscriber (not a previously paying Tren customer).</li>
+        <li>The resulting payment is successfully processed and not subsequently refunded or charged back.</li>
+      </ul>
+      <p>Tren will maintain records of all attributable sales and make summary data available to you. If you believe there is a discrepancy, you may raise a query by contacting us via our <a href="https://trenai.vercel.app/contact" style="color:var(--accent-l);">contact page</a> within 30 days of the relevant billing period.</p>
+    </div>
+
+    <!-- 6 -->
+    <div class="terms-section" id="s6">
+      <div class="section-head">
+        <div class="section-num">06</div>
+        <h2>Payouts</h2>
+      </div>
+      <h3>Payout schedule</h3>
+      <p>Commissions are paid out on a <strong>monthly basis</strong>, typically within the first 10 business days of the following calendar month for commissions earned in the prior month.</p>
+
+      <h3>Minimum threshold</h3>
+      <p>A minimum balance of <strong>$20</strong> must have accrued before a payout is issued. If your balance does not meet the threshold, it rolls over to the following month.</p>
+
+      <h3>Payment methods</h3>
+      <p>Payouts are made exclusively via <strong>PayPal</strong>. You must have a valid PayPal account to receive commission payments. You are responsible for providing accurate PayPal account details. Tren is not liable for payments sent to incorrect details provided by you.</p>
+
+      <h3>Taxes</h3>
+      <p>You are solely responsible for reporting and paying any taxes, duties, or levies applicable to your commission income in your jurisdiction. Tren does not withhold tax on behalf of Affiliates unless required by applicable law. If required, we may request a completed tax form (e.g. W-8 for non-US persons) before processing payouts.</p>
+
+      <div class="warn-box">
+        <p>⚠️ Commissions earned during a period in which your account was suspended or in breach of these Terms may be withheld and forfeited at Tren's discretion.</p>
+      </div>
+    </div>
+
+    <!-- 7 -->
+    <div class="terms-section" id="s7">
+      <div class="section-head">
+        <div class="section-num">07</div>
+        <h2>Affiliate Code Usage</h2>
+      </div>
+      <p>Your Affiliate Code is personal to you and may not be transferred, sold, or shared with another person for use as their affiliate identifier. You may freely share your code with your audience for the purpose of giving them a discount and earning your commission.</p>
+      <p>You must not:</p>
+      <ul>
+        <li>Use your own Affiliate Code to purchase a Tren subscription for yourself or anyone in your immediate household.</li>
+        <li>Post your code in a way that is deceptive, misleading, or likely to cause confusion about the nature of the discount.</li>
+        <li>Use your code on cashback websites, voucher aggregator sites, or coupon platforms without prior written approval from Tren.</li>
+        <li>Use your code in paid advertising (including Google Ads, Meta Ads, or any PPC platform) without prior written approval from Tren.</li>
+      </ul>
+      <p>Tren reserves the right to deactivate your Affiliate Code at any time in the event of a breach of these Terms or suspected fraudulent activity.</p>
+    </div>
+
+    <!-- 8 -->
+    <div class="terms-section" id="s8">
+      <div class="section-head">
+        <div class="section-num">08</div>
+        <h2>Prohibited Conduct</h2>
+      </div>
+      <p>As an Affiliate, you must not engage in any of the following:</p>
+      <ul>
+        <li><strong>Misleading claims:</strong> Making false, exaggerated, or unsubstantiated claims about Tren's products, performance, or returns. This includes guaranteeing profits or implying that Tren's signals guarantee financial results.</li>
+        <li><strong>Spam:</strong> Sending unsolicited commercial messages (email, DM, or otherwise) to promote your Affiliate Code.</li>
+        <li><strong>Fraud:</strong> Generating fake referrals, creating fictitious accounts, or manipulating tracking in any way.</li>
+        <li><strong>Self-referral:</strong> Using your own code to obtain a discount on purchases for yourself or associates.</li>
+        <li><strong>Disparagement:</strong> Publishing negative, defamatory, or misleading content about Tren, its team, or its competitors that could bring Tren into disrepute.</li>
+        <li><strong>Impersonation:</strong> Representing yourself as an employee, agent, or spokesperson of Tren.</li>
+        <li><strong>Unauthorised advertising:</strong> Running paid ads using Tren's brand name, trademarks, or your Affiliate Code without prior written consent.</li>
+        <li><strong>Non-disclosure:</strong> Failing to clearly disclose your affiliate relationship to your audience in accordance with applicable advertising standards and regulations (e.g. the ASA in the UK, the FTC in the US).</li>
+      </ul>
+      <p>Violation of any of the above may result in immediate termination of your affiliate account and forfeiture of any unpaid commissions.</p>
+    </div>
+
+    <!-- 9 -->
+    <div class="terms-section" id="s9">
+      <div class="section-head">
+        <div class="section-num">09</div>
+        <h2>Intellectual Property</h2>
+      </div>
+      <p>Tren grants you a limited, non-exclusive, non-transferable, revocable licence to use the Tren name, logo, and approved marketing materials solely for the purpose of promoting Tren through the Affiliate Program in accordance with these Terms.</p>
+      <p>You must not:</p>
+      <ul>
+        <li>Alter, distort, or modify Tren's logos or brand assets.</li>
+        <li>Create derivative works from Tren's intellectual property.</li>
+        <li>Use Tren's brand assets in a manner that implies endorsement beyond the scope of the Affiliate Program.</li>
+        <li>Register any domain name, social handle, or brand identifier that incorporates "Tren" or any confusingly similar variation.</li>
+      </ul>
+      <p>All intellectual property rights in the Tren Platform and brand remain exclusively with Tren. Nothing in these Terms transfers any ownership of intellectual property to you.</p>
+    </div>
+
+    <!-- 10 -->
+    <div class="terms-section" id="s10">
+      <div class="section-head">
+        <div class="section-num">10</div>
+        <h2>Confidentiality</h2>
+      </div>
+      <p>You may receive access to non-public information about Tren, including but not limited to commission structures, unreleased features, pricing strategies, and internal data ("Confidential Information"). You agree to:</p>
+      <ul>
+        <li>Keep Confidential Information strictly confidential.</li>
+        <li>Not disclose Confidential Information to any third party without prior written consent from Tren.</li>
+        <li>Use Confidential Information only for the purpose of participating in the Affiliate Program.</li>
+      </ul>
+      <p>This obligation of confidentiality survives the termination of your participation in the Affiliate Program.</p>
+    </div>
+
+    <!-- 11 -->
+    <div class="terms-section" id="s11">
+      <div class="section-head">
+        <div class="section-num">11</div>
+        <h2>Termination</h2>
+      </div>
+      <h3>Termination by you</h3>
+      <p>You may withdraw from the Affiliate Program at any time by notifying us via our <a href="https://trenai.vercel.app/contact" style="color:var(--accent-l);">contact page</a>. Any commissions already earned on Qualifying Sales up to the date of termination will be paid at the next scheduled payout, provided the minimum threshold is met.</p>
+
+      <h3>Termination by Tren</h3>
+      <p>Tren may terminate or suspend your participation in the Affiliate Program at any time, with or without cause, by providing notice via email. In the event of termination for cause (including breach of these Terms or fraudulent conduct), Tren reserves the right to withhold any unpaid commissions.</p>
+
+      <h3>Effect of termination</h3>
+      <p>Upon termination, your Affiliate Code will be deactivated and you must immediately cease all promotional activity on behalf of Tren. Any licences granted under Section 9 are automatically revoked upon termination.</p>
+    </div>
+
+    <!-- 12 -->
+    <div class="terms-section" id="s12">
+      <div class="section-head">
+        <div class="section-num">12</div>
+        <h2>Disclaimers</h2>
+      </div>
+      <div class="warn-box" style="margin-bottom:1rem;">
+        <p>⚠️ <strong>Trading involves significant risk of loss.</strong> Past performance of Tren's signals or strategies is not indicative of future results. Nothing on the Tren Platform or in any affiliate's promotional content constitutes financial advice.</p>
+      </div>
+      <p>The Tren Affiliate Program is provided "as is". Tren makes no warranties, express or implied, regarding:</p>
+      <ul>
+        <li>The uninterrupted availability of the tracking system or Platform.</li>
+        <li>The accuracy of referral tracking data.</li>
+        <li>The continued availability of the Affiliate Program.</li>
+        <li>The earnings you may achieve as an Affiliate.</li>
+      </ul>
+      <p>Estimated earnings shown on the affiliate page are illustrative only and do not constitute a guarantee of income.</p>
+    </div>
+
+    <!-- 13 -->
+    <div class="terms-section" id="s13">
+      <div class="section-head">
+        <div class="section-num">13</div>
+        <h2>Limitation of Liability</h2>
+      </div>
+      <p>To the maximum extent permitted by applicable law, Tren shall not be liable to you for any:</p>
+      <ul>
+        <li>Loss of revenue, profits, or anticipated commissions.</li>
+        <li>Indirect, incidental, special, or consequential damages arising from your participation in the Affiliate Program.</li>
+        <li>Losses arising from technical failures, tracking inaccuracies, or payment processing errors outside of Tren's reasonable control.</li>
+      </ul>
+      <p>In any event, Tren's total aggregate liability to you under these Terms shall not exceed the total commissions paid to you in the three (3) months immediately preceding the event giving rise to the claim.</p>
+    </div>
+
+    <!-- 14 -->
+    <div class="terms-section" id="s14">
+      <div class="section-head">
+        <div class="section-num">14</div>
+        <h2>Modifications to These Terms</h2>
+      </div>
+      <p>Tren reserves the right to modify these Affiliate Terms &amp; Conditions at any time. When we make material changes, we will notify active Affiliates by email at least <strong>14 days</strong> before the changes take effect.</p>
+      <p>Your continued participation in the Affiliate Program after the effective date of any changes constitutes your acceptance of the updated Terms. If you do not agree to the updated Terms, you must stop participating in the Program and notify us of your withdrawal.</p>
+    </div>
+
+    <!-- 15 -->
+    <div class="terms-section" id="s15">
+      <div class="section-head">
+        <div class="section-num">15</div>
+        <h2>Governing Law &amp; Disputes</h2>
+      </div>
+      <p>These Terms are governed by and construed in accordance with the laws of the <strong>Netherlands</strong>. Any disputes arising out of or in connection with these Terms shall be subject to the exclusive jurisdiction of the courts of the Netherlands.</p>
+      <p>Before initiating formal legal proceedings, both parties agree to attempt to resolve any dispute in good faith through direct negotiation for a period of at least 30 days from the date the dispute is first raised in writing.</p>
+    </div>
+
+    <!-- 16 -->
+    <div class="terms-section" id="s16">
+      <div class="section-head">
+        <div class="section-num">16</div>
+        <h2>Contact</h2>
+      </div>
+      <p>If you have any questions about these Terms or the Affiliate Program, please contact us:</p>
+      <ul>
+        <li><strong>Contact:</strong> <a href="https://trenai.vercel.app/contact" style="color:var(--accent-l);">trenai.vercel.app/contact</a></li>
+        <li><strong>Discord:</strong> <a href="https://discord.gg/Ygwf8xfEXS" target="_blank" style="color:var(--accent-l);">discord.gg/Ygwf8xfEXS</a></li>
+      </ul>
+    </div>
+
+    <!-- CONTACT STRIP -->
+    <div class="contact-strip">
+      <div>
+        <h3>Ready to apply?</h3>
+        <p>Head back to the affiliate page to submit your application.</p>
+      </div>
+      <div class="contact-links">
+        <a href="https://trenai.vercel.app/affiliate" class="contact-link" target="_self">← Apply now</a>
+        <a href="https://trenai.vercel.app/contact" class="contact-link" target="_self">Contact us</a>
+        <a href="https://discord.gg/Ygwf8xfEXS" class="contact-link" target="_blank">Discord</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="https://trenai.vercel.app" class="logo">tren<span>.</span></a>
+        <p>Intelligent trading automation and precision signals for NinjaTrader. Built by traders, for traders.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="https://trenai.vercel.app/login-page">Dashboard</a>
+        <a href="https://trenai.vercel.app/pricing">Pricing</a>
+        <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+        <a href="https://trenai.vercel.app/contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <a href="https://discord.gg/Ygwf8xfEXS" target="_blank">Discord</a>
+        <a href="https://www.tiktok.com/@trentrades0" target="_blank">TikTok</a>
+        <a href="https://www.instagram.com/trenai.vercel.app/" target="_blank">Instagram</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="https://trenai.vercel.app/terms-conditions">Terms of service</a>
+        <a href="https://trenai.vercel.app/privacy-policy">Privacy policy</a>
+        <a href="#" target="_self">Affiliate terms</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Tren. All rights reserved.</div>
+      <div class="footer-risk">Trading involves significant risk of loss. Past performance is not indicative of future results. This is not financial advice.</div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script>
+function toggleMenu() {
+  document.getElementById('hamburger').classList.toggle('active');
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+
+// TOC active state on scroll
+const sections = document.querySelectorAll('.terms-section');
+const tocLinks = document.querySelectorAll('.toc a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      tocLinks.forEach(l => l.classList.remove('active'));
+      const active = document.querySelector(`.toc a[href="#${entry.target.id}"]`);
+      if (active) active.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -70% 0px' });
+
+sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>

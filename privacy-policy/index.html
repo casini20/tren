@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="refresh" content="0; url=https://trenai.vercel.app/">
+<script>window.location.replace("https://trenai.vercel.app/");</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — Tren</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:   #04080f;
+  --bg2:  #080e1a;
+  --bg3:  #0c1525;
+  --bg4:  #101d30;
+  --border: rgba(255,255,255,0.07);
+  --border-b: rgba(255,255,255,0.14);
+  --accent: #2563eb;
+  --accent-l: #3b82f6;
+  --green: #10b981;
+  --green-bg: rgba(16,185,129,0.1);
+  --text: #f0f4ff;
+  --ts: rgba(240,244,255,0.55);
+  --tm: rgba(240,244,255,0.3);
+}
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 16px; line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* BG */
+.bg-layer {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 40% at 80% 0%, rgba(37,99,235,0.10) 0%, transparent 55%),
+    radial-gradient(ellipse 40% 30% at 10% 90%, rgba(16,185,129,0.05) 0%, transparent 50%),
+    var(--bg);
+}
+.grid-bg {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.018;
+  background-image: linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.page { position: relative; z-index: 1; }
+
+/* NAV */
+nav {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.1rem 3rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: rgba(4,8,15,0.85);
+  backdrop-filter: blur(14px);
+  z-index: 1000;
+}
+.logo {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 21px; font-weight: 800; letter-spacing: -0.03em; color: var(--text);
+  text-decoration: none;
+}
+.logo span { color: var(--accent-l); }
+.nav-links { display: flex; gap: 2rem; align-items: center; }
+.nav-links a {
+  font-size: 13px; font-weight: 500; color: var(--ts);
+  text-decoration: none; transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--text); }
+a.nav-cta {
+  background: var(--accent); color: rgb(255,255,255) !important;
+  font-size: 13px; font-weight: 500; padding: 8px 18px;
+  border-radius: 6px; text-decoration: none; border: 1px solid var(--accent);
+  transition: box-shadow 0.3s, transform 0.15s;
+}
+a.nav-cta:hover {
+  background: var(--accent); color: rgb(255,255,255) !important; border-color: var(--accent);
+  box-shadow: 0 0 20px rgba(37,99,235,0.5), 0 0 40px rgba(37,99,235,0.3);
+  transform: translateY(-1px);
+}
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 8px;
+  background: none;
+  border: none;
+}
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+.hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.hamburger.active span:nth-child(2) { opacity: 0; }
+.hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+.mobile-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  flex-direction: column;
+  gap: 0;
+  background: rgba(4,8,15,0.95);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 3rem;
+}
+.mobile-menu.open { display: flex; }
+.mobile-menu a {
+  font-size: 14px; font-weight: 500; color: var(--ts);
+  text-decoration: none; padding: 12px 0;
+  border-bottom: 1px solid var(--border); transition: color 0.2s;
+}
+.mobile-menu a:last-child { border-bottom: none; }
+.mobile-menu a:hover { color: var(--text); }
+.mobile-menu a.nav-cta { margin-top: 8px; text-align: center; }
+
+/* HERO AREA */
+.policy-hero {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 4rem 2rem 2.5rem;
+}
+.tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 4px 12px; border-radius: 100px;
+  margin-bottom: 1.25rem;
+  background: rgba(37,99,235,0.10); border: 1px solid rgba(37,99,235,0.25); color: var(--accent-l);
+}
+.policy-hero h1 {
+  font-size: clamp(32px, 5vw, 50px);
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+}
+.policy-hero h1 em { font-style: normal; color: var(--accent-l); }
+.policy-meta {
+  display: flex; gap: 1.5rem; flex-wrap: wrap;
+  margin-top: 1.25rem;
+}
+.meta-pill {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--ts);
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 6px; padding: 5px 12px;
+}
+
+/* TOC */
+.toc-wrap {
+  max-width: 860px; margin: 0 auto;
+  padding: 0 2rem 2rem;
+}
+.toc {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 1.5rem;
+}
+.toc h3 {
+  font-size: 12px; font-weight: 600; color: var(--ts);
+  text-transform: uppercase; letter-spacing: 0.07em;
+  margin-bottom: 1rem;
+}
+.toc-list {
+  list-style: none; display: flex; flex-direction: column; gap: 4px;
+  columns: 2; column-gap: 2rem;
+}
+.toc-list li { break-inside: avoid; }
+.toc-list a {
+  font-size: 13px; color: var(--ts); text-decoration: none;
+  padding: 3px 0; display: block;
+  transition: color 0.2s;
+}
+.toc-list a:hover { color: var(--accent-l); }
+.toc-list a::before { content: '→ '; color: var(--accent-l); opacity: 0.6; font-size: 11px; }
+
+/* MAIN CONTENT */
+.policy-body {
+  max-width: 860px; margin: 0 auto;
+  padding: 0 2rem 3rem;
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+/* SECTION CARDS */
+.pol-section {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 14px; padding: 2rem;
+  transition: border-color 0.2s;
+}
+.pol-section:hover { border-color: var(--border-b); }
+
+.pol-section h2 {
+  font-size: 18px; font-weight: 700; color: var(--text);
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+}
+.pol-section h2 .sec-num {
+  font-size: 11px; font-weight: 600; color: var(--accent-l);
+  background: rgba(37,99,235,0.12); border: 1px solid rgba(37,99,235,0.2);
+  padding: 2px 8px; border-radius: 4px; letter-spacing: 0.05em;
+}
+
+.pol-section h3 {
+  font-size: 14px; font-weight: 600; color: var(--text);
+  margin: 1.25rem 0 0.4rem;
+}
+
+.pol-section p {
+  font-size: 14px; color: var(--ts); line-height: 1.75; margin-bottom: 0.75rem;
+}
+.pol-section p:last-child { margin-bottom: 0; }
+
+.pol-section ul {
+  list-style: none; display: flex; flex-direction: column; gap: 6px;
+  margin: 0.5rem 0 0.75rem;
+}
+.pol-section ul li {
+  font-size: 14px; color: var(--ts); line-height: 1.65;
+  display: flex; align-items: flex-start; gap: 8px;
+}
+.pol-section ul li::before {
+  content: '·'; color: var(--accent-l); font-size: 16px; line-height: 1.5; flex-shrink: 0;
+}
+
+/* DATA TABLE */
+.data-table {
+  width: 100%; border-collapse: collapse; margin: 1rem 0;
+  font-size: 13px;
+}
+.data-table th {
+  text-align: left; padding: 8px 12px;
+  font-size: 11px; font-weight: 600; color: var(--ts);
+  text-transform: uppercase; letter-spacing: 0.05em;
+  background: var(--bg3); border-bottom: 1px solid var(--border);
+}
+.data-table td {
+  padding: 10px 12px; color: var(--ts); line-height: 1.5;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.data-table tr:last-child td { border-bottom: none; }
+
+/* HIGHLIGHT BOXES */
+.highlight-box {
+  background: rgba(37,99,235,0.06); border: 1px solid rgba(37,99,235,0.2);
+  border-radius: 10px; padding: 1rem 1.25rem;
+  margin: 0.75rem 0;
+}
+.highlight-box p { color: var(--ts); font-size: 13px; margin: 0; }
+
+.warning-box {
+  background: rgba(239,68,68,0.05); border: 1px solid rgba(239,68,68,0.18);
+  border-radius: 10px; padding: 1rem 1.25rem;
+  margin: 0.75rem 0;
+}
+.warning-box p { color: rgba(240,244,255,0.5); font-size: 13px; margin: 0; }
+
+/* CONTACT CARD */
+.contact-card {
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1.25rem;
+  margin-top: 0.75rem;
+  display: flex; flex-direction: column; gap: 6px;
+}
+.contact-row { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ts); }
+.contact-row a { color: var(--accent-l); text-decoration: none; }
+.contact-row a:hover { text-decoration: underline; }
+
+/* FOOTER */
+footer {
+  padding: 2rem 2.5rem;
+}
+.footer-inner {
+  max-width: 1160px; margin: 0 auto;
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 16px; padding: 2.5rem 2.5rem 2rem;
+}
+.footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 2.5rem; margin-bottom: 2.5rem; }
+.footer-brand .logo { font-size: 20px; margin-bottom: 0.75rem; display: block; }
+.footer-brand p { font-size: 13px; color: var(--ts); line-height: 1.7; max-width: 240px; }
+.footer-col h4 { font-size: 12px; font-weight: 600; color: var(--text); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1rem; }
+.footer-col a { display: block; font-size: 13px; color: var(--ts); text-decoration: none; margin-bottom: 8px; transition: color 0.2s; }
+.footer-col a:hover { color: var(--text); }
+.footer-bottom {
+  border-top: 1px solid var(--border); padding-top: 1.5rem;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 12px;
+}
+.footer-copy { font-size: 12px; color: var(--tm); }
+.footer-risk { font-size: 11px; color: var(--tm); max-width: 500px; line-height: 1.5; }
+
+@media (max-width: 768px) {
+  html { font-size: 14px; }
+  body { font-size: 13px; overflow-x: hidden; }
+
+  /* NAV */
+  nav { 
+    padding: 0.75rem 1rem; 
+    width: 100%;
+    margin-left: 0;
+  }
+  .logo { font-size: 17px; }
+  .hamburger span { width: 20px; height: 1.5px; }
+  .mobile-menu { padding: 0.5rem 1rem; }
+  .mobile-menu a { font-size: 13px; padding: 10px 0; }
+  .mobile-menu a.nav-cta { 
+    margin-top: 4px; 
+    padding: 10px; 
+    font-size: 13px; 
+    border-radius: 6px;
+  }
+
+  /* HERO */
+  .policy-hero { 
+    padding: 1.75rem 1rem 1rem; 
+    text-align: left;
+    max-width: 100%;
+  }
+  .tag {
+    font-size: 10px;
+    padding: 3px 10px;
+    margin-bottom: 0.75rem;
+  }
+  .policy-hero h1 { 
+    font-size: 26px; 
+    line-height: 1.2;
+    word-break: break-word;
+    margin-bottom: 0.5rem;
+  }
+  .policy-hero p { 
+    font-size: 12.5px; 
+    max-width: 100%; 
+    line-height: 1.6;
+    margin-top: 0.5rem;
+  }
+  .policy-meta { 
+    justify-content: flex-start; 
+    gap: 0.4rem; 
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .meta-pill { 
+    font-size: 10px; 
+    padding: 3px 8px;
+  }
+
+  /* TOC */
+  .toc-wrap { 
+    padding: 0 1rem 1rem; 
+    max-width: 100%;
+  }
+  .toc { 
+    padding: 1rem; 
+    border-radius: 8px; 
+  }
+  .toc h3 { 
+    font-size: 10px; 
+    margin-bottom: 0.5rem; 
+  }
+  .toc-list { 
+    columns: 1; 
+    column-gap: 0;
+    gap: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .toc-list li { 
+    width: 100%; 
+  }
+  .toc-list a { 
+    font-size: 12px; 
+    padding: 4px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* BODY & SECTIONS */
+  .policy-body { 
+    padding: 0 1rem 2rem; 
+    gap: 8px; 
+    max-width: 100%;
+  }
+  .pol-section { 
+    padding: 1rem; 
+    border-radius: 10px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+  .pol-section h2 { 
+    font-size: 14px; 
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .pol-section h2 .sec-num { 
+    font-size: 9px; 
+    padding: 1px 5px;
+    flex-shrink: 0;
+  }
+  .pol-section h3 { 
+    font-size: 12px; 
+    margin: 0.75rem 0 0.3rem;
+  }
+  .pol-section p { 
+    font-size: 12.5px; 
+    line-height: 1.65; 
+    margin-bottom: 0.5rem;
+    word-wrap: break-word;
+  }
+  .pol-section ul { 
+    gap: 4px; 
+    margin: 0.4rem 0 0.5rem; 
+  }
+  .pol-section ul li { 
+    font-size: 12.5px; 
+    line-height: 1.55; 
+    gap: 6px;
+    word-wrap: break-word;
+  }
+  .pol-section ul li::before {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  /* TABLES */
+  .table-wrap {
+    margin: 0.5rem 0;
+    border-radius: 6px;
+  }
+  .data-table { 
+    font-size: 11px;
+    word-break: break-word;
+    min-width: 400px;
+  }
+  .data-table th, .data-table td { 
+    padding: 6px 8px; 
+    font-size: 11px;
+    word-break: break-word;
+  }
+  .data-table th {
+    font-size: 9px;
+    padding: 6px 8px;
+  }
+
+  /* BOXES */
+  .highlight-box, .warning-box { 
+    padding: 0.75rem; 
+    border-radius: 6px;
+    margin: 0.5rem 0;
+    word-wrap: break-word;
+  }
+  .highlight-box p, .warning-box p { font-size: 11.5px; line-height: 1.6; }
+
+  /* CONTACT CARD */
+  .contact-card { 
+    padding: 0.875rem; 
+    gap: 8px;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+  }
+  .contact-row { 
+    font-size: 12px; 
+    gap: 6px; 
+    flex-wrap: wrap;
+    word-break: break-word;
+  }
+
+  /* FOOTER */
+  footer { padding: 1rem; }
+  .footer-inner { 
+    padding: 1.25rem 1rem 1rem; 
+    border-radius: 10px;
+  }
+  .footer-top { 
+    grid-template-columns: 1fr 1fr; 
+    gap: 1rem; 
+    margin-bottom: 1.25rem;
+  }
+  .footer-brand .logo { font-size: 16px; margin-bottom: 0.4rem; }
+  .footer-brand p { font-size: 11px; max-width: 100%; line-height: 1.6; }
+  .footer-col h4 { font-size: 10px; margin-bottom: 0.5rem; }
+  .footer-col a { font-size: 11px; margin-bottom: 4px; }
+  .footer-bottom { 
+    flex-direction: column; 
+    align-items: flex-start; 
+    gap: 8px;
+    padding-top: 1rem;
+  }
+  .footer-copy { font-size: 10px; }
+  .footer-risk { font-size: 9px; max-width: 100%; line-height: 1.5; }
+}
+
+@media (max-width: 480px) {
+  html { font-size: 13px; }
+  body { font-size: 12.5px; }
+
+  .policy-hero { padding: 1.5rem 0.875rem 0.875rem; }
+  .policy-hero h1 { font-size: 24px; }
+  .policy-hero p { font-size: 12px; }
+  .tag { font-size: 9px; padding: 2px 8px; }
+  .meta-pill { font-size: 9px; padding: 2px 6px; }
+
+  .toc-wrap { padding: 0 0.875rem 0.875rem; }
+  .toc { padding: 0.875rem; }
+  .toc-list a { font-size: 11px; padding: 3px 0; }
+
+  .policy-body { padding: 0 0.875rem 1.5rem; gap: 6px; }
+  .pol-section { padding: 0.875rem; border-radius: 8px; }
+  .pol-section h2 { font-size: 13px; }
+  .pol-section h3 { font-size: 11.5px; }
+  .pol-section p, .pol-section ul li { font-size: 12px; }
+
+  .data-table { font-size: 10px; min-width: 350px; }
+  .data-table th, .data-table td { padding: 5px 6px; font-size: 10px; }
+  .data-table th { font-size: 8px; }
+
+  .highlight-box, .warning-box { padding: 0.625rem; }
+  .highlight-box p, .warning-box p { font-size: 11px; }
+
+  .contact-card { padding: 0.75rem; }
+  .contact-row { font-size: 11px; }
+
+  .footer-inner { padding: 1rem 0.875rem 0.875rem; }
+  .footer-top { grid-template-columns: 1fr; gap: 1rem; }
+  .footer-brand p { max-width: 100%; }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .toc-list a { padding: 5px 0; }
+  .pol-section { transition: none; }
+  a.nav-cta:active { 
+    transform: scale(0.98); 
+    opacity: 0.9;
+  }
+}
+</style>
+<base target="_blank">
+<base target="_blank">
+<base target="_blank">
+</head>
+<body>
+
+<div class="bg-layer"></div>
+<div class="grid-bg"></div>
+
+<div style="position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--bg3);border-bottom:1px solid var(--border);padding:1rem;text-align:center;font-size:14px;color:var(--ts);">
+  This page has moved to <a href="https://trenai.vercel.app/" style="color:var(--accent-l);font-weight:600;">trenai.vercel.app</a>. Redirecting now...
+</div>
+<div style="height:60px;"></div>
+<div class="page">
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">tren<span>.</span></a>
+  <div class="nav-links">
+    <a href="https://trenai.vercel.app/dashboard">Dashboard</a>
+    <a href="https://trenai.vercel.app/pricing">Pricing</a>
+    <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+    <a href="https://trenai.vercel.app/contact">Contact</a>
+    <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
+  </div>
+  <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="https://trenai.vercel.app/login-page">Dashboard</a>
+    <a href="https://trenai.vercel.app/pricing">Pricing</a>
+    <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+    <a href="https://trenai.vercel.app/contact">Contact</a>
+    <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="policy-hero">
+  <div class="tag">Legal</div>
+  <h1>Privacy <em>Policy</em></h1>
+  <p style="font-size:15px;color:var(--ts);max-width:560px;line-height:1.7;margin-top:0.75rem;">
+    This policy explains how Tren collects, uses, and protects your personal data. We believe in transparency — you deserve to know exactly what we do with your information.
+  </p>
+  <div class="policy-meta">
+    <div class="meta-pill">📅 Effective date: 24 April 2026</div>
+    <div class="meta-pill">📅 Last updated: 24 April 2026</div>
+    <div class="meta-pill">🌍 Applies globally</div>
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc-wrap">
+  <div class="toc">
+    <h3>Contents</h3>
+    <ul class="toc-list">
+      <li><a href="#who">1. Who We Are</a></li>
+      <li><a href="#collect">2. Information We Collect</a></li>
+      <li><a href="#use">3. How We Use Your Information</a></li>
+      <li><a href="#legal-basis">4. Legal Basis (GDPR)</a></li>
+      <li><a href="#sharing">5. Data Sharing</a></li>
+      <li><a href="#retention">6. Data Retention</a></li>
+      <li><a href="#security">7. Security</a></li>
+      <li><a href="#rights">8. Your Rights</a></li>
+      <li><a href="#cookies">9. Cookies</a></li>
+      <li><a href="#trading-risk">10. Trading Risk Disclosure</a></li>
+      <li><a href="#children">11. Children's Privacy</a></li>
+      <li><a href="#changes">12. Changes to This Policy</a></li>
+      <li><a href="#contact">13. Contact Us</a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- BODY -->
+<div class="policy-body">
+
+  <!-- 1 -->
+  <div class="pol-section" id="who">
+    <h2><span class="sec-num">01</span> Who We Are</h2>
+    <p>Tren ("we", "us", or "our") operates the website at <strong>trenai.vercel.app</strong> and the associated trading automation service. We are the data controller responsible for your personal information collected through this service.</p>
+    <p>For any privacy-related questions, you can reach us at <a href="mailto:trenhelp@outlook.com" style="color:var(--accent-l);">trenhelp@outlook.com</a>.</p>
+  </div>
+
+  <!-- 2 -->
+  <div class="pol-section" id="collect">
+    <h2><span class="sec-num">02</span> Information We Collect</h2>
+
+    <h3>2.1 Information You Provide Directly</h3>
+    <ul>
+      <li><strong>Account data:</strong> Name, email address, and password when you register.</li>
+      <li><strong>Payment data:</strong> Billing details (processed securely by our payment provider — we do not store raw card numbers).</li>
+      <li><strong>Communications:</strong> Messages you send us via email or support channels.</li>
+      <li><strong>Brokerage credentials:</strong> Connection details required to link your NinjaTrader account, stored encrypted.</li>
+    </ul>
+
+    <h3>2.2 Information Collected Automatically</h3>
+    <ul>
+      <li><strong>Usage data:</strong> Pages visited, features used, time spent on the platform.</li>
+      <li><strong>Device data:</strong> IP address, browser type, operating system, device identifiers.</li>
+      <li><strong>Trade logs:</strong> Records of signals generated and executed trades for performance tracking and display.</li>
+      <li><strong>Cookies and tracking technologies:</strong> See Section 9 for full details.</li>
+    </ul>
+
+    <h3>2.3 Information From Third Parties</h3>
+    <ul>
+      <li>Payment processors (e.g. Stripe) may share transaction confirmation data with us.</li>
+      <li>If you connect via Discord OAuth, we may receive your Discord username and ID.</li>
+    </ul>
+  </div>
+
+  <!-- 3 -->
+  <div class="pol-section" id="use">
+    <h2><span class="sec-num">03</span> How We Use Your Information</h2>
+    <div class="table-wrap"><table class="data-table">
+      <thead>
+        <tr>
+          <th>Purpose</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Service delivery</strong></td>
+          <td>Providing access to signals, executing automated trades on your behalf, maintaining your account.</td>
+        </tr>
+        <tr>
+          <td><strong>Billing &amp; subscriptions</strong></td>
+          <td>Processing payments, managing trials, sending receipts and renewal notifications.</td>
+        </tr>
+        <tr>
+          <td><strong>Communication</strong></td>
+          <td>Sending service updates, signal alerts, important notices, and responding to support requests.</td>
+        </tr>
+        <tr>
+          <td><strong>Safety &amp; fraud prevention</strong></td>
+          <td>Detecting and preventing abuse, unauthorized access, or fraudulent activity.</td>
+        </tr>
+        <tr>
+          <td><strong>Platform improvement</strong></td>
+          <td>Analysing usage patterns to improve features, fix bugs, and optimize signal performance.</td>
+        </tr>
+        <tr>
+          <td><strong>Legal compliance</strong></td>
+          <td>Meeting obligations under applicable law, responding to lawful requests from authorities.</td>
+        </tr>
+      </tbody>
+    </table></div>
+    <div class="highlight-box">
+      <p>💡 We do not use your data to build advertising profiles or sell insights to third parties. Our business model is subscriptions — not your data.</p>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="pol-section" id="legal-basis">
+    <h2><span class="sec-num">04</span> Legal Basis for Processing (GDPR)</h2>
+    <p>If you are located in the European Economic Area (EEA) or United Kingdom, we process your personal data under the following legal bases:</p>
+    <ul>
+      <li><strong>Contract performance:</strong> Processing necessary to provide the services you've signed up for.</li>
+      <li><strong>Legitimate interests:</strong> Fraud prevention, security, and improving our service — balanced against your rights.</li>
+      <li><strong>Legal obligation:</strong> Complying with applicable law (e.g. financial record-keeping requirements).</li>
+      <li><strong>Consent:</strong> For optional communications such as marketing emails. You can withdraw consent at any time.</li>
+    </ul>
+  </div>
+
+  <!-- 5 -->
+  <div class="pol-section" id="sharing">
+    <h2><span class="sec-num">05</span> Data Sharing &amp; Disclosure</h2>
+    <p><strong>We do not sell your personal data.</strong> We may share data only in these limited circumstances:</p>
+
+    <h3>5.1 Service Providers</h3>
+    <p>We engage trusted third-party processors to help operate our service. These include:</p>
+    <ul>
+      <li><strong>Payment processing:</strong> Stripe (or similar) for handling subscriptions securely.</li>
+      <li><strong>Database &amp; infrastructure:</strong> Supabase for storing trade logs and account data.</li>
+      <li><strong>Communication:</strong> Discord for signal delivery and community features.</li>
+      <li><strong>Analytics:</strong> Aggregated, anonymised usage analytics to improve the platform.</li>
+    </ul>
+    <p>All processors are contractually obligated to handle your data securely and only for the purposes we specify.</p>
+
+    <h3>5.2 Legal Requirements</h3>
+    <p>We may disclose your information if required by law, court order, or governmental authority — or if we believe disclosure is necessary to protect the rights, property, or safety of Tren, our users, or the public.</p>
+
+    <h3>5.3 Business Transfers</h3>
+    <p>If Tren is involved in a merger, acquisition, or sale of assets, your data may be transferred as part of that transaction. We will notify you before your data is subject to a different privacy policy.</p>
+  </div>
+
+  <!-- 6 -->
+  <div class="pol-section" id="retention">
+    <h2><span class="sec-num">06</span> Data Retention</h2>
+    <p>We retain your personal data for as long as your account is active or as needed to provide services. Specifically:</p>
+    <ul>
+      <li><strong>Account data:</strong> Retained while your account is active, plus up to 90 days after deletion to enable recovery.</li>
+      <li><strong>Trade logs:</strong> Retained for up to 3 years for performance auditing and legal purposes.</li>
+      <li><strong>Payment records:</strong> Retained for 7 years as required by financial regulations.</li>
+      <li><strong>Support communications:</strong> Retained for 2 years after resolution.</li>
+    </ul>
+    <p>After applicable retention periods, data is securely deleted or anonymised.</p>
+  </div>
+
+  <!-- 7 -->
+  <div class="pol-section" id="security">
+    <h2><span class="sec-num">07</span> Security</h2>
+    <p>We implement appropriate technical and organisational measures to protect your personal data, including:</p>
+    <ul>
+      <li>Encryption of data at rest and in transit (TLS/SSL).</li>
+      <li>Encrypted storage of brokerage connection credentials.</li>
+      <li>Access controls limiting who can view personal data internally.</li>
+      <li>Regular security reviews of our infrastructure.</li>
+    </ul>
+    <div class="warning-box">
+      <p>⚠️ No system is completely secure. While we take security seriously, we cannot guarantee absolute security of data transmitted over the internet. You are responsible for keeping your account credentials confidential.</p>
+    </div>
+    <p>If you discover a security vulnerability, please report it immediately to <a href="mailto:trenhelp@outlook.com" style="color:var(--accent-l);">trenhelp@outlook.com</a>.</p>
+  </div>
+
+  <!-- 8 -->
+  <div class="pol-section" id="rights">
+    <h2><span class="sec-num">08</span> Your Rights</h2>
+    <p>Depending on your location, you may have the following rights regarding your personal data:</p>
+    <div class="table-wrap"><table class="data-table">
+      <thead>
+        <tr>
+          <th>Right</th>
+          <th>What it means</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Access</strong></td>
+          <td>Request a copy of the personal data we hold about you.</td>
+        </tr>
+        <tr>
+          <td><strong>Rectification</strong></td>
+          <td>Request correction of inaccurate or incomplete data.</td>
+        </tr>
+        <tr>
+          <td><strong>Erasure</strong></td>
+          <td>Request deletion of your personal data ("right to be forgotten"), subject to legal retention obligations.</td>
+        </tr>
+        <tr>
+          <td><strong>Restriction</strong></td>
+          <td>Request that we limit processing of your data in certain circumstances.</td>
+        </tr>
+        <tr>
+          <td><strong>Portability</strong></td>
+          <td>Receive your data in a structured, machine-readable format.</td>
+        </tr>
+        <tr>
+          <td><strong>Objection</strong></td>
+          <td>Object to processing based on legitimate interests or for direct marketing purposes.</td>
+        </tr>
+        <tr>
+          <td><strong>Withdraw consent</strong></td>
+          <td>Withdraw consent at any time where processing is consent-based.</td>
+        </tr>
+      </tbody>
+    </table></div>
+    <p>To exercise any of these rights, contact us at <a href="mailto:trenhelp@outlook.com" style="color:var(--accent-l);">trenhelp@outlook.com</a>. We will respond within 30 days. You also have the right to lodge a complaint with your local data protection authority (e.g. the Dutch Autoriteit Persoonsgegevens or the UK ICO).</p>
+  </div>
+
+  <!-- 9 -->
+  <div class="pol-section" id="cookies">
+    <h2><span class="sec-num">09</span> Cookies &amp; Tracking</h2>
+    <p>We use cookies and similar technologies to operate and improve our service. Here's what we use:</p>
+    <div class="table-wrap"><table class="data-table">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Purpose</th>
+          <th>Deletable?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Strictly necessary</strong></td>
+          <td>Authentication, session management, security. Required for the service to function.</td>
+          <td>No — essential</td>
+        </tr>
+        <tr>
+          <td><strong>Functional</strong></td>
+          <td>Remembering your preferences (e.g. language, display settings).</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Analytics</strong></td>
+          <td>Aggregated usage data to understand how features are used and improve the platform.</td>
+          <td>Yes</td>
+        </tr>
+      </tbody>
+    </table></div>
+    <p>You can manage or delete cookies through your browser settings. Disabling cookies may affect the functionality of the service. We do not use third-party advertising cookies.</p>
+  </div>
+
+  <!-- 10 -->
+  <div class="pol-section" id="trading-risk">
+    <h2><span class="sec-num">10</span> Trading Risk Disclosure</h2>
+    <div class="warning-box">
+      <p>⚠️ <strong>Important:</strong> Trading financial instruments involves substantial risk of loss, including the potential loss of all invested capital. Past performance displayed on this platform is not indicative of future results. Tren is a technology and signal service — we are not a licensed financial advisor, broker, or investment firm. Nothing on this platform constitutes financial, investment, or trading advice. You are solely responsible for all trading decisions and outcomes. Only trade with capital you can afford to lose entirely.</p>
+    </div>
+    <p>By using Tren, you acknowledge that you understand and accept these risks.</p>
+  </div>
+
+  <!-- 11 -->
+  <div class="pol-section" id="children">
+    <h2><span class="sec-num">11</span> Children's Privacy</h2>
+    <p>Our service is not directed at individuals under the age of 18. We do not knowingly collect personal data from minors. If you believe a minor has provided us with personal data, please contact us immediately at <a href="mailto:trenhelp@outlook.com" style="color:var(--accent-l);">trenhelp@outlook.com</a> and we will delete that information promptly.</p>
+  </div>
+
+  <!-- 12 -->
+  <div class="pol-section" id="changes">
+    <h2><span class="sec-num">12</span> Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. When we make significant changes, we will:</p>
+    <ul>
+      <li>Update the "Last updated" date at the top of this page.</li>
+      <li>Notify active users via email or a prominent notice on the platform.</li>
+    </ul>
+    <p>Your continued use of the service after changes take effect constitutes acceptance of the revised policy. We encourage you to review this page periodically.</p>
+  </div>
+
+  <!-- 13 -->
+  <div class="pol-section" id="contact">
+    <h2><span class="sec-num">13</span> Contact Us</h2>
+    <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please reach out:</p>
+    <div class="contact-card">
+      <div class="contact-row">📧 Email: <a href="mailto:trenhelp@outlook.com">trenhelp@outlook.com</a></div>
+      <div class="contact-row">🌐 Website: <a href="https://trenai.vercel.app">trenai.vercel.app</a></div>
+      <div class="contact-row">💬 Discord: <a href="https://discord.gg/Ygwf8xfEXS" target="_blank">discord.gg/Ygwf8xfEXS</a></div>
+    </div>
+    <p style="margin-top:1rem;">We aim to respond to all privacy-related enquiries within <strong style="color:var(--text);">5 business days</strong>, and within 30 days for formal data rights requests.</p>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#" class="logo">tren<span>.</span></a>
+        <p>Intelligent trading automation and precision signals for NinjaTrader. Built by traders, for traders.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Product</h4>
+        <a href="https://trenai.vercel.app/login-page">Dashboard</a>
+        <a href="https://trenai.vercel.app/pricing">Pricing</a>
+        <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+        <a href="https://trenai.vercel.app/contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Community</h4>
+        <a href="https://discord.gg/Ygwf8xfEXS" target="_blank">Discord</a>
+        <a href="https://www.tiktok.com/@trentrades0" target="_blank">TikTok</a>
+        <a href="https://www.instagram.com/trenai.vercel.app/" target="_blank">Instagram</a>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <a href="https://trenai.vercel.app/terms-conditions">Terms of service</a>
+        <a href="https://trenai.vercel.app/privacy-policy">Privacy policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Tren. All rights reserved.</div>
+      <div class="footer-risk">Trading involves significant risk of loss. Past performance is not indicative of future results. This is not financial advice.</div>
+    </div>
+  </div>
+</footer>
+
+</div>
+
+<script>
+function toggleMenu() {
+  const hamburger = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  hamburger.classList.toggle('active');
+  menu.classList.toggle('open');
+}
+</script>
+</body>
+</html>
