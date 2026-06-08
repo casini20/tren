@@ -146,6 +146,56 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .sub-info-label{font-size:12px;color:var(--sub2);line-height:1.6;}
 .sub-info-label strong{display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px;}
 
+/* ── DASHBOARD CUSTOMIZATION ── */
+/* Layout cards */
+.layout-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.layout-card{border:1px solid var(--border);border-radius:11px;padding:14px 12px;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.02);display:flex;flex-direction:column;align-items:center;gap:9px;}
+.layout-card:hover{border-color:var(--border2);background:rgba(255,255,255,.04);}
+.layout-card.on{border-color:rgba(59,130,246,.4);background:rgba(59,130,246,.08);}
+.layout-card.on .lc-label{color:var(--al);}
+.lc-preview{width:100%;height:40px;border-radius:6px;background:rgba(255,255,255,.04);border:1px solid var(--border);display:flex;gap:3px;padding:5px;overflow:hidden;}
+.lc-preview .lc-col{border-radius:3px;background:rgba(255,255,255,.07);flex:1;}
+.lc-preview .lc-col.wide{flex:2;}
+.lc-label{font-size:11.5px;font-weight:600;color:var(--sub2);transition:color .2s;}
+
+/* Chart style cards */
+.chart-style-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.cs-card{border:1px solid var(--border);border-radius:11px;padding:12px;cursor:pointer;transition:all .2s;background:rgba(255,255,255,.02);display:flex;flex-direction:column;align-items:center;gap:8px;}
+.cs-card:hover{border-color:var(--border2);background:rgba(255,255,255,.04);}
+.cs-card.on{border-color:rgba(59,130,246,.4);background:rgba(59,130,246,.08);}
+.cs-card.on .cs-label{color:var(--al);}
+.cs-preview{width:100%;height:36px;border-radius:5px;display:flex;align-items:flex-end;gap:2px;padding:4px 4px 0;}
+.cs-label{font-size:11.5px;font-weight:600;color:var(--sub2);transition:color .2s;}
+
+/* Bar sparkline */
+.sp-bar{border-radius:2px 2px 0 0;background:var(--green);flex:1;}
+.sp-bar.r{background:var(--red);}
+/* Line sparkline */
+.sp-line{width:100%;height:100%;position:relative;}
+.sp-line svg{width:100%;height:100%;}
+/* Candle sparkline */
+.sp-candle{display:flex;align-items:center;justify-content:center;gap:2px;width:100%;height:100%;}
+.sp-c{display:flex;flex-direction:column;align-items:center;gap:1px;}
+.sp-c-body{width:6px;border-radius:1px;}
+.sp-c-wick{width:1.5px;border-radius:1px;}
+
+/* Default page chips */
+.page-chip-row{display:flex;gap:8px;flex-wrap:wrap;}
+.page-chip{display:flex;align-items:center;gap:6px;padding:7px 13px;border-radius:9px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:12px;font-weight:500;color:var(--sub2);transition:all .18s;font-family:'Plus Jakarta Sans',sans-serif;}
+.page-chip:hover{border-color:var(--border2);color:var(--text);}
+.page-chip.on{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.28);color:var(--al);}
+
+/* Density chips */
+.density-row{display:flex;gap:8px;}
+.density-chip{padding:7px 16px;border-radius:9px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:12px;font-weight:500;color:var(--sub2);transition:all .18s;font-family:'Plus Jakarta Sans',sans-serif;display:flex;flex-direction:column;align-items:center;gap:3px;}
+.density-chip:hover{border-color:var(--border2);color:var(--text);}
+.density-chip.on{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.28);color:var(--al);}
+.density-chip small{font-size:10px;color:var(--sub);font-weight:400;}
+
+/* Saved confirmation flash */
+@keyframes flashSave{0%{opacity:0;transform:scale(.92)}60%{opacity:1;transform:scale(1.04)}100%{opacity:1;transform:scale(1)}}
+.saved-flash{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--green);animation:flashSave .3s ease both;}
+
 /* ── TOAST ── */
 .toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:linear-gradient(145deg,var(--bg3),var(--bg2));border:1px solid var(--border2);border-radius:14px;padding:1.1rem 1.4rem;box-shadow:0 12px 40px rgba(0,0,0,.4);display:flex;align-items:center;gap:12px;animation:toastIn .4s ease;max-width:380px;}
 @keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
@@ -169,6 +219,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
   .page{padding:1.2rem 1.4rem;}
   .t-pill{display:none;}
   .set-stats{grid-template-columns:repeat(2,1fr);}
+  .layout-grid,.chart-style-grid{grid-template-columns:repeat(2,1fr);}
 }
 @media(max-width:600px){
   .page{padding:1rem;}
@@ -177,9 +228,9 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
   .set-row{flex-wrap:wrap;gap:12px;}
   .set-lbl{flex:1;min-width:200px;}
   .set-stats{grid-template-columns:1fr 1fr;}
+  .layout-grid,.chart-style-grid{grid-template-columns:1fr 1fr;}
 }
 </style>
-
 </head>
 <body>
 <div class="shell">
@@ -243,8 +294,6 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 
   <!-- MAIN -->
   <div class="main-wrap">
-
-    <!-- TOPBAR -->
     <div class="topbar">
       <div style="display:flex;align-items:center;gap:12px;">
         <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
@@ -273,11 +322,12 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
     <!-- PAGE -->
     <div class="page">
       <div class="set-tabs">
-        <button class="set-tab-btn on" onclick="setTab('profile',this)">👤 Profile</button>
-        <button class="set-tab-btn" onclick="setTab('appearance',this)">🎨 Appearance</button>
-        <button class="set-tab-btn" onclick="setTab('notifications',this)">🔔 Notifications</button>
-        <button class="set-tab-btn" onclick="setTab('journal',this)">📈 Journal</button>
-        <button class="set-tab-btn" onclick="setTab('data',this)">💾 Data</button>
+        <button class="set-tab-btn on"  onclick="setTab('profile',this)">👤 Profile</button>
+        <button class="set-tab-btn"     onclick="setTab('appearance',this)">🎨 Appearance</button>
+        <button class="set-tab-btn"     onclick="setTab('dashboard',this)">🖥 Dashboard</button>
+        <button class="set-tab-btn"     onclick="setTab('notifications',this)">🔔 Notifications</button>
+        <button class="set-tab-btn"     onclick="setTab('journal',this)">📈 Journal</button>
+        <button class="set-tab-btn"     onclick="setTab('data',this)">💾 Data</button>
       </div>
 
       <!-- PROFILE -->
@@ -348,6 +398,145 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
               <div class="accent-sw" data-color="#0891b2" style="background:#0891b2;" onclick="setAccent('#0891b2','#06b6d4',this)"></div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- DASHBOARD CUSTOMIZATION -->
+      <div class="set-panel" id="sp-dashboard">
+
+        <!-- Default Landing Page -->
+        <div class="set-section">
+          <div class="set-sh">Default Landing Page</div>
+          <div class="set-row" style="flex-wrap:wrap;gap:12px;">
+            <div class="set-lbl"><strong>Open To</strong><span>Which page loads when you first sign in</span></div>
+            <div class="page-chip-row" id="default-page-row">
+              <div class="page-chip on" data-page="overview"        onclick="setDefaultPage('overview',this)">📊 Overview</div>
+              <div class="page-chip"    data-page="live-signals"    onclick="setDefaultPage('live-signals',this)"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 5px var(--green);margin-right:4px;"></span>Live Signals</div>
+              <div class="page-chip"    data-page="signals"         onclick="setDefaultPage('signals',this)">⚡ Recent Trades</div>
+              <div class="page-chip"    data-page="journal"         onclick="setDefaultPage('journal',this)">📓 Journal</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overview Card Layout -->
+        <div class="set-section">
+          <div class="set-sh">Overview Card Layout</div>
+          <div class="set-row" style="flex-wrap:wrap;align-items:flex-start;gap:16px;">
+            <div class="set-lbl"><strong>Stat Cards Arrangement</strong><span>How the top stat cards are laid out</span></div>
+            <div class="layout-grid" id="layout-grid" style="flex:1;min-width:240px;">
+              <!-- 4 equal -->
+              <div class="layout-card on" data-layout="equal4" onclick="setLayout('equal4',this)">
+                <div class="lc-preview">
+                  <div class="lc-col"></div><div class="lc-col"></div><div class="lc-col"></div><div class="lc-col"></div>
+                </div>
+                <div class="lc-label">4 Equal</div>
+              </div>
+              <!-- 2+2 stacked -->
+              <div class="layout-card" data-layout="grid2x2" onclick="setLayout('grid2x2',this)">
+                <div class="lc-preview" style="flex-direction:column;gap:3px;">
+                  <div style="display:flex;gap:3px;flex:1;"><div class="lc-col"></div><div class="lc-col"></div></div>
+                  <div style="display:flex;gap:3px;flex:1;"><div class="lc-col"></div><div class="lc-col"></div></div>
+                </div>
+                <div class="lc-label">2 × 2 Grid</div>
+              </div>
+              <!-- Wide + 2 -->
+              <div class="layout-card" data-layout="wide1" onclick="setLayout('wide1',this)">
+                <div class="lc-preview">
+                  <div class="lc-col wide"></div><div class="lc-col"></div><div class="lc-col"></div>
+                </div>
+                <div class="lc-label">Featured + 2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart Style -->
+        <div class="set-section">
+          <div class="set-sh">P&amp;L Chart Style</div>
+          <div class="set-row" style="flex-wrap:wrap;align-items:flex-start;gap:16px;">
+            <div class="set-lbl"><strong>Chart Type</strong><span>How performance is visualised on the overview chart</span></div>
+            <div class="chart-style-grid" id="chart-style-grid" style="flex:1;min-width:240px;">
+              <!-- Bar chart -->
+              <div class="cs-card on" data-style="bar" onclick="setChartStyle('bar',this)">
+                <div class="cs-preview">
+                  <div class="sp-bar" style="height:60%"></div>
+                  <div class="sp-bar r" style="height:35%"></div>
+                  <div class="sp-bar" style="height:80%"></div>
+                  <div class="sp-bar r" style="height:20%"></div>
+                  <div class="sp-bar" style="height:55%"></div>
+                  <div class="sp-bar" style="height:90%"></div>
+                  <div class="sp-bar r" style="height:40%"></div>
+                </div>
+                <div class="cs-label">Bar</div>
+              </div>
+              <!-- Line chart -->
+              <div class="cs-card" data-style="line" onclick="setChartStyle('line',this)">
+                <div class="cs-preview" style="padding:0;align-items:stretch;">
+                  <svg viewBox="0 0 80 36" preserveAspectRatio="none" style="width:100%;height:100%;">
+                    <polyline points="0,30 12,22 24,26 36,14 48,18 60,8 72,12 80,4" fill="none" stroke="#10b981" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <polygon points="0,30 12,22 24,26 36,14 48,18 60,8 72,12 80,4 80,36 0,36" fill="rgba(16,185,129,.12)"/>
+                  </svg>
+                </div>
+                <div class="cs-label">Line</div>
+              </div>
+              <!-- Cumulative -->
+              <div class="cs-card" data-style="cumulative" onclick="setChartStyle('cumulative',this)">
+                <div class="cs-preview" style="padding:0;align-items:stretch;">
+                  <svg viewBox="0 0 80 36" preserveAspectRatio="none" style="width:100%;height:100%;">
+                    <polyline points="0,34 12,30 24,28 36,20 48,16 60,10 72,7 80,4" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <polygon points="0,34 12,30 24,28 36,20 48,16 60,10 72,7 80,4 80,36 0,36" fill="rgba(59,130,246,.12)"/>
+                  </svg>
+                </div>
+                <div class="cs-label">Cumulative</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- UI Density -->
+        <div class="set-section">
+          <div class="set-sh">Interface Density</div>
+          <div class="set-row" style="flex-wrap:wrap;gap:12px;">
+            <div class="set-lbl"><strong>Spacing</strong><span>How compact the dashboard feels</span></div>
+            <div class="density-row" id="density-row">
+              <div class="density-chip" data-density="compact" onclick="setDensity('compact',this)">
+                Compact<small>Tighter rows</small>
+              </div>
+              <div class="density-chip on" data-density="default" onclick="setDensity('default',this)">
+                Default<small>Balanced</small>
+              </div>
+              <div class="density-chip" data-density="relaxed" onclick="setDensity('relaxed',this)">
+                Relaxed<small>More breathing room</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Visible Sections -->
+        <div class="set-section">
+          <div class="set-sh">Overview Sections</div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Show P&amp;L Chart</strong><span>Display the daily performance bar chart</span></div>
+            <label class="tog"><input type="checkbox" id="tog-show-chart" checked onchange="savePref('show_chart',this.checked)"><div class="tog-track"></div></label>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Show Latest Signals</strong><span>Display the recent signal cards below the chart</span></div>
+            <label class="tog"><input type="checkbox" id="tog-show-sigs" checked onchange="savePref('show_signals',this.checked)"><div class="tog-track"></div></label>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Animate Cards on Load</strong><span>Subtle fade-in when the dashboard opens</span></div>
+            <label class="tog"><input type="checkbox" id="tog-animate" checked onchange="savePref('animate_cards',this.checked)"><div class="tog-track"></div></label>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Show Weekend Bars</strong><span>Include Sat &amp; Sun as dimmed bars in the P&amp;L chart</span></div>
+            <label class="tog"><input type="checkbox" id="tog-wknd-chart" onchange="savePref('chart_weekends',this.checked)"><div class="tog-track"></div></label>
+          </div>
+        </div>
+
+        <!-- Save button -->
+        <div style="display:flex;align-items:center;gap:14px;justify-content:flex-end;margin-top:4px;">
+          <span id="dash-saved-msg" style="display:none;"></span>
+          <button class="set-save" onclick="saveDashboardSettings()">Save Dashboard Settings</button>
         </div>
       </div>
 
@@ -504,6 +693,29 @@ function initToggles(){
   if(document.getElementById('tog-notif-main'))document.getElementById('tog-notif-main').checked=no;
   if(p.accent)document.querySelectorAll('.accent-sw').forEach(s=>s.classList.toggle('on',s.dataset.color===p.accent));
   if(p.theme)document.querySelectorAll('.theme-chip').forEach(c=>c.classList.toggle('on',c.dataset.theme===p.theme));
+
+  // Dashboard prefs
+  const sc=document.getElementById('tog-show-chart');if(sc)sc.checked=p.show_chart!==false;
+  const ss=document.getElementById('tog-show-sigs');if(ss)ss.checked=p.show_signals!==false;
+  const an=document.getElementById('tog-animate');if(an)an.checked=p.animate_cards!==false;
+  const wc=document.getElementById('tog-wknd-chart');if(wc)wc.checked=!!p.chart_weekends;
+
+  // Layout
+  if(p.card_layout){
+    document.querySelectorAll('.layout-card').forEach(c=>c.classList.toggle('on',c.dataset.layout===p.card_layout));
+  }
+  // Chart style
+  if(p.chart_style){
+    document.querySelectorAll('.cs-card').forEach(c=>c.classList.toggle('on',c.dataset.style===p.chart_style));
+  }
+  // Density
+  if(p.density){
+    document.querySelectorAll('.density-chip').forEach(c=>c.classList.toggle('on',c.dataset.density===p.density));
+  }
+  // Default page
+  if(p.default_page){
+    document.querySelectorAll('.page-chip').forEach(c=>c.classList.toggle('on',c.dataset.page===p.default_page));
+  }
 }
 
 function toggleProfileMenu(){
@@ -552,6 +764,43 @@ function setTheme(name,el){
   document.documentElement.style.setProperty('--bg2',t.bg2);
   document.documentElement.style.setProperty('--bg3',t.bg3);
   savePref('theme',name);
+}
+
+// ── DASHBOARD CUSTOMIZATION LOGIC ────────────────────────────────
+function setDefaultPage(page,el){
+  document.querySelectorAll('.page-chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  savePref('default_page',page);
+}
+
+function setLayout(layout,el){
+  document.querySelectorAll('.layout-card').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  savePref('card_layout',layout);
+}
+
+function setChartStyle(style,el){
+  document.querySelectorAll('.cs-card').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  savePref('chart_style',style);
+}
+
+function setDensity(density,el){
+  document.querySelectorAll('.density-chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  savePref('density',density);
+  // Apply density to root immediately as a preview
+  const D={compact:'0.75rem',default:'1.1rem',relaxed:'1.6rem'};
+  document.documentElement.style.setProperty('--row-gap', D[density]||D.default);
+}
+
+function saveDashboardSettings(){
+  // All individual settings already auto-save via savePref; this is just confirmation
+  const msg=document.getElementById('dash-saved-msg');
+  msg.innerHTML='<span class="saved-flash">✓ Saved</span>';
+  msg.style.display='inline-flex';
+  setTimeout(()=>{msg.style.display='none';},2500);
+  showToast('🖥','Dashboard Settings Saved','Your preferences have been applied.');
 }
 
 async function handleNotifToggle(checked){
@@ -611,16 +860,11 @@ initUserInfo();
 initSubUI();
 initStats();
 initToggles();
-</script>
-<script>
-  function goToDashboard(e) {
-    e.preventDefault();
-    if (localStorage.getItem('tren_session')) {
-      window.location.href = '/overview';
-    } else {
-      window.location.href = '/login-page';
-    }
-  }
+
+function goToDashboard(e){
+  e.preventDefault();
+  window.location.href=localStorage.getItem('tren_session')?'/overview':'/login-page';
+}
 </script>
 </body>
 </html>
