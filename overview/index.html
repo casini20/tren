@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
 
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Tren – Overview</title>
@@ -112,18 +111,15 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 
 /* ── OVERVIEW COMPONENTS ── */
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:1.8rem;}
-/* Layout variants from settings */
 .sg.layout-equal4{grid-template-columns:repeat(4,1fr);}
 .sg.layout-grid2x2{grid-template-columns:repeat(2,1fr);}
 .sg.layout-wide1{grid-template-columns:2fr 1fr 1fr;}
-/* Density variants */
 .page.density-compact .sc{padding:.7rem 1rem;}
 .page.density-compact .sh{margin-bottom:.7rem;}
 .page.density-compact .ca{padding:.9rem;}
 .page.density-relaxed .sc{padding:1.5rem 1.6rem;}
 .page.density-relaxed .sh{margin-bottom:1.5rem;}
 .page.density-relaxed .ca{padding:1.8rem;}
-/* Card animate on load */
 @keyframes cardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .animate-cards .sc{animation:cardIn .35s ease both;}
 .animate-cards .sc:nth-child(1){animation-delay:.04s;}
@@ -152,7 +148,6 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .mb::before{content:attr(data-pnl);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%) scale(.9);background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;transition:all .18s;z-index:10;}
 .mb:hover::before{opacity:1;transform:translateX(-50%) scale(1);}
 .mb::after{content:attr(data-date) ' ' attr(data-day);position:absolute;top:calc(100% + 4px);left:50%;transform:translateX(-50%);font-size:9px;color:var(--sub);letter-spacing:.3px;white-space:nowrap;opacity:.55;}
-/* hide date labels on larger timeframes to avoid crowding */
 .mb.hide-label::after{display:none;}
 .sig-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:13px;}
 .sig-card{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:1.1rem;transition:border-color .2s,transform .2s;cursor:pointer;position:relative;overflow:hidden;}
@@ -183,11 +178,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .sig-pnl-badge.neg{color:var(--red);}
 .skel{background:rgba(255,255,255,.04);border-radius:8px;animation:sk 1.4s ease infinite;}
 @keyframes sk{0%,100%{opacity:.4}50%{opacity:.9}}
-
-/* ── LOADING OVERLAY for re-renders ── */
 .stats-loading{opacity:.5;pointer-events:none;transition:opacity .2s;}
-
-/* ── TOAST ── */
 .toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:linear-gradient(145deg,var(--bg3),var(--bg2));border:1px solid var(--border2);border-radius:14px;padding:1.1rem 1.4rem;box-shadow:0 12px 40px rgba(0,0,0,.4);display:flex;align-items:center;gap:12px;animation:toastIn .4s ease;max-width:380px;}
 @keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
 .toast-icon{font-size:24px;}
@@ -195,6 +186,53 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .toast-title{font-size:14px;font-weight:700;margin-bottom:2px;}
 .toast-msg{font-size:12px;color:var(--sub2);}
 .toast-close{background:none;border:none;color:var(--sub);cursor:pointer;font-size:16px;padding:4px;}
+
+/* ── NEW FEATURE STYLES ── */
+.edge-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:1.6rem;}
+.intel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:1.6rem;}
+/* streak card */
+.streak-card{background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(239,68,68,.05));border:1px solid rgba(245,158,11,.2)!important;}
+.streak-flames{display:flex;gap:3px;margin-top:9px;}
+.s-flame{width:13px;height:13px;border-radius:3px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.18);}
+.s-flame.on{background:rgba(245,158,11,.35);border-color:rgba(245,158,11,.5);}
+.s-flame.hot{background:rgba(239,68,68,.45);border-color:rgba(239,68,68,.65);}
+/* donut */
+.donut-wrap{display:flex;align-items:center;gap:14px;}
+.donut-legend{display:flex;flex-direction:column;gap:6px;}
+.legend-row{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--sub2);}
+.legend-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+/* rr bar */
+.rr-track{height:7px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;display:flex;margin:8px 0 4px;}
+.rr-w{background:var(--green);border-radius:4px 0 0 4px;}
+.rr-l{background:var(--red);border-radius:0 4px 4px 0;}
+.rr-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--sub);}
+/* pf meter */
+.pf-track{height:6px;background:rgba(255,255,255,.06);border-radius:3px;position:relative;margin:8px 0 4px;}
+.pf-fill{height:100%;border-radius:3px;}
+.pf-marker{position:absolute;top:-3px;width:2px;height:12px;background:rgba(255,255,255,.15);border-radius:1px;}
+.pf-scale{display:flex;justify-content:space-between;font-size:9px;color:var(--sub);}
+/* hold time */
+.hold-row{margin-bottom:8px;}
+.hold-row:last-child{margin-bottom:0;}
+.hold-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:3px;font-size:12px;}
+.hold-bar-track{height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+.hold-bar-fill{height:100%;border-radius:3px;}
+/* best/worst */
+.bw-row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:9px;margin-bottom:6px;}
+.bw-row:last-child{margin-bottom:0;}
+/* consistency dots */
+.consist-dots{display:flex;gap:3px;flex-wrap:wrap;margin-top:9px;}
+.cd{width:13px;height:13px;border-radius:3px;}
+/* dow cards */
+.dow-grid{display:flex;gap:8px;flex-wrap:wrap;}
+.dow-card{flex:1;min-width:72px;padding:11px 8px;border-radius:10px;border:1px solid var(--border);text-align:center;cursor:default;transition:border-color .18s,background .18s;}
+.dow-card:hover{border-color:var(--border2);}
+.dow-card.pos{border-color:rgba(16,185,129,.25);background:rgba(16,185,129,.06);}
+.dow-card.neg{border-color:rgba(239,68,68,.25);background:rgba(239,68,68,.05);}
+.dow-day{font-size:11px;color:var(--sub);font-weight:600;margin-bottom:5px;}
+.dow-pnl{font-size:14px;font-weight:700;}
+.dow-cnt{font-size:10px;color:var(--sub);margin-top:3px;}
+.dow-bar{height:3px;border-radius:2px;margin:6px auto 0;opacity:.7;}
 
 /* ── MOBILE ── */
 .mobile-toggle{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;flex-shrink:0;}
@@ -210,13 +248,19 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
   .page{padding:1.2rem 1.4rem;}
   .t-pill{display:none;}
 }
+@media(max-width:768px){
+  .edge-grid{grid-template-columns:repeat(2,1fr);}
+  .intel-grid{grid-template-columns:1fr 1fr;}
+}
 @media(max-width:600px){
   .sg{grid-template-columns:1fr 1fr;}
   .sc-val{font-size:18px;}
   .sig-grid{grid-template-columns:1fr;}
   .sig-meta{grid-template-columns:1fr 1fr;}
   .page{padding:1rem;}
-
+  .edge-grid{grid-template-columns:1fr 1fr;}
+  .intel-grid{grid-template-columns:1fr;}
+  .dow-card{min-width:60px;}
 }
 </style>
 
@@ -224,7 +268,6 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 <body>
 <div class="shell">
 
-  <!-- SIDEBAR OVERLAY (mobile) -->
   <div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
 
   <!-- SIDEBAR -->
@@ -326,6 +369,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         </div>
       </div>
 
+      <!-- STAT CARDS -->
       <div class="sg">
         <div class="sc"><div class="sc-lbl">Total P&amp;L <span class="sc-lbl-sub" id="lbl-pnl">14 days</span></div><div class="sc-val g" id="ov-pnl">—</div><div class="sc-ch" id="ov-pc">Loading…</div></div>
         <div class="sc"><div class="sc-lbl">Win Rate <span class="sc-lbl-sub" id="lbl-wr">14 days</span></div><div class="sc-val" id="ov-wr">—</div><div class="sc-ch" id="ov-wc">Loading…</div></div>
@@ -333,11 +377,44 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <div class="sc"><div class="sc-lbl">Live Signals</div><div class="sc-val" id="ov-live-count">—</div><div class="sc-ch u" id="ov-live-sub">Loading…</div></div>
       </div>
 
+      <!-- P&L CHART -->
       <div class="ca">
         <div class="sh" style="margin-bottom:0"><div class="st">P&amp;L Performance</div><div style="font-size:11.5px;color:var(--sub)" id="chart-range-label">Last 14 days</div></div>
         <div class="mc" id="ov-chart"><div class="skel" style="width:100%;height:60px;border-radius:6px;"></div></div>
       </div>
 
+      <!-- ── DAY OF WEEK ── -->
+      <div class="sh"><div class="st">Day-of-Week Performance</div></div>
+      <div class="ca" style="padding:1.1rem 1.3rem;margin-bottom:1.6rem;">
+        <div class="dow-grid" id="ov-dow">
+          <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
+          <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
+          <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
+          <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
+          <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
+          <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
+          <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
+        </div>
+      </div>
+
+      <!-- ── EDGE METRICS ── -->
+      <div class="sh"><div class="st">Edge Metrics</div></div>
+      <div class="edge-grid" id="ov-edge">
+        <div class="sc skel" style="height:120px;"></div>
+        <div class="sc skel" style="height:120px;"></div>
+        <div class="sc skel" style="height:120px;"></div>
+        <div class="sc skel" style="height:120px;"></div>
+      </div>
+
+      <!-- ── TRADE INTELLIGENCE ── -->
+      <div class="sh"><div class="st">Trade Intelligence</div></div>
+      <div class="intel-grid" id="ov-intel">
+        <div class="sc skel" style="height:130px;"></div>
+        <div class="sc skel" style="height:130px;"></div>
+        <div class="sc skel" style="height:130px;"></div>
+      </div>
+
+      <!-- LATEST SIGNALS -->
       <div class="sh">
         <div class="st">Latest Signals <span style="font-size:11px;color:var(--sub);font-weight:400;" id="sigs-range-label">(last 14 days)</span></div>
         <a class="sa" onclick="navTo('https://trenai.vercel.app/signals')">View all →</a>
@@ -348,13 +425,13 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <div class="skel" style="height:110px;border-radius:13px;"></div>
         <div class="skel" style="height:110px;border-radius:13px;"></div>
       </div>
-    </div><!-- end .page -->
 
+    </div><!-- end .page -->
   </div><!-- end .main-wrap -->
 </div><!-- end .shell -->
 
 <script>
-// ── SESSION RECOVERY (runs before anything else) ──────────────────
+// ── SESSION RECOVERY ──────────────────────────────────────────────
 (function(){
   try{
     const p=new URLSearchParams(window.location.search);
@@ -377,23 +454,17 @@ const SUPABASE_URL='https://rjzteejovzmytfeupeaa.supabase.co';
 const SUPABASE_KEY='sb_publishable_p0W2wgXC1zc73-50mSx2ew_OBOCMSXJ';
 const SESSION_KEY='tren_session';
 
-// ── TIMEFRAME STATE ───────────────────────────────────────────────
 let _activeDays = 14;
 let _allTradesCache = null;
-let _renderDebounce = null;
 
 const TF_LABELS = {7:'7 days',14:'14 days',30:'30 days',90:'90 days',365:'1 year'};
 
 function setTimeframe(days){
   _activeDays = days;
-
-  // Update button states
   document.querySelectorAll('.tf-btn').forEach(btn => {
     const v = btn.textContent === '1Y' ? 365 : parseInt(btn.textContent);
     btn.classList.toggle('active', v === days);
   });
-
-  // Update labels
   const lbl = TF_LABELS[days] || days + ' days';
   const setTxt = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
   setTxt('tf-sublabel', 'Last ' + lbl);
@@ -402,15 +473,9 @@ function setTimeframe(days){
   setTxt('lbl-bd', lbl);
   setTxt('chart-range-label', 'Last ' + lbl);
   setTxt('sigs-range-label', '(last ' + lbl + ')');
-
-  if(_allTradesCache){
-    renderFromData(_allTradesCache);
-  } else {
-    renderOvStats();
-  }
+  if(_allTradesCache){ renderFromData(_allTradesCache); } else { renderOvStats(); }
 }
 
-// ── NAV WITH SESSION PASSTHROUGH + DEBOUNCE ──────────────────────
 let _navLock=false;
 function navTo(url){
   if(_navLock)return;
@@ -418,16 +483,12 @@ function navTo(url){
   setTimeout(()=>{_navLock=false;},800);
   try{
     const s=localStorage.getItem(SESSION_KEY);
-    if(s){
-      const encoded=encodeURIComponent(btoa(s));
-      url+=(url.includes('?')?'&':'?')+'_t='+encoded;
-    }
+    if(s){ const encoded=encodeURIComponent(btoa(s)); url+=(url.includes('?')?'&':'?')+'_t='+encoded; }
   }catch(e){}
   window.location.href=url;
 }
 
 let _session=window.__trenSession||(()=>{try{const r=localStorage.getItem(SESSION_KEY);return r?JSON.parse(r):null;}catch{return null;}})();
-
 let _subData=null,_autoSubData=null,_autoSignalsSubData=null;
 try{_subData=JSON.parse(localStorage.getItem('tren_sub')||'null');}catch(e){}
 try{_autoSubData=JSON.parse(localStorage.getItem('tren_trenbot_sub')||'null');}catch(e){}
@@ -437,7 +498,6 @@ function getSessionEmail(){return _session&&_session.user&&_session.user.email?_
 function getSessionFullName(){if(_session&&_session.user){const m=_session.user.user_metadata||{};if(m.full_name)return m.full_name;if(m.name)return m.name;if(_session.user.email)return _session.user.email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());}return'Trader';}
 function getPrefs(){return JSON.parse(localStorage.getItem('tren_prefs')||'{}');}
 function getUserDisplayName(){const e=getSessionEmail(),p=getPrefs(),u=p.display_names||{};return u[e]||getSessionFullName();}
-
 function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function fmtNum(n,d){return Number(n).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});}
 function fmtDate(iso){const d=new Date(iso),now=new Date();const dm=Math.floor((now-d)/60000);if(dm<60)return dm<=1?'just now':`${dm}m ago`;const dh=Math.floor(dm/60);if(dh<24)return`${dh}h ago`;return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});}
@@ -454,7 +514,6 @@ async function doLogout(){
   window.location.href='https://trenai.vercel.app/login-page';
 }
 
-// ── USER INFO ─────────────────────────────────────────────────────
 function initUserInfo(){
   const name=getUserDisplayName(),email=getSessionEmail(),init=name.charAt(0).toUpperCase();
   ['s-nm','prof-menu-name'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=name;});
@@ -463,7 +522,6 @@ function initUserInfo(){
   const pe=document.getElementById('prof-menu-email');if(pe)pe.textContent=email;
 }
 
-// ── SUBSCRIPTION UI ───────────────────────────────────────────────
 function initSubUI(){
   const hasTB=_autoSubData?.status==='active'&&_autoSubData?.plan==='trenbot';
   const hasAS=_autoSignalsSubData?.status==='active'&&_autoSignalsSubData?.plan==='auto';
@@ -481,7 +539,6 @@ function initSubUI(){
   }
 }
 
-// ── PROFILE MENU ──────────────────────────────────────────────────
 function toggleProfileMenu(){
   const m=document.getElementById('prof-menu'),b=document.getElementById('prof-av-btn');
   const o=m.classList.contains('open');
@@ -493,11 +550,10 @@ document.addEventListener('click',e=>{
     document.getElementById('prof-menu').classList.remove('open');
     document.getElementById('prof-av-btn').classList.remove('open');
   }
-  const sb=document.getElementById('sidebar'),tog=document.querySelector('.mobile-toggle'),ov=document.getElementById('sb-overlay');
+  const sb=document.getElementById('sidebar'),tog=document.querySelector('.mobile-toggle');
   if(window.innerWidth<=850&&sb.classList.contains('open')&&!sb.contains(e.target)&&e.target!==tog){closeSidebar();}
 });
 
-// ── MOBILE SIDEBAR ────────────────────────────────────────────────
 function toggleSidebar(){
   const sb=document.getElementById('sidebar'),ov=document.getElementById('sb-overlay');
   sb.classList.toggle('open');ov.classList.toggle('open');
@@ -507,7 +563,7 @@ function closeSidebar(){
   document.getElementById('sb-overlay').classList.remove('open');
 }
 
-// ── OVERVIEW LOGIC ────────────────────────────────────────────────
+// ── SIGNAL CARD ───────────────────────────────────────────────────
 function buildSignalCard(t){
   const isActive=!t.exit||t.exit===null;const win=parseFloat(t.pnl||0)>=0;const dir=(t.direction||'').toLowerCase();const isLong=dir==='long';
   const pnlStr=isActive?'':`<span class="sig-pnl-badge ${win?'pos':'neg'}">${win?'+':'-'}$${Math.abs(parseFloat(t.pnl||0)).toLocaleString('en-US',{maximumFractionDigits:0})}</span>`;
@@ -520,19 +576,199 @@ function buildSignalCard(t){
   </div>`;
 }
 
+// ── RENDER DOW ────────────────────────────────────────────────────
+function renderDOW(data){
+  const dowMap={}, dowCount={};
+  data.forEach(t=>{
+    const d=new Date(t.executed_at).getDay();
+    dowMap[d]=(dowMap[d]||0)+parseFloat(t.pnl||0);
+    dowCount[d]=(dowCount[d]||0)+1;
+  });
+  const maxDow=Math.max(...Object.values(dowMap).map(Math.abs),1);
+  const labels=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  document.getElementById('ov-dow').innerHTML=labels.map((lbl,i)=>{
+    const v=dowMap[i]||0, cnt=dowCount[i]||0, has=cnt>0;
+    const cls=has?(v>=0?'pos':'neg'):'';
+    const barW=has?Math.round(Math.abs(v)/maxDow*80+15):0;
+    const col=v>=0?'var(--green)':'var(--red)';
+    return`<div class="dow-card ${cls}">
+      <div class="dow-day">${lbl}</div>
+      <div class="dow-pnl" style="color:${has?col:'var(--sub)'}">${has?(v>=0?'+':'-')+'$'+Math.round(Math.abs(v)).toLocaleString():'—'}</div>
+      <div class="dow-cnt">${has?cnt+' trade'+(cnt!==1?'s':''):''}</div>
+      ${has?`<div class="dow-bar" style="width:${barW}%;background:${col};"></div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ── RENDER EDGE METRICS ───────────────────────────────────────────
+function renderEdge(data){
+  const closed=data.filter(t=>t.exit);
+  const wins=closed.filter(t=>parseFloat(t.pnl||0)>0);
+  const losses=closed.filter(t=>parseFloat(t.pnl||0)<=0);
+  const wr=closed.length?Math.round(wins.length/closed.length*100):0;
+  const avgWin=wins.length?wins.reduce((a,t)=>a+parseFloat(t.pnl||0),0)/wins.length:0;
+  const avgLoss=losses.length?Math.abs(losses.reduce((a,t)=>a+parseFloat(t.pnl||0),0)/losses.length):0;
+  const rrRatio=avgLoss>0?(avgWin/avgLoss).toFixed(2):'∞';
+  const grossWin=wins.reduce((a,t)=>a+parseFloat(t.pnl||0),0);
+  const grossLoss=Math.abs(losses.reduce((a,t)=>a+parseFloat(t.pnl||0),0));
+  const pf=grossLoss>0?grossWin/grossLoss:99;
+  const pfCapped=Math.min(pf,5);
+
+  // Streak (using ALL data, not timeframe-filtered)
+  const byDay={};
+  _allTradesCache.forEach(t=>{const k=t.executed_at.slice(0,10);byDay[k]=(byDay[k]||0)+parseFloat(t.pnl||0);});
+  const days=Object.keys(byDay).sort();
+  let streak=0, maxStreak=0, cur=0;
+  days.forEach(d=>{if(byDay[d]>0){cur++;maxStreak=Math.max(maxStreak,cur);}else{cur=0;}});
+  streak=cur;
+
+  // Donut
+  const SIZE=60,R=24,CX=30,CY=30,CIRCUMF=2*Math.PI*R;
+  const winArc=(closed.length?wins.length/closed.length:0)*CIRCUMF;
+  const losArc=CIRCUMF-winArc;
+
+  document.getElementById('ov-edge').innerHTML=`
+
+    <div class="sc">
+      <div class="sc-lbl">Win / Loss Split</div>
+      <div class="donut-wrap" style="margin-top:4px;">
+        <svg width="${SIZE}" height="${SIZE}" viewBox="0 0 ${SIZE} ${SIZE}" style="flex-shrink:0;">
+          <circle cx="${CX}" cy="${CY}" r="${R}" fill="none" stroke="rgba(239,68,68,.2)" stroke-width="7"/>
+          <circle cx="${CX}" cy="${CY}" r="${R}" fill="none" stroke="var(--green)" stroke-width="7"
+            stroke-dasharray="${winArc.toFixed(2)} ${losArc.toFixed(2)}"
+            stroke-dashoffset="${(CIRCUMF/4).toFixed(2)}" stroke-linecap="round"/>
+          <text x="${CX}" y="${CY+1}" text-anchor="middle" dominant-baseline="middle"
+            fill="var(--text)" font-size="11" font-weight="700" font-family="Plus Jakarta Sans,sans-serif">${wr}%</text>
+        </svg>
+        <div class="donut-legend">
+          <div class="legend-row"><div class="legend-dot" style="background:var(--green)"></div>${wins.length} wins</div>
+          <div class="legend-row"><div class="legend-dot" style="background:rgba(239,68,68,.5)"></div>${losses.length} losses</div>
+          <div class="legend-row"><div class="legend-dot" style="background:rgba(255,255,255,.12)"></div>${closed.length} closed</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sc">
+      <div class="sc-lbl">Risk / Reward</div>
+      <div class="sc-val ${parseFloat(rrRatio)>=1?'g':'r'}" style="margin-top:4px;">${rrRatio}</div>
+      <div class="rr-track">
+        <div class="rr-w" style="width:${(avgWin/(avgWin+avgLoss||1)*100).toFixed(1)}%"></div>
+        <div class="rr-l" style="width:${(avgLoss/(avgWin+avgLoss||1)*100).toFixed(1)}%"></div>
+      </div>
+      <div class="rr-labels"><span>Avg win $${Math.round(avgWin)}</span><span>Avg loss $${Math.round(avgLoss)}</span></div>
+    </div>
+
+    <div class="sc">
+      <div class="sc-lbl">Profit Factor</div>
+      <div class="sc-val ${pf>=1.5?'g':pf>=1?'':''}" style="color:${pf>=1.5?'var(--green)':pf>=1?'var(--gold)':'var(--red)'};margin-top:4px;">${pf>=99?'∞':pf.toFixed(2)}</div>
+      <div class="pf-track" style="margin-top:8px;">
+        <div class="pf-fill" style="width:${Math.min(pfCapped/5*100,100).toFixed(1)}%;background:${pf>=1.5?'var(--green)':pf>=1?'var(--gold)':'var(--red)'};"></div>
+        <div class="pf-marker" style="left:20%"></div>
+        <div class="pf-marker" style="left:40%"></div>
+      </div>
+      <div class="pf-scale"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5+</span></div>
+      <div class="sc-ch" style="margin-top:4px;">Gross win ÷ gross loss</div>
+    </div>
+
+    <div class="sc streak-card">
+      <div class="sc-lbl">Current Streak</div>
+      <div class="sc-val" style="color:var(--gold);margin-top:4px;">${streak} day${streak!==1?'s':''}</div>
+      <div class="sc-ch">Best: ${maxStreak} days</div>
+      <div class="streak-flames">
+        ${Array.from({length:7},(_,i)=>`<div class="s-flame${i<streak&&streak>=5?' hot':i<streak?' on':''}"></div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ── RENDER TRADE INTELLIGENCE ─────────────────────────────────────
+function renderIntel(data){
+  const closed=data.filter(t=>t.exit);
+  const wins=closed.filter(t=>parseFloat(t.pnl||0)>0);
+  const losses=closed.filter(t=>parseFloat(t.pnl||0)<=0);
+
+  // Avg hold time
+  const wDur=wins.length?Math.round(wins.reduce((a,t)=>a+(t.duration_min||0),0)/wins.length):0;
+  const lDur=losses.length?Math.round(losses.reduce((a,t)=>a+(t.duration_min||0),0)/losses.length):0;
+  const durFmt=m=>m>=60?(m/60).toFixed(1)+'h':m+'m';
+  const totalDur=wDur+lDur||1;
+
+  // Best & worst
+  const bigWin=wins.length?wins.reduce((a,t)=>parseFloat(t.pnl)>parseFloat(a.pnl)?t:a,wins[0]):null;
+  const bigLoss=losses.length?losses.reduce((a,t)=>parseFloat(t.pnl)<parseFloat(a.pnl)?t:a,losses[0]):null;
+
+  // Consistency (all-time)
+  const byDay={};
+  _allTradesCache.forEach(t=>{const k=t.executed_at.slice(0,10);byDay[k]=(byDay[k]||0)+parseFloat(t.pnl||0);});
+  const allDays=Object.keys(byDay).sort();
+  const profDays=allDays.filter(d=>byDay[d]>0).length;
+  const consistScore=allDays.length?Math.round(profDays/allDays.length*100):0;
+  const last14=allDays.slice(-14);
+
+  document.getElementById('ov-intel').innerHTML=`
+
+    <div class="sc">
+      <div class="sc-lbl">Avg Hold Time</div>
+      <div style="margin-top:8px;">
+        <div class="hold-row">
+          <div class="hold-top">
+            <span style="color:var(--sub)">Winners</span>
+            <span style="font-weight:700;color:var(--green)">${durFmt(wDur)}</span>
+          </div>
+          <div class="hold-bar-track">
+            <div class="hold-bar-fill" style="width:${Math.min(wDur/totalDur*100,90).toFixed(0)}%;background:var(--green);"></div>
+          </div>
+        </div>
+        <div class="hold-row">
+          <div class="hold-top">
+            <span style="color:var(--sub)">Losers</span>
+            <span style="font-weight:700;color:var(--red)">${durFmt(lDur)}</span>
+          </div>
+          <div class="hold-bar-track">
+            <div class="hold-bar-fill" style="width:${Math.min(lDur/totalDur*100,90).toFixed(0)}%;background:var(--red);"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sc-ch" style="margin-top:8px;">${wDur>lDur?'✓ Winners held longer':'Cut losers faster than winners'}</div>
+    </div>
+
+    <div class="sc">
+      <div class="sc-lbl">Best &amp; Worst Trade</div>
+      ${bigWin?`<div class="bw-row" style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.15);">
+        <div><div style="font-size:12px;font-weight:600;">${escHtml(bigWin.market||'—')}</div><div style="font-size:10px;color:var(--sub);">${bigWin.executed_at.slice(5,10)}</div></div>
+        <div style="font-size:15px;font-weight:700;color:var(--green);">+$${Math.round(parseFloat(bigWin.pnl||0)).toLocaleString()}</div>
+      </div>`:''}
+      ${bigLoss?`<div class="bw-row" style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.15);">
+        <div><div style="font-size:12px;font-weight:600;">${escHtml(bigLoss.market||'—')}</div><div style="font-size:10px;color:var(--sub);">${bigLoss.executed_at.slice(5,10)}</div></div>
+        <div style="font-size:15px;font-weight:700;color:var(--red);">-$${Math.round(Math.abs(parseFloat(bigLoss.pnl||0))).toLocaleString()}</div>
+      </div>`:''}
+    </div>
+
+    <div class="sc">
+      <div class="sc-lbl">Consistency</div>
+      <div class="sc-val" style="color:${consistScore>=70?'var(--green)':consistScore>=50?'var(--gold)':'var(--red)'};margin-top:4px;">${consistScore}%</div>
+      <div class="sc-ch">${profDays} of ${allDays.length} days green</div>
+      <div class="consist-dots">
+        ${last14.map(d=>`<div class="cd" style="background:${byDay[d]>0?'rgba(16,185,129,.4)':'rgba(239,68,68,.3)'};border:1px solid ${byDay[d]>0?'rgba(16,185,129,.2)':'rgba(239,68,68,.2)'};"></div>`).join('')}
+      </div>
+      <div class="sc-ch" style="margin-top:5px;">Last 14 days</div>
+    </div>
+  `;
+}
+
+// ── MAIN RENDER ───────────────────────────────────────────────────
 function renderFromData(data){
-  const days = _activeDays;
+  const days=_activeDays;
   const cutoff=new Date();cutoff.setDate(cutoff.getDate()-days);cutoff.setHours(0,0,0,0);
   const filtered=data.filter(t=>t.executed_at&&new Date(t.executed_at)>=cutoff);
 
-  // P&L
+  // Stat cards
   const totalPnl=filtered.reduce((a,t)=>a+parseFloat(t.pnl||0),0);
   const pe=document.getElementById('ov-pnl');
   pe.textContent=(totalPnl>=0?'+':'')+'$'+Math.abs(totalPnl).toLocaleString('en-US',{maximumFractionDigits:0});
   pe.className='sc-val '+(totalPnl>=0?'g':'r');
   document.getElementById('ov-pc').textContent=`${filtered.length} trades last ${TF_LABELS[days]||days+' days'}`;
 
-  // Win rate
   const closed=filtered.filter(t=>t.exit);
   const wins=closed.filter(t=>parseFloat(t.pnl||0)>0).length;
   const wr=closed.length?Math.round(wins/closed.length*100):0;
@@ -540,29 +776,25 @@ function renderFromData(data){
   we.textContent=wr+'%';we.className='sc-val '+(wr>=50?'g':'r');
   document.getElementById('ov-wc').textContent=`${closed.length} closed (${TF_LABELS[days]||days+' days'})`;
 
-  // Best day
   const dm={};filtered.forEach(t=>{if(!t.executed_at)return;const k=t.executed_at.slice(0,10);dm[k]=(dm[k]||0)+parseFloat(t.pnl||0);});
   const bd=Object.values(dm).length?Math.max(...Object.values(dm)):0;
   document.getElementById('ov-bd').textContent='+$'+bd.toLocaleString('en-US',{maximumFractionDigits:0});
 
-  // Live signals
   const lc=data.filter(t=>!t.exit).length;
   const today=getTodayLocal();const tc=data.filter(t=>t.executed_at&&t.executed_at.startsWith(today)).length;
   document.getElementById('ov-live-count').textContent=lc;
   document.getElementById('ov-live-sub').textContent=`↑ ${tc} new today`;
 
-  // Chart — group by day (≤30d) or by week (90d / 1Y)
+  // Chart
   const today2=new Date();
-  const useWeeks = days >= 60;
-
+  const useWeeks=days>=60;
   let bars=[];
   if(!useWeeks){
-    // Daily bars
     const chartDays=[];
     for(let i=days-1;i>=0;i--){const d=new Date(today2);d.setDate(today2.getDate()-i);chartDays.push(toLocalISO(d));}
     const DL=['SU','MO','TU','WE','TH','FR','SA'];
-    const labelEvery = days <= 14 ? 1 : 3;
-    bars = chartDays.map((k,i)=>{
+    const labelEvery=days<=14?1:3;
+    bars=chartDays.map((k,i)=>{
       const v=filtered.filter(t=>t.executed_at&&t.executed_at.startsWith(k)).reduce((a,t)=>a+parseFloat(t.pnl||0),0);
       const d=new Date(k+'T12:00:00');
       const ds=d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'});
@@ -573,236 +805,143 @@ function renderFromData(data){
       return{v,bc,pd,label:ds+' '+DL[dw],hideLabel};
     });
   } else {
-    // Weekly bars — build ISO week buckets from cutoff to today
     const cutoffW=new Date(today2);cutoffW.setDate(today2.getDate()-(days-1));
-    // Walk week by week (Monday-anchored)
     const weekMap=new Map();
     filtered.forEach(t=>{
       if(!t.executed_at)return;
       const d=new Date(t.executed_at);
-      // Get Monday of this trade's week
       const dow=d.getDay();const diff=(dow===0?-6:1-dow);
       const mon=new Date(d);mon.setDate(d.getDate()+diff);mon.setHours(0,0,0,0);
-      const key=toLocalISO(mon);
-      weekMap.set(key,(weekMap.get(key)||0)+parseFloat(t.pnl||0));
+      weekMap.set(toLocalISO(mon),(weekMap.get(toLocalISO(mon))||0)+parseFloat(t.pnl||0));
     });
-    // Build ordered week list
     const weeks=[];
     const cursor=new Date(cutoffW);
-    // Snap cursor to its Monday
     const sd=cursor.getDay();const sdiff=(sd===0?-6:1-sd);cursor.setDate(cursor.getDate()+sdiff);cursor.setHours(0,0,0,0);
-    while(cursor<=today2){
-      weeks.push(toLocalISO(new Date(cursor)));
-      cursor.setDate(cursor.getDate()+7);
-    }
+    while(cursor<=today2){weeks.push(toLocalISO(new Date(cursor)));cursor.setDate(cursor.getDate()+7);}
     bars=weeks.map((k,i)=>{
       const v=weekMap.get(k)||0;
       const d=new Date(k+'T12:00:00');
-      const labelEvery = days >= 365 ? 4 : 2;
+      const labelEvery=days>=365?4:2;
       const hideLabel=(i%labelEvery!==0)?' hide-label':'';
       const ds=d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'});
-      const bc=v>=0?'g':'r';
-      const pd=(v>=0?'+':'')+'$'+v.toFixed(0);
-      return{v,bc,pd,label:ds+' WK',hideLabel};
+      return{v,bc:v>=0?'g':'r',pd:(v>=0?'+':'')+'$'+v.toFixed(0),label:ds+' WK',hideLabel};
     });
   }
 
   const mx=Math.max(...bars.map(b=>Math.abs(b.v)),1);
-  const chartStyle = (JSON.parse(localStorage.getItem('tren_prefs')||'{}').chart_style) || 'bar';
+  const chartStyle=(JSON.parse(localStorage.getItem('tren_prefs')||'{}').chart_style)||'bar';
 
-  if(chartStyle === 'bar'){
+  if(chartStyle==='bar'){
     document.getElementById('ov-chart').innerHTML=bars.map(b=>{
       const h=Math.max(4,Math.round(Math.abs(b.v)/mx*72));
       const parts=b.label.split(' ');
       return`<div class="mb ${b.bc}${b.hideLabel}" style="height:${h}px" data-pnl="${b.pd}" data-date="${parts[0]}" data-day="${parts[1]||''}"></div>`;
     }).join('');
   } else {
-    // Build interactive line or cumulative chart
-    const rawVals = bars.map(b => b.v);
-    let points = [];
-    if(chartStyle === 'cumulative'){
-      let cum = 0;
-      points = rawVals.map(v => { cum += v; return cum; });
-    } else {
-      points = rawVals;
-    }
-    const minP = Math.min(...points);
-    const maxP = Math.max(...points, 0.01);
-    const range = maxP - minP || 1;
-    const W = 1000, H = 72, PAD = 6;
-    const LABEL_H = 22; // space below SVG for date labels, matches bar chart padding-bottom
-    const toX = i => PAD + (i / (points.length - 1 || 1)) * (W - PAD * 2);
-    const toY = v => H - PAD - ((v - minP) / range) * (H - PAD * 2);
-    const ptStr = points.map((v,i) => `${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(' ');
-    const firstX = toX(0).toFixed(1), lastX = toX(points.length-1).toFixed(1);
-    const fillPts = `${firstX},${H} ${ptStr} ${lastX},${H}`;
-    const color = chartStyle === 'cumulative' ? '#3b82f6' : '#10b981';
-    const fillColor = chartStyle === 'cumulative' ? 'rgba(59,130,246,.12)' : 'rgba(16,185,129,.12)';
-
-    // Tooltip label per point
-    const tooltips = points.map((v, i) => {
-      if(chartStyle === 'cumulative'){
-        return (v >= 0 ? '+' : '') + '$' + v.toFixed(0) + ' total';
-      } else {
-        return bars[i].pd;
-      }
-    });
-
-    // Date labels — show every Nth same as bar chart
-    const labelEvery = bars.length <= 14 ? 1 : bars.length <= 30 ? 3 : bars.length <= 90 ? 7 : 14;
-
-    // Hover dot + vertical line (injected once, toggled via JS)
-    const hoverElId = 'lc-hover-' + Date.now();
-
-    const svgHtml = `
+    const rawVals=bars.map(b=>b.v);
+    let points=[];
+    if(chartStyle==='cumulative'){let cum=0;points=rawVals.map(v=>{cum+=v;return cum;});}
+    else{points=rawVals;}
+    const minP=Math.min(...points),maxP=Math.max(...points,0.01),range=maxP-minP||1;
+    const W=1000,H=72,PAD=6,LABEL_H=22;
+    const toX=i=>PAD+(i/(points.length-1||1))*(W-PAD*2);
+    const toY=v=>H-PAD-((v-minP)/range)*(H-PAD*2);
+    const ptStr=points.map((v,i)=>`${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(' ');
+    const firstX=toX(0).toFixed(1),lastX=toX(points.length-1).toFixed(1);
+    const fillPts=`${firstX},${H} ${ptStr} ${lastX},${H}`;
+    const color=chartStyle==='cumulative'?'#3b82f6':'#10b981';
+    const tooltips=points.map((v,i)=>chartStyle==='cumulative'?(v>=0?'+':'')+`$${v.toFixed(0)} total`:bars[i].pd);
+    const labelEvery=bars.length<=14?1:bars.length<=30?3:bars.length<=90?7:14;
+    const hoverElId='lc-hover-'+Date.now();
+    document.getElementById('ov-chart').innerHTML=`
       <div style="position:relative;width:100%;padding-bottom:${LABEL_H}px;">
-        <svg id="${hoverElId}-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"
-             style="width:100%;height:72px;display:block;overflow:visible;cursor:crosshair;">
-          <defs>
-            <linearGradient id="lcFill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stop-color="${color}" stop-opacity="0.18"/>
-              <stop offset="100%" stop-color="${color}" stop-opacity="0.01"/>
-            </linearGradient>
-          </defs>
+        <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:72px;display:block;overflow:visible;cursor:crosshair;">
+          <defs><linearGradient id="lcFill" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="${color}" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="${color}" stop-opacity="0.01"/>
+          </linearGradient></defs>
           <polygon points="${fillPts}" fill="url(#lcFill)"/>
           <polyline points="${ptStr}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <!-- hover vertical line -->
           <line id="${hoverElId}-vline" x1="0" y1="0" x2="0" y2="${H}" stroke="${color}" stroke-width="1" stroke-dasharray="3,3" opacity="0" pointer-events="none"/>
-          <!-- dots -->
-          ${points.map((v,i)=>{
-            const cx=toX(i).toFixed(1), cy=toY(v).toFixed(1);
-            return `<circle class="lc-dot" cx="${cx}" cy="${cy}" r="3.5" fill="${color}" stroke="var(--bg3)" stroke-width="1.5"
-              data-tip="${tooltips[i]}" data-date="${bars[i].label.split(' ')[0]}" data-day="${bars[i].label.split(' ')[1]||''}"
-              data-cx="${cx}" data-cy="${cy}" data-vline="${hoverElId}-vline" data-tip-id="${hoverElId}-tip"
-              onmouseenter="lcDotEnter(this)" onmouseleave="lcDotLeave(this)"/>`;
-          }).join('')}
+          ${points.map((v,i)=>{const cx=toX(i).toFixed(1),cy=toY(v).toFixed(1);return`<circle class="lc-dot" cx="${cx}" cy="${cy}" r="3.5" fill="${color}" stroke="var(--bg3)" stroke-width="1.5" data-tip="${tooltips[i]}" data-date="${bars[i].label.split(' ')[0]}" data-day="${bars[i].label.split(' ')[1]||''}" data-cx="${cx}" data-cy="${cy}" data-vline="${hoverElId}-vline" data-tip-id="${hoverElId}-tip" onmouseenter="lcDotEnter(this)" onmouseleave="lcDotLeave(this)"/>`}).join('')}
         </svg>
-        <!-- floating tooltip -->
         <div id="${hoverElId}-tip" style="display:none;position:absolute;top:-38px;left:0;background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px;white-space:nowrap;pointer-events:none;font-family:'Plus Jakarta Sans',sans-serif;z-index:20;"></div>
-        <!-- date labels row -->
         <div style="display:flex;position:absolute;bottom:0;left:0;right:0;height:${LABEL_H}px;">
-          ${points.map((v,i) => {
-            const pct = (toX(i) / W * 100).toFixed(2);
-            const parts = bars[i].label.split(' ');
-            const hide = (i % labelEvery !== 0);
-            return `<div style="position:absolute;left:${pct}%;transform:translateX(-50%);font-size:9px;color:var(--sub);opacity:${hide?'0':'.55'};white-space:nowrap;letter-spacing:.3px;">${parts[0]} ${parts[1]||''}</div>`;
-          }).join('')}
+          ${points.map((v,i)=>{const pct=(toX(i)/W*100).toFixed(2);const parts=bars[i].label.split(' ');const hide=(i%labelEvery!==0);return`<div style="position:absolute;left:${pct}%;transform:translateX(-50%);font-size:9px;color:var(--sub);opacity:${hide?'0':'.55'};white-space:nowrap;letter-spacing:.3px;">${parts[0]} ${parts[1]||''}</div>`;}).join('')}
         </div>
       </div>`;
-
-    document.getElementById('ov-chart').innerHTML = svgHtml;
   }
 
-  // Signals list
+  // New sections — always use ALL data for DOW/edge/intel so they're timeframe-independent
+  renderDOW(data);
+  renderEdge(filtered);
+  renderIntel(filtered);
+
+  // Signals
   document.getElementById('ov-sigs').innerHTML=(filtered||[]).slice(0,8).map(buildSignalCard).join('');
 }
 
-// ── APPLY SAVED DASHBOARD PREFERENCES ────────────────────────────
+// ── PREFS ─────────────────────────────────────────────────────────
 function applyPrefs(){
-  const p = JSON.parse(localStorage.getItem('tren_prefs') || '{}');
-
-  // Theme
-  const T = {dark:{bg:'#04080f',bg2:'#080e1a',bg3:'#0c1525'},deep:{bg:'#020810',bg2:'#050c1a',bg3:'#091020'},slate:{bg:'#0d1117',bg2:'#161b22',bg3:'#21262d'}};
-  if(p.theme && T[p.theme]){
-    const t = T[p.theme];
-    document.documentElement.style.setProperty('--bg', t.bg);
-    document.documentElement.style.setProperty('--bg2', t.bg2);
-    document.documentElement.style.setProperty('--bg3', t.bg3);
-  }
-  // Accent
-  if(p.accent) document.documentElement.style.setProperty('--accent', p.accent);
-  if(p.accent_light) document.documentElement.style.setProperty('--al', p.accent_light);
-
-  // Card layout
-  const sg = document.querySelector('.sg');
-  if(sg){
-    sg.classList.remove('layout-equal4','layout-grid2x2','layout-wide1');
-    if(p.card_layout && p.card_layout !== 'equal4') sg.classList.add('layout-' + p.card_layout);
-  }
-
-  // Density
-  const page = document.querySelector('.page');
-  if(page){
-    page.classList.remove('density-compact','density-relaxed');
-    if(p.density && p.density !== 'default') page.classList.add('density-' + p.density);
-  }
-
-  // Animate cards
-  if(p.animate_cards !== false){
-    document.querySelector('.sg')?.classList.add('animate-cards');
-  }
-
-  // Show/hide chart section
-  const chartSection = document.querySelector('.ca');
-  if(chartSection) chartSection.style.display = p.show_chart === false ? 'none' : '';
-
-  // Show/hide signals section
-  const sigsHeader = document.querySelector('.sh:last-of-type');
-  const sigsGrid = document.getElementById('ov-sigs');
-  const showSigs = p.show_signals !== false;
-  if(sigsHeader) sigsHeader.style.display = showSigs ? '' : 'none';
-  if(sigsGrid) sigsGrid.style.display = showSigs ? '' : 'none';
+  const p=JSON.parse(localStorage.getItem('tren_prefs')||'{}');
+  const T={dark:{bg:'#04080f',bg2:'#080e1a',bg3:'#0c1525'},deep:{bg:'#020810',bg2:'#050c1a',bg3:'#091020'},slate:{bg:'#0d1117',bg2:'#161b22',bg3:'#21262d'}};
+  if(p.theme&&T[p.theme]){const t=T[p.theme];document.documentElement.style.setProperty('--bg',t.bg);document.documentElement.style.setProperty('--bg2',t.bg2);document.documentElement.style.setProperty('--bg3',t.bg3);}
+  if(p.accent)document.documentElement.style.setProperty('--accent',p.accent);
+  if(p.accent_light)document.documentElement.style.setProperty('--al',p.accent_light);
+  const sg=document.querySelector('.sg');
+  if(sg){sg.classList.remove('layout-equal4','layout-grid2x2','layout-wide1');if(p.card_layout&&p.card_layout!=='equal4')sg.classList.add('layout-'+p.card_layout);}
+  const page=document.querySelector('.page');
+  if(page){page.classList.remove('density-compact','density-relaxed');if(p.density&&p.density!=='default')page.classList.add('density-'+p.density);}
+  if(p.animate_cards!==false){document.querySelector('.sg')?.classList.add('animate-cards');}
+  const chartSection=document.querySelector('.ca');
+  if(chartSection)chartSection.style.display=p.show_chart===false?'none':'';
+  const sigsHeader=document.querySelector('.sh:last-of-type');
+  const sigsGrid=document.getElementById('ov-sigs');
+  const showSigs=p.show_signals!==false;
+  if(sigsHeader)sigsHeader.style.display=showSigs?'':'none';
+  if(sigsGrid)sigsGrid.style.display=showSigs?'':'none';
 }
 
 async function renderOvStats(){
   try{
-    // Fetch enough data for the largest possible timeframe (365 days)
     const data=await sbFetch('trades?order=executed_at.desc&limit=2000');
-    _allTradesCache = data;
+    _allTradesCache=data;
     renderFromData(data);
   }catch(e){
     ['ov-pnl','ov-wr','ov-bd','ov-live-count'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
   }
 }
 
-// ── LINE CHART DOT HOVER ──────────────────────────────────────────
+// ── LINE CHART HOVER ──────────────────────────────────────────────
 function lcDotEnter(dot){
-  const tip = document.getElementById(dot.dataset.tipId);
-  const vline = document.getElementById(dot.dataset.vline);
+  const tip=document.getElementById(dot.dataset.tipId);
+  const vline=document.getElementById(dot.dataset.vline);
   if(tip){
-    tip.textContent = dot.dataset.tip;
-    // position relative to dot's cx as a % of SVG width
-    const svg = dot.closest('svg');
-    const svgW = svg ? svg.getBoundingClientRect().width : 300;
-    const vb = 1000; // viewBox width
-    const pct = parseFloat(dot.dataset.cx) / vb;
-    const px = pct * svgW;
-    tip.style.display = 'block';
-    tip.style.left = Math.min(px, svgW - 120) + 'px';
+    tip.textContent=dot.dataset.tip;
+    const svg=dot.closest('svg');
+    const svgW=svg?svg.getBoundingClientRect().width:300;
+    const pct=parseFloat(dot.dataset.cx)/1000;
+    const px=pct*svgW;
+    tip.style.display='block';
+    tip.style.left=Math.min(px,svgW-120)+'px';
   }
-  if(vline){
-    vline.setAttribute('x1', dot.dataset.cx);
-    vline.setAttribute('x2', dot.dataset.cx);
-    vline.setAttribute('opacity', '0.5');
-  }
-  dot.setAttribute('r', '5');
+  if(vline){vline.setAttribute('x1',dot.dataset.cx);vline.setAttribute('x2',dot.dataset.cx);vline.setAttribute('opacity','0.5');}
+  dot.setAttribute('r','5');
 }
 function lcDotLeave(dot){
-  const tip = document.getElementById(dot.dataset.tipId);
-  const vline = document.getElementById(dot.dataset.vline);
-  if(tip) tip.style.display = 'none';
-  if(vline) vline.setAttribute('opacity', '0');
-  dot.setAttribute('r', '3.5');
+  const tip=document.getElementById(dot.dataset.tipId);
+  const vline=document.getElementById(dot.dataset.vline);
+  if(tip)tip.style.display='none';
+  if(vline)vline.setAttribute('opacity','0');
+  dot.setAttribute('r','3.5');
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
-// Restore saved timeframe preference and sync UI without triggering a fetch
 (function initTF(){
-  const saved = _activeDays;
-  const lbl = TF_LABELS[saved] || saved + ' days';
-
-  document.querySelectorAll('.tf-btn').forEach(btn => {
-    const v = btn.textContent === '1Y' ? 365 : parseInt(btn.textContent);
-    btn.classList.toggle('active', v === saved);
-  });
-
-  const setTxt = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
-  setTxt('tf-sublabel', 'Last ' + lbl);
-  setTxt('lbl-pnl', lbl);
-  setTxt('lbl-wr', lbl);
-  setTxt('lbl-bd', lbl);
-  setTxt('chart-range-label', 'Last ' + lbl);
-  setTxt('sigs-range-label', '(last ' + lbl + ')');
+  const lbl=TF_LABELS[_activeDays]||_activeDays+' days';
+  document.querySelectorAll('.tf-btn').forEach(btn=>{const v=btn.textContent==='1Y'?365:parseInt(btn.textContent);btn.classList.toggle('active',v===_activeDays);});
+  const setTxt=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
+  setTxt('tf-sublabel','Last '+lbl);setTxt('lbl-pnl',lbl);setTxt('lbl-wr',lbl);setTxt('lbl-bd',lbl);setTxt('chart-range-label','Last '+lbl);setTxt('sigs-range-label','(last '+lbl+')');
 })();
 
 initUserInfo();
