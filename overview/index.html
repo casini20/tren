@@ -617,31 +617,80 @@ function renderFromData(data){
       return`<div class="mb ${b.bc}${b.hideLabel}" style="height:${h}px" data-pnl="${b.pd}" data-date="${parts[0]}" data-day="${parts[1]||''}"></div>`;
     }).join('');
   } else {
-    // Build SVG line or cumulative chart
-    const vals = bars.map(b => b.v);
+    // Build interactive line or cumulative chart
+    const rawVals = bars.map(b => b.v);
     let points = [];
     if(chartStyle === 'cumulative'){
       let cum = 0;
-      points = vals.map(v => { cum += v; return cum; });
+      points = rawVals.map(v => { cum += v; return cum; });
     } else {
-      points = vals;
+      points = rawVals;
     }
     const minP = Math.min(...points);
     const maxP = Math.max(...points, 0.01);
     const range = maxP - minP || 1;
-    const W = 800, H = 72, PAD = 4;
-    const toX = i => (i / (points.length - 1 || 1)) * W;
+    const W = 1000, H = 72, PAD = 6;
+    const LABEL_H = 22; // space below SVG for date labels, matches bar chart padding-bottom
+    const toX = i => PAD + (i / (points.length - 1 || 1)) * (W - PAD * 2);
     const toY = v => H - PAD - ((v - minP) / range) * (H - PAD * 2);
     const ptStr = points.map((v,i) => `${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(' ');
-    const fillPts = `0,${H} ${ptStr} ${W},${H}`;
+    const firstX = toX(0).toFixed(1), lastX = toX(points.length-1).toFixed(1);
+    const fillPts = `${firstX},${H} ${ptStr} ${lastX},${H}`;
     const color = chartStyle === 'cumulative' ? '#3b82f6' : '#10b981';
     const fillColor = chartStyle === 'cumulative' ? 'rgba(59,130,246,.12)' : 'rgba(16,185,129,.12)';
-    document.getElementById('ov-chart').innerHTML = `
-      <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:72px;display:block;">
-        <polygon points="${fillPts}" fill="${fillColor}"/>
-        <polyline points="${ptStr}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-        ${points.map((v,i)=>`<circle cx="${toX(i).toFixed(1)}" cy="${toY(v).toFixed(1)}" r="3" fill="${color}" opacity="0.7"/>`).join('')}
-      </svg>`;
+
+    // Tooltip label per point
+    const tooltips = points.map((v, i) => {
+      if(chartStyle === 'cumulative'){
+        return (v >= 0 ? '+' : '') + '$' + v.toFixed(0) + ' total';
+      } else {
+        return bars[i].pd;
+      }
+    });
+
+    // Date labels — show every Nth same as bar chart
+    const labelEvery = bars.length <= 14 ? 1 : bars.length <= 30 ? 3 : bars.length <= 90 ? 7 : 14;
+
+    // Hover dot + vertical line (injected once, toggled via JS)
+    const hoverElId = 'lc-hover-' + Date.now();
+
+    const svgHtml = `
+      <div style="position:relative;width:100%;padding-bottom:${LABEL_H}px;">
+        <svg id="${hoverElId}-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none"
+             style="width:100%;height:72px;display:block;overflow:visible;cursor:crosshair;">
+          <defs>
+            <linearGradient id="lcFill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="${color}" stop-opacity="0.18"/>
+              <stop offset="100%" stop-color="${color}" stop-opacity="0.01"/>
+            </linearGradient>
+          </defs>
+          <polygon points="${fillPts}" fill="url(#lcFill)"/>
+          <polyline points="${ptStr}" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- hover vertical line -->
+          <line id="${hoverElId}-vline" x1="0" y1="0" x2="0" y2="${H}" stroke="${color}" stroke-width="1" stroke-dasharray="3,3" opacity="0" pointer-events="none"/>
+          <!-- dots -->
+          ${points.map((v,i)=>{
+            const cx=toX(i).toFixed(1), cy=toY(v).toFixed(1);
+            return `<circle class="lc-dot" cx="${cx}" cy="${cy}" r="3.5" fill="${color}" stroke="var(--bg3)" stroke-width="1.5"
+              data-tip="${tooltips[i]}" data-date="${bars[i].label.split(' ')[0]}" data-day="${bars[i].label.split(' ')[1]||''}"
+              data-cx="${cx}" data-cy="${cy}" data-vline="${hoverElId}-vline" data-tip-id="${hoverElId}-tip"
+              onmouseenter="lcDotEnter(this)" onmouseleave="lcDotLeave(this)"/>`;
+          }).join('')}
+        </svg>
+        <!-- floating tooltip -->
+        <div id="${hoverElId}-tip" style="display:none;position:absolute;top:-38px;left:0;background:var(--bg3);border:1px solid var(--border2);color:var(--text);font-size:11px;font-weight:700;padding:5px 10px;border-radius:8px;white-space:nowrap;pointer-events:none;font-family:'Plus Jakarta Sans',sans-serif;z-index:20;"></div>
+        <!-- date labels row -->
+        <div style="display:flex;position:absolute;bottom:0;left:0;right:0;height:${LABEL_H}px;">
+          ${points.map((v,i) => {
+            const pct = (toX(i) / W * 100).toFixed(2);
+            const parts = bars[i].label.split(' ');
+            const hide = (i % labelEvery !== 0);
+            return `<div style="position:absolute;left:${pct}%;transform:translateX(-50%);font-size:9px;color:var(--sub);opacity:${hide?'0':'.55'};white-space:nowrap;letter-spacing:.3px;">${parts[0]} ${parts[1]||''}</div>`;
+          }).join('')}
+        </div>
+      </div>`;
+
+    document.getElementById('ov-chart').innerHTML = svgHtml;
   }
 
   // Signals list
@@ -704,6 +753,36 @@ async function renderOvStats(){
   }catch(e){
     ['ov-pnl','ov-wr','ov-bd','ov-live-count'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
   }
+}
+
+// ── LINE CHART DOT HOVER ──────────────────────────────────────────
+function lcDotEnter(dot){
+  const tip = document.getElementById(dot.dataset.tipId);
+  const vline = document.getElementById(dot.dataset.vline);
+  if(tip){
+    tip.textContent = dot.dataset.tip;
+    // position relative to dot's cx as a % of SVG width
+    const svg = dot.closest('svg');
+    const svgW = svg ? svg.getBoundingClientRect().width : 300;
+    const vb = 1000; // viewBox width
+    const pct = parseFloat(dot.dataset.cx) / vb;
+    const px = pct * svgW;
+    tip.style.display = 'block';
+    tip.style.left = Math.min(px, svgW - 120) + 'px';
+  }
+  if(vline){
+    vline.setAttribute('x1', dot.dataset.cx);
+    vline.setAttribute('x2', dot.dataset.cx);
+    vline.setAttribute('opacity', '0.5');
+  }
+  dot.setAttribute('r', '5');
+}
+function lcDotLeave(dot){
+  const tip = document.getElementById(dot.dataset.tipId);
+  const vline = document.getElementById(dot.dataset.vline);
+  if(tip) tip.style.display = 'none';
+  if(vline) vline.setAttribute('opacity', '0');
+  dot.setAttribute('r', '3.5');
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
