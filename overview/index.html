@@ -378,14 +378,13 @@ function setTimeframe(days){
 
   // Update labels
   const lbl = TF_LABELS[days] || days + ' days';
-  const sub = document.getElementById('tf-sublabel');
-  if(sub) sub.textContent = 'Last ' + lbl;
-  ['lbl-pnl','lbl-wr','lbl-bd'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.textContent = lbl;
-  });
-  document.getElementById('chart-range-label').textContent = 'Last ' + lbl;
-  document.getElementById('sigs-range-label').textContent = '(last ' + lbl + ')';
+  const setTxt = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+  setTxt('tf-sublabel', 'Last ' + lbl);
+  setTxt('lbl-pnl', lbl);
+  setTxt('lbl-wr', lbl);
+  setTxt('lbl-bd', lbl);
+  setTxt('chart-range-label', 'Last ' + lbl);
+  setTxt('sigs-range-label', '(last ' + lbl + ')');
 
   if(_allTradesCache){
     renderFromData(_allTradesCache);
@@ -575,21 +574,23 @@ async function renderOvStats(){
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
-// Restore saved timeframe preference and sync UI
+// Restore saved timeframe preference and sync UI without triggering a fetch
 (function initTF(){
   const saved = _activeDays;
+  const lbl = TF_LABELS[saved] || saved + ' days';
+
   document.querySelectorAll('.tf-btn').forEach(btn => {
     const v = btn.textContent === '1Y' ? 365 : parseInt(btn.textContent);
     btn.classList.toggle('active', v === saved);
   });
-  const lbl = TF_LABELS[saved] || saved + ' days';
-  document.getElementById('tf-label').textContent = 'last ' + lbl;
-  ['lbl-pnl','lbl-wr','lbl-bd'].forEach(id => {
-    const el = document.getElementById(id);
-    if(el) el.textContent = lbl;
-  });
-  document.getElementById('chart-range-label').textContent = 'Last ' + lbl;
-  document.getElementById('sigs-range-label').textContent = '(last ' + lbl + ')';
+
+  const setTxt = (id, val) => { const el = document.getElementById(id); if(el) el.textContent = val; };
+  setTxt('tf-sublabel', 'Last ' + lbl);
+  setTxt('lbl-pnl', lbl);
+  setTxt('lbl-wr', lbl);
+  setTxt('lbl-bd', lbl);
+  setTxt('chart-range-label', 'Last ' + lbl);
+  setTxt('sigs-range-label', '(last ' + lbl + ')');
 })();
 
 initUserInfo();
