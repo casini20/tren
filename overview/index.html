@@ -687,11 +687,32 @@ function renderIntel(data){
   const wins=closed.filter(t=>parseFloat(t.pnl||0)>0);
   const losses=closed.filter(t=>parseFloat(t.pnl||0)<=0);
 
-  // Avg hold time
-  const wDur=wins.length?Math.round(wins.reduce((a,t)=>a+(t.duration_min||0),0)/wins.length):0;
-  const lDur=losses.length?Math.round(losses.reduce((a,t)=>a+(t.duration_min||0),0)/losses.length):0;
-  const durFmt=m=>m>=60?(m/60).toFixed(1)+'h':m+'m';
-  const totalDur=wDur+lDur||1;
+  // Avg hold time — parses the text `duration` field (e.g. "1h 23m", "45m", "2h", "90")
+  function parseDuration(t){
+    const raw = t.duration;
+    if(raw){
+      const s = String(raw).trim().toLowerCase();
+      // formats: "1h 30m", "1h30m", "1h", "45m", "45 min", "90" (bare number = minutes)
+      let mins = 0;
+      const hMatch = s.match(/(\d+\.?\d*)\s*h/);
+      const mMatch = s.match(/(\d+\.?\d*)\s*m/);
+      if(hMatch) mins += parseFloat(hMatch[1]) * 60;
+      if(mMatch) mins += parseFloat(mMatch[1]);
+      if(!hMatch && !mMatch){
+        // bare number — treat as minutes
+        const num = parseFloat(s);
+        if(!isNaN(num) && num > 0) mins = num;
+      }
+      if(mins > 0 && mins < 43200) return Math.round(mins);
+    }
+    return null;
+  }
+  const wDurs = wins.map(parseDuration).filter(v=>v!==null);
+  const lDurs = losses.map(parseDuration).filter(v=>v!==null);
+  const wDur = wDurs.length ? Math.round(wDurs.reduce((a,v)=>a+v,0)/wDurs.length) : null;
+  const lDur = lDurs.length ? Math.round(lDurs.reduce((a,v)=>a+v,0)/lDurs.length) : null;
+  const durFmt = m => m === null ? '—' : m >= 60 ? (m/60).toFixed(1)+'h' : m+'m';
+  const totalDur = (wDur||0) + (lDur||0) || 1;
 
   // Best & worst
   const bigWin=wins.length?wins.reduce((a,t)=>parseFloat(t.pnl)>parseFloat(a.pnl)?t:a,wins[0]):null;
@@ -709,6 +730,7 @@ function renderIntel(data){
 
     <div class="sc">
       <div class="sc-lbl">Avg Hold Time</div>
+      ${wDur===null&&lDur===null ? `<div class="sc-val" style="margin-top:6px;">—</div><div class="sc-ch" style="margin-top:6px;">No duration data found.<br>Add <code style="font-size:10px;background:rgba(255,255,255,.06);padding:1px 5px;border-radius:4px;">closed_at</code> to your trades table.</div>` : `
       <div style="margin-top:8px;">
         <div class="hold-row">
           <div class="hold-top">
@@ -716,7 +738,7 @@ function renderIntel(data){
             <span style="font-weight:700;color:var(--green)">${durFmt(wDur)}</span>
           </div>
           <div class="hold-bar-track">
-            <div class="hold-bar-fill" style="width:${Math.min(wDur/totalDur*100,90).toFixed(0)}%;background:var(--green);"></div>
+            <div class="hold-bar-fill" style="width:${wDur!==null?Math.min((wDur||0)/totalDur*100,90).toFixed(0):0}%;background:var(--green);"></div>
           </div>
         </div>
         <div class="hold-row">
@@ -725,11 +747,11 @@ function renderIntel(data){
             <span style="font-weight:700;color:var(--red)">${durFmt(lDur)}</span>
           </div>
           <div class="hold-bar-track">
-            <div class="hold-bar-fill" style="width:${Math.min(lDur/totalDur*100,90).toFixed(0)}%;background:var(--red);"></div>
+            <div class="hold-bar-fill" style="width:${lDur!==null?Math.min((lDur||0)/totalDur*100,90).toFixed(0):0}%;background:var(--red);"></div>
           </div>
         </div>
       </div>
-      <div class="sc-ch" style="margin-top:8px;">${wDur>lDur?'✓ Winners held longer':'Cut losers faster than winners'}</div>
+      <div class="sc-ch" style="margin-top:8px;">${wDur!==null&&lDur!==null?(wDur>lDur?'✓ Winners held longer':'Cut losers faster than winners'):'Partial duration data'}</div>`}
     </div>
 
     <div class="sc">
