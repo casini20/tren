@@ -534,28 +534,67 @@ function renderFromData(data){
   document.getElementById('ov-live-count').textContent=lc;
   document.getElementById('ov-live-sub').textContent=`↑ ${tc} new today`;
 
-  // Chart — group by day for the selected range
+  // Chart — group by day (≤30d) or by week (90d / 1Y)
   const today2=new Date();
-  const chartDays=[];
-  for(let i=days-1;i>=0;i--){const d=new Date(today2);d.setDate(today2.getDate()-i);chartDays.push(toLocalISO(d));}
+  const useWeeks = days >= 60;
 
-  const vals=chartDays.map(k=>filtered.filter(t=>t.executed_at&&t.executed_at.startsWith(k)).reduce((a,t)=>a+parseFloat(t.pnl||0),0));
-  const mx=Math.max(...vals.map(Math.abs),1);
-  const DL=['SU','MO','TU','WE','TH','FR','SA'];
+  let bars=[];
+  if(!useWeeks){
+    // Daily bars
+    const chartDays=[];
+    for(let i=days-1;i>=0;i--){const d=new Date(today2);d.setDate(today2.getDate()-i);chartDays.push(toLocalISO(d));}
+    const DL=['SU','MO','TU','WE','TH','FR','SA'];
+    const labelEvery = days <= 14 ? 1 : 3;
+    bars = chartDays.map((k,i)=>{
+      const v=filtered.filter(t=>t.executed_at&&t.executed_at.startsWith(k)).reduce((a,t)=>a+parseFloat(t.pnl||0),0);
+      const d=new Date(k+'T12:00:00');
+      const ds=d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'});
+      const dw=d.getDay();const iw=(dw===0||dw===6);
+      const hideLabel=(i%labelEvery!==0)?' hide-label':'';
+      let bc,pd;
+      if(iw){bc='wknd';pd='Weekend';}else{bc=v>=0?'g':'r';pd=(v>=0?'+':'')+'$'+v.toFixed(0);}
+      return{v,bc,pd,label:ds+' '+DL[dw],hideLabel};
+    });
+  } else {
+    // Weekly bars — build ISO week buckets from cutoff to today
+    const cutoffW=new Date(today2);cutoffW.setDate(today2.getDate()-(days-1));
+    // Walk week by week (Monday-anchored)
+    const weekMap=new Map();
+    filtered.forEach(t=>{
+      if(!t.executed_at)return;
+      const d=new Date(t.executed_at);
+      // Get Monday of this trade's week
+      const dow=d.getDay();const diff=(dow===0?-6:1-dow);
+      const mon=new Date(d);mon.setDate(d.getDate()+diff);mon.setHours(0,0,0,0);
+      const key=toLocalISO(mon);
+      weekMap.set(key,(weekMap.get(key)||0)+parseFloat(t.pnl||0));
+    });
+    // Build ordered week list
+    const weeks=[];
+    const cursor=new Date(cutoffW);
+    // Snap cursor to its Monday
+    const sd=cursor.getDay();const sdiff=(sd===0?-6:1-sd);cursor.setDate(cursor.getDate()+sdiff);cursor.setHours(0,0,0,0);
+    while(cursor<=today2){
+      weeks.push(toLocalISO(new Date(cursor)));
+      cursor.setDate(cursor.getDate()+7);
+    }
+    bars=weeks.map((k,i)=>{
+      const v=weekMap.get(k)||0;
+      const d=new Date(k+'T12:00:00');
+      const labelEvery = days >= 365 ? 4 : 2;
+      const hideLabel=(i%labelEvery!==0)?' hide-label':'';
+      const ds=d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'});
+      const bc=v>=0?'g':'r';
+      const pd=(v>=0?'+':'')+'$'+v.toFixed(0);
+      return{v,bc,pd,label:ds+' WK',hideLabel};
+    });
+  }
 
-  // For larger timeframes, only show labels on every Nth bar to avoid clutter
-  const labelEvery = days <= 14 ? 1 : days <= 30 ? 3 : days <= 90 ? 7 : 14;
-
-  document.getElementById('ov-chart').innerHTML=vals.map((v,i)=>{
-    const h=Math.max(4,Math.round(Math.abs(v)/mx*72));
-    const d=new Date(chartDays[i]+'T12:00:00');
-    const ds=d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'});
-    const dw=d.getDay();const iw=(dw===0||dw===6);
-    let bc,pd;
-    if(iw){bc='wknd';pd='Weekend';}
-    else{bc=v>=0?'g':'r';pd=(v>=0?'+':'')+'$'+v.toFixed(0);}
-    const hideLabel = (i % labelEvery !== 0) ? ' hide-label' : '';
-    return`<div class="mb ${bc}${hideLabel}" style="height:${h}px" data-pnl="${pd}" data-date="${ds}" data-day="${DL[dw]}"></div>`;
+  const mx=Math.max(...bars.map(b=>Math.abs(b.v)),1);
+  document.getElementById('ov-chart').innerHTML=bars.map(b=>{
+    const h=Math.max(4,Math.round(Math.abs(b.v)/mx*72));
+    const parts=b.label.split(' ');
+    return`<div class="mb ${b.bc}${b.hideLabel}" style="height:${h}px" data-pnl="${b.pd}" data-date="${parts[0]}" data-day="${parts[1]||''}"></div>`;
   }).join('');
 
   // Signals list
