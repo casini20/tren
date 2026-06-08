@@ -112,6 +112,24 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 
 /* ── OVERVIEW COMPONENTS ── */
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:1.8rem;}
+/* Layout variants from settings */
+.sg.layout-equal4{grid-template-columns:repeat(4,1fr);}
+.sg.layout-grid2x2{grid-template-columns:repeat(2,1fr);}
+.sg.layout-wide1{grid-template-columns:2fr 1fr 1fr;}
+/* Density variants */
+.page.density-compact .sc{padding:.7rem 1rem;}
+.page.density-compact .sh{margin-bottom:.7rem;}
+.page.density-compact .ca{padding:.9rem;}
+.page.density-relaxed .sc{padding:1.5rem 1.6rem;}
+.page.density-relaxed .sh{margin-bottom:1.5rem;}
+.page.density-relaxed .ca{padding:1.8rem;}
+/* Card animate on load */
+@keyframes cardIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.animate-cards .sc{animation:cardIn .35s ease both;}
+.animate-cards .sc:nth-child(1){animation-delay:.04s;}
+.animate-cards .sc:nth-child(2){animation-delay:.08s;}
+.animate-cards .sc:nth-child(3){animation-delay:.12s;}
+.animate-cards .sc:nth-child(4){animation-delay:.16s;}
 .sc{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:1.1rem 1.3rem;transition:border-color .18s;}
 .sc:hover{border-color:var(--border2);}
 .sc-lbl{font-size:11px;color:var(--sub);text-transform:uppercase;letter-spacing:.7px;margin-bottom:7px;display:flex;align-items:center;gap:5px;}
@@ -590,14 +608,91 @@ function renderFromData(data){
   }
 
   const mx=Math.max(...bars.map(b=>Math.abs(b.v)),1);
-  document.getElementById('ov-chart').innerHTML=bars.map(b=>{
-    const h=Math.max(4,Math.round(Math.abs(b.v)/mx*72));
-    const parts=b.label.split(' ');
-    return`<div class="mb ${b.bc}${b.hideLabel}" style="height:${h}px" data-pnl="${b.pd}" data-date="${parts[0]}" data-day="${parts[1]||''}"></div>`;
-  }).join('');
+  const chartStyle = (JSON.parse(localStorage.getItem('tren_prefs')||'{}').chart_style) || 'bar';
+
+  if(chartStyle === 'bar'){
+    document.getElementById('ov-chart').innerHTML=bars.map(b=>{
+      const h=Math.max(4,Math.round(Math.abs(b.v)/mx*72));
+      const parts=b.label.split(' ');
+      return`<div class="mb ${b.bc}${b.hideLabel}" style="height:${h}px" data-pnl="${b.pd}" data-date="${parts[0]}" data-day="${parts[1]||''}"></div>`;
+    }).join('');
+  } else {
+    // Build SVG line or cumulative chart
+    const vals = bars.map(b => b.v);
+    let points = [];
+    if(chartStyle === 'cumulative'){
+      let cum = 0;
+      points = vals.map(v => { cum += v; return cum; });
+    } else {
+      points = vals;
+    }
+    const minP = Math.min(...points);
+    const maxP = Math.max(...points, 0.01);
+    const range = maxP - minP || 1;
+    const W = 800, H = 72, PAD = 4;
+    const toX = i => (i / (points.length - 1 || 1)) * W;
+    const toY = v => H - PAD - ((v - minP) / range) * (H - PAD * 2);
+    const ptStr = points.map((v,i) => `${toX(i).toFixed(1)},${toY(v).toFixed(1)}`).join(' ');
+    const fillPts = `0,${H} ${ptStr} ${W},${H}`;
+    const color = chartStyle === 'cumulative' ? '#3b82f6' : '#10b981';
+    const fillColor = chartStyle === 'cumulative' ? 'rgba(59,130,246,.12)' : 'rgba(16,185,129,.12)';
+    document.getElementById('ov-chart').innerHTML = `
+      <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" style="width:100%;height:72px;display:block;">
+        <polygon points="${fillPts}" fill="${fillColor}"/>
+        <polyline points="${ptStr}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        ${points.map((v,i)=>`<circle cx="${toX(i).toFixed(1)}" cy="${toY(v).toFixed(1)}" r="3" fill="${color}" opacity="0.7"/>`).join('')}
+      </svg>`;
+  }
 
   // Signals list
   document.getElementById('ov-sigs').innerHTML=(filtered||[]).slice(0,8).map(buildSignalCard).join('');
+}
+
+// ── APPLY SAVED DASHBOARD PREFERENCES ────────────────────────────
+function applyPrefs(){
+  const p = JSON.parse(localStorage.getItem('tren_prefs') || '{}');
+
+  // Theme
+  const T = {dark:{bg:'#04080f',bg2:'#080e1a',bg3:'#0c1525'},deep:{bg:'#020810',bg2:'#050c1a',bg3:'#091020'},slate:{bg:'#0d1117',bg2:'#161b22',bg3:'#21262d'}};
+  if(p.theme && T[p.theme]){
+    const t = T[p.theme];
+    document.documentElement.style.setProperty('--bg', t.bg);
+    document.documentElement.style.setProperty('--bg2', t.bg2);
+    document.documentElement.style.setProperty('--bg3', t.bg3);
+  }
+  // Accent
+  if(p.accent) document.documentElement.style.setProperty('--accent', p.accent);
+  if(p.accent_light) document.documentElement.style.setProperty('--al', p.accent_light);
+
+  // Card layout
+  const sg = document.querySelector('.sg');
+  if(sg){
+    sg.classList.remove('layout-equal4','layout-grid2x2','layout-wide1');
+    if(p.card_layout && p.card_layout !== 'equal4') sg.classList.add('layout-' + p.card_layout);
+  }
+
+  // Density
+  const page = document.querySelector('.page');
+  if(page){
+    page.classList.remove('density-compact','density-relaxed');
+    if(p.density && p.density !== 'default') page.classList.add('density-' + p.density);
+  }
+
+  // Animate cards
+  if(p.animate_cards !== false){
+    document.querySelector('.sg')?.classList.add('animate-cards');
+  }
+
+  // Show/hide chart section
+  const chartSection = document.querySelector('.ca');
+  if(chartSection) chartSection.style.display = p.show_chart === false ? 'none' : '';
+
+  // Show/hide signals section
+  const sigsHeader = document.querySelector('.sh:last-of-type');
+  const sigsGrid = document.getElementById('ov-sigs');
+  const showSigs = p.show_signals !== false;
+  if(sigsHeader) sigsHeader.style.display = showSigs ? '' : 'none';
+  if(sigsGrid) sigsGrid.style.display = showSigs ? '' : 'none';
 }
 
 async function renderOvStats(){
@@ -633,6 +728,7 @@ async function renderOvStats(){
 
 initUserInfo();
 initSubUI();
+applyPrefs();
 renderOvStats();
 setInterval(renderOvStats,60000);
 </script>
