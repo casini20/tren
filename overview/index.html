@@ -234,6 +234,9 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .dow-cnt{font-size:10px;color:var(--sub);margin-top:3px;}
 .dow-bar{height:3px;border-radius:2px;margin:6px auto 0;opacity:.7;}
 
+/* ── NQ CHART ── */
+.nq-chart-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:13px;overflow:hidden;margin-bottom:1.6rem;}
+
 /* ── MOBILE ── */
 .mobile-toggle{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;flex-shrink:0;}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:19;}
@@ -383,6 +386,39 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <div class="mc" id="ov-chart"><div class="skel" style="width:100%;height:60px;border-radius:6px;"></div></div>
       </div>
 
+      <!-- ── NASDAQ FUTURES CHART ── -->
+      <div class="sh">
+        <div class="st">NASDAQ Futures <span style="font-size:11px;color:var(--sub);font-weight:400;">(NQ=F · E-mini)</span></div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="tf-seg" id="nq-tf-seg" role="group" aria-label="Chart interval">
+            <button class="tf-btn" onclick="setNQInterval(this,'5m','1d')">5M</button>
+            <button class="tf-btn" onclick="setNQInterval(this,'15m','5d')">15M</button>
+            <button class="tf-btn" onclick="setNQInterval(this,'1h','1mo')">1H</button>
+            <button class="tf-btn active" onclick="setNQInterval(this,'1d','6mo')">1D</button>
+            <button class="tf-btn" onclick="setNQInterval(this,'1wk','2y')">1W</button>
+          </div>
+          <div id="nq-refresh-btn" onclick="nqFetch(_nqInterval,_nqRange,true)" title="Refresh" style="width:28px;height:28px;border-radius:7px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:all .2s;flex-shrink:0;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">↻</div>
+        </div>
+      </div>
+      <div class="nq-chart-wrap" style="position:relative;padding:1.2rem 1.4rem 1rem;">
+        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
+          <span id="nq-price" style="font-size:22px;font-weight:700;letter-spacing:-.3px;">—</span>
+          <span id="nq-change" style="font-size:13px;font-weight:600;">—</span>
+          <span id="nq-updated" style="font-size:10px;color:var(--sub);margin-left:auto;"></span>
+        </div>
+        <div style="position:relative;">
+          <canvas id="nq-canvas" height="280" style="width:100%;height:280px;display:block;cursor:crosshair;border-radius:6px;"></canvas>
+          <div id="nq-tooltip" style="display:none;position:absolute;top:8px;left:8px;pointer-events:none;background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:6px 12px;font-size:11px;font-weight:600;white-space:nowrap;z-index:10;line-height:1.7;"></div>
+          <div id="nq-crosshair-v" style="display:none;position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.15);pointer-events:none;"></div>
+          <div id="nq-crosshair-h" style="display:none;position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.15);pointer-events:none;"></div>
+        </div>
+        <div id="nq-xlabels" style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--sub);"></div>
+        <div id="nq-overlay" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;border-radius:13px;background:var(--bg3);">
+          <div style="width:32px;height:32px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:spin .8s linear infinite;"></div>
+          <div style="font-size:12px;color:var(--sub);">Loading NQ futures…</div>
+        </div>
+      </div>
+
       <!-- ── DAY OF WEEK ── -->
       <div class="sh"><div class="st">Day-of-Week Performance</div></div>
       <div class="ca" style="padding:1.1rem 1.3rem;margin-bottom:1.6rem;">
@@ -462,6 +498,8 @@ const TF_LABELS = {7:'7 days',14:'14 days',30:'30 days',90:'90 days',365:'1 year
 function setTimeframe(days){
   _activeDays = days;
   document.querySelectorAll('.tf-btn').forEach(btn => {
+    // Skip NQ interval buttons
+    if(btn.closest('#nq-tf-seg')) return;
     const v = btn.textContent === '1Y' ? 365 : parseInt(btn.textContent);
     btn.classList.toggle('active', v === days);
   });
@@ -475,6 +513,189 @@ function setTimeframe(days){
   setTxt('sigs-range-label', '(last ' + lbl + ')');
   if(_allTradesCache){ renderFromData(_allTradesCache); } else { renderOvStats(); }
 }
+
+// ── NQ FUTURES CHART ──────────────────────────────────────────────
+// Uses a tiny Vercel serverless proxy at /api/nq-chart to bypass
+// Yahoo Finance CORS. See api/nq-chart.js in your project root.
+let _nqInterval = '1d', _nqRange = '6mo';
+let _nqData = null, _nqAutoTimer = null;
+
+window.setNQInterval = function(btn, interval, range) {
+  _nqInterval = interval; _nqRange = range;
+  document.querySelectorAll('#nq-tf-seg .tf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  nqFetch(interval, range, false);
+};
+
+async function nqFetch(interval, range, isRefresh) {
+  const overlay = document.getElementById('nq-overlay');
+  if(overlay) overlay.style.display = 'flex';
+  if(isRefresh){
+    const rb = document.getElementById('nq-refresh-btn');
+    if(rb){ rb.style.transform='rotate(360deg)'; rb.style.transition='transform .5s'; setTimeout(()=>{rb.style.transform='';rb.style.transition='';},500); }
+  }
+  try {
+    const res = await fetch(`/api/nq-chart?interval=${interval}&range=${range}`);
+    if(!res.ok) throw new Error('fetch failed');
+    const json = await res.json();
+    _nqData = json;
+    nqDraw(json);
+    if(overlay) overlay.style.display = 'none';
+  } catch(e) {
+    if(overlay) overlay.innerHTML = `<span style="font-size:22px">📡</span><div style="font-size:12px;color:var(--sub);text-align:center;">Couldn't load NQ data<br><span style="color:var(--al);cursor:pointer;" onclick="nqFetch(_nqInterval,_nqRange,false)">retry ↻</span></div>`;
+  }
+}
+
+function nqDraw(data) {
+  const canvas = document.getElementById('nq-canvas');
+  if(!canvas || !data || !data.bars || !data.bars.length) return;
+  const bars = data.bars;
+  const DPR = window.devicePixelRatio || 1;
+  const W = canvas.offsetWidth, H = 280;
+  canvas.width = W * DPR; canvas.height = H * DPR;
+  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(DPR, DPR);
+
+  const PAD_L = 60, PAD_R = 8, PAD_T = 12, PAD_B = 4;
+  const chartW = W - PAD_L - PAD_R;
+  const chartH = H - PAD_T - PAD_B;
+
+  const closes = bars.map(b => b.c);
+  const highs  = bars.map(b => b.h);
+  const lows   = bars.map(b => b.l);
+  const minP = Math.min(...lows)  * 0.9995;
+  const maxP = Math.max(...highs) * 1.0005;
+  const range = maxP - minP || 1;
+
+  const toX = i => PAD_L + (i / (bars.length - 1)) * chartW;
+  const toY = v => PAD_T + chartH - ((v - minP) / range) * chartH;
+
+  const isUp = bars[bars.length-1].c >= bars[0].c;
+  const lineColor = isUp ? '#10b981' : '#ef4444';
+  const fillColor = isUp ? 'rgba(16,185,129,' : 'rgba(239,68,68,';
+
+  // Grid lines
+  const gridCount = 4;
+  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+  ctx.lineWidth = 1;
+  for(let i = 0; i <= gridCount; i++){
+    const y = PAD_T + (chartH / gridCount) * i;
+    ctx.beginPath(); ctx.moveTo(PAD_L, y); ctx.lineTo(W - PAD_R, y); ctx.stroke();
+    const price = maxP - (range / gridCount) * i;
+    ctx.fillStyle = 'rgba(240,244,255,0.35)';
+    ctx.font = '10px Plus Jakarta Sans, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(price.toLocaleString('en-US',{maximumFractionDigits:0}), PAD_L - 5, y + 3);
+  }
+
+  // Gradient fill
+  const grad = ctx.createLinearGradient(0, PAD_T, 0, PAD_T + chartH);
+  grad.addColorStop(0, fillColor + '0.18)');
+  grad.addColorStop(1, fillColor + '0.0)');
+  ctx.beginPath();
+  ctx.moveTo(toX(0), PAD_T + chartH);
+  bars.forEach((b, i) => ctx.lineTo(toX(i), toY(b.c)));
+  ctx.lineTo(toX(bars.length - 1), PAD_T + chartH);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // Line
+  ctx.beginPath();
+  ctx.strokeStyle = lineColor;
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  bars.forEach((b, i) => i === 0 ? ctx.moveTo(toX(i), toY(b.c)) : ctx.lineTo(toX(i), toY(b.c)));
+  ctx.stroke();
+
+  // Price / change header
+  const last = bars[bars.length - 1];
+  const first = bars[0];
+  const chg = last.c - first.c;
+  const chgPct = (chg / first.c) * 100;
+  const pe = document.getElementById('nq-price');
+  const ce = document.getElementById('nq-change');
+  const ue = document.getElementById('nq-updated');
+  if(pe) pe.textContent = last.c.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+  if(ce){ ce.textContent = (chg >= 0 ? '+' : '') + chg.toFixed(2) + ' (' + (chgPct >= 0 ? '+' : '') + chgPct.toFixed(2) + '%)'; ce.style.color = chg >= 0 ? 'var(--green)' : 'var(--red)'; }
+  if(ue) ue.textContent = 'NQ=F · ' + new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+
+  // X-axis labels
+  const lbl = document.getElementById('nq-xlabels');
+  if(lbl){
+    const step = Math.max(1, Math.floor(bars.length / 6));
+    const items = [];
+    for(let i = 0; i < bars.length; i += step) items.push(`<span>${bars[i].label||''}</span>`);
+    lbl.innerHTML = items.join('');
+  }
+
+  // Hover interaction
+  canvas._nqBars = bars; canvas._nqToX = toX; canvas._nqToY = toY;
+  canvas._nqPAD_L = PAD_L; canvas._nqChartW = chartW; canvas._nqLen = bars.length;
+  canvas._nqDPR = DPR;
+}
+
+// Hover
+(function setupNQHover(){
+  function onMove(e){
+    const canvas = document.getElementById('nq-canvas');
+    if(!canvas || !canvas._nqBars) return;
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    const my = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+    const {_nqBars:bars, _nqToX:toX, _nqToY:toY, _nqPAD_L:PAD_L, _nqChartW:chartW, _nqLen:len} = canvas;
+    const idx = Math.max(0, Math.min(len-1, Math.round((mx - PAD_L) / chartW * (len-1))));
+    const b = bars[idx];
+    if(!b) return;
+    const cx = toX(idx), cy = toY(b.c);
+    const tip = document.getElementById('nq-tooltip');
+    const cv = document.getElementById('nq-crosshair-v');
+    const ch = document.getElementById('nq-crosshair-h');
+    if(tip){
+      tip.style.display = 'block';
+      tip.innerHTML = `<span style="color:var(--sub);font-weight:500">${b.label||''}</span><br>O: ${b.o?.toLocaleString('en-US',{maximumFractionDigits:2})}  H: <span style="color:var(--green)">${b.h?.toLocaleString('en-US',{maximumFractionDigits:2})}</span>  L: <span style="color:var(--red)">${b.l?.toLocaleString('en-US',{maximumFractionDigits:2})}</span>  C: <b>${b.c?.toLocaleString('en-US',{maximumFractionDigits:2})}</b>`;
+      // keep tip inside canvas
+      const tipW = 320, tipH = 50;
+      tip.style.left = Math.min(cx + 10, rect.width - tipW - 8) + 'px';
+      tip.style.top = Math.max(8, cy - tipH/2) + 'px';
+    }
+    if(cv){ cv.style.display='block'; cv.style.left = cx + 'px'; }
+    if(ch){ ch.style.display='block'; ch.style.top = cy + 'px'; }
+  }
+  function onLeave(){
+    ['nq-tooltip','nq-crosshair-v','nq-crosshair-h'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    const c = document.getElementById('nq-canvas');
+    if(!c) return;
+    c.addEventListener('mousemove', onMove);
+    c.addEventListener('mouseleave', onLeave);
+    c.addEventListener('touchmove', onMove, {passive:true});
+    c.addEventListener('touchend', onLeave);
+  });
+  // also wire immediately in case DOM already ready
+  const c = document.getElementById('nq-canvas');
+  if(c){ c.addEventListener('mousemove', onMove); c.addEventListener('mouseleave', onLeave); }
+})();
+
+// spin animation
+(function addSpinCSS(){
+  if(document.getElementById('nq-spin-style')) return;
+  const s = document.createElement('style');
+  s.id = 'nq-spin-style';
+  s.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+  document.head.appendChild(s);
+})();
+
+// Auto-refresh every 5min
+function nqScheduleRefresh(){
+  clearInterval(_nqAutoTimer);
+  _nqAutoTimer = setInterval(() => nqFetch(_nqInterval, _nqRange, false), 5 * 60 * 1000);
+}
+nqFetch(_nqInterval, _nqRange, false);
+nqScheduleRefresh();
+window.addEventListener('resize', () => { if(_nqData) nqDraw(_nqData); });
 
 let _navLock=false;
 function navTo(url){
@@ -687,19 +908,16 @@ function renderIntel(data){
   const wins=closed.filter(t=>parseFloat(t.pnl||0)>0);
   const losses=closed.filter(t=>parseFloat(t.pnl||0)<=0);
 
-  // Avg hold time — parses the text `duration` field (e.g. "1h 23m", "45m", "2h", "90")
   function parseDuration(t){
     const raw = t.duration;
     if(raw){
       const s = String(raw).trim().toLowerCase();
-      // formats: "1h 30m", "1h30m", "1h", "45m", "45 min", "90" (bare number = minutes)
       let mins = 0;
       const hMatch = s.match(/(\d+\.?\d*)\s*h/);
       const mMatch = s.match(/(\d+\.?\d*)\s*m/);
       if(hMatch) mins += parseFloat(hMatch[1]) * 60;
       if(mMatch) mins += parseFloat(mMatch[1]);
       if(!hMatch && !mMatch){
-        // bare number — treat as minutes
         const num = parseFloat(s);
         if(!isNaN(num) && num > 0) mins = num;
       }
@@ -714,11 +932,9 @@ function renderIntel(data){
   const durFmt = m => m === null ? '—' : m >= 60 ? (m/60).toFixed(1)+'h' : m+'m';
   const totalDur = (wDur||0) + (lDur||0) || 1;
 
-  // Best & worst
   const bigWin=wins.length?wins.reduce((a,t)=>parseFloat(t.pnl)>parseFloat(a.pnl)?t:a,wins[0]):null;
   const bigLoss=losses.length?losses.reduce((a,t)=>parseFloat(t.pnl)<parseFloat(a.pnl)?t:a,losses[0]):null;
 
-  // Consistency (all-time)
   const byDay={};
   _allTradesCache.forEach(t=>{const k=t.executed_at.slice(0,10);byDay[k]=(byDay[k]||0)+parseFloat(t.pnl||0);});
   const allDays=Object.keys(byDay).sort();
@@ -784,7 +1000,6 @@ function renderFromData(data){
   const cutoff=new Date();cutoff.setDate(cutoff.getDate()-days);cutoff.setHours(0,0,0,0);
   const filtered=data.filter(t=>t.executed_at&&new Date(t.executed_at)>=cutoff);
 
-  // Stat cards
   const totalPnl=filtered.reduce((a,t)=>a+parseFloat(t.pnl||0),0);
   const pe=document.getElementById('ov-pnl');
   pe.textContent=(totalPnl>=0?'+':'')+'$'+Math.abs(totalPnl).toLocaleString('en-US',{maximumFractionDigits:0});
@@ -894,12 +1109,10 @@ function renderFromData(data){
       </div>`;
   }
 
-  // New sections — always use ALL data for DOW/edge/intel so they're timeframe-independent
   renderDOW(data);
   renderEdge(filtered);
   renderIntel(filtered);
 
-  // Signals
   document.getElementById('ov-sigs').innerHTML=(filtered||[]).slice(0,8).map(buildSignalCard).join('');
 }
 
@@ -961,7 +1174,11 @@ function lcDotLeave(dot){
 // ── INIT ──────────────────────────────────────────────────────────
 (function initTF(){
   const lbl=TF_LABELS[_activeDays]||_activeDays+' days';
-  document.querySelectorAll('.tf-btn').forEach(btn=>{const v=btn.textContent==='1Y'?365:parseInt(btn.textContent);btn.classList.toggle('active',v===_activeDays);});
+  document.querySelectorAll('.tf-btn').forEach(btn=>{
+    if(btn.closest('#nq-tf-seg')) return;
+    const v=btn.textContent==='1Y'?365:parseInt(btn.textContent);
+    btn.classList.toggle('active',v===_activeDays);
+  });
   const setTxt=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
   setTxt('tf-sublabel','Last '+lbl);setTxt('lbl-pnl',lbl);setTxt('lbl-wr',lbl);setTxt('lbl-bd',lbl);setTxt('chart-range-label','Last '+lbl);setTxt('sigs-range-label','(last '+lbl+')');
 })();
