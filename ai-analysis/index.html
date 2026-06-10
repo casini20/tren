@@ -512,24 +512,37 @@ function nqFmtK(n){if(n==null)return'—';if(n>=1e9)return(n/1e9).toFixed(1)+'B'
 function nowStr(){return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
 function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-// ── PROXY WATERFALL — tries 3 proxies in order ────────────────────
+// ── PROXY WATERFALL — tries 5 proxies, validates response shape ───
 var _PROXIES=[
-  'https://api.allorigins.win/raw?url=',
   'https://corsproxy.io/?',
-  'https://api.codetabs.com/v1/proxy?quest='
+  'https://api.allorigins.win/raw?url=',
+  'https://api.codetabs.com/v1/proxy?quest=',
+  'https://thingproxy.freeboard.io/fetch/',
+  'https://api.allorigins.win/get?url=',
 ];
+var _PROXY_IS_WRAPPED=[false,false,false,false,true];
+
 async function proxyFetch(targetUrl){
   var lastErr=null;
   for(var pi=0;pi<_PROXIES.length;pi++){
     try{
       var controller=new AbortController();
-      var tid=setTimeout(function(){controller.abort();},8000);
-      var res=await fetch(_PROXIES[pi]+encodeURIComponent(targetUrl),{signal:controller.signal});
+      var tid=setTimeout(function(){controller.abort();},9000);
+      var proxyUrl=_PROXIES[pi]+encodeURIComponent(targetUrl);
+      var res=await fetch(proxyUrl,{signal:controller.signal});
       clearTimeout(tid);
       if(!res.ok){lastErr=new Error('HTTP '+res.status+' proxy'+pi);continue;}
       var text=await res.text();
-      var json=JSON.parse(text);
-      return json;
+      var json;
+      if(_PROXY_IS_WRAPPED[pi]){
+        var wrapper=JSON.parse(text);
+        json=JSON.parse(wrapper.contents||wrapper.body||text);
+      }else{
+        json=JSON.parse(text);
+      }
+      if(json&&json.chart&&json.chart.result)return json;
+      if(json&&json.quoteResponse)return json;
+      lastErr=new Error('Unexpected response shape from proxy'+pi);
     }catch(e){lastErr=e;}
   }
   throw lastErr||new Error('All proxies failed');
@@ -546,10 +559,17 @@ var _ctxSelected={price:true,levels:true,indicators:true};
 // ── FETCH CHART BARS ──────────────────────────────────────────────
 async function fetchYahooNQ(interval,range){
   var symbol='NQ%3DF';
-  var url='https://query1.finance.yahoo.com/v8/finance/chart/'+symbol+'?interval='+interval+'&range='+range+'&includePrePost=false';
-  var json=await proxyFetch(url);
+  var urls=[
+    'https://query1.finance.yahoo.com/v8/finance/chart/'+symbol+'?interval='+interval+'&range='+range+'&includePrePost=false',
+    'https://query2.finance.yahoo.com/v8/finance/chart/'+symbol+'?interval='+interval+'&range='+range+'&includePrePost=false',
+  ];
+  var json=null,lastErr=null;
+  for(var ui=0;ui<urls.length;ui++){
+    try{json=await proxyFetch(urls[ui]);break;}catch(e){lastErr=e;}
+  }
+  if(!json)throw lastErr||new Error('No chart data from Yahoo');
   var result=json.chart&&json.chart.result&&json.chart.result[0];
-  if(!result)throw new Error('No chart data from Yahoo');
+  if(!result)throw new Error('Empty chart result');
   var timestamps=result.timestamp||[];
   var q=result.indicators.quote[0];
   var opens=q.open,highs=q.high,lows=q.low,closes=q.close,volumes=q.volume;
@@ -582,7 +602,6 @@ async function nqFetch(interval,range,isRefresh){
   var overlay=document.getElementById('nq-overlay');
   if(overlay){overlay.style.display='flex';overlay.innerHTML='<div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:nqspin .7s linear infinite;"></div><div style="font-size:12px;color:var(--sub);">Loading NQ futures…</div>';}
   try{
-    // Fetch chart bars + live quote simultaneously
     var results=await Promise.allSettled([fetchYahooNQ(interval,range),fetchNQLiveQuote()]);
     if(results[0].status==='rejected')throw results[0].reason;
     var json=results[0].value;
@@ -597,12 +616,11 @@ async function nqFetch(interval,range,isRefresh){
   }
 }
 
-// ── SNAPSHOT — live price is always from the quote endpoint ───────
+// ── SNAPSHOT ──────────────────────────────────────────────────────
 function updateSnapshot(data,liveQuote){
   if(!data||!data.bars||!data.bars.length)return;
   var bars=data.bars,last=bars[bars.length-1],first=bars[0];
   var G='#10b981',R='#ef4444';
-  // Current price: live quote wins. Period change: always relative to the loaded range.
   var livePrice=liveQuote&&liveQuote.regularMarketPrice?liveQuote.regularMarketPrice:last.c;
   var dayChg=liveQuote&&liveQuote.regularMarketChange!=null?liveQuote.regularMarketChange:null;
   var dayChgPct=liveQuote&&liveQuote.regularMarketChangePercent!=null?liveQuote.regularMarketChangePercent:null;
@@ -706,7 +724,6 @@ function nqDraw(data){
     ctx.strokeStyle='rgba(255,255,255,0.07)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(PAD_L,PRICE_H);ctx.lineTo(W-PAD_R,PRICE_H);ctx.stroke();
     bars.forEach(function(b,i){var x=toX(i),h=Math.max(1,(b.v/maxVol)*vH),co=b.c>=b.o;ctx.fillStyle=co?'rgba(16,185,129,0.45)':'rgba(239,68,68,0.4)';ctx.fillRect(x-bw/2,vTop+vH-h,bw,h);});
   }
-  // Last price line — show live quote price if it falls within chart range
   var livePx=(_nqLiveQuote&&_nqLiveQuote.regularMarketPrice)?_nqLiveQuote.regularMarketPrice:bars[bars.length-1].c;
   var tagPrice=livePx;
   var tagY;
@@ -719,7 +736,6 @@ function nqDraw(data){
   }
   var ptag=document.getElementById('nq-price-tag');
   if(ptag){ptag.style.display='block';ptag.textContent=nqFmt(tagPrice);ptag.style.top=(tagY-9)+'px';ptag.style.background=isUp?GREEN:RED;}
-  // Header stats — price always from live quote
   var last=bars[bars.length-1],first=bars[0];
   var displayPrice=(_nqLiveQuote&&_nqLiveQuote.regularMarketPrice)?_nqLiveQuote.regularMarketPrice:last.c;
   var displayChg=(_nqLiveQuote&&_nqLiveQuote.regularMarketChange!=null)?_nqLiveQuote.regularMarketChange:(last.c-first.c);
