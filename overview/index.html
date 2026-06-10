@@ -1334,8 +1334,12 @@ function renderIntel(data){
 // ── MAIN RENDER ───────────────────────────────────────────────────
 function renderFromData(data){
   const days=_activeDays;
-  const cutoff=new Date();cutoff.setDate(cutoff.getDate()-days);cutoff.setHours(0,0,0,0);
-  const filtered=data.filter(t=>t.executed_at&&new Date(t.executed_at)>=cutoff);
+  // Use date-string comparison to avoid timezone issues.
+  // Supabase stores UTC; we compare YYYY-MM-DD strings so no tz offset can exclude valid trades.
+  const cutoffDate = new Date();
+  cutoffDate.setDate(cutoffDate.getDate() - (days - 1));
+  const cutoffStr = cutoffDate.toISOString().slice(0, 10); // e.g. "2025-05-28"
+  const filtered = data.filter(t => t.executed_at && t.executed_at.slice(0, 10) >= cutoffStr);
 
   const totalPnl=filtered.reduce((a,t)=>a+parseFloat(t.pnl||0),0);
   const pe=document.getElementById('ov-pnl');
