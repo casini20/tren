@@ -221,36 +221,6 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .mobile-toggle{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;flex-shrink:0;}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:19;}
 
-/* ── NQ CHART ── */
-.nq-chart-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:13px;overflow:hidden;margin-bottom:1.4rem;}
-
-
-/* ── CHART ANNOTATIONS ── */
-.chart-annotation-line{position:absolute;left:0;right:0;height:1px;pointer-events:none;z-index:10;}
-.chart-annotation-line.support{border-top:1px dashed rgba(16,185,129,0.6);}
-.chart-annotation-line.resist{border-top:1px dashed rgba(239,68,68,0.6);}
-.chart-annotation-line.entry{border-top:1px dashed rgba(59,130,246,0.7);}
-.chart-annotation-line.stop{border-top:1px dashed rgba(239,68,68,0.5);}
-.chart-annotation-line.target{border-top:1px dashed rgba(16,185,129,0.5);}
-.chart-annotation-line.ema{border-top:1px dashed rgba(245,158,11,0.5);}
-.chart-annotation-tag{position:absolute;right:4px;transform:translateY(-50%);font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;pointer-events:none;white-space:nowrap;}
-.chart-annotation-tag.support{background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.25);}
-.chart-annotation-tag.resist{background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid rgba(239,68,68,0.2);}
-.chart-annotation-tag.entry{background:rgba(59,130,246,0.12);color:#60a5fa;border:1px solid rgba(59,130,246,0.2);}
-.chart-annotation-tag.stop{background:rgba(239,68,68,0.1);color:#f87171;border:1px solid rgba(239,68,68,0.18);}
-.chart-annotation-tag.target{background:rgba(16,185,129,0.1);color:#34d399;border:1px solid rgba(16,185,129,0.18);}
-.chart-annotation-tag.ema{background:rgba(245,158,11,0.1);color:#fbbf24;border:1px solid rgba(245,158,11,0.18);}
-.chart-annotation-zone{position:absolute;left:0;right:0;pointer-events:none;z-index:9;opacity:0.12;}
-.chart-annotation-zone.support{background:rgba(16,185,129,0.25);}
-.chart-annotation-zone.resist{background:rgba(239,68,68,0.2);}
-
-/* Show on chart button */
-.show-chart-btn{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;color:#a78bfa;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.18);cursor:pointer;transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif;margin-top:8px;}
-.show-chart-btn:hover{background:rgba(139,92,246,0.15);border-color:rgba(139,92,246,0.3);}
-.show-chart-btn.on{background:rgba(139,92,246,0.2);border-color:rgba(139,92,246,0.4);color:#c4b5fd;}
-.show-chart-btn .dot{width:5px;height:5px;border-radius:50%;background:#a78bfa;opacity:0;transition:opacity .15s;}
-.show-chart-btn.on .dot{opacity:1;}
-
 @media(max-width:850px){
   .mobile-toggle{display:flex;}
   .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:20;box-shadow:4px 0 30px rgba(0,0,0,.5);}
@@ -270,7 +240,32 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
   .context-row{grid-template-columns:1fr 1fr;}
 }
 
-@keyframes nqspin{to{transform:rotate(360deg)}}
+/* ── NQ CHART ── */
+.nq-chart-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:13px;overflow:hidden;margin-bottom:1.4rem;}
+/* ── CHART ANNOTATIONS ── */
+.chart-annotation-line{position:absolute;left:0;right:0;height:1px;pointer-events:none;z-index:10;}
+.chart-annotation-line.support{border-top:1px dashed rgba(16,185,129,0.6);}
+.chart-annotation-line.resist{border-top:1px dashed rgba(239,68,68,0.6);}
+.chart-annotation-line.entry{border-top:1px dashed rgba(59,130,246,0.7);}
+.chart-annotation-line.stop{border-top:1px dashed rgba(239,68,68,0.5);}
+.chart-annotation-line.target{border-top:1px dashed rgba(16,185,129,0.5);}
+.chart-annotation-line.ema{border-top:1px dashed rgba(245,158,11,0.5);}
+.chart-annotation-tag{position:absolute;right:4px;transform:translateY(-50%);font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;pointer-events:none;white-space:nowrap;}
+.chart-annotation-tag.support{background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.25);}
+.chart-annotation-tag.resist{background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid rgba(239,68,68,0.2);}
+.chart-annotation-tag.entry{background:rgba(59,130,246,0.12);color:#60a5fa;border:1px solid rgba(59,130,246,0.2);}
+.chart-annotation-tag.stop{background:rgba(239,68,68,0.1);color:#f87171;border:1px solid rgba(239,68,68,0.18);}
+.chart-annotation-tag.target{background:rgba(16,185,129,0.1);color:#34d399;border:1px solid rgba(16,185,129,0.18);}
+.chart-annotation-tag.ema{background:rgba(245,158,11,0.1);color:#fbbf24;border:1px solid rgba(245,158,11,0.18);}
+.chart-annotation-zone{position:absolute;left:0;right:0;pointer-events:none;z-index:9;opacity:0.12;}
+.chart-annotation-zone.support{background:rgba(16,185,129,0.25);}
+.chart-annotation-zone.resist{background:rgba(239,68,68,0.2);}
+.show-chart-btn{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;color:#a78bfa;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.18);cursor:pointer;transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif;margin-top:8px;}
+.show-chart-btn:hover{background:rgba(139,92,246,0.15);border-color:rgba(139,92,246,0.3);}
+.show-chart-btn.on{background:rgba(139,92,246,0.2);border-color:rgba(139,92,246,0.4);color:#c4b5fd;}
+.show-chart-btn .dot{width:5px;height:5px;border-radius:50%;background:#a78bfa;opacity:0;transition:opacity .15s;}
+.show-chart-btn.on .dot{opacity:1;}
+
 </style>
 <base target="_blank">
 </head>
@@ -417,18 +412,16 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
           <span style="font-size:10px;color:var(--sub);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:5px;padding:2px 7px;">NQ=F · E-mini</span>
         </div>
         <div style="display:flex;align-items:center;gap:6px;">
-          <!-- Chart type -->
+          <button id="nq-clear-ann" onclick="clearAnnotations()" title="Clear AI annotations" style="display:none;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;color:var(--sub2);background:rgba(255,255,255,.04);border:1px solid var(--border);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;">Clear AI</button>
           <div class="tf-seg" id="nq-type-seg">
             <button class="tf-btn active" onclick="setNQType(this,'line')" title="Line">〜</button>
             <button class="tf-btn" onclick="setNQType(this,'candle')" title="Candles">▮</button>
           </div>
-          <!-- Indicators -->
           <div class="tf-seg" id="nq-ind-seg">
             <button class="tf-btn active" onclick="toggleNQInd(this,'ema9')" title="EMA 9">E9</button>
             <button class="tf-btn active" onclick="toggleNQInd(this,'ema21')" title="EMA 21">E21</button>
             <button class="tf-btn active" onclick="toggleNQInd(this,'vol')" title="Volume">Vol</button>
           </div>
-          <!-- Timeframe -->
           <div class="tf-seg" id="nq-tf-seg">
             <button class="tf-btn" onclick="setNQInterval(this,'5m','1d')">5M</button>
             <button class="tf-btn" onclick="setNQInterval(this,'15m','5d')">15M</button>
@@ -441,7 +434,6 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
       </div>
 
       <div class="nq-chart-wrap" style="position:relative;padding:.9rem 1.2rem .7rem;">
-        <!-- ── PRICE HEADER ── -->
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
           <div>
             <span id="nq-price" style="font-size:24px;font-weight:800;letter-spacing:-.5px;">—</span>
@@ -456,28 +448,568 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
           </div>
           <div style="margin-left:auto;font-size:10px;color:var(--sub);" id="nq-updated"></div>
         </div>
-
-        <!-- ── CANVAS AREA ── -->
         <div style="position:relative;" id="nq-canvas-wrap">
-          <!-- annotation overlays -->
           <div id="nq-annotations" style="position:absolute;inset:0;pointer-events:none;z-index:12;"></div>
           <canvas id="nq-canvas" style="width:100%;display:block;cursor:crosshair;"></canvas>
-          <!-- hover tooltip -->
           <div id="nq-tooltip" style="display:none;position:absolute;pointer-events:none;background:rgba(8,14,26,.95);border:1px solid var(--border2);border-radius:10px;padding:8px 13px;font-size:11px;font-weight:600;white-space:nowrap;z-index:20;line-height:1.9;backdrop-filter:blur(8px);"></div>
-          <!-- price tag on y-axis -->
           <div id="nq-price-tag" style="display:none;position:absolute;right:0;pointer-events:none;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap;z-index:15;"></div>
-          <!-- crosshairs -->
           <div id="nq-cv" style="display:none;position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.12);pointer-events:none;border-left:1px dashed rgba(255,255,255,.1);"></div>
           <div id="nq-ch" style="display:none;position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.12);pointer-events:none;border-top:1px dashed rgba(255,255,255,.1);"></div>
         </div>
-
-        <!-- loading overlay -->
         <div id="nq-overlay" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;border-radius:13px;background:var(--bg3);z-index:30;">
           <div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:nqspin .7s linear infinite;"></div>
           <div style="font-size:12px;color:var(--sub);">Loading NQ futures…</div>
         </div>
       </div>
 
+<!-- ANALYSIS CONTEXT CARDS -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:-.5rem;">
+        <div style="font-size:13px;font-weight:700;">Analysis Context</div>
+        <div style="font-size:11px;color:var(--sub);">Select what to include</div>
+      </div>
+      <div class="context-row" id="ctx-row">
+        <div class="ctx-card selected" onclick="toggleCtx(this,'price')">
+          <div class="ctx-card-label">Price Action</div>
+          <div class="ctx-card-val">OHLC + Trend</div>
+          <div class="ctx-card-sub">Open, High, Low, Close + direction</div>
+          <div class="ctx-check">✓</div>
+        </div>
+        <div class="ctx-card selected" onclick="toggleCtx(this,'levels')">
+          <div class="ctx-card-label">Key Levels</div>
+          <div class="ctx-card-val">Support &amp; Resistance</div>
+          <div class="ctx-card-sub">Auto-detected S/R from price history</div>
+          <div class="ctx-check">✓</div>
+        </div>
+        <div class="ctx-card selected" onclick="toggleCtx(this,'indicators')">
+          <div class="ctx-card-label">Indicators</div>
+          <div class="ctx-card-val">EMA 9, EMA 21, Vol</div>
+          <div class="ctx-card-sub">Moving averages and volume profile</div>
+          <div class="ctx-check">✓</div>
+        </div>
+      </div>
+
+      <!-- CHAT WINDOW -->
+      <div class="chat-outer" id="chat-outer">
+        <div class="chat-header">
+          <div class="chat-header-left">
+            <div style="font-size:16px;">✦</div>
+            <div>
+              <div class="chat-header-title">Tren AI · NQ Analysis</div>
+              <div class="chat-header-sub" id="chat-status">Ready to analyze</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="chat-live-badge" id="live-badge" style="display:none;">
+              <div class="chat-live-dot"></div>Thinking…
+            </div>
+            <button class="ai-btn outline" style="padding:5px 11px;font-size:11.5px;" onclick="clearChat()">Clear</button>
+          </div>
+        </div>
+
+        <div class="chat-body" id="chat-body">
+          <!-- Welcome message -->
+          <div class="msg ai" id="welcome-msg">
+            <div class="msg-avatar ai">✦</div>
+            <div>
+              <div class="msg-bubble">
+                <div>Hey! I'm your AI market analyst for NQ Futures. I can help you with:</div>
+                <div class="signal-chips" style="margin-top:.6rem;">
+                  <span class="schip neut">📊 Price structure</span>
+                  <span class="schip bull">🟢 Support levels</span>
+                  <span class="schip bear">🔴 Resistance zones</span>
+                  <span class="schip neut">📐 Trade setups</span>
+                  <span class="schip neut">📉 Bias &amp; trend</span>
+                </div>
+                <div style="margin-top:.6rem;color:var(--sub2);">Hit <strong style="color:#a78bfa;">Analyze Now</strong> for a full breakdown, or ask me anything below.</div>
+              </div>
+              <div class="msg-time">Now</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick prompt chips -->
+        <div class="quick-prompts" id="quick-prompts">
+          <button class="qp-btn" onclick="sendQuick('What is the current NQ trend and bias?')">Trend &amp; bias</button>
+          <button class="qp-btn" onclick="sendQuick('Give me the key support and resistance levels on NQ right now.')">Key S/R levels</button>
+          <button class="qp-btn" onclick="sendQuick('What is a high-probability long setup on NQ today?')">Long setup</button>
+          <button class="qp-btn" onclick="sendQuick('What is a high-probability short setup on NQ today?')">Short setup</button>
+          <button class="qp-btn" onclick="sendQuick('What does the NQ volume profile tell us about current price?')">Volume profile</button>
+          <button class="qp-btn" onclick="sendQuick('Where are the EMA 9 and EMA 21 relative to price, and what does that signal?')">EMA signals</button>
+        </div>
+
+        <!-- Input -->
+        <div class="chat-input-wrap">
+          <textarea class="chat-input" id="chat-input" placeholder="Ask anything about NQ…" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+          <button class="send-btn" id="send-btn" onclick="sendMessage()">↑</button>
+        </div>
+      </div>
+
+    </div><!-- end .page -->
+  </div><!-- end .main-wrap -->
+</div><!-- end .shell -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tren – AI Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
+:root{
+  --bg:#04080f;--bg2:#080e1a;--bg3:#0c1525;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --accent:#2563eb;--al:#3b82f6;--green:#10b981;--red:#ef4444;--gold:#f59e0b;
+  --text:#f0f4ff;--sub:rgba(240,244,255,0.45);--sub2:rgba(240,244,255,0.72);
+  --sw:220px;
+}
+
+/* ── LAYOUT ── */
+.shell{position:fixed;inset:0;display:flex;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--bg);}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sw);min-width:var(--sw);height:100vh;border-right:1px solid var(--border);background:linear-gradient(180deg,#080e1a,#04080f);display:flex;flex-direction:column;padding:1.6rem .9rem 0;position:relative;z-index:20;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;}
+.sidebar::-webkit-scrollbar{display:none;}
+.s-logo{font-size:20px;font-weight:800;padding:0 .6rem;margin-bottom:2rem;display:flex;align-items:center;gap:6px;}
+.s-logo span{color:var(--al);}
+.s-logo::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);}
+.s-nav{flex:1;display:flex;flex-direction:column;gap:2px;}
+.s-item{display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:500;color:var(--sub2);cursor:pointer;transition:all .2s;margin-bottom:1px;border:1px solid transparent;position:relative;text-decoration:none;}
+.s-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%) scaleY(0);width:3px;height:20px;background:var(--accent);border-radius:0 3px 3px 0;transition:transform .2s;}
+.s-item:hover{background:rgba(255,255,255,.04);color:var(--text);}
+.s-item:hover::before{transform:translateY(-50%) scaleY(.6);}
+.s-item.on{background:rgba(37,99,235,.1);border-color:rgba(37,99,235,.15);color:var(--al);}
+.s-item.on::before{transform:translateY(-50%) scaleY(1);box-shadow:0 0 8px var(--accent);}
+.s-item.ai-on{background:linear-gradient(90deg,rgba(139,92,246,.12),rgba(59,130,246,.08));border-color:rgba(139,92,246,.2);color:#a78bfa;}
+.s-item.ai-on::before{transform:translateY(-50%) scaleY(1);background:#8b5cf6;box-shadow:0 0 8px #8b5cf6;}
+.s-item.gold{color:var(--gold);}
+.s-item.gold:hover{background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.35);}
+.s-item.gold.on{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.25);}
+.s-item.gold.on::before{background:var(--gold);}
+.s-ic{font-size:16px;width:22px;text-align:center;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;padding:3px 8px;border-radius:20px;font-weight:700;min-width:22px;text-align:center;}
+.s-badge.gd{background:var(--gold);color:#000;}
+.s-badge.ai{background:linear-gradient(90deg,#8b5cf6,#6366f1);color:#fff;}
+.s-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:1.2rem .5rem .8rem;}
+.s-bot{position:sticky;bottom:0;width:100%;background:rgba(4,8,15,.95);backdrop-filter:blur(20px);padding:14px .6rem 16px;border-top:1px solid var(--border);z-index:20;margin-top:auto;flex-shrink:0;}
+.trial-card{background:linear-gradient(135deg,rgba(37,99,235,.15),rgba(59,130,246,.06));border:1px solid rgba(37,99,235,.2);border-radius:12px;padding:14px;margin-bottom:12px;}
+.trial-card h4{font-size:12px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.trial-card p{font-size:11px;color:var(--sub);margin-bottom:12px;line-height:1.5;}
+.up-mini{width:100%;padding:9px;border:none;border-radius:9px;background:linear-gradient(90deg,var(--accent),var(--al));color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:opacity .2s;}
+.up-mini:hover{opacity:.9;}
+.u-row{display:flex;align-items:center;gap:10px;padding:8px;border-radius:10px;cursor:pointer;transition:background .2s;text-decoration:none;}
+.u-row:hover{background:rgba(255,255,255,.04);}
+.u-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;color:#fff;}
+.u-info{min-width:0;flex:1;display:flex;flex-direction:column;gap:1px;}
+.u-name{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.u-email{font-size:10px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sub-status-badge{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:2px;letter-spacing:.3px;}
+.sub-status-badge.trial{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:var(--gold);}
+.sub-status-badge.premium{background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.3);color:var(--al);}
+.s-logout{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;font-size:12px;font-weight:500;color:rgba(239,68,68,.7);cursor:pointer;transition:all .2s;margin-top:6px;border:1px solid transparent;}
+.s-logout:hover{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.18);color:var(--red);}
+.live-dot-nav{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);animation:flicker 3.5s infinite;box-shadow:0 0 6px var(--green);}
+@keyframes flicker{0%,100%{opacity:1;transform:scale(1);}15%{opacity:.88;transform:scale(.95);}30%{opacity:1;transform:scale(1.03);}45%{opacity:.92;transform:scale(.97);}60%{opacity:1;transform:scale(1.06);}75%{opacity:.9;transform:scale(.94);}90%{opacity:1;transform:scale(1.02);}}
+
+/* ── MAIN AREA ── */
+.main-wrap{flex:1;display:flex;flex-direction:column;min-width:0;height:100vh;overflow:hidden;}
+
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.4rem;border-bottom:1px solid var(--border);background:rgba(4,8,15,.88);backdrop-filter:blur(20px);flex-shrink:0;position:relative;z-index:10;}
+.tb-title{font-size:17px;font-weight:700;}
+.tb-right{display:flex;align-items:center;gap:11px;}
+.t-pill{display:flex;align-items:center;gap:5px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.25);color:#a78bfa;font-size:11.5px;font-weight:600;padding:5px 13px;border-radius:20px;}
+.nb{width:33px;height:33px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative;transition:border-color .2s;}
+.nb:hover{border-color:var(--border2);}
+.prof-wrap{position:relative;}
+.prof-av{width:33px;height:33px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;cursor:pointer;border:2px solid transparent;transition:border-color .2s;color:#fff;}
+.prof-av:hover{border-color:rgba(255,255,255,.2);}
+.prof-av.open{border-color:var(--al);}
+.prof-menu{position:absolute;top:calc(100% + 10px);right:0;background:linear-gradient(145deg,#0d1628,#080e1a);border:1px solid rgba(255,255,255,.12);border-radius:13px;padding:6px;min-width:190px;z-index:200;box-shadow:0 12px 40px rgba(0,0,0,.55);display:none;}
+.prof-menu.open{display:block;animation:pf .2s ease;}
+@keyframes pf{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.prof-menu-header{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:5px;}
+.prof-menu-name{font-size:13px;font-weight:700;color:var(--text);}
+.prof-menu-email{font-size:11px;color:var(--sub);margin-top:2px;}
+.prof-menu-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;font-size:13px;font-weight:500;color:var(--sub2);cursor:pointer;transition:all .15s;}
+.prof-menu-item:hover{background:rgba(255,255,255,.06);color:var(--text);}
+.prof-menu-item.danger{color:rgba(239,68,68,.75);}
+.prof-menu-item.danger:hover{background:rgba(239,68,68,.09);color:var(--red);}
+
+/* ── PAGE ── */
+.page{flex:1;overflow-y:auto;padding:1.8rem 2.4rem;scrollbar-width:none;display:flex;flex-direction:column;gap:1.4rem;}
+.page::-webkit-scrollbar{display:none;}
+
+/* ── AI PAGE SPECIFIC ── */
+
+/* Hero strip */
+.ai-hero{background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(37,99,235,.07));border:1px solid rgba(139,92,246,.2);border-radius:14px;padding:1.2rem 1.6rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
+.ai-hero-left{display:flex;align-items:center;gap:14px;}
+.ai-hero-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#8b5cf6,#6366f1);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 20px rgba(139,92,246,.35);}
+.ai-hero-text h2{font-size:15px;font-weight:700;margin-bottom:2px;}
+.ai-hero-text p{font-size:12px;color:var(--sub);line-height:1.5;}
+.ai-hero-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.ai-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;border:none;transition:all .2s;}
+.ai-btn.primary{background:linear-gradient(90deg,#8b5cf6,#6366f1);color:#fff;box-shadow:0 4px 14px rgba(139,92,246,.3);}
+.ai-btn.primary:hover{box-shadow:0 4px 22px rgba(139,92,246,.5);transform:translateY(-1px);}
+.ai-btn.primary:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none;}
+.ai-btn.outline{background:rgba(255,255,255,.04);color:var(--sub2);border:1px solid var(--border2);}
+.ai-btn.outline:hover{background:rgba(255,255,255,.07);color:var(--text);}
+
+/* Context controls */
+.context-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+.ctx-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
+.ctx-card:hover{border-color:var(--border2);}
+.ctx-card.selected{border-color:rgba(139,92,246,.4);background:rgba(139,92,246,.07);}
+.ctx-card.selected::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#8b5cf6,#6366f1);}
+.ctx-card-label{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;}
+.ctx-card-val{font-size:13px;font-weight:700;color:var(--text);}
+.ctx-card-sub{font-size:11px;color:var(--sub);margin-top:3px;}
+.ctx-check{position:absolute;top:10px;right:10px;width:18px;height:18px;border-radius:5px;background:linear-gradient(135deg,#8b5cf6,#6366f1);display:none;align-items:center;justify-content:center;font-size:10px;}
+.ctx-card.selected .ctx-check{display:flex;}
+
+/* Timeframe + mode selectors */
+.selectors-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.sel-label{font-size:11.5px;color:var(--sub);font-weight:500;}
+.tf-seg{display:flex;align-items:center;gap:1px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:2px;}
+.tf-btn{padding:4px 10px;border-radius:6px;font-size:11.5px;font-weight:600;color:var(--sub);cursor:pointer;transition:all .15s;border:none;font-family:'Plus Jakarta Sans',sans-serif;background:none;letter-spacing:.2px;}
+.tf-btn:hover{color:var(--sub2);}
+.tf-btn.active{background:rgba(255,255,255,.08);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.3);}
+.mode-seg{display:flex;align-items:center;gap:1px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:2px;}
+.mode-btn{padding:4px 12px;border-radius:6px;font-size:11.5px;font-weight:600;color:var(--sub);cursor:pointer;transition:all .15s;border:none;font-family:'Plus Jakarta Sans',sans-serif;background:none;}
+.mode-btn:hover{color:var(--sub2);}
+.mode-btn.active{background:rgba(139,92,246,.18);color:#c4b5fd;}
+
+/* Chat area */
+.chat-outer{background:var(--bg3);border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column;min-height:0;flex:1;overflow:hidden;position:relative;}
+.chat-header{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.2rem;border-bottom:1px solid var(--border);flex-shrink:0;}
+.chat-header-left{display:flex;align-items:center;gap:10px;}
+.chat-header-title{font-size:13.5px;font-weight:700;}
+.chat-header-sub{font-size:11px;color:var(--sub);}
+.chat-live-badge{display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:#a78bfa;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.2);border-radius:6px;padding:3px 9px;}
+.chat-live-dot{width:6px;height:6px;border-radius:50%;background:#8b5cf6;animation:flicker 2s infinite;}
+.chat-body{flex:1;overflow-y:auto;padding:1.2rem;display:flex;flex-direction:column;gap:.9rem;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.08) transparent;}
+.chat-body::-webkit-scrollbar{width:4px;}
+.chat-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px;}
+
+/* Messages */
+.msg{display:flex;gap:10px;max-width:100%;}
+.msg.user{flex-direction:row-reverse;}
+.msg-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px;}
+.msg-avatar.ai{background:linear-gradient(135deg,#8b5cf6,#6366f1);}
+.msg-avatar.user{background:linear-gradient(135deg,var(--accent),var(--al));}
+.msg-bubble{max-width:88%;padding:.9rem 1.1rem;border-radius:13px;font-size:13px;line-height:1.7;position:relative;}
+.msg.ai .msg-bubble{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px 13px 13px 13px;color:var(--text);}
+.msg.user .msg-bubble{background:linear-gradient(135deg,rgba(37,99,235,.18),rgba(59,130,246,.12));border:1px solid rgba(59,130,246,.2);border-radius:13px 4px 13px 13px;color:var(--text);}
+.msg-time{font-size:10px;color:var(--sub);margin-top:5px;}
+.msg.user .msg-time{text-align:right;}
+
+/* AI message rich content */
+.ai-section{margin:.5rem 0;}
+.ai-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#a78bfa;margin-bottom:.5rem;display:flex;align-items:center;gap:6px;}
+.ai-section-title::before{content:'';width:3px;height:12px;background:linear-gradient(#8b5cf6,#6366f1);border-radius:2px;}
+.signal-chips{display:flex;gap:7px;flex-wrap:wrap;margin:.4rem 0;}
+.schip{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;font-size:12px;font-weight:600;}
+.schip.bull{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.22);color:var(--green);}
+.schip.bear{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:var(--red);}
+.schip.neut{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);color:var(--gold);}
+.level-row{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-radius:8px;margin:.3rem 0;font-size:12.5px;}
+.level-row.support{background:rgba(16,185,129,.06);border-left:3px solid var(--green);}
+.level-row.resist{background:rgba(239,68,68,.05);border-left:3px solid var(--red);}
+.level-row .lv-label{color:var(--sub);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
+.level-row .lv-price{font-weight:700;font-family:monospace;font-size:13.5px;}
+.level-row .lv-note{font-size:11px;color:var(--sub);}
+.bias-bar{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:9px;padding:.7rem 1rem;margin:.4rem 0;display:flex;align-items:center;gap:12px;}
+.bias-label{font-size:11px;color:var(--sub);font-weight:600;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;}
+.bias-track{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
+.bias-fill{height:100%;border-radius:3px;transition:width .6s ease;}
+.bias-score{font-size:13px;font-weight:700;min-width:40px;text-align:right;}
+
+/* Thinking / streaming */
+.thinking{display:flex;align-items:center;gap:8px;padding:.7rem 1rem;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.14);border-radius:10px;font-size:12.5px;color:#a78bfa;font-weight:500;}
+.think-dots{display:flex;gap:4px;}
+.think-dot{width:5px;height:5px;border-radius:50%;background:#8b5cf6;animation:tdot 1.4s infinite;}
+.think-dot:nth-child(2){animation-delay:.2s;}
+.think-dot:nth-child(3){animation-delay:.4s;}
+@keyframes tdot{0%,80%,100%{transform:scale(.6);opacity:.4;}40%{transform:scale(1);opacity:1;}}
+
+/* Streaming cursor */
+.stream-cursor{display:inline-block;width:2px;height:14px;background:#a78bfa;border-radius:1px;margin-left:2px;vertical-align:middle;animation:blink .7s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* Quick prompts */
+.quick-prompts{display:flex;gap:7px;flex-wrap:wrap;padding:.7rem 1.2rem;border-top:1px solid var(--border);}
+.qp-btn{padding:6px 12px;border-radius:7px;font-size:11.5px;font-weight:600;color:var(--sub2);background:rgba(255,255,255,.04);border:1px solid var(--border);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .18s;white-space:nowrap;}
+.qp-btn:hover{background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.25);color:#c4b5fd;}
+
+/* Input area */
+.chat-input-wrap{padding:.9rem 1.2rem;border-top:1px solid var(--border);display:flex;gap:9px;align-items:flex-end;background:rgba(4,8,15,.5);backdrop-filter:blur(12px);}
+.chat-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:.7rem 1rem;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);resize:none;min-height:42px;max-height:120px;line-height:1.5;transition:border-color .2s;outline:none;}
+.chat-input:focus{border-color:rgba(139,92,246,.4);}
+.chat-input::placeholder{color:var(--sub);}
+.send-btn{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#6366f1);border:none;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;box-shadow:0 2px 12px rgba(139,92,246,.3);}
+.send-btn:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(139,92,246,.5);}
+.send-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* Market snapshot bar */
+.snapshot-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+.snap-card{background:var(--bg3);border:1px solid var(--border);border-radius:11px;padding:.8rem 1rem;transition:border-color .18s;}
+.snap-card:hover{border-color:var(--border2);}
+.snap-label{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;}
+.snap-val{font-size:15px;font-weight:700;}
+.snap-chg{font-size:11px;margin-top:2px;}
+.snap-chg.up{color:var(--green);}
+.snap-chg.dn{color:var(--red);}
+
+/* Skel */
+.skel{background:rgba(255,255,255,.04);border-radius:8px;animation:sk 1.4s ease infinite;}
+@keyframes sk{0%,100%{opacity:.4}50%{opacity:.9}}
+
+/* Mobile */
+.mobile-toggle{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;flex-shrink:0;}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:19;}
+
+@media(max-width:850px){
+  .mobile-toggle{display:flex;}
+  .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:20;box-shadow:4px 0 30px rgba(0,0,0,.5);}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-overlay.open{display:block;}
+  .main-wrap{width:100%;}
+  .topbar{padding:1rem 1.2rem;}
+  .page{padding:1.2rem 1.4rem;}
+  .t-pill{display:none;}
+  .snapshot-bar{grid-template-columns:repeat(2,1fr);}
+  .context-row{grid-template-columns:1fr;}
+  .selectors-row{gap:6px;}
+}
+@media(max-width:600px){
+  .snapshot-bar{grid-template-columns:1fr 1fr;}
+  .page{padding:1rem;}
+  .context-row{grid-template-columns:1fr 1fr;}
+}
+
+/* ── NQ CHART ── */
+.nq-chart-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:13px;overflow:hidden;margin-bottom:1.4rem;}
+/* ── CHART ANNOTATIONS ── */
+.chart-annotation-line{position:absolute;left:0;right:0;height:1px;pointer-events:none;z-index:10;}
+.chart-annotation-line.support{border-top:1px dashed rgba(16,185,129,0.6);}
+.chart-annotation-line.resist{border-top:1px dashed rgba(239,68,68,0.6);}
+.chart-annotation-line.entry{border-top:1px dashed rgba(59,130,246,0.7);}
+.chart-annotation-line.stop{border-top:1px dashed rgba(239,68,68,0.5);}
+.chart-annotation-line.target{border-top:1px dashed rgba(16,185,129,0.5);}
+.chart-annotation-line.ema{border-top:1px dashed rgba(245,158,11,0.5);}
+.chart-annotation-tag{position:absolute;right:4px;transform:translateY(-50%);font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;pointer-events:none;white-space:nowrap;}
+.chart-annotation-tag.support{background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.25);}
+.chart-annotation-tag.resist{background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid rgba(239,68,68,0.2);}
+.chart-annotation-tag.entry{background:rgba(59,130,246,0.12);color:#60a5fa;border:1px solid rgba(59,130,246,0.2);}
+.chart-annotation-tag.stop{background:rgba(239,68,68,0.1);color:#f87171;border:1px solid rgba(239,68,68,0.18);}
+.chart-annotation-tag.target{background:rgba(16,185,129,0.1);color:#34d399;border:1px solid rgba(16,185,129,0.18);}
+.chart-annotation-tag.ema{background:rgba(245,158,11,0.1);color:#fbbf24;border:1px solid rgba(245,158,11,0.18);}
+.chart-annotation-zone{position:absolute;left:0;right:0;pointer-events:none;z-index:9;opacity:0.12;}
+.chart-annotation-zone.support{background:rgba(16,185,129,0.25);}
+.chart-annotation-zone.resist{background:rgba(239,68,68,0.2);}
+.show-chart-btn{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;color:#a78bfa;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.18);cursor:pointer;transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif;margin-top:8px;}
+.show-chart-btn:hover{background:rgba(139,92,246,0.15);border-color:rgba(139,92,246,0.3);}
+.show-chart-btn.on{background:rgba(139,92,246,0.2);border-color:rgba(139,92,246,0.4);color:#c4b5fd;}
+.show-chart-btn .dot{width:5px;height:5px;border-radius:50%;background:#a78bfa;opacity:0;transition:opacity .15s;}
+.show-chart-btn.on .dot{opacity:1;}
+
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <a class="s-logo" href="https://trenai.vercel.app" style="text-decoration:none;color:inherit;">tren<span>.</span></a>
+    <div class="s-nav">
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/live-signals')">
+        <span class="s-ic"><span class="live-dot-nav"></span></span>
+        <span>Live Signals</span>
+      </a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/overview')">
+        <span class="s-ic">📊</span><span>Overview</span>
+      </a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/signals')">
+        <span class="s-ic">⚡</span><span>Recent Trades</span>
+      </a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/journal')">
+        <span class="s-ic">📓</span><span>Journal</span>
+      </a>
+      <div class="s-divider"></div>
+      <a class="s-item ai-on" onclick="navTo('https://trenai.vercel.app/ai-analysis')">
+        <span class="s-ic">✦</span><span>AI Analysis</span>
+        <span class="s-badge ai">NEW</span>
+      </a>
+      <a class="s-item gold" onclick="navTo('https://trenai.vercel.app/upgrade')">
+        <span class="s-ic">👑</span><span>Upgrade</span>
+        <span class="s-badge gd">PRO</span>
+      </a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/trenbot')">
+        <span class="s-ic">🤖</span><span>TrenBot</span>
+      </a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/autosignals')">
+        <span class="s-ic">⚡</span><span>AutoSignals</span>
+      </a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/indicator')">
+        <span class="s-ic">📈</span><span>Indicator</span>
+      </a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/settings')">
+        <span class="s-ic">⚙</span><span>Settings</span>
+      </a>
+    </div>
+    <div class="s-bot">
+      <div class="trial-card" id="trial-card">
+        <h4>🔥 7 Days Left</h4>
+        <p>Your free trial ends soon. Upgrade to keep full access.</p>
+        <button class="up-mini" onclick="window.open('https://trenai.vercel.app/checkout-trenbot','_blank')">Upgrade Now</button>
+      </div>
+      <a class="u-row" onclick="navTo('https://trenai.vercel.app/settings')">
+        <div class="u-av" id="s-av">T</div>
+        <div class="u-info">
+          <div class="u-name" id="s-nm">Trader</div>
+          <div class="u-email" id="s-email-display">—</div>
+          <span class="sub-status-badge trial" id="sidebar-plan-badge">⏱ Trial</span>
+        </div>
+      </a>
+      <div class="s-logout" onclick="doLogout()">
+        <span style="font-size:14px">→</span> Sign out
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main-wrap">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
+        <div class="tb-title">AI Analysis</div>
+      </div>
+      <div class="tb-right">
+        <div class="t-pill">✦ AI Powered</div>
+        <div class="nb">🔔</div>
+        <div class="prof-wrap">
+          <div class="prof-av" id="prof-av-btn" onclick="toggleProfileMenu()">T</div>
+          <div class="prof-menu" id="prof-menu">
+            <div class="prof-menu-header">
+              <div class="prof-menu-name" id="prof-menu-name">Trader</div>
+              <div class="prof-menu-email" id="prof-menu-email">—</div>
+            </div>
+            <a class="prof-menu-item" onclick="navTo('https://trenai.vercel.app/settings')">👤 Profile settings</a>
+            <div class="prof-menu-item danger" onclick="doLogout()">→ Sign out</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE CONTENT -->
+    <div class="page" id="main-page">
+
+      <!-- HERO -->
+      <div class="ai-hero">
+        <div class="ai-hero-left">
+          <div class="ai-hero-icon">✦</div>
+          <div class="ai-hero-text">
+            <h2>NQ Futures AI Analysis</h2>
+            <p>Real-time chart analysis, key levels, bias, and trade setups — powered by Claude AI.</p>
+          </div>
+        </div>
+        <div class="ai-hero-right">
+          <div class="selectors-row">
+            <span class="sel-label">Timeframe</span>
+            <div class="tf-seg" id="ai-tf-seg">
+              <button class="tf-btn" onclick="setAITF(this,'5m')">5M</button>
+              <button class="tf-btn" onclick="setAITF(this,'15m')">15M</button>
+              <button class="tf-btn" onclick="setAITF(this,'1h')">1H</button>
+              <button class="tf-btn active" onclick="setAITF(this,'1d')">1D</button>
+              <button class="tf-btn" onclick="setAITF(this,'1w')">1W</button>
+            </div>
+          </div>
+          <div class="selectors-row">
+            <span class="sel-label">Mode</span>
+            <div class="mode-seg">
+              <button class="mode-btn active" onclick="setMode(this,'analysis')">Analysis</button>
+              <button class="mode-btn" onclick="setMode(this,'context')">Context</button>
+              <button class="mode-btn" onclick="setMode(this,'levels')">Levels</button>
+            </div>
+          </div>
+          <button class="ai-btn primary" id="analyze-btn" onclick="runFullAnalysis()">
+            <span>✦</span> Analyze Now
+          </button>
+        </div>
+      </div>
+
+      <!-- MARKET SNAPSHOT -->
+      <div class="snapshot-bar" id="snapshot-bar">
+        <div class="snap-card"><div class="snap-label">NQ Price</div><div class="snap-val skel" style="width:80px;height:20px;"></div><div class="snap-chg skel" style="width:60px;height:12px;margin-top:4px;"></div></div>
+        <div class="snap-card"><div class="snap-label">Daily Change</div><div class="snap-val skel" style="width:70px;height:20px;"></div><div class="snap-chg skel" style="width:50px;height:12px;margin-top:4px;"></div></div>
+        <div class="snap-card"><div class="snap-label">Day High</div><div class="snap-val skel" style="width:80px;height:20px;"></div><div class="snap-chg skel" style="width:55px;height:12px;margin-top:4px;"></div></div>
+        <div class="snap-card"><div class="snap-label">Day Low</div><div class="snap-val skel" style="width:80px;height:20px;"></div><div class="snap-chg skel" style="width:55px;height:12px;margin-top:4px;"></div></div>
+        <div class="snap-card"><div class="snap-label">Volume</div><div class="snap-val skel" style="width:65px;height:20px;"></div><div class="snap-chg" style="color:var(--sub);font-size:11px;margin-top:2px;">E-mini NQ</div></div>
+      </div>
+
+            <!-- ── NASDAQ FUTURES CHART ── -->
+      <div class="sh" style="margin-bottom:.7rem;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="st">NASDAQ Futures</div>
+          <span style="font-size:10px;color:var(--sub);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:5px;padding:2px 7px;">NQ=F · E-mini</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <button id="nq-clear-ann" onclick="clearAnnotations()" title="Clear AI annotations" style="display:none;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;color:var(--sub2);background:rgba(255,255,255,.04);border:1px solid var(--border);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;">Clear AI</button>
+          <div class="tf-seg" id="nq-type-seg">
+            <button class="tf-btn active" onclick="setNQType(this,'line')" title="Line">〜</button>
+            <button class="tf-btn" onclick="setNQType(this,'candle')" title="Candles">▮</button>
+          </div>
+          <div class="tf-seg" id="nq-ind-seg">
+            <button class="tf-btn active" onclick="toggleNQInd(this,'ema9')" title="EMA 9">E9</button>
+            <button class="tf-btn active" onclick="toggleNQInd(this,'ema21')" title="EMA 21">E21</button>
+            <button class="tf-btn active" onclick="toggleNQInd(this,'vol')" title="Volume">Vol</button>
+          </div>
+          <div class="tf-seg" id="nq-tf-seg">
+            <button class="tf-btn" onclick="setNQInterval(this,'5m','1d')">5M</button>
+            <button class="tf-btn" onclick="setNQInterval(this,'15m','5d')">15M</button>
+            <button class="tf-btn" onclick="setNQInterval(this,'1h','1mo')">1H</button>
+            <button class="tf-btn active" onclick="setNQInterval(this,'1d','6mo')">1D</button>
+            <button class="tf-btn" onclick="setNQInterval(this,'1wk','2y')">1W</button>
+          </div>
+          <div id="nq-refresh-btn" onclick="nqFetch(_nqInterval,_nqRange,true)" title="Refresh" style="width:28px;height:28px;border-radius:7px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;flex-shrink:0;transition:border-color .2s;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">↻</div>
+        </div>
+      </div>
+
+      <div class="nq-chart-wrap" style="position:relative;padding:.9rem 1.2rem .7rem;">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+          <div>
+            <span id="nq-price" style="font-size:24px;font-weight:800;letter-spacing:-.5px;">—</span>
+            <span id="nq-change" style="font-size:13px;font-weight:600;margin-left:8px;">—</span>
+          </div>
+          <div style="display:flex;gap:16px;margin-left:4px;">
+            <div style="font-size:11px;color:var(--sub);">O: <span id="nq-stat-o" style="color:var(--sub2);font-weight:600;">—</span></div>
+            <div style="font-size:11px;color:var(--sub);">H: <span id="nq-stat-h" style="color:var(--green);font-weight:600;">—</span></div>
+            <div style="font-size:11px;color:var(--sub);">L: <span id="nq-stat-l" style="color:var(--red);font-weight:600;">—</span></div>
+            <div style="font-size:11px;color:var(--sub);">C: <span id="nq-stat-c" style="color:var(--sub2);font-weight:600;">—</span></div>
+            <div style="font-size:11px;color:var(--sub);">Vol: <span id="nq-stat-v" style="color:var(--sub2);font-weight:600;">—</span></div>
+          </div>
+          <div style="margin-left:auto;font-size:10px;color:var(--sub);" id="nq-updated"></div>
+        </div>
+        <div style="position:relative;" id="nq-canvas-wrap">
+          <div id="nq-annotations" style="position:absolute;inset:0;pointer-events:none;z-index:12;"></div>
+          <canvas id="nq-canvas" style="width:100%;display:block;cursor:crosshair;"></canvas>
+          <div id="nq-tooltip" style="display:none;position:absolute;pointer-events:none;background:rgba(8,14,26,.95);border:1px solid var(--border2);border-radius:10px;padding:8px 13px;font-size:11px;font-weight:600;white-space:nowrap;z-index:20;line-height:1.9;backdrop-filter:blur(8px);"></div>
+          <div id="nq-price-tag" style="display:none;position:absolute;right:0;pointer-events:none;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap;z-index:15;"></div>
+          <div id="nq-cv" style="display:none;position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.12);pointer-events:none;border-left:1px dashed rgba(255,255,255,.1);"></div>
+          <div id="nq-ch" style="display:none;position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.12);pointer-events:none;border-top:1px dashed rgba(255,255,255,.1);"></div>
+        </div>
+        <div id="nq-overlay" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;border-radius:13px;background:var(--bg3);z-index:30;">
+          <div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:nqspin .7s linear infinite;"></div>
+          <div style="font-size:12px;color:var(--sub);">Loading NQ futures…</div>
+        </div>
+      </div>
 
 <!-- ANALYSIS CONTEXT CARDS -->
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:-.5rem;">
@@ -896,25 +1428,6 @@ async function callGeminiAPI(messages) {
   return data.text || '';
 }
 
-
-function addShowChartButton(msgId, text) {
-  const actions = document.getElementById('actions-' + msgId);
-  if (!actions) return;
-
-  const levels = parseLevelsFromText(text);
-  if (levels.length === 0) {
-    actions.style.display = 'none';
-    return;
-  }
-
-  actions.style.display = 'block';
-  actions.innerHTML = `<button class="show-chart-btn" id="btn-chart-${msgId}" onclick="toggleAnnotations('${msgId}', this.dataset.text, this)">
-    <span class="dot"></span> Show on Chart
-  </button>`;
-  const btn = document.getElementById('btn-chart-' + msgId);
-  if (btn) btn.dataset.text = text;
-}
-
 async function streamToMessage(msgId, messages) {
   const bubble = document.getElementById('bubble-' + msgId);
   if (!bubble) return;
@@ -1048,178 +1561,13 @@ function autoResize(el) {
   el.style.height = Math.min(el.scrollHeight, 120) + 'px';
 }
 
-// ── INIT ──────────────────────────────────────────────────────────
-
-// ── AI CHART ANNOTATIONS ────────────────────────────────────────
-let _currentAnnotations = [];
-let _annotationMsgId = null;
-
-function parseLevelsFromText(text) {
-  const levels = [];
-  const lines = text.split('\n');
-
-  // Pattern matchers for different level types
-  const patterns = [
-    // Support levels
-    { regex: /support.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'support', label: 'Support' },
-    { regex: /support.*?zone.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'support', label: 'Support Zone' },
-    { regex: /s\/r.*?support.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'support', label: 'S/R' },
-
-    // Resistance levels
-    { regex: /resistance.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'resist', label: 'Resistance' },
-    { regex: /resistance.*?zone.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'resist', label: 'Resist Zone' },
-    { regex: /r\/s.*?resistance.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'resist', label: 'R/S' },
-
-    // Entry
-    { regex: /entry.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'entry', label: 'Entry' },
-    { regex: /long.*?above.*?\$?([\d,]+\.?\d*)/i, type: 'entry', label: 'Long Entry' },
-    { regex: /short.*?below.*?\$?([\d,]+\.?\d*)/i, type: 'entry', label: 'Short Entry' },
-
-    // Stop loss
-    { regex: /stop[-\s]?loss.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'stop', label: 'Stop' },
-    { regex: /sl.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'stop', label: 'SL' },
-
-    // Target / TP
-    { regex: /target.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'target', label: 'Target' },
-    { regex: /tp.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'target', label: 'TP' },
-    { regex: /take[-\s]?profit.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'target', label: 'TP' },
-
-    // EMA levels
-    { regex: /ema\s*9.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'ema', label: 'EMA 9' },
-    { regex: /ema\s*21.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'ema', label: 'EMA 21' },
-  ];
-
-  lines.forEach(line => {
-    patterns.forEach(p => {
-      const match = line.match(p.regex);
-      if (match) {
-        const price = parseFloat(match[1].replace(/,/g, ''));
-        if (!isNaN(price) && price > 1000 && price < 50000) {
-          // Check for duplicate (within 5 points)
-          const dup = levels.find(l => Math.abs(l.price - price) < 5 && l.type === p.type);
-          if (!dup) {
-            levels.push({ price, type: p.type, label: p.label, raw: line.trim() });
-          }
-        }
-      }
-    });
-  });
-
-  // Also look for zone ranges (e.g., "20,100–20,150" or "20,100 to 20,150")
-  const zoneRegex = /(\d{1,2},?\d{3})\s*[-–—to]+\s*(\d{1,2},?\d{3})/g;
-  let zoneMatch;
-  while ((zoneMatch = zoneRegex.exec(text)) !== null) {
-    const low = parseFloat(zoneMatch[1].replace(/,/g, ''));
-    const high = parseFloat(zoneMatch[2].replace(/,/g, ''));
-    if (!isNaN(low) && !isNaN(high) && low > 1000 && high < 50000) {
-      // Determine type from surrounding context (50 chars before)
-      const context = text.substring(Math.max(0, zoneMatch.index - 50), zoneMatch.index).toLowerCase();
-      const type = context.includes('resist') ? 'resist' : context.includes('support') ? 'support' : 'resist';
-      levels.push({ price: low, priceHigh: high, type, label: type === 'resist' ? 'Resist Zone' : 'Support Zone', isZone: true });
-    }
-  }
-
-  return levels;
-}
-
-function hasChartableLevels(text) {
-  return parseLevelsFromText(text).length > 0;
-}
-
-function clearAnnotations() {
-  const container = document.getElementById('nq-annotations');
-  if (container) container.innerHTML = '';
-  _currentAnnotations = [];
-  _annotationMsgId = null;
-  // Reset all toggle buttons
-  document.querySelectorAll('.show-chart-btn').forEach(btn => btn.classList.remove('on'));
-  // Hide clear button
-  const cb = document.getElementById('nq-clear-ann');
-  if (cb) cb.style.display = 'none';
-}
-
-function drawAnnotations(levels) {
-  const container = document.getElementById('nq-annotations');
-  if (!container || !levels.length) return;
-
-  const canvas = document.getElementById('nq-canvas');
-  if (!canvas || !canvas._nq) return;
-
-  // Show clear button
-  const cb = document.getElementById('nq-clear-ann');
-  if (cb) cb.style.display = '';
-
-  const { toY, PAD_T, chartH } = canvas._nq;
-  const wrapRect = canvas.parentElement.getBoundingClientRect();
-  const canvasRect = canvas.getBoundingClientRect();
-
-  // Clear previous
-  container.innerHTML = '';
-  _currentAnnotations = levels;
-
-  levels.forEach((lv, i) => {
-    if (lv.isZone && lv.priceHigh) {
-      // Draw zone (band)
-      const y1 = toY(lv.priceHigh) - PAD_T + canvas.offsetTop;
-      const y2 = toY(lv.price) - PAD_T + canvas.offsetTop;
-      const zone = document.createElement('div');
-      zone.className = `chart-annotation-zone ${lv.type}`;
-      zone.style.top = `${Math.min(y1, y2)}px`;
-      zone.style.height = `${Math.abs(y2 - y1)}px`;
-      container.appendChild(zone);
-
-      // Label
-      const tag = document.createElement('div');
-      tag.className = `chart-annotation-tag ${lv.type}`;
-      tag.textContent = `${lv.label}: ${lv.price.toLocaleString()}–${lv.priceHigh.toLocaleString()}`;
-      tag.style.top = `${Math.min(y1, y2) - 10}px`;
-      tag.style.right = '4px';
-      container.appendChild(tag);
-    } else {
-      // Draw single line
-      const y = toY(lv.price) - PAD_T + canvas.offsetTop;
-      const line = document.createElement('div');
-      line.className = `chart-annotation-line ${lv.type}`;
-      line.style.top = `${y}px`;
-      container.appendChild(line);
-
-      // Label
-      const tag = document.createElement('div');
-      tag.className = `chart-annotation-tag ${lv.type}`;
-      tag.textContent = `${lv.label}: ${lv.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
-      tag.style.top = `${y}px`;
-      tag.style.right = '4px';
-      container.appendChild(tag);
-    }
-  });
-}
-
-function toggleAnnotations(msgId, text, btn) {
-  // If clicking the same message that's already shown, clear it
-  if (_annotationMsgId === msgId) {
-    clearAnnotations();
-    return;
-  }
-
-  // Clear previous and draw new
-  clearAnnotations();
-  const levels = parseLevelsFromText(text);
-  if (levels.length) {
-    drawAnnotations(levels);
-    _annotationMsgId = msgId;
-    btn.classList.add('on');
-  }
-}
-
 
 // ── NQ FUTURES CHART ──────────────────────────────────────────────
-// Vercel proxy: api/nq-chart.js  |  symbol: NQ=F
 let _nqInterval = '1d', _nqRange = '6mo';
-let _nqChartType = 'line';   // 'line' | 'candle'
+let _nqChartType = 'line';
 let _nqIndicators = { ema9: true, ema21: true, vol: true };
 let _nqData = null, _nqAutoTimer = null;
 
-// ── helpers ──
 function nqEMA(arr, period) {
   const k = 2 / (period + 1), out = [];
   let prev = null;
@@ -1231,7 +1579,11 @@ function nqEMA(arr, period) {
   }
   return out;
 }
-function nqFmt(n) { return n == null ? '—' : n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+
+function nqFmt(n) {
+  return n == null ? '—' : n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
 function nqFmtK(n) {
   if (n == null) return '—';
   if (n >= 1e9) return (n/1e9).toFixed(1)+'B';
@@ -1240,35 +1592,38 @@ function nqFmtK(n) {
   return String(n);
 }
 
-// ── controls ──
 window.setNQInterval = function(btn, interval, range) {
   _nqInterval = interval; _nqRange = range;
   document.querySelectorAll('#nq-tf-seg .tf-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   nqFetch(interval, range, false);
 };
+
 window.setNQType = function(btn, type) {
   _nqChartType = type;
   document.querySelectorAll('#nq-type-seg .tf-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   if (_nqData) nqDraw(_nqData);
 };
+
 window.toggleNQInd = function(btn, ind) {
   _nqIndicators[ind] = !_nqIndicators[ind];
   btn.classList.toggle('active', _nqIndicators[ind]);
   if (_nqData) nqDraw(_nqData);
 };
 
-// ── fetch ──
 async function nqFetch(interval, range, isRefresh) {
   const overlay = document.getElementById('nq-overlay');
-  if (overlay) { overlay.style.display = 'flex'; overlay.innerHTML = '<div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:nqspin .7s linear infinite;"></div><div style="font-size:12px;color:var(--sub);">Loading NQ futures…</div>'; }
+  if (overlay) {
+    overlay.style.display = 'flex';
+    overlay.innerHTML = '<div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:nqspin .7s linear infinite;"></div><div style="font-size:12px;color:var(--sub);">Loading NQ futures…</div>';
+  }
   if (isRefresh) {
     const rb = document.getElementById('nq-refresh-btn');
-    if (rb) { rb.style.transform='rotate(360deg)'; rb.style.transition='transform .5s'; setTimeout(()=>{ rb.style.transform=''; rb.style.transition=''; }, 500); }
+    if (rb) { rb.style.transform='rotate(360deg)'; rb.style.transition='transform .5s'; setTimeout(function(){ rb.style.transform=''; rb.style.transition=''; }, 500); }
   }
   try {
-    const res = await fetch(`/api/nq-chart?interval=${interval}&range=${range}`);
+    const res = await fetch('/api/nq-chart?interval='+interval+'&range='+range);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const json = await res.json();
     if (!json.bars || !json.bars.length) throw new Error('no data');
@@ -1276,78 +1631,59 @@ async function nqFetch(interval, range, isRefresh) {
     nqDraw(json);
     if (overlay) overlay.style.display = 'none';
   } catch(e) {
-    if (overlay) overlay.innerHTML = `<span style="font-size:22px">📡</span><div style="font-size:12px;color:var(--sub);text-align:center;line-height:1.7;">Couldn't load NQ data<br><small style="opacity:.6">${e.message}</small><br><span style="color:var(--al);cursor:pointer;font-weight:600;" onclick="nqFetch('${interval}','${range}',false)">retry ↻</span></div>`;
+    if (overlay) overlay.innerHTML = '<span style="font-size:22px">📡</span><div style="font-size:12px;color:var(--sub);text-align:center;line-height:1.7;">Could not load NQ data<br><small style="opacity:.6">'+e.message+'</small><br><span style="color:var(--al);cursor:pointer;font-weight:600;" onclick="nqFetch(''+interval+'',''+range+'',false)">retry</span></div>';
   }
 }
 
-// ── draw ──
 function nqDraw(data) {
   const canvas = document.getElementById('nq-canvas');
   if (!canvas || !data || !data.bars || !data.bars.length) return;
   const bars = data.bars;
-  const DPR  = window.devicePixelRatio || 1;
-  const W    = canvas.offsetWidth || canvas.parentElement.offsetWidth || 800;
-
-  // split into price pane + optional volume pane
-  const hasVol = _nqIndicators.vol && bars.some(b => b.v > 0);
+  const DPR = window.devicePixelRatio || 1;
+  const W = canvas.offsetWidth || canvas.parentElement.offsetWidth || 800;
+  const hasVol = _nqIndicators.vol && bars.some(function(b){ return b.v > 0; });
   const TOTAL_H = 220;
-  const VOL_H   = hasVol ? 44 : 0;
+  const VOL_H = hasVol ? 44 : 0;
   const PRICE_H = TOTAL_H - VOL_H;
-
-  canvas.width  = W * DPR;
+  canvas.width = W * DPR;
   canvas.height = TOTAL_H * DPR;
-  canvas.style.width  = W + 'px';
+  canvas.style.width = W + 'px';
   canvas.style.height = TOTAL_H + 'px';
-
   const ctx = canvas.getContext('2d');
   ctx.scale(DPR, DPR);
-
   const PAD_L = 68, PAD_R = 72, PAD_T = 14, PAD_B = 22;
   const chartW = W - PAD_L - PAD_R;
   const chartH = PRICE_H - PAD_T - PAD_B;
-
-  // price range
-  const highs  = bars.map(b => b.h);
-  const lows   = bars.map(b => b.l);
-  const pad    = (Math.max(...highs) - Math.min(...lows)) * 0.04;
-  const minP   = Math.min(...lows)  - pad;
-  const maxP   = Math.max(...highs) + pad;
+  const highs = bars.map(function(b){ return b.h; });
+  const lows = bars.map(function(b){ return b.l; });
+  const pad = (Math.max.apply(null, highs) - Math.min.apply(null, lows)) * 0.04;
+  const minP = Math.min.apply(null, lows) - pad;
+  const maxP = Math.max.apply(null, highs) + pad;
   const pRange = maxP - minP || 1;
-
-  const toX = i => PAD_L + (i / Math.max(bars.length - 1, 1)) * chartW;
-  const toY = v => PAD_T + chartH - ((v - minP) / pRange) * chartH;
-
+  const toX = function(i){ return PAD_L + (i / Math.max(bars.length - 1, 1)) * chartW; };
+  const toY = function(v){ return PAD_T + chartH - ((v - minP) / pRange) * chartH; };
   const isUp = bars[bars.length-1].c >= bars[0].c;
   const GREEN = '#10b981', RED = '#ef4444';
   const lineColor = isUp ? GREEN : RED;
-
-  // ── BACKGROUND ──
-  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg3').trim() || '#0c1525';
+  ctx.fillStyle = '#0c1525';
   ctx.fillRect(0, 0, W, TOTAL_H);
-
-  // ── GRID + Y-AXIS (left & right) ──
   const gridCount = 5;
   ctx.font = '10px Plus Jakarta Sans, sans-serif';
   ctx.textBaseline = 'middle';
   for (let i = 0; i <= gridCount; i++) {
     const y = PAD_T + (chartH / gridCount) * i;
     const price = maxP - (pRange / gridCount) * i;
-    // grid line
     ctx.strokeStyle = 'rgba(255,255,255,0.045)';
     ctx.lineWidth = 1;
     ctx.setLineDash([4, 6]);
     ctx.beginPath(); ctx.moveTo(PAD_L, y); ctx.lineTo(W - PAD_R, y); ctx.stroke();
     ctx.setLineDash([]);
-    // left label
     ctx.fillStyle = 'rgba(240,244,255,0.3)';
     ctx.textAlign = 'right';
     ctx.fillText(price.toLocaleString('en-US', {maximumFractionDigits:0}), PAD_L - 6, y);
-    // right label
     ctx.textAlign = 'left';
     ctx.fillText(price.toLocaleString('en-US', {maximumFractionDigits:0}), W - PAD_R + 6, y);
   }
-
-  // ── X-AXIS ticks ──
   const labelEvery = Math.max(1, Math.ceil(bars.length / 8));
   ctx.fillStyle = 'rgba(240,244,255,0.3)';
   ctx.textAlign = 'center';
@@ -1359,31 +1695,26 @@ function nqDraw(data) {
     ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(x, PAD_T + chartH); ctx.lineTo(x, PAD_T + chartH + 3); ctx.stroke();
   }
-
-  // ── CHART: LINE or CANDLE ──
   if (_nqChartType === 'line') {
-    // gradient fill under line
     const grad = ctx.createLinearGradient(0, PAD_T, 0, PAD_T + chartH);
     grad.addColorStop(0, isUp ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.12)');
     grad.addColorStop(1, 'rgba(0,0,0,0)');
     ctx.beginPath();
     ctx.moveTo(toX(0), PAD_T + chartH);
-    bars.forEach((b, i) => ctx.lineTo(toX(i), toY(b.c)));
+    bars.forEach(function(b, i){ ctx.lineTo(toX(i), toY(b.c)); });
     ctx.lineTo(toX(bars.length - 1), PAD_T + chartH);
     ctx.closePath();
     ctx.fillStyle = grad;
     ctx.fill();
-    // line
     ctx.beginPath();
     ctx.strokeStyle = lineColor;
     ctx.lineWidth = 2;
     ctx.lineJoin = 'round';
     ctx.shadowColor = lineColor;
     ctx.shadowBlur = 6;
-    bars.forEach((b, i) => i === 0 ? ctx.moveTo(toX(i), toY(b.c)) : ctx.lineTo(toX(i), toY(b.c)));
+    bars.forEach(function(b, i){ if (i === 0) ctx.moveTo(toX(i), toY(b.c)); else ctx.lineTo(toX(i), toY(b.c)); });
     ctx.stroke();
     ctx.shadowBlur = 0;
-    // last price dot
     const lx = toX(bars.length - 1), ly = toY(bars[bars.length-1].c);
     ctx.beginPath();
     ctx.arc(lx, ly, 4, 0, Math.PI * 2);
@@ -1392,26 +1723,22 @@ function nqDraw(data) {
     ctx.strokeStyle = '#0c1525';
     ctx.lineWidth = 2;
     ctx.stroke();
-
   } else {
-    // CANDLESTICK
     const candleW = Math.max(1, Math.min(12, chartW / bars.length * 0.7));
-    bars.forEach((b, i) => {
-      const x  = toX(i);
+    bars.forEach(function(b, i){
+      const x = toX(i);
       const co = b.c >= b.o;
       const bodyTop = toY(Math.max(b.o, b.c));
       const bodyBot = toY(Math.min(b.o, b.c));
-      const bodyH   = Math.max(1, bodyBot - bodyTop);
+      const bodyH = Math.max(1, bodyBot - bodyTop);
       const wickTop = toY(b.h);
       const wickBot = toY(b.l);
       const col = co ? GREEN : RED;
-      // wick
       ctx.strokeStyle = col;
       ctx.lineWidth = 1;
       ctx.globalAlpha = 0.7;
       ctx.beginPath(); ctx.moveTo(x, wickTop); ctx.lineTo(x, wickBot); ctx.stroke();
       ctx.globalAlpha = 1;
-      // body
       ctx.fillStyle = co ? 'rgba(16,185,129,0.85)' : 'rgba(239,68,68,0.85)';
       ctx.strokeStyle = col;
       ctx.lineWidth = 1;
@@ -1419,24 +1746,21 @@ function nqDraw(data) {
       ctx.strokeRect(x - candleW/2, bodyTop, candleW, bodyH);
     });
   }
-
-  // ── EMA 9 ──
   if (_nqIndicators.ema9) {
-    const ema9 = nqEMA(bars.map(b => b.c), 9);
+    const ema9 = nqEMA(bars.map(function(b){ return b.c; }), 9);
     ctx.beginPath();
     ctx.strokeStyle = '#f59e0b';
     ctx.lineWidth = 1.5;
     ctx.lineJoin = 'round';
     ctx.setLineDash([]);
     let started = false;
-    ema9.forEach((v, i) => {
+    ema9.forEach(function(v, i){
       if (v == null) return;
-      started ? ctx.lineTo(toX(i), toY(v)) : ctx.moveTo(toX(i), toY(v));
+      if (started) ctx.lineTo(toX(i), toY(v)); else ctx.moveTo(toX(i), toY(v));
       started = true;
     });
     ctx.stroke();
-    // label at end
-    const lastEma9 = ema9.filter(v => v != null).pop();
+    const lastEma9 = ema9.filter(function(v){ return v != null; }).pop();
     if (lastEma9) {
       ctx.fillStyle = '#f59e0b';
       ctx.font = '9px Plus Jakarta Sans, sans-serif';
@@ -1445,23 +1769,21 @@ function nqDraw(data) {
       ctx.fillText('E9', W - PAD_R + 6, toY(lastEma9));
     }
   }
-
-  // ── EMA 21 ──
   if (_nqIndicators.ema21) {
-    const ema21 = nqEMA(bars.map(b => b.c), 21);
+    const ema21 = nqEMA(bars.map(function(b){ return b.c; }), 21);
     ctx.beginPath();
     ctx.strokeStyle = '#818cf8';
     ctx.lineWidth = 1.5;
     ctx.setLineDash([4, 3]);
     let started = false;
-    ema21.forEach((v, i) => {
+    ema21.forEach(function(v, i){
       if (v == null) return;
-      started ? ctx.lineTo(toX(i), toY(v)) : ctx.moveTo(toX(i), toY(v));
+      if (started) ctx.lineTo(toX(i), toY(v)); else ctx.moveTo(toX(i), toY(v));
       started = true;
     });
     ctx.stroke();
     ctx.setLineDash([]);
-    const lastEma21 = ema21.filter(v => v != null).pop();
+    const lastEma21 = ema21.filter(function(v){ return v != null; }).pop();
     if (lastEma21) {
       ctx.fillStyle = '#818cf8';
       ctx.font = '9px Plus Jakarta Sans, sans-serif';
@@ -1470,40 +1792,32 @@ function nqDraw(data) {
       ctx.fillText('E21', W - PAD_R + 6, toY(lastEma21) + 10);
     }
   }
-
-  // ── VOLUME PANE ──
   if (hasVol) {
     const volTop = PRICE_H + 4;
-    const volH   = VOL_H - 8;
-    const volumes = bars.map(b => b.v || 0);
-    const maxVol  = Math.max(...volumes, 1);
-    const barW    = Math.max(1, chartW / bars.length * 0.65);
-    // separator
+    const volH = VOL_H - 8;
+    const volumes = bars.map(function(b){ return b.v || 0; });
+    const maxVol = Math.max.apply(null, volumes.concat([1]));
+    const barW = Math.max(1, chartW / bars.length * 0.65);
     ctx.strokeStyle = 'rgba(255,255,255,0.07)';
     ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(PAD_L, PRICE_H); ctx.lineTo(W - PAD_R, PRICE_H); ctx.stroke();
-    // Vol label
     ctx.fillStyle = 'rgba(240,244,255,0.25)';
     ctx.font = '9px Plus Jakarta Sans, sans-serif';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'top';
     ctx.fillText('VOL', PAD_L - 6, volTop);
-    // bars
-    bars.forEach((b, i) => {
-      const x  = toX(i);
-      const h  = Math.max(1, (b.v / maxVol) * volH);
+    bars.forEach(function(b, i){
+      const x = toX(i);
+      const h = Math.max(1, (b.v / maxVol) * volH);
       const co = b.c >= b.o;
       ctx.fillStyle = co ? 'rgba(16,185,129,0.45)' : 'rgba(239,68,68,0.4)';
       ctx.fillRect(x - barW/2, volTop + volH - h, barW, h);
     });
-    // max vol label
     ctx.fillStyle = 'rgba(240,244,255,0.25)';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'top';
     ctx.fillText(nqFmtK(maxVol), PAD_L - 6, volTop + 8);
   }
-
-  // ── LAST PRICE LINE ──
   const lastClose = bars[bars.length-1].c;
   const lastY = toY(lastClose);
   ctx.strokeStyle = isUp ? 'rgba(16,185,129,0.6)' : 'rgba(239,68,68,0.6)';
@@ -1511,7 +1825,6 @@ function nqDraw(data) {
   ctx.setLineDash([3, 4]);
   ctx.beginPath(); ctx.moveTo(PAD_L, lastY); ctx.lineTo(W - PAD_R, lastY); ctx.stroke();
   ctx.setLineDash([]);
-  // price tag right side
   const tag = document.getElementById('nq-price-tag');
   if (tag) {
     tag.style.display = 'block';
@@ -1519,13 +1832,11 @@ function nqDraw(data) {
     tag.style.top = (lastY - 9) + 'px';
     tag.style.background = isUp ? '#10b981' : '#ef4444';
   }
-
-  // ── HEADER STATS ──
-  const last  = bars[bars.length - 1];
+  const last = bars[bars.length - 1];
   const first = bars[0];
-  const chg   = last.c - first.c;
+  const chg = last.c - first.c;
   const chgPct = (chg / first.c) * 100;
-  const g = id => document.getElementById(id);
+  const g = function(id){ return document.getElementById(id); };
   const pe = g('nq-price'), ce = g('nq-change'), ue = g('nq-updated');
   const so = g('nq-stat-o'), sh = g('nq-stat-h'), sl = g('nq-stat-l'), sc = g('nq-stat-c'), sv = g('nq-stat-v');
   if (pe) { pe.textContent = nqFmt(last.c); pe.style.color = isUp ? GREEN : RED; }
@@ -1536,17 +1847,12 @@ function nqDraw(data) {
   if (sl) sl.textContent = nqFmt(last.l);
   if (sc) sc.textContent = nqFmt(last.c);
   if (sv) sv.textContent = nqFmtK(last.v);
-
-  // store for hover
-  canvas._nq = { bars, toX, toY, PAD_L, chartW, len: bars.length };
-
-  // Redraw annotations if active
+  canvas._nq = { bars: bars, toX: toX, toY: toY, PAD_T: PAD_T, chartW: chartW, len: bars.length };
   if (_currentAnnotations.length && _annotationMsgId) {
     drawAnnotations(_currentAnnotations);
   }
 }
 
-// ── HOVER ──
 (function setupNQHover() {
   function onMove(e) {
     const canvas = document.getElementById('nq-canvas');
@@ -1554,73 +1860,57 @@ function nqDraw(data) {
     const rect = canvas.getBoundingClientRect();
     const mx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
     const my = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-    const { bars, toX, toY, PAD_L, chartW, len } = canvas._nq;
-    const idx = Math.max(0, Math.min(len - 1, Math.round((mx - PAD_L) / chartW * (len - 1))));
-    const b = bars[idx];
+    const nq = canvas._nq;
+    const idx = Math.max(0, Math.min(nq.len - 1, Math.round((mx - nq.PAD_L) / nq.chartW * (nq.len - 1))));
+    const b = nq.bars[idx];
     if (!b) return;
-    const cx = toX(idx), cy = toY(b.c);
+    const cx = nq.toX(idx), cy = nq.toY(b.c);
     const tip = document.getElementById('nq-tooltip');
-    const cv  = document.getElementById('nq-cv');
-    const ch  = document.getElementById('nq-ch');
+    const cv = document.getElementById('nq-cv');
+    const ch = document.getElementById('nq-ch');
     const tag = document.getElementById('nq-price-tag');
     const isUp = b.c >= b.o;
-    const col  = isUp ? '#10b981' : '#ef4444';
-
-    // update header OHLCV to hovered bar
-    const g = id => document.getElementById(id);
+    const col = isUp ? '#10b981' : '#ef4444';
+    const g = function(id){ return document.getElementById(id); };
     const so=g('nq-stat-o'),sh=g('nq-stat-h'),sl=g('nq-stat-l'),sc=g('nq-stat-c'),sv=g('nq-stat-v');
     if(so) so.textContent = nqFmt(b.o);
     if(sh) sh.textContent = nqFmt(b.h);
     if(sl) sl.textContent = nqFmt(b.l);
     if(sc) { sc.textContent = nqFmt(b.c); sc.style.color = col; }
-    if(sv) sv.textContent  = nqFmtK(b.v);
-
+    if(sv) sv.textContent = nqFmtK(b.v);
     if (tip) {
       const chgBar = b.c - b.o;
       const chgBarPct = b.o ? (chgBar / b.o * 100) : 0;
       tip.style.display = 'block';
-      tip.innerHTML =
-        `<div style="color:var(--sub);font-size:10px;margin-bottom:3px;">${b.label || ''}</div>` +
-        `<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;">` +
-        `<span style="color:var(--sub)">Open</span><span>${nqFmt(b.o)}</span>` +
-        `<span style="color:var(--sub)">High</span><span style="color:#10b981">${nqFmt(b.h)}</span>` +
-        `<span style="color:var(--sub)">Low</span><span style="color:#ef4444">${nqFmt(b.l)}</span>` +
-        `<span style="color:var(--sub)">Close</span><span style="color:${col};font-weight:700">${nqFmt(b.c)}</span>` +
-        `<span style="color:var(--sub)">Chg</span><span style="color:${col}">${chgBar >= 0 ? '+' : ''}${chgBar.toFixed(2)} (${chgBarPct.toFixed(2)}%)</span>` +
-        (b.v ? `<span style="color:var(--sub)">Vol</span><span>${nqFmtK(b.v)}</span>` : '') +
-        `</div>`;
-      // position tooltip — avoid edges
+      tip.innerHTML = '<div style="color:var(--sub);font-size:10px;margin-bottom:3px;">'+(b.label || '')+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;"><span style="color:var(--sub)">Open</span><span>'+nqFmt(b.o)+'</span><span style="color:var(--sub)">High</span><span style="color:#10b981">'+nqFmt(b.h)+'</span><span style="color:var(--sub)">Low</span><span style="color:#ef4444">'+nqFmt(b.l)+'</span><span style="color:var(--sub)">Close</span><span style="color:'+col+';font-weight:700">'+nqFmt(b.c)+'</span><span style="color:var(--sub)">Chg</span><span style="color:'+col+'">'+(chgBar >= 0 ? '+' : '')+chgBar.toFixed(2)+' ('+chgBarPct.toFixed(2)+'%)</span>'+(b.v ? '<span style="color:var(--sub)">Vol</span><span>'+nqFmtK(b.v)+'</span>' : '')+'</div>';
       const TW = 210, TH = 130;
       let tx = cx + 14, ty = cy - TH / 2;
       if (tx + TW > rect.width - 10) tx = cx - TW - 10;
       if (ty < 8) ty = 8;
       if (ty + TH > rect.height - 8) ty = rect.height - TH - 8;
       tip.style.left = tx + 'px';
-      tip.style.top  = ty + 'px';
+      tip.style.top = ty + 'px';
     }
     if (cv) { cv.style.display = 'block'; cv.style.left = cx + 'px'; }
-    if (ch) { ch.style.display = 'block'; ch.style.top  = cy + 'px'; }
-    // live price tag follows hover
+    if (ch) { ch.style.display = 'block'; ch.style.top = cy + 'px'; }
     if (tag) { tag.textContent = nqFmt(b.c); tag.style.top = (cy - 9) + 'px'; tag.style.background = col; }
   }
   function onLeave() {
-    ['nq-tooltip','nq-cv','nq-ch'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+    ['nq-tooltip','nq-cv','nq-ch'].forEach(function(id){ const el = document.getElementById(id); if (el) el.style.display = 'none'; });
     const tag = document.getElementById('nq-price-tag');
-    // restore to last close
     if (_nqData && _nqData.bars) {
       const last = _nqData.bars[_nqData.bars.length - 1];
-      // redraw to restore header
       const canvas = document.getElementById('nq-canvas');
       if (canvas && canvas._nq) {
-        const { bars, toY } = canvas._nq;
-        const lb = bars[bars.length - 1];
-        const isUp = lb.c >= bars[0].c;
-        const g = id => document.getElementById(id);
+        const nq = canvas._nq;
+        const lb = nq.bars[nq.bars.length - 1];
+        const isUp = lb.c >= nq.bars[0].c;
+        const g = function(id){ return document.getElementById(id); };
         const so=g('nq-stat-o'),sh=g('nq-stat-h'),sl=g('nq-stat-l'),sc=g('nq-stat-c'),sv=g('nq-stat-v');
         if(so) so.textContent=nqFmt(lb.o); if(sh) sh.textContent=nqFmt(lb.h);
         if(sl) sl.textContent=nqFmt(lb.l); if(sc){sc.textContent=nqFmt(lb.c);sc.style.color=isUp?'#10b981':'#ef4444';}
         if(sv) sv.textContent=nqFmtK(lb.v);
-        if(tag){tag.style.display='block';tag.textContent=nqFmt(lb.c);tag.style.top=(toY(lb.c)-9)+'px';tag.style.background=isUp?'#10b981':'#ef4444';}
+        if(tag){tag.style.display='block';tag.textContent=nqFmt(lb.c);tag.style.top=(nq.toY(lb.c)-9)+'px';tag.style.background=isUp?'#10b981':'#ef4444';}
       }
     }
   }
@@ -1636,7 +1926,6 @@ function nqDraw(data) {
   else wire();
 })();
 
-// spin keyframes
 (function(){
   if (document.getElementById('_nqcss')) return;
   const s = document.createElement('style');
@@ -1645,17 +1934,150 @@ function nqDraw(data) {
   document.head.appendChild(s);
 })();
 
-// auto-refresh every 5min
 function nqScheduleRefresh() {
   clearInterval(_nqAutoTimer);
-  _nqAutoTimer = setInterval(() => nqFetch(_nqInterval, _nqRange, false), 5 * 60 * 1000);
+  _nqAutoTimer = setInterval(function(){ nqFetch(_nqInterval, _nqRange, false); }, 5 * 60 * 1000);
 }
-nqFetch(_nqInterval, _nqRange, false);
-nqScheduleRefresh();
-window.addEventListener('resize', () => { if (_nqData) nqDraw(_nqData);
 
+// ── AI CHART ANNOTATIONS ─────────────────────────────────────────
+let _currentAnnotations = [];
+let _annotationMsgId = null;
+
+function parseLevelsFromText(text) {
+  const levels = [];
+  const lines = text.split("\n");
+  const patterns = [
+    { regex: /support.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'support', label: 'Support' },
+    { regex: /support.*?zone.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'support', label: 'Support Zone' },
+    { regex: /s\/r.*?support.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'support', label: 'S/R' },
+    { regex: /resistance.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'resist', label: 'Resistance' },
+    { regex: /resistance.*?zone.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'resist', label: 'Resist Zone' },
+    { regex: /r\/s.*?resistance.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'resist', label: 'R/S' },
+    { regex: /entry.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'entry', label: 'Entry' },
+    { regex: /long.*?above.*?\$?([\d,]+\.?\d*)/i, type: 'entry', label: 'Long Entry' },
+    { regex: /short.*?below.*?\$?([\d,]+\.?\d*)/i, type: 'entry', label: 'Short Entry' },
+    { regex: /stop[-\s]?loss.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'stop', label: 'Stop' },
+    { regex: /sl.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'stop', label: 'SL' },
+    { regex: /target.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'target', label: 'Target' },
+    { regex: /tp.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'target', label: 'TP' },
+    { regex: /take[-\s]?profit.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'target', label: 'TP' },
+    { regex: /ema\s*9.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'ema', label: 'EMA 9' },
+    { regex: /ema\s*21.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'ema', label: 'EMA 21' },
+  ];
+  lines.forEach(function(line){
+    patterns.forEach(function(p){
+      const match = line.match(p.regex);
+      if (match) {
+        const price = parseFloat(match[1].replace(/,/g, ''));
+        if (!isNaN(price) && price > 1000 && price < 50000) {
+          const dup = levels.find(function(l){ return Math.abs(l.price - price) < 5 && l.type === p.type; });
+          if (!dup) levels.push({ price: price, type: p.type, label: p.label, raw: line.trim() });
+        }
+      }
+    });
+  });
+  const zoneRegex = /(\d{1,2},?\d{3})\s*[-–—to]+\s*(\d{1,2},?\d{3})/g;
+  let zoneMatch;
+  while ((zoneMatch = zoneRegex.exec(text)) !== null) {
+    const low = parseFloat(zoneMatch[1].replace(/,/g, ''));
+    const high = parseFloat(zoneMatch[2].replace(/,/g, ''));
+    if (!isNaN(low) && !isNaN(high) && low > 1000 && high < 50000) {
+      const context = text.substring(Math.max(0, zoneMatch.index - 50), zoneMatch.index).toLowerCase();
+      const type = context.includes('resist') ? 'resist' : context.includes('support') ? 'support' : 'resist';
+      levels.push({ price: low, priceHigh: high, type: type, label: type === 'resist' ? 'Resist Zone' : 'Support Zone', isZone: true });
+    }
+  }
+  return levels;
+}
+
+function hasChartableLevels(text) {
+  return parseLevelsFromText(text).length > 0;
+}
+
+function clearAnnotations() {
+  const container = document.getElementById('nq-annotations');
+  if (container) container.innerHTML = '';
+  _currentAnnotations = [];
+  _annotationMsgId = null;
+  document.querySelectorAll('.show-chart-btn').forEach(function(btn){ btn.classList.remove('on'); });
+  const cb = document.getElementById('nq-clear-ann');
+  if (cb) cb.style.display = 'none';
+}
+
+function drawAnnotations(levels) {
+  const container = document.getElementById('nq-annotations');
+  if (!container || !levels.length) return;
+  const canvas = document.getElementById('nq-canvas');
+  if (!canvas || !canvas._nq) return;
+  const cb = document.getElementById('nq-clear-ann');
+  if (cb) cb.style.display = '';
+  const nq = canvas._nq;
+  container.innerHTML = '';
+  _currentAnnotations = levels;
+  levels.forEach(function(lv){
+    if (lv.isZone && lv.priceHigh) {
+      const y1 = nq.toY(lv.priceHigh) - nq.PAD_T + canvas.offsetTop;
+      const y2 = nq.toY(lv.price) - nq.PAD_T + canvas.offsetTop;
+      const zone = document.createElement('div');
+      zone.className = 'chart-annotation-zone ' + lv.type;
+      zone.style.top = Math.min(y1, y2) + 'px';
+      zone.style.height = Math.abs(y2 - y1) + 'px';
+      container.appendChild(zone);
+      const tag = document.createElement('div');
+      tag.className = 'chart-annotation-tag ' + lv.type;
+      tag.textContent = lv.label + ': ' + lv.price.toLocaleString() + '–' + lv.priceHigh.toLocaleString();
+      tag.style.top = (Math.min(y1, y2) - 10) + 'px';
+      tag.style.right = '4px';
+      container.appendChild(tag);
+    } else {
+      const y = nq.toY(lv.price) - nq.PAD_T + canvas.offsetTop;
+      const line = document.createElement('div');
+      line.className = 'chart-annotation-line ' + lv.type;
+      line.style.top = y + 'px';
+      container.appendChild(line);
+      const tag = document.createElement('div');
+      tag.className = 'chart-annotation-tag ' + lv.type;
+      tag.textContent = lv.label + ': ' + lv.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      tag.style.top = y + 'px';
+      tag.style.right = '4px';
+      container.appendChild(tag);
+    }
+  });
+}
+
+function toggleAnnotations(msgId, text, btn) {
+  if (_annotationMsgId === msgId) {
+    clearAnnotations();
+    return;
+  }
+  clearAnnotations();
+  const levels = parseLevelsFromText(text);
+  if (levels.length) {
+    drawAnnotations(levels);
+    _annotationMsgId = msgId;
+    btn.classList.add('on');
+  }
+}
+
+function addShowChartButton(msgId, text) {
+  const actions = document.getElementById('actions-' + msgId);
+  if (!actions) return;
+  const levels = parseLevelsFromText(text);
+  if (levels.length === 0) {
+    actions.style.display = 'none';
+    return;
+  }
+  actions.style.display = 'block';
+  actions.innerHTML = '<button class="show-chart-btn" id="btn-chart-' + msgId + '" onclick="toggleAnnotations('' + msgId + '', this.dataset.text, this)"><span class="dot"></span> Show on Chart</button>';
+  const btn = document.getElementById('btn-chart-' + msgId);
+  if (btn) btn.dataset.text = text;
+}
+// ── INIT ──
 initUserInfo();
 loadSnapshot();
+nqFetch(_nqInterval, _nqRange, false);
+nqScheduleRefresh();
+window.addEventListener('resize', function(){ if (_nqData) nqDraw(_nqData); });
 </script>
 </body>
 </html>
