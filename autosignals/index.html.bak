@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Tren – TrenBot</title>
+<title>Tren – AutoSignals</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -107,9 +109,9 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .check-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;}
 .check-item span{font-size:12px;}
 .success-bar{display:flex;align-items:center;gap:8px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:10px 14px;}
-.warn-bar{display:flex;align-items:center;gap:8px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.18);border-radius:10px;padding:10px 14px;margin-top:1rem;}
+.warn-bar{display:flex;align-items:center;gap:8px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.18);border-radius:10px;padding:10px 14px;}
 .dl-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(90deg,var(--accent),var(--al));color:#fff;font-size:13px;font-weight:600;padding:10px 18px;border-radius:10px;text-decoration:none;}
-.must-set{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--sub2);}
+.must-set{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--sub2);margin-bottom:4px;}
 .must-set .req{color:var(--red);font-weight:700;}
 
 /* ── BLUR OVERLAY ── */
@@ -117,17 +119,17 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .blur-content{transition:filter .4s ease,opacity .4s ease;}
 .blur-wrap.locked .blur-content{filter:blur(20px) brightness(0.25);pointer-events:none;user-select:none;}
 .blur-overlay{position:fixed;top:0;left:var(--sw);right:0;bottom:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;pointer-events:auto;}
-.blur-box{background:linear-gradient(145deg,#0d1628,#080e1a);border:1px solid rgba(245,158,11,.35);border-radius:22px;padding:2.4rem 2.2rem;max-width:420px;width:92%;box-shadow:0 0 80px rgba(245,158,11,.15),0 20px 60px rgba(0,0,0,.5);position:relative;overflow:hidden;}
-.blur-box::before{content:'';position:absolute;top:-70px;left:50%;transform:translateX(-50%);width:220px;height:220px;background:radial-gradient(circle,rgba(245,158,11,.18),transparent 70%);pointer-events:none;}
-.blur-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(245,158,11,.13);border:1px solid rgba(245,158,11,.3);color:var(--gold);font-size:11px;font-weight:700;padding:4px 13px;border-radius:20px;margin-bottom:1.3rem;letter-spacing:.6px;text-transform:uppercase;}
+.blur-box{background:linear-gradient(145deg,#0d1628,#080e1a);border:1px solid rgba(16,185,129,.35);border-radius:22px;padding:2.4rem 2.2rem;max-width:420px;width:92%;box-shadow:0 0 80px rgba(16,185,129,.15),0 20px 60px rgba(0,0,0,.5);position:relative;overflow:hidden;}
+.blur-box::before{content:'';position:absolute;top:-70px;left:50%;transform:translateX(-50%);width:220px;height:220px;background:radial-gradient(circle,rgba(16,185,129,.18),transparent 70%);pointer-events:none;}
+.blur-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(16,185,129,.13);border:1px solid rgba(16,185,129,.3);color:var(--green);font-size:11px;font-weight:700;padding:4px 13px;border-radius:20px;margin-bottom:1.3rem;letter-spacing:.6px;text-transform:uppercase;}
 .blur-box h2{font-size:1.9rem;font-weight:800;margin-bottom:.65rem;line-height:1.2;}
-.blur-box h2 span{color:var(--gold);}
+.blur-box h2 span{color:var(--green);}
 .blur-box p{color:var(--sub2);font-size:13px;line-height:1.75;margin-bottom:1.6rem;}
 .blur-feats{display:flex;flex-direction:column;gap:8px;margin-bottom:1.6rem;text-align:left;}
 .blur-feat{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--sub2);}
 .blur-feat .ic{width:22px;height:22px;border-radius:6px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.25);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
-.blur-btn{width:100%;padding:14px;border:none;border-radius:11px;background:linear-gradient(90deg,var(--gold),#f97316);color:#000;font-family:'Plus Jakarta Sans',sans-serif;font-size:14.5px;font-weight:700;cursor:pointer;box-shadow:0 0 30px rgba(245,158,11,.3);transition:box-shadow .2s,transform .15s;text-decoration:none;display:inline-block;}
-.blur-btn:hover{box-shadow:0 0 45px rgba(245,158,11,.5);transform:translateY(-1px);}
+.blur-btn{width:100%;padding:14px;border:none;border-radius:11px;background:linear-gradient(90deg,#10b981,#059669);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14.5px;font-weight:700;cursor:pointer;box-shadow:0 0 30px rgba(16,185,129,.3);transition:box-shadow .2s,transform .15s;text-decoration:none;display:inline-block;}
+.blur-btn:hover{box-shadow:0 0 45px rgba(16,185,129,.5);transform:translateY(-1px);}
 .blur-terms{font-size:11px;color:var(--sub);margin-top:10px;}
 
 /* ── TOAST ── */
@@ -152,31 +154,9 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 </style>
 
 
+
 </head>
 <body>
-<script>
-(function(){
-  var S="https://sjntsmzbiqvtstvofcnx.supabase.co";
-  var K="sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg";
-  var CK="tren_session";
-  var U="https://trenai.vercel.app/checkout-premium";
-  function E(){try{var s=JSON.parse(localStorage.getItem(CK)||"null");return s&&s.user&&s.user.email?s.user.email:null}catch(e){return null}}
-  async function A(){
-    var e=E();if(!e)return false;
-    try{var x=JSON.parse(localStorage.getItem("tren_sub")||"null");if(x&&x.status==="active"&&x.plan==="premium")return true;var y=JSON.parse(localStorage.getItem("tren_trenbot_sub")||"null");if(y&&y.status==="active"&&y.plan==="trenbot")return true;var z=JSON.parse(localStorage.getItem("tren_autosignals_sub")||"null");if(z&&z.status==="active"&&z.plan==="auto")return true}catch(e){}
-    var P=[["premium","premium"],["trenbot","trenbot"],["auto","auto"]];
-    for(var i=0;i<P.length;i++){try{var r=await fetch(S+"/rest/v1/subscribers?email=eq."+encodeURIComponent(e.toLowerCase().trim())+"&plan=eq."+P[i][1]+"&status=eq.active&select=*",{headers:{"apikey":K,"Authorization":"Bearer "+K}});var w=await r.json();if(w&&w.length>0&&w[0].status==="active")return true}catch(e){}}
-    return false;
-  }
-  function W(){
-    if(document.getElementById("__pw"))return;
-    var d=document.createElement("div");d.id="__pw";
-    d.innerHTML='<div style="position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;font-family:Plus Jakarta Sans,sans-serif;"><div style="position:fixed;inset:0;background:rgba(4,8,15,0.75);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);"></div><div style="position:relative;z-index:1;background:linear-gradient(145deg,#0d1628,#080e1a);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:48px 40px;text-align:center;max-width:420px;width:90%;box-shadow:0 24px 80px rgba(0,0,0,0.6);"><div style="width:56px;height:56px;border-radius:16px;background:linear-gradient(135deg,#2563eb,#3b82f6);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:26px;">&#128274;</div><h2 style="font-size:22px;font-weight:800;color:#f0f4ff;margin-bottom:10px;letter-spacing:-0.3px;">Premium Access Required</h2><p style="font-size:14px;color:rgba(240,244,255,0.55);line-height:1.6;margin-bottom:28px;">Start your free trial to unlock this dashboard and all premium features.</p><a href="'+U+'" style="display:inline-block;width:100%;padding:14px 24px;border-radius:12px;background:linear-gradient(90deg,#2563eb,#3b82f6);color:#fff;font-size:14px;font-weight:700;text-decoration:none;transition:opacity 0.2s;font-family:Plus Jakarta Sans,sans-serif;border:none;cursor:pointer;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1">Start Your Free Trial &rarr;</a><p style="margin-top:18px;font-size:12px;color:rgba(240,244,255,0.35);">Already have access? <a href="https://trenai.vercel.app/login-page" style="color:#3b82f6;text-decoration:none;font-weight:600;">Sign in</a></p></div></div>';
-    document.body.appendChild(d);document.body.style.overflow="hidden";
-  }
-  (async function(){var h=await A();if(!h)W()})();
-})();
-</script>
 <div class="shell">
   <div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
 
@@ -184,22 +164,22 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
   <nav class="sidebar" id="sidebar">
     <a class="s-logo" href="https://trenai.vercel.app" style="text-decoration:none;color:inherit;">tren<span>.</span></a>
     <div class="s-nav">
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/live-signals')" href="#"><span class="s-ic"><span class="live-dot-nav"></span></span><span>Live Signals</span></a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/overview')" href="#"><span class="s-ic">📊</span><span>Overview</span></a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/signals')" href="#"><span class="s-ic">⚡</span><span>Recent Trades</span></a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/journal')" href="#"><span class="s-ic">📓</span><span>Journal</span></a>
+      <a class="s-item" href="https://trenai.vercel.app/live-signals"><span class="s-ic"><span class="live-dot-nav"></span></span><span>Live Signals</span></a>
+      <a class="s-item" href="#" onclick="goToDashboard(event)"><span class="s-ic">📊</span><span>Overview</span></a>
+      <a class="s-item" href="https://trenai.vercel.app/signals"><span class="s-ic">⚡</span><span>Recent Trades</span></a>
+      <a class="s-item" href="https://trenai.vercel.app/journal"><span class="s-ic">📓</span><span>Journal</span></a>
       <div class="s-divider"></div>
-      <a class="s-item gold" onclick="navTo('https://trenai.vercel.app/upgrade')" href="#"><span class="s-ic">👑</span><span>Upgrade</span><span class="s-badge gd">PRO</span></a>
-      <a class="s-item on" onclick="navTo('https://trenai.vercel.app/trenbot')" href="#"><span class="s-ic">🤖</span><span>TrenBot</span></a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/autosignals')" href="#"><span class="s-ic">⚡</span><span>AutoSignals</span></a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/indicator')" href="#"><span class="s-ic">📈</span><span>Indicator</span></a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/settings')" href="#"><span class="s-ic">⚙</span><span>Settings</span></a>
+      <a class="s-item gold" href="https://trenai.vercel.app/upgrade"><span class="s-ic">👑</span><span>Upgrade</span><span class="s-badge gd">PRO</span></a>
+      <a class="s-item" href="https://trenai.vercel.app/trenbot"><span class="s-ic">🤖</span><span>TrenBot</span></a>
+      <a class="s-item on" href="https://trenai.vercel.app/autosignals"><span class="s-ic">⚡</span><span>AutoSignals</span></a>
+      <a class="s-item" href="https://trenai.vercel.app/indicator"><span class="s-ic">📈</span><span>Indicator</span></a>
+      <a class="s-item" href="https://trenai.vercel.app/settings"><span class="s-ic">⚙</span><span>Settings</span></a>
     </div>
     <div class="s-bot">
       <div class="trial-card" id="trial-card">
         <h4>🔥 <span id="trial-days-left">7</span> Days Left</h4>
         <p>Your free trial ends soon. Upgrade to keep full access.</p>
-        <button class="up-mini" onclick="window.open('https://trenai.vercel.app/checkout-trenbot','_blank')">Upgrade Now</button>
+        <button class="up-mini" onclick="window.open('https://trenai.vercel.app/checkout-autosignals','_blank')">Upgrade Now</button>
       </div>
       <a class="u-row" href="https://trenai.vercel.app/settings">
         <div class="u-av" id="s-av">T</div>
@@ -219,8 +199,8 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
       <div style="display:flex;align-items:center;gap:12px;">
         <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
         <div>
-          <div class="tb-title">TrenBot</div>
-          <div style="font-size:12px;color:var(--sub);margin-top:2px;">Get Tren running on NinjaTrader in under 5 minutes</div>
+          <div class="tb-title">AutoSignals</div>
+          <div style="font-size:12px;color:var(--sub);margin-top:2px;">Get AutoSignals running on NinjaTrader in under 5 minutes</div>
         </div>
       </div>
       <div class="tb-right">
@@ -246,18 +226,18 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <div class="blur-content">
 
           <!-- STEP 1 -->
-          <div class="jp" style="background:linear-gradient(145deg,var(--bg3),rgba(37,99,235,.04));">
+          <div class="jp" style="background:linear-gradient(145deg,var(--bg3),rgba(16,185,129,.04));">
             <div class="jp-bar" style="background:linear-gradient(90deg,var(--green),var(--al));"></div>
             <div style="display:flex;align-items:flex-start;gap:16px;">
               <div class="jp-icon" style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.25);">1️⃣</div>
               <div style="flex:1;min-width:0;">
-                <h3>Download the Bot File</h3>
-                <p>Download the latest <strong>TrenBot</strong> NinjaScript add-on directly. This is the file you'll import into NinjaTrader to power automated execution.</p>
+                <h3>Download the AutoSignals File</h3>
+                <p>Download the latest <strong>AutoSignals</strong> NinjaScript add-on directly. This is the file you'll import into NinjaTrader to enable automated signal copying.</p>
                 <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:1rem;">
-                  <a href="https://sjntsmzbiqvtstvofcnx.supabase.co/storage/v1/object/public/downloads%20dashboard/TrenBotv3.zip" download class="dl-btn">⬇️ Download TrenBotv3.zip</a>
+                  <a href="https://sjntsmzbiqvtstvofcnx.supabase.co/storage/v1/object/public/downloads%20dashboard/Autosignals.zip" download class="dl-btn">⬇️ Download AutoSignals.zip</a>
                   <span style="font-size:11px;color:var(--sub);">~ 163 KB · NinjaScript Add-On</span>
                 </div>
-                <div class="warn-bar" style="margin-top:0;">
+                <div class="warn-bar">
                   <span style="font-size:16px;">💡</span>
                   <span style="font-size:12px;color:var(--sub2);">Make sure you have <a href="https://account.ninjatrader.com/welcome" target="_blank" style="color:var(--al);text-decoration:none;font-weight:600;">NinjaTrader Desktop</a> installed before proceeding.</span>
                 </div>
@@ -277,7 +257,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
                   <div class="menu-path-title">Menu Path</div>
                   <div class="step-row"><span class="step-num">1</span> Control Center → Tools</div>
                   <div class="step-row"><span class="step-num">2</span> Import → NinjaScript Add-On</div>
-                  <div class="step-row"><span class="step-num">3</span> Select <strong>trenbotv3.zip</strong> from your Downloads</div>
+                  <div class="step-row"><span class="step-num">3</span> Select <strong>AutoSignals.zip</strong> from your Downloads</div>
                 </div>
                 <div class="success-bar"><span style="font-size:18px">✅</span><span style="font-size:12.5px;color:var(--sub2);">Wait for: <strong style="color:var(--green)">Import Successful</strong></span></div>
               </div>
@@ -291,7 +271,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
               <div class="jp-icon" style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.25);">3️⃣</div>
               <div style="flex:1;min-width:0;">
                 <h3>Connect Your Account</h3>
-                <p>Link your broker or data feed so Tren can execute trades. You must see a green connection icon for the bot to trade.</p>
+                <p>Link your broker or data feed so AutoSignals can execute trades. You must see a green connection icon for copying to work.</p>
                 <div class="broker-grid">
                   <div class="broker-card"><div class="bi">📊</div><div class="bn">Simulated Data</div><div class="bs">Practice only</div></div>
                   <div class="broker-card"><div class="bi">🏦</div><div class="bn">Tradovate</div><div class="bs">Futures broker</div></div>
@@ -311,7 +291,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
               <div class="jp-icon" style="background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.25);">4️⃣</div>
               <div style="flex:1;min-width:0;">
                 <h3>Open Your Chart</h3>
-                <p>Create a new chart with the <strong style="color:var(--red)">exact</strong> settings below. These are <strong style="color:var(--red)">required</strong> — Tren will not trade correctly without them.</p>
+                <p>Create a new chart with the <strong style="color:var(--red)">exact</strong> settings below. These are <strong style="color:var(--red)">required</strong> — AutoSignals will not copy correctly without them.</p>
                 <div class="broker-grid" style="grid-template-columns:1fr 1fr;">
                   <div class="broker-card"><div class="bi">📈</div><div class="bn">Instrument</div><div class="bs"><strong style="color:var(--red)">Required:</strong> NQ or MNQ futures</div></div>
                   <div class="broker-card"><div class="bi">⏱️</div><div class="bn">Timeframe</div><div class="bs"><strong style="color:var(--red)">5 minute</strong> (required)</div></div>
@@ -327,20 +307,21 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
             <div style="display:flex;align-items:flex-start;gap:16px;">
               <div class="jp-icon" style="background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.25);">5️⃣</div>
               <div style="flex:1;min-width:0;">
-                <h3>Add Tren to Chart</h3>
+                <h3>Enable AutoSignals on Chart</h3>
                 <p>Attach the strategy to your chart and configure the essential settings.</p>
                 <div class="menu-path">
                   <div class="menu-path-title">On the Chart</div>
                   <div class="step-row"><span class="step-num">1</span> Right click → Strategies</div>
-                  <div class="step-row"><span class="step-num">2</span> Find <strong>trenbotv3</strong> → Double click</div>
+                  <div class="step-row"><span class="step-num">2</span> Find <strong>AutoSignals</strong> → Double click</div>
                   <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);">
                     <div class="menu-path-title">Strategy Panel — Must Set</div>
-                    <div class="must-set" style="margin-bottom:4px;"><span class="req">*</span> Account → Select your account</div>
-                    <div class="must-set" style="margin-bottom:4px;"><span class="req">*</span> Enabled → Set to <strong style="color:var(--green)">TRUE</strong></div>
-                    <div class="must-set"><span style="color:var(--sub);font-weight:700;">○</span> Parameters → Current Misc settings are optimal</div>
+                    <div class="must-set"><span class="req">*</span> Account → Select your account</div>
+                    <div class="must-set"><span class="req">*</span> Enabled → Set to <strong style="color:var(--green)">TRUE</strong></div>
+                    <div class="must-set"><span class="req">*</span> Auto-Copy → Set to <strong style="color:var(--green)">TRUE</strong></div>
+                    <div class="must-set"><span style="color:var(--sub);font-weight:700;">○</span> Contract Size → Lots per trade</div>
                   </div>
                 </div>
-                <div class="success-bar"><span style="font-size:18px">✅</span><span style="font-size:12.5px;color:var(--sub2);">Click <strong style="color:var(--green)">Apply</strong> to activate</span></div>
+                <div class="success-bar"><span style="font-size:18px">✅</span><span style="font-size:12.5px;color:var(--sub2);">Click <strong style="color:var(--green)">Apply</strong> to activate — every signal will now auto-copy</span></div>
               </div>
             </div>
           </div>
@@ -351,15 +332,15 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
             <div style="display:flex;align-items:flex-start;gap:16px;">
               <div class="jp-icon" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.25);">🚨</div>
               <div style="flex:1;min-width:0;">
-                <h3 style="color:var(--red);">Bot Not Trading? Check This List</h3>
+                <h3 style="color:var(--red);">Not Copying? Check This List</h3>
                 <p>Every item below must be correct. Go through each one carefully.</p>
                 <div class="check-grid">
                   <div class="check-item"><div class="check-dot"></div><span>Connected = <strong style="color:var(--green)">YES</strong></span></div>
                   <div class="check-item"><div class="check-dot"></div><span>Strategy Enabled = <strong style="color:var(--green)">TRUE</strong></span></div>
+                  <div class="check-item"><div class="check-dot"></div><span>Auto-Copy = <strong style="color:var(--green)">TRUE</strong></span></div>
                   <div class="check-item"><div class="check-dot"></div><span>No errors in <strong>Log</strong> tab</span></div>
-                  <div class="check-item"><div class="check-dot"></div><span>Correct instrument</span></div>
-                  <div class="check-item"><div class="check-dot"></div><span>Correct timeframe (5m)</span></div>
-                  <div class="check-item"><div class="check-dot"></div><span>Session time active</span></div>
+                  <div class="check-item"><div class="check-dot"></div><span>Correct instrument &amp; 5m timeframe</span></div>
+                  <div class="check-item"><div class="check-dot"></div><span>Contract size &gt; <strong>0</strong></span></div>
                 </div>
                 <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
                   <span style="font-size:13px;color:var(--sub2);">📩 Still not working?</span>
@@ -374,16 +355,16 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <!-- UPGRADE OVERLAY -->
         <div class="blur-overlay" id="blur-overlay">
           <div class="blur-box">
-            <div class="blur-badge">🔒 TRENBOT ONLY</div>
-            <h2>Upgrade to <span>TrenBot</span></h2>
-            <p>Connect Tren directly to NinjaTrader for hands-free execution. Full bot control with higher trade frequency and multi-contract scaling.</p>
+            <div class="blur-badge">🔒 AutoSignals Only</div>
+            <h2>Upgrade to <span>AutoSignals</span></h2>
+            <p>Auto-copy every premium signal to your broker in under 1 second. No manual execution required.</p>
             <div class="blur-feats">
-              <div class="blur-feat"><div class="ic">✓</div>Instant trade execution on NinjaTrader</div>
-              <div class="blur-feat"><div class="ic">✓</div>Emotion-free automated trading</div>
+              <div class="blur-feat"><div class="ic">✓</div>Instant trade copying to your broker</div>
+              <div class="blur-feat"><div class="ic">✓</div>Works with NinjaTrader &amp; major brokers</div>
               <div class="blur-feat"><div class="ic">✓</div>Everything in Premium Signals included</div>
-              <div class="blur-feat"><div class="ic">✓</div>Advanced customization options</div>
+              <div class="blur-feat"><div class="ic">✓</div>Set position size once, trade forever</div>
             </div>
-            <a href="https://trenai.vercel.app/checkout-trenbot" target="_blank" class="blur-btn">Upgrade to TrenBot — $67.99/mo</a>
+            <a href="https://trenai.vercel.app/checkout-autosignals" target="_blank" class="blur-btn">Upgrade to AutoSignals — $42.49/mo</a>
             <div class="blur-terms">Cancel anytime</div>
           </div>
         </div>
@@ -394,15 +375,6 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 </div><!-- end .shell -->
 
 <script>
-
-function navTo(url){
-  try{
-    const s=localStorage.getItem('tren_session');
-    if(s){const encoded=encodeURIComponent(btoa(s));url+=(url.includes('?')?'&':'?')+'_t='+encoded;}
-  }catch(e){}
-  window.location.href=url;
-}
-
 // ── CORE ──────────────────────────────────────────────────────────
 const SUPABASE_AUTH_URL='https://sjntsmzbiqvtstvofcnx.supabase.co';
 const SUPABASE_AUTH_KEY='sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg';
@@ -412,7 +384,6 @@ let _session=window.__trenSession||(()=>{try{const r=localStorage.getItem(SESSIO
 if(!(_session&&_session.access_token)){window.location.href='https://trenai.vercel.app/login-page';}
 
 let _subData=null,_autoSubData=null,_autoSignalsSubData=null;
-// Load from cache first for instant render
 try{_subData=JSON.parse(localStorage.getItem('tren_sub')||'null');}catch(e){}
 try{_autoSubData=JSON.parse(localStorage.getItem('tren_trenbot_sub')||'null');}catch(e){}
 try{_autoSignalsSubData=JSON.parse(localStorage.getItem('tren_autosignals_sub')||'null');}catch(e){}
@@ -433,9 +404,26 @@ async function doLogout(){
 }
 
 // ── LIVE SUPABASE ACCESS CHECKS ───────────────────────────────────
+async function checkAutoSignalsAccess(){
+  const email=getSessionEmail();if(!email||email==='—')return false;
+  if(_autoSignalsSubData?.status==='active'&&_autoSignalsSubData?.plan==='auto')return true;
+  try{
+    const res=await fetch(
+      `${SUPABASE_AUTH_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&plan=eq.auto&status=eq.active&select=*`,
+      {headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}}
+    );
+    const rows=await res.json();
+    if(rows&&rows.length>0&&rows[0].status==='active'){
+      _autoSignalsSubData=rows[0];
+      localStorage.setItem('tren_autosignals_sub',JSON.stringify(_autoSignalsSubData));
+      return true;
+    }
+  }catch(e){console.error('AutoSignals check failed:',e);}
+  return false;
+}
+
 async function checkTrenBotAccess(){
   const email=getSessionEmail();if(!email||email==='—')return false;
-  // Return from cache if already confirmed active
   if(_autoSubData?.status==='active'&&_autoSubData?.plan==='trenbot')return true;
   try{
     const res=await fetch(
@@ -443,7 +431,7 @@ async function checkTrenBotAccess(){
       {headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}}
     );
     const rows=await res.json();
-    if(rows&&rows.length>0&&rows[0].status==='active'&&rows[0].plan==='trenbot'){
+    if(rows&&rows.length>0&&rows[0].status==='active'){
       _autoSubData=rows[0];
       localStorage.setItem('tren_trenbot_sub',JSON.stringify(_autoSubData));
       return true;
@@ -470,24 +458,6 @@ async function checkPremiumAccess(){
   return false;
 }
 
-async function checkAutoSignalsAccess(){
-  const email=getSessionEmail();if(!email||email==='—')return false;
-  if(_autoSignalsSubData?.status==='active'&&_autoSignalsSubData?.plan==='auto')return true;
-  try{
-    const res=await fetch(
-      `${SUPABASE_AUTH_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&plan=eq.auto&status=eq.active&select=*`,
-      {headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}}
-    );
-    const rows=await res.json();
-    if(rows&&rows.length>0&&rows[0].status==='active'){
-      _autoSignalsSubData=rows[0];
-      localStorage.setItem('tren_autosignals_sub',JSON.stringify(_autoSignalsSubData));
-      return true;
-    }
-  }catch(e){console.error('AutoSignals check failed:',e);}
-  return false;
-}
-
 function initUserInfo(){
   const name=getUserDisplayName(),email=getSessionEmail(),init=name.charAt(0).toUpperCase();
   ['s-nm','prof-menu-name'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=name;});
@@ -507,8 +477,8 @@ function applyAccessUI(hasTB,hasAS,hasP){
     if(tp){tp.textContent=lbl+' Active';tp.className='t-pill '+cls;}
     if(sb){sb.textContent=lbl;sb.className='sub-status-badge '+cls;}
   }
-  // Only TrenBot unlocks this page
-  if(hasTB){
+  // AutoSignals OR TrenBot (superset) both unlock this page
+  if(hasAS||hasTB){
     wrap.classList.remove('locked');
     overlay.style.display='none';
   }else{
@@ -533,17 +503,27 @@ function closeSidebar(){document.getElementById('sidebar').classList.remove('ope
 // ── INIT ──────────────────────────────────────────────────────────
 initUserInfo();
 
-// Step 1: apply cached state instantly so UI doesn't flash
+// Step 1: apply cache instantly
 const cachedTB=_autoSubData?.status==='active'&&_autoSubData?.plan==='trenbot';
 const cachedAS=_autoSignalsSubData?.status==='active'&&_autoSignalsSubData?.plan==='auto';
 const cachedP=_subData?.status&&_subData.status!=='inactive'&&_subData.status!=='cancelled';
 applyAccessUI(cachedTB,cachedAS,cachedP);
 
-// Step 2: verify live from Supabase and re-apply (catches new subs and cancellations)
+// Step 2: verify live from Supabase
 (async()=>{
   const [hasTB,hasAS,hasP]=await Promise.all([checkTrenBotAccess(),checkAutoSignalsAccess(),checkPremiumAccess()]);
   applyAccessUI(hasTB,hasAS,hasP);
 })();
+</script>
+<script>
+  function goToDashboard(e) {
+    e.preventDefault();
+    if (localStorage.getItem('tren_session')) {
+      window.location.href = '/overview';
+    } else {
+      window.location.href = '/login-page';
+    }
+  }
 </script>
 </body>
 </html>
