@@ -50,7 +50,7 @@ body {
 }
 .grid-bg {
   position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.02;
-  background-image: 
+  background-image:
     linear-gradient(rgba(255,255,255,0.8) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,0.8) 1px, transparent 1px);
   background-size: 80px 80px;
@@ -148,8 +148,8 @@ a.nav-cta:active { transform: translateY(0); }
   opacity: 0;
   transition: all 0.3s ease;
 }
-.mobile-menu.open { 
-  display: flex; 
+.mobile-menu.open {
+  display: flex;
   transform: translateY(0);
   opacity: 1;
 }
@@ -160,9 +160,9 @@ a.nav-cta:active { transform: translateY(0); }
 }
 .mobile-menu a:last-child { border-bottom: none; }
 .mobile-menu a:hover { color: var(--text); padding-left: 8px; }
-.mobile-menu a.nav-cta { 
-  margin-top: 12px; 
-  text-align: center; 
+.mobile-menu a.nav-cta {
+  margin-top: 12px;
+  text-align: center;
   padding: 12px;
   border: none;
 }
@@ -178,10 +178,10 @@ a.nav-cta:active { transform: translateY(0); }
   margin-bottom: 1.25rem;
   backdrop-filter: blur(10px);
 }
-.tag-blue  { 
-  background: rgba(37,99,235,0.12);   
-  border: 1px solid rgba(37,99,235,0.25); 
-  color: var(--accent-l); 
+.tag-blue  {
+  background: rgba(37,99,235,0.12);
+  border: 1px solid rgba(37,99,235,0.25);
+  color: var(--accent-l);
 }
 .tag-gold {
   background: rgba(245,158,11,0.12);
@@ -211,22 +211,16 @@ h2.section-title em { font-style: normal; color: var(--accent-l); }
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
+  width: 100%;
+  text-align: center;
 }
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.btn-primary:hover { 
-  background: var(--accent-l); 
-  transform: translateY(-2px); 
+.btn-primary:hover {
+  background: var(--accent-l);
+  transform: translateY(-2px);
   box-shadow: 0 12px 32px rgba(37,99,235,0.35), 0 0 0 1px rgba(59,130,246,0.2);
 }
-.btn-primary:hover::before { opacity: 1; }
 .btn-primary:active { transform: translateY(0); }
+
 .btn-ghost {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
   background: transparent; color: var(--ts);
@@ -234,25 +228,46 @@ h2.section-title em { font-style: normal; color: var(--accent-l); }
   padding: 13px 24px; border-radius: 10px;
   border: 1.5px solid var(--border-b); text-decoration: none; cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  text-align: center;
 }
-.btn-ghost:hover { 
-  color: var(--text); 
-  border-color: rgba(255,255,255,0.3); 
+.btn-ghost:hover {
+  color: var(--text);
+  border-color: rgba(255,255,255,0.3);
   transform: translateY(-2px);
   background: rgba(255,255,255,0.03);
 }
+
 .btn-gold {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-  background: linear-gradient(135deg, var(--gold), var(--gold-dark)); 
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
   color: #000;
   font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700;
   padding: 13px 28px; border-radius: 10px; border: none;
   text-decoration: none; cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  text-align: center;
 }
 .btn-gold:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 32px rgba(245,158,11,0.3);
+}
+
+.btn-green {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 14px; font-weight: 700;
+  padding: 13px 28px; border-radius: 10px; border: none;
+  text-decoration: none; cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+  text-align: center;
+}
+.btn-green:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(16,185,129,0.3);
 }
 
 /* PRICING TOGGLE */
@@ -299,12 +314,12 @@ h2.section-title em { font-style: normal; color: var(--accent-l); }
   margin-left: 6px;
 }
 
-/* PRICING GRID */
+/* PRICING GRID — 4 columns */
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-  max-width: 1100px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+  max-width: 1160px;
   margin: 0 auto;
   align-items: start;
 }
@@ -314,7 +329,7 @@ h2.section-title em { font-style: normal; color: var(--accent-l); }
   background: var(--bg2);
   border: 1.5px solid var(--border);
   border-radius: 20px;
-  padding: 2rem;
+  padding: 1.6rem;
   display: flex;
   flex-direction: column;
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -336,19 +351,26 @@ h2.section-title em { font-style: normal; color: var(--accent-l); }
 .price-card.popular {
   border: 2px solid var(--accent);
   background: linear-gradient(180deg, var(--bg2) 0%, rgba(37,99,235,0.05) 100%);
-  transform: scale(1.03);
   box-shadow: 0 0 60px rgba(37,99,235,0.1), 0 20px 60px rgba(0,0,0,0.3);
 }
 .price-card.popular:hover {
-  transform: scale(1.03) translateY(-4px);
   box-shadow: 0 0 80px rgba(37,99,235,0.15), 0 25px 70px rgba(0,0,0,0.4);
 }
-.price-card.automated {
-  border: 1.5px solid rgba(245,158,11,0.3);
-  background: linear-gradient(180deg, var(--bg2) 0%, rgba(245,158,11,0.03) 100%);
+.price-card.autosignals-card {
+  border: 1.5px solid rgba(16,185,129,0.3);
+  background: linear-gradient(180deg, var(--bg2) 0%, rgba(16,185,129,0.03) 100%);
 }
-.price-card.automated:hover {
+.price-card.autosignals-card:hover {
+  border-color: rgba(16,185,129,0.5);
+  box-shadow: 0 20px 60px rgba(16,185,129,0.08);
+}
+.price-card.trenbot-card {
+  border: 1.5px solid rgba(245,158,11,0.3);
+  background: linear-gradient(180deg, var(--bg2) 0%, rgba(245,158,11,0.04) 100%);
+}
+.price-card.trenbot-card:hover {
   border-color: rgba(245,158,11,0.5);
+  box-shadow: 0 20px 60px rgba(245,158,11,0.08);
 }
 
 .card-badge {
@@ -374,13 +396,18 @@ h2.section-title em { font-style: normal; color: var(--accent-l); }
   color: #000;
   box-shadow: 0 4px 20px rgba(245,158,11,0.3);
 }
+.card-badge.auto-badge {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  box-shadow: 0 4px 20px rgba(16,185,129,0.3);
+}
 
 .card-header {
-  margin-bottom: 1.5rem;
-  padding-top: 0.5rem;
+  margin-bottom: 1.25rem;
+  padding-top: 0.75rem;
 }
 .card-name {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--ts);
   text-transform: uppercase;
@@ -390,37 +417,38 @@ h2.section-title em { font-style: normal; color: var(--accent-l); }
 .price-row {
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  gap: 6px;
   margin-bottom: 4px;
+  flex-wrap: wrap;
 }
 .price-strike {
-  font-size: 16px;
+  font-size: 15px;
   color: var(--tm);
   text-decoration: line-through;
   font-weight: 500;
 }
 .price-amount {
   font-family: 'Plus Jakarta Sans', sans-serif;
-  font-size: 42px;
+  font-size: 36px;
   font-weight: 800;
   color: var(--text);
   letter-spacing: -0.03em;
   line-height: 1;
 }
 .price-period {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 400;
   color: var(--ts);
 }
 .price-note {
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--green);
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   min-height: 18px;
 }
 .price-desc {
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--tm);
   line-height: 1.6;
 }
@@ -429,15 +457,15 @@ h2.section-title em { font-style: normal; color: var(--accent-l); }
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 2rem;
+  gap: 8px;
+  margin-bottom: 1.5rem;
   flex: 1;
 }
 .feature-list li {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  font-size: 13.5px;
+  gap: 9px;
+  font-size: 13px;
   color: var(--ts);
   line-height: 1.5;
 }
@@ -446,8 +474,8 @@ h2.section-title em { font-style: normal; color: var(--accent-l); }
   font-size: 16px;
   flex-shrink: 0;
   margin-top: 1px;
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -455,8 +483,8 @@ h2.section-title em { font-style: normal; color: var(--accent-l); }
   border-radius: 50%;
 }
 .feature-list li .check svg {
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
 }
 
 /* INDICATOR SECTION */
@@ -489,14 +517,6 @@ h2.section-title em { font-style: normal; color: var(--accent-l); }
   border-radius: 24px;
   overflow: hidden;
   box-shadow: 0 25px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05);
-}
-.indicator-visual::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
-  pointer-events: none;
 }
 .indicator-mock {
   background: var(--bg3);
@@ -561,6 +581,7 @@ h2.section-title em { font-style: normal; color: var(--accent-l); }
   padding-top: 2rem;
   border-top: 1px solid var(--border);
   flex-wrap: wrap;
+  justify-content: center;
 }
 .trust-badge {
   display: flex;
@@ -582,9 +603,9 @@ footer {
 }
 .footer-inner {
   max-width: 1160px; margin: 0 auto;
-  background: var(--bg2); 
+  background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 20px; 
+  border-radius: 20px;
   padding: 3rem 3rem 2rem;
   position: relative;
   overflow: hidden;
@@ -596,62 +617,62 @@ footer {
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
 }
-.footer-top { 
-  display: grid; 
-  grid-template-columns: 2fr 1fr 1fr 1fr; 
-  gap: 3rem; 
-  margin-bottom: 2.5rem; 
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 3rem;
+  margin-bottom: 2.5rem;
 }
-.footer-brand .logo { 
-  font-size: 22px; 
-  margin-bottom: 1rem; 
-  display: block; 
+.footer-brand .logo {
+  font-size: 22px;
+  margin-bottom: 1rem;
+  display: block;
 }
-.footer-brand p { 
-  font-size: 13.5px; 
-  color: var(--ts); 
-  line-height: 1.7; 
-  max-width: 260px; 
+.footer-brand p {
+  font-size: 13.5px;
+  color: var(--ts);
+  line-height: 1.7;
+  max-width: 260px;
 }
-.footer-col h4 { 
-  font-size: 12px; 
-  font-weight: 700; 
-  color: var(--text); 
-  letter-spacing: 0.08em; 
-  text-transform: uppercase; 
-  margin-bottom: 1.2rem; 
+.footer-col h4 {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 1.2rem;
 }
-.footer-col a { 
-  display: block; 
-  font-size: 13.5px; 
-  color: var(--ts); 
-  text-decoration: none; 
-  margin-bottom: 10px; 
+.footer-col a {
+  display: block;
+  font-size: 13.5px;
+  color: var(--ts);
+  text-decoration: none;
+  margin-bottom: 10px;
   transition: all 0.2s;
   width: fit-content;
 }
-.footer-col a:hover { 
-  color: var(--text); 
+.footer-col a:hover {
+  color: var(--text);
   transform: translateX(2px);
 }
 .footer-bottom {
-  border-top: 1px solid var(--border); 
+  border-top: 1px solid var(--border);
   padding-top: 1.5rem;
-  display: flex; 
-  justify-content: space-between; 
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   gap: 12px;
 }
-.footer-copy { 
-  font-size: 12px; 
-  color: var(--tm); 
+.footer-copy {
+  font-size: 12px;
+  color: var(--tm);
 }
-.footer-risk { 
-  font-size: 11px; 
-  color: var(--tm); 
-  max-width: 500px; 
-  line-height: 1.5; 
+.footer-risk {
+  font-size: 11px;
+  color: var(--tm);
+  max-width: 500px;
+  line-height: 1.5;
 }
 
 /* ANIMATIONS */
@@ -665,16 +686,16 @@ footer {
 .delay-1 { animation-delay: 0.1s; opacity: 0; }
 .delay-2 { animation-delay: 0.2s; opacity: 0; }
 .delay-3 { animation-delay: 0.3s; opacity: 0; }
+.delay-4 { animation-delay: 0.4s; opacity: 0; }
 
 /* RESPONSIVE */
+@media (max-width: 1100px) {
+  .pricing-grid { grid-template-columns: repeat(2, 1fr); max-width: 800px; }
+}
 @media (max-width: 1024px) {
-  .pricing-grid { grid-template-columns: 1fr; max-width: 480px; }
-  .price-card.popular { transform: scale(1); }
-  .price-card.popular:hover { transform: translateY(-4px); }
   .indicator-grid { grid-template-columns: 1fr; gap: 3rem; }
   .indicator-visual { order: -1; }
 }
-
 @media (max-width: 900px) {
   nav { padding: 1rem 1.5rem; width: 100vw; margin-left: calc(-50vw + 50%); }
   .nav-links { display: none; }
@@ -683,18 +704,14 @@ footer {
   .footer-top { grid-template-columns: 1fr 1fr; gap: 2rem; }
   .trust-badges { justify-content: center; }
 }
-
-@media (max-width: 580px) {
-  .pricing-grid { max-width: 100%; }
-  .price-card { padding: 1.5rem; }
-  .price-amount { font-size: 36px; }
-  .btn-primary, .btn-ghost, .btn-gold { width: 100%; text-align: center; }
+@media (max-width: 640px) {
+  .pricing-grid { grid-template-columns: 1fr; max-width: 420px; }
+  .price-card { padding: 1.4rem; }
+  .price-amount { font-size: 32px; }
   .footer-top { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; text-align: center; }
   .pricing-toggle { width: 100%; max-width: 320px; }
 }
-
-/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -703,8 +720,6 @@ footer {
   }
 }
 </style>
-
-
 </head>
 <body>
 
@@ -735,8 +750,6 @@ footer {
   </div>
 </nav>
 
-
-
 <!-- PRICING -->
 <div id="pricing" class="section" style="padding-top:5rem;">
   <div style="text-align:center;max-width:560px;margin:0 auto 3rem" class="animate-in">
@@ -748,12 +761,13 @@ footer {
   <div class="pricing-toggle animate-in delay-1">
     <span class="pt-label" id="up-lbl-mo" onclick="setUpgradeBilling('monthly')">Monthly</span>
     <span class="pt-label on" id="up-lbl-yr" onclick="setUpgradeBilling('yearly')">
-      Yearly 
+      Yearly
       <span class="pt-save">Save 15%</span>
     </span>
   </div>
 
   <div class="pricing-grid">
+
     <!-- Free -->
     <div class="price-card animate-in delay-1">
       <div class="card-header">
@@ -767,9 +781,9 @@ footer {
       <ul class="feature-list">
         <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Delayed signals (3 min)</li>
         <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Discord community access</li>
-        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Full signal access</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Basic dashboard access</li>
       </ul>
-      <a href="https://discord.gg/7rbYPuRfcN" class="btn-ghost" target="_blank">Get access</a>
+      <a href="https://discord.gg/fStfMCMTa2" class="btn-ghost" target="_blank">Get access</a>
     </div>
 
     <!-- Premium -->
@@ -790,35 +804,62 @@ footer {
         <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Best entry prices</li>
         <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Full signal access</li>
         <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Priority Discord role</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Trading journal &amp; analytics</li>
       </ul>
       <a href="https://trenai.vercel.app/checkout-premium" class="btn-primary">Subscribe to Premium</a>
     </div>
 
-    <!-- Automated -->
-    <div class="price-card automated animate-in delay-3">
-      <div class="card-badge value-badge">Best Value</div>
+    <!-- AutoSignals -->
+    <div class="price-card autosignals-card animate-in delay-3">
+      <div class="card-badge auto-badge">AutoSignals</div>
       <div class="card-header">
-        <div class="card-name">Automated Trading</div>
+        <div class="card-name">AutoSignals</div>
         <div class="price-row">
-          <span class="price-strike" id="up-auto-strike">$49.99</span>
-          <span class="price-amount" id="up-auto-amount">$42.49</span>
+          <span class="price-strike" id="up-autosignals-strike">$49.99</span>
+          <span class="price-amount" id="up-autosignals-amount">$42.49</span>
           <span class="price-period">/mo</span>
         </div>
-        <div class="price-note" id="up-bill-auto">Billed annually — Save 15%</div>
-        <div class="price-desc" id="up-ppe-auto">Fully automated execution via NinjaTrader.</div>
+        <div class="price-note" id="up-bill-autosignals" style="color:var(--green);">Billed annually — Save 15%</div>
+        <div class="price-desc" id="up-ppe-autosignals">Auto-copy every signal to your broker via NinjaTrader Desktop.</div>
       </div>
       <ul class="feature-list">
         <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Everything in Premium</li>
-        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Instant trade execution</li>
-        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Emotion-free trading</li>
-        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Advanced customization</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Auto-copies to your broker</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Works with major brokers</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Set position size once</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Emotion-free execution</li>
       </ul>
-      <a href="https://trenai.vercel.app/checkout-automated" class="btn-gold">Get Automated Access</a>
+      <a href="https://trenai.vercel.app/checkout-autosignals" class="btn-green">Get AutoSignals</a>
     </div>
+
+    <!-- TrenBot -->
+    <div class="price-card trenbot-card animate-in delay-4">
+      <div class="card-badge value-badge">Best Value</div>
+      <div class="card-header">
+        <div class="card-name">TrenBot</div>
+        <div class="price-row">
+          <span class="price-strike" id="up-trenbot-strike">$79.99</span>
+          <span class="price-amount" id="up-trenbot-amount">$67.99</span>
+          <span class="price-period">/mo</span>
+        </div>
+        <div class="price-note" id="up-bill-trenbot">Billed annually — Save 15%</div>
+        <div class="price-desc" id="up-ppe-trenbot">Fully automated — Tren connects directly to NinjaTrader and executes for you.</div>
+      </div>
+      <ul class="feature-list">
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Everything in AutoSignals</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Full NinjaTrader integration</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Higher trade frequency</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Multi-contract scaling</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Custom risk rules per trade</li>
+        <li><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span> Dedicated onboarding call</li>
+      </ul>
+      <a href="https://trenai.vercel.app/checkout-trenbot" class="btn-gold">Get TrenBot Access</a>
+    </div>
+
   </div>
 
   <!-- Trust Badges -->
-  <div class="trust-badges animate-in delay-3">
+  <div class="trust-badges animate-in delay-4">
     <div class="trust-badge">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       Secure SSL Checkout
@@ -853,7 +894,7 @@ footer {
         <span class="period">/ Lifetime</span>
         <span class="badge">One-time</span>
       </div>
-      <a href="#" class="btn-primary">Purchase Indicator</a>
+      <a href="#" class="btn-primary" style="width:auto;display:inline-flex;">Purchase Indicator</a>
     </div>
     <div class="indicator-visual animate-in delay-2">
       <div class="indicator-mock">
@@ -931,12 +972,13 @@ document.addEventListener('click', (e) => {
 
 // Pricing toggle
 const PRICES = {
-  premium: { monthly: 29.99, yearly: 25.49 },
-  auto: { monthly: 49.99, yearly: 42.49 }
+  premium:      { monthly: 29.99, yearly: 25.49 },
+  autosignals:  { monthly: 49.99, yearly: 42.49 },
+  trenbot:      { monthly: 79.99, yearly: 67.99 }
 };
 let upgradeBilling = 'yearly';
 
-function formatPrice(n) { return '$' + n.toFixed(2); }
+function fmt(n) { return '$' + n.toFixed(2); }
 
 function setUpgradeBilling(mode) {
   upgradeBilling = mode;
@@ -946,42 +988,58 @@ function setUpgradeBilling(mode) {
 }
 
 function updateUpgradePrices() {
-  const premStrike = document.getElementById('up-premium-strike');
-  const premAmount = document.getElementById('up-premium-amount');
-  const autoStrike = document.getElementById('up-auto-strike');
-  const autoAmount = document.getElementById('up-auto-amount');
-  const premBill = document.getElementById('up-bill-premium');
-  const autoBill = document.getElementById('up-bill-auto');
-  const premPpe = document.getElementById('up-ppe-premium');
-  const autoPpe = document.getElementById('up-ppe-auto');
+  const plans = [
+    {
+      key: 'premium',
+      strike: 'up-premium-strike',
+      amount: 'up-premium-amount',
+      bill: 'up-bill-premium',
+      ppe: 'up-ppe-premium',
+      desc: 'Instant signals with the best possible entry prices. No delay.',
+      noteColor: 'var(--green)'
+    },
+    {
+      key: 'autosignals',
+      strike: 'up-autosignals-strike',
+      amount: 'up-autosignals-amount',
+      bill: 'up-bill-autosignals',
+      ppe: 'up-ppe-autosignals',
+      desc: 'Auto-copy every signal to your broker via NinjaTrader Desktop.',
+      noteColor: 'var(--green)'
+    },
+    {
+      key: 'trenbot',
+      strike: 'up-trenbot-strike',
+      amount: 'up-trenbot-amount',
+      bill: 'up-bill-trenbot',
+      ppe: 'up-ppe-trenbot',
+      desc: 'Fully automated — Tren connects directly to NinjaTrader and executes for you.',
+      noteColor: 'var(--green)'
+    }
+  ];
 
-  if (upgradeBilling === 'yearly') {
-    if (premStrike) premStrike.style.display = 'inline';
-    if (premAmount) premAmount.textContent = formatPrice(PRICES.premium.yearly);
-    if (autoStrike) autoStrike.style.display = 'inline';
-    if (autoAmount) autoAmount.textContent = formatPrice(PRICES.auto.yearly);
-    if (premBill) { premBill.innerHTML = 'Billed annually — Save 15%'; premBill.style.color = 'var(--green)'; }
-    if (autoBill) { autoBill.innerHTML = 'Billed annually — Save 15%'; autoBill.style.color = 'var(--green)'; }
-    if (premPpe) premPpe.innerHTML = `Instant signals with the best possible entry prices. No delay.<span style="font-size:11px;color:var(--tm);display:block;margin-top:4px;font-weight:500;">${formatPrice(PRICES.premium.yearly * 12)}/year</span>`;
-    if (autoPpe) autoPpe.innerHTML = `Fully automated execution via NinjaTrader.<span style="font-size:11px;color:var(--tm);display:block;margin-top:4px;font-weight:500;">${formatPrice(PRICES.auto.yearly * 12)}/year</span>`;
-  } else {
-    if (premStrike) premStrike.style.display = 'none';
-    if (premAmount) premAmount.textContent = formatPrice(PRICES.premium.monthly);
-    if (autoStrike) autoStrike.style.display = 'none';
-    if (autoAmount) autoAmount.textContent = formatPrice(PRICES.auto.monthly);
-    if (premBill) { premBill.innerHTML = 'Billed monthly'; premBill.style.color = 'var(--ts)'; }
-    if (autoBill) { autoBill.innerHTML = 'Billed monthly'; autoBill.style.color = 'var(--ts)'; }
-    if (premPpe) premPpe.innerHTML = 'Instant signals with the best possible entry prices. No delay.';
-    if (autoPpe) autoPpe.innerHTML = 'Fully automated execution via NinjaTrader.';
-  }
+  plans.forEach(p => {
+    const P = PRICES[p.key];
+    const strikeEl = document.getElementById(p.strike);
+    const amountEl = document.getElementById(p.amount);
+    const billEl   = document.getElementById(p.bill);
+    const ppeEl    = document.getElementById(p.ppe);
+
+    if (upgradeBilling === 'yearly') {
+      if (strikeEl) strikeEl.style.display = 'inline';
+      if (amountEl) amountEl.textContent = fmt(P.yearly);
+      if (billEl)   { billEl.textContent = 'Billed annually — Save 15%'; billEl.style.color = p.noteColor; }
+      if (ppeEl)    ppeEl.innerHTML = `${p.desc}<span style="font-size:11px;color:var(--tm);display:block;margin-top:4px;font-weight:500;">${fmt(P.yearly * 12)}/year</span>`;
+    } else {
+      if (strikeEl) strikeEl.style.display = 'none';
+      if (amountEl) amountEl.textContent = fmt(P.monthly);
+      if (billEl)   { billEl.textContent = 'Billed monthly'; billEl.style.color = 'var(--ts)'; }
+      if (ppeEl)    ppeEl.textContent = p.desc;
+    }
+  });
 }
 
-// Intersection Observer for scroll animations
-const observerOptions = {
-  threshold: 0.1,
-  rootMargin: '0px 0px -50px 0px'
-};
-
+// Scroll animations
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
@@ -989,7 +1047,7 @@ const observer = new IntersectionObserver((entries) => {
       entry.target.style.transform = 'translateY(0)';
     }
   });
-}, observerOptions);
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
 
 document.querySelectorAll('.animate-in').forEach(el => {
   el.style.opacity = '0';
