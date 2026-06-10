@@ -234,6 +234,22 @@ html,body{width:100%;height:100%;background:#04080f;}
 <body>
 <script>
 (function(){
+  try{
+    var p = new URLSearchParams(window.location.search);
+    var t = p.get('_t');
+    if(t){
+      var existing = localStorage.getItem('tren_session');
+      if(!existing){
+        var decoded = JSON.parse(atob(decodeURIComponent(t)));
+        localStorage.setItem('tren_session', JSON.stringify(decoded));
+      }
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }catch(e){}
+})();
+</script>
+<script>
+(function(){
   var S="https://sjntsmzbiqvtstvofcnx.supabase.co";
   var K="sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg";
   var CK="tren_session";
@@ -258,19 +274,54 @@ html,body{width:100%;height:100%;background:#04080f;}
 </script>
 
 
+
 <script>
-/* ── SUBSCRIPTION DETECTION ─────────────────────────────────────── */
 (function(){
   var SUPABASE_AUTH_URL = "https://sjntsmzbiqvtstvofcnx.supabase.co";
   var SUPABASE_AUTH_KEY = "sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg";
   var SESSION_KEY = "tren_session";
 
+  var _session = null;
+  try{ _session = JSON.parse(localStorage.getItem(SESSION_KEY) || "null"); }catch(e){}
+
   function getSessionEmail(){
-    try{ var s = JSON.parse(localStorage.getItem(SESSION_KEY) || "null"); return s && s.user && s.user.email ? s.user.email : null; }catch(e){ return null; }
+    return (_session && _session.user && _session.user.email) ? _session.user.email : "—";
+  }
+  function getSessionFullName(){
+    if(_session && _session.user){
+      var m = _session.user.user_metadata || {};
+      if(m.full_name) return m.full_name;
+      if(m.name) return m.name;
+      if(_session.user.email){
+        var parts = _session.user.email.split("@")[0];
+        return parts.replace(/[._]/g, " ").replace(/\b\w/g, function(c){ return c.toUpperCase(); });
+      }
+    }
+    return "Trader";
+  }
+  function getUserDisplayName(){
+    try{
+      var prefs = JSON.parse(localStorage.getItem("tren_prefs") || "{}");
+      var names = prefs.display_names || {};
+      return names[getSessionEmail()] || getSessionFullName();
+    }catch(e){ return getSessionFullName(); }
   }
 
+  var name = getUserDisplayName(), email = getSessionEmail(), init = name.charAt(0).toUpperCase();
+  var sNm = document.getElementById("s-nm"); if(sNm) sNm.textContent = name;
+  var pMn = document.getElementById("prof-menu-name"); if(pMn) pMn.textContent = name;
+  var sAv = document.getElementById("s-av"); if(sAv) sAv.textContent = init;
+  var pAv = document.getElementById("prof-av-btn"); if(pAv) pAv.textContent = init;
+  var sEm = document.getElementById("s-email-display"); if(sEm) sEm.textContent = email;
+  var pEm = document.getElementById("prof-menu-email"); if(pEm) pEm.textContent = email;
+
+  var _subData = null, _autoSubData = null, _autoSignalsSubData = null;
+  try{ _subData = JSON.parse(localStorage.getItem("tren_sub") || "null"); }catch(e){}
+  try{ _autoSubData = JSON.parse(localStorage.getItem("tren_trenbot_sub") || "null"); }catch(e){}
+  try{ _autoSignalsSubData = JSON.parse(localStorage.getItem("tren_autosignals_sub") || "null"); }catch(e){}
+
   async function checkSub(plan){
-    var e = getSessionEmail(); if(!e) return false;
+    var e = getSessionEmail(); if(!e || e === "—") return false;
     try{
       var r = await fetch(
         SUPABASE_AUTH_URL + "/rest/v1/subscribers?email=eq." + encodeURIComponent(e.toLowerCase().trim()) + "&plan=eq." + plan + "&status=eq.active&select=*",
@@ -283,9 +334,10 @@ html,body{width:100%;height:100%;background:#04080f;}
 
   async function checkAllSubs(){
     var hasP = false, hasTB = false, hasAS = false;
-    try{ var x = JSON.parse(localStorage.getItem("tren_sub") || "null"); if(x && x.status === "active" && x.plan === "premium") hasP = true; }catch(e){}
-    try{ var y = JSON.parse(localStorage.getItem("tren_trenbot_sub") || "null"); if(y && y.status === "active" && y.plan === "trenbot") hasTB = true; }catch(e){}
-    try{ var z = JSON.parse(localStorage.getItem("tren_autosignals_sub") || "null"); if(z && z.status === "active" && z.plan === "auto") hasAS = true; }catch(e){}
+
+    if(_subData && _subData.status === "active" && _subData.plan === "premium") hasP = true;
+    if(_autoSubData && _autoSubData.status === "active" && _autoSubData.plan === "trenbot") hasTB = true;
+    if(_autoSignalsSubData && _autoSignalsSubData.status === "active" && _autoSignalsSubData.plan === "auto") hasAS = true;
 
     if(!hasP && !hasTB && !hasAS){
       var p = await checkSub("premium");
@@ -297,7 +349,6 @@ html,body{width:100%;height:100%;background:#04080f;}
       if(hasAS) localStorage.setItem("tren_autosignals_sub", JSON.stringify({status:"active",plan:"auto"}));
     }
 
-    // Update UI
     var tc = document.getElementById("trial-card");
     var tp = document.getElementById("trial-pill");
     var sb = document.getElementById("sidebar-plan-badge");
@@ -307,11 +358,11 @@ html,body{width:100%;height:100%;background:#04080f;}
       var lbl = "⚡ Premium", cls = "premium";
       if(hasTB){ lbl = "⚡ TrenBot"; cls = "automated"; }
       else if(hasAS){ lbl = "⚡ AutoSignals"; cls = "autosignals"; }
-      if(tp){ tp.textContent = lbl + " Active"; tp.className = "t-pill " + cls; tp.style.display = "flex"; }
+      if(tp){ tp.textContent = lbl + " Active"; tp.className = "t-pill " + cls; }
       if(sb){ sb.textContent = lbl; sb.className = "sub-status-badge " + cls; }
     } else {
       if(tc) tc.style.display = "";
-      if(tp){ tp.textContent = "⏱ Trial"; tp.className = "t-pill"; tp.style.display = "flex"; }
+      if(tp){ tp.innerHTML = '⏱ <span id="pill-days">7</span> days left in trial'; tp.className = "t-pill"; }
       if(sb){ sb.textContent = "⏱ Trial"; sb.className = "sub-status-badge trial"; }
     }
   }
