@@ -775,16 +775,14 @@ function buildSystemPrompt() {
   return modeInstructions[_aiMode] || modeInstructions.analysis;
 }
 
-// ── STREAMING API CALL ─────────────────────────────────────────────
-async function callClaudeAPI(messages) {
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+// ── GROQ API CALL ──────────────────────────────────────────────────
+async function callGeminiAPI(messages) {
+  const response = await fetch('/api/ai-analysis', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 1000,
-      system: buildSystemPrompt(),
-      messages: messages
+      systemPrompt: buildSystemPrompt(),
+      messages
     })
   });
   if (!response.ok) {
@@ -792,8 +790,7 @@ async function callClaudeAPI(messages) {
     throw new Error(err.error?.message || 'API error ' + response.status);
   }
   const data = await response.json();
-  const text = (data.content || []).map(c => c.type === 'text' ? c.text : '').join('');
-  return text;
+  return data.text || '';
 }
 
 async function streamToMessage(msgId, messages) {
@@ -802,7 +799,7 @@ async function streamToMessage(msgId, messages) {
   bubble.innerHTML = '<span class="stream-cursor"></span>';
 
   try {
-    const fullText = await callClaudeAPI(messages);
+    const fullText = await callGeminiAPI(messages);
     // Simulate streaming by progressively revealing text
     let displayed = '';
     const words = fullText.split(' ');
