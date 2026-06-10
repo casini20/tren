@@ -387,34 +387,67 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
       </div>
 
       <!-- ── NASDAQ FUTURES CHART ── -->
-      <div class="sh">
-        <div class="st">NASDAQ Futures <span style="font-size:11px;color:var(--sub);font-weight:400;">(NQ=F · E-mini)</span></div>
-        <div style="display:flex;align-items:center;gap:8px;">
-          <div class="tf-seg" id="nq-tf-seg" role="group" aria-label="Chart interval">
+      <div class="sh" style="margin-bottom:.7rem;">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <div class="st">NASDAQ Futures</div>
+          <span style="font-size:10px;color:var(--sub);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:5px;padding:2px 7px;">NQ=F · E-mini</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <!-- Chart type -->
+          <div class="tf-seg" id="nq-type-seg">
+            <button class="tf-btn active" onclick="setNQType(this,'line')" title="Line">〜</button>
+            <button class="tf-btn" onclick="setNQType(this,'candle')" title="Candles">▮</button>
+          </div>
+          <!-- Indicators -->
+          <div class="tf-seg" id="nq-ind-seg">
+            <button class="tf-btn active" onclick="toggleNQInd(this,'ema9')" title="EMA 9">E9</button>
+            <button class="tf-btn active" onclick="toggleNQInd(this,'ema21')" title="EMA 21">E21</button>
+            <button class="tf-btn active" onclick="toggleNQInd(this,'vol')" title="Volume">Vol</button>
+          </div>
+          <!-- Timeframe -->
+          <div class="tf-seg" id="nq-tf-seg">
             <button class="tf-btn" onclick="setNQInterval(this,'5m','1d')">5M</button>
             <button class="tf-btn" onclick="setNQInterval(this,'15m','5d')">15M</button>
             <button class="tf-btn" onclick="setNQInterval(this,'1h','1mo')">1H</button>
             <button class="tf-btn active" onclick="setNQInterval(this,'1d','6mo')">1D</button>
             <button class="tf-btn" onclick="setNQInterval(this,'1wk','2y')">1W</button>
           </div>
-          <div id="nq-refresh-btn" onclick="nqFetch(_nqInterval,_nqRange,true)" title="Refresh" style="width:28px;height:28px;border-radius:7px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:all .2s;flex-shrink:0;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">↻</div>
+          <div id="nq-refresh-btn" onclick="nqFetch(_nqInterval,_nqRange,true)" title="Refresh" style="width:28px;height:28px;border-radius:7px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;flex-shrink:0;transition:border-color .2s;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">↻</div>
         </div>
       </div>
-      <div class="nq-chart-wrap" style="position:relative;padding:1.2rem 1.4rem 1rem;">
-        <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-          <span id="nq-price" style="font-size:22px;font-weight:700;letter-spacing:-.3px;">—</span>
-          <span id="nq-change" style="font-size:13px;font-weight:600;">—</span>
-          <span id="nq-updated" style="font-size:10px;color:var(--sub);margin-left:auto;"></span>
+
+      <div class="nq-chart-wrap" style="position:relative;padding:.9rem 1.2rem .7rem;">
+        <!-- ── PRICE HEADER ── -->
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
+          <div>
+            <span id="nq-price" style="font-size:24px;font-weight:800;letter-spacing:-.5px;">—</span>
+            <span id="nq-change" style="font-size:13px;font-weight:600;margin-left:8px;">—</span>
+          </div>
+          <div style="display:flex;gap:16px;margin-left:4px;">
+            <div style="font-size:11px;color:var(--sub);">O: <span id="nq-stat-o" style="color:var(--sub2);font-weight:600;">—</span></div>
+            <div style="font-size:11px;color:var(--sub);">H: <span id="nq-stat-h" style="color:var(--green);font-weight:600;">—</span></div>
+            <div style="font-size:11px;color:var(--sub);">L: <span id="nq-stat-l" style="color:var(--red);font-weight:600;">—</span></div>
+            <div style="font-size:11px;color:var(--sub);">C: <span id="nq-stat-c" style="color:var(--sub2);font-weight:600;">—</span></div>
+            <div style="font-size:11px;color:var(--sub);">Vol: <span id="nq-stat-v" style="color:var(--sub2);font-weight:600;">—</span></div>
+          </div>
+          <div style="margin-left:auto;font-size:10px;color:var(--sub);" id="nq-updated"></div>
         </div>
-        <div style="position:relative;">
-          <canvas id="nq-canvas" height="280" style="width:100%;height:280px;display:block;cursor:crosshair;border-radius:6px;"></canvas>
-          <div id="nq-tooltip" style="display:none;position:absolute;top:8px;left:8px;pointer-events:none;background:var(--bg2);border:1px solid var(--border2);border-radius:9px;padding:6px 12px;font-size:11px;font-weight:600;white-space:nowrap;z-index:10;line-height:1.7;"></div>
-          <div id="nq-crosshair-v" style="display:none;position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.15);pointer-events:none;"></div>
-          <div id="nq-crosshair-h" style="display:none;position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.15);pointer-events:none;"></div>
+
+        <!-- ── CANVAS AREA ── -->
+        <div style="position:relative;" id="nq-canvas-wrap">
+          <canvas id="nq-canvas" style="width:100%;display:block;cursor:crosshair;"></canvas>
+          <!-- hover tooltip -->
+          <div id="nq-tooltip" style="display:none;position:absolute;pointer-events:none;background:rgba(8,14,26,.95);border:1px solid var(--border2);border-radius:10px;padding:8px 13px;font-size:11px;font-weight:600;white-space:nowrap;z-index:20;line-height:1.9;backdrop-filter:blur(8px);"></div>
+          <!-- price tag on y-axis -->
+          <div id="nq-price-tag" style="display:none;position:absolute;right:0;pointer-events:none;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap;z-index:15;"></div>
+          <!-- crosshairs -->
+          <div id="nq-cv" style="display:none;position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.12);pointer-events:none;border-left:1px dashed rgba(255,255,255,.1);"></div>
+          <div id="nq-ch" style="display:none;position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.12);pointer-events:none;border-top:1px dashed rgba(255,255,255,.1);"></div>
         </div>
-        <div id="nq-xlabels" style="display:flex;justify-content:space-between;margin-top:6px;font-size:10px;color:var(--sub);"></div>
-        <div id="nq-overlay" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;border-radius:13px;background:var(--bg3);">
-          <div style="width:32px;height:32px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:spin .8s linear infinite;"></div>
+
+        <!-- loading overlay -->
+        <div id="nq-overlay" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;border-radius:13px;background:var(--bg3);z-index:30;">
+          <div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:nqspin .7s linear infinite;"></div>
           <div style="font-size:12px;color:var(--sub);">Loading NQ futures…</div>
         </div>
       </div>
@@ -498,8 +531,8 @@ const TF_LABELS = {7:'7 days',14:'14 days',30:'30 days',90:'90 days',365:'1 year
 function setTimeframe(days){
   _activeDays = days;
   document.querySelectorAll('.tf-btn').forEach(btn => {
-    // Skip NQ interval buttons
-    if(btn.closest('#nq-tf-seg')) return;
+    // Skip ALL NQ chart buttons (timeframe, type, indicators)
+    if(btn.closest('#nq-tf-seg') || btn.closest('#nq-type-seg') || btn.closest('#nq-ind-seg')) return;
     const v = btn.textContent === '1Y' ? 365 : parseInt(btn.textContent);
     btn.classList.toggle('active', v === days);
   });
@@ -515,187 +548,441 @@ function setTimeframe(days){
 }
 
 // ── NQ FUTURES CHART ──────────────────────────────────────────────
-// Uses a tiny Vercel serverless proxy at /api/nq-chart to bypass
-// Yahoo Finance CORS. See api/nq-chart.js in your project root.
+// Vercel proxy: api/nq-chart.js  |  symbol: NQ=F
 let _nqInterval = '1d', _nqRange = '6mo';
+let _nqChartType = 'line';   // 'line' | 'candle'
+let _nqIndicators = { ema9: true, ema21: true, vol: true };
 let _nqData = null, _nqAutoTimer = null;
 
+// ── helpers ──
+function nqEMA(arr, period) {
+  const k = 2 / (period + 1), out = [];
+  let prev = null;
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] == null) { out.push(null); continue; }
+    if (prev == null) { prev = arr[i]; out.push(prev); continue; }
+    prev = arr[i] * k + prev * (1 - k);
+    out.push(prev);
+  }
+  return out;
+}
+function nqFmt(n) { return n == null ? '—' : n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}); }
+function nqFmtK(n) {
+  if (n == null) return '—';
+  if (n >= 1e9) return (n/1e9).toFixed(1)+'B';
+  if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
+  if (n >= 1e3) return (n/1e3).toFixed(0)+'K';
+  return String(n);
+}
+
+// ── controls ──
 window.setNQInterval = function(btn, interval, range) {
   _nqInterval = interval; _nqRange = range;
   document.querySelectorAll('#nq-tf-seg .tf-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
   nqFetch(interval, range, false);
 };
+window.setNQType = function(btn, type) {
+  _nqChartType = type;
+  document.querySelectorAll('#nq-type-seg .tf-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (_nqData) nqDraw(_nqData);
+};
+window.toggleNQInd = function(btn, ind) {
+  _nqIndicators[ind] = !_nqIndicators[ind];
+  btn.classList.toggle('active', _nqIndicators[ind]);
+  if (_nqData) nqDraw(_nqData);
+};
 
+// ── fetch ──
 async function nqFetch(interval, range, isRefresh) {
   const overlay = document.getElementById('nq-overlay');
-  if(overlay) overlay.style.display = 'flex';
-  if(isRefresh){
+  if (overlay) { overlay.style.display = 'flex'; overlay.innerHTML = '<div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:nqspin .7s linear infinite;"></div><div style="font-size:12px;color:var(--sub);">Loading NQ futures…</div>'; }
+  if (isRefresh) {
     const rb = document.getElementById('nq-refresh-btn');
-    if(rb){ rb.style.transform='rotate(360deg)'; rb.style.transition='transform .5s'; setTimeout(()=>{rb.style.transform='';rb.style.transition='';},500); }
+    if (rb) { rb.style.transform='rotate(360deg)'; rb.style.transition='transform .5s'; setTimeout(()=>{ rb.style.transform=''; rb.style.transition=''; }, 500); }
   }
   try {
     const res = await fetch(`/api/nq-chart?interval=${interval}&range=${range}`);
-    if(!res.ok) throw new Error('fetch failed');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     const json = await res.json();
+    if (!json.bars || !json.bars.length) throw new Error('no data');
     _nqData = json;
     nqDraw(json);
-    if(overlay) overlay.style.display = 'none';
+    if (overlay) overlay.style.display = 'none';
   } catch(e) {
-    if(overlay) overlay.innerHTML = `<span style="font-size:22px">📡</span><div style="font-size:12px;color:var(--sub);text-align:center;">Couldn't load NQ data<br><span style="color:var(--al);cursor:pointer;" onclick="nqFetch(_nqInterval,_nqRange,false)">retry ↻</span></div>`;
+    if (overlay) overlay.innerHTML = `<span style="font-size:22px">📡</span><div style="font-size:12px;color:var(--sub);text-align:center;line-height:1.7;">Couldn't load NQ data<br><small style="opacity:.6">${e.message}</small><br><span style="color:var(--al);cursor:pointer;font-weight:600;" onclick="nqFetch('${interval}','${range}',false)">retry ↻</span></div>`;
   }
 }
 
+// ── draw ──
 function nqDraw(data) {
   const canvas = document.getElementById('nq-canvas');
-  if(!canvas || !data || !data.bars || !data.bars.length) return;
+  if (!canvas || !data || !data.bars || !data.bars.length) return;
   const bars = data.bars;
-  const DPR = window.devicePixelRatio || 1;
-  const W = canvas.offsetWidth, H = 280;
-  canvas.width = W * DPR; canvas.height = H * DPR;
-  canvas.style.width = W + 'px'; canvas.style.height = H + 'px';
+  const DPR  = window.devicePixelRatio || 1;
+  const W    = canvas.offsetWidth || canvas.parentElement.offsetWidth || 800;
+
+  // split into price pane + optional volume pane
+  const hasVol = _nqIndicators.vol && bars.some(b => b.v > 0);
+  const TOTAL_H = 220;
+  const VOL_H   = hasVol ? 44 : 0;
+  const PRICE_H = TOTAL_H - VOL_H;
+
+  canvas.width  = W * DPR;
+  canvas.height = TOTAL_H * DPR;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = TOTAL_H + 'px';
+
   const ctx = canvas.getContext('2d');
   ctx.scale(DPR, DPR);
 
-  const PAD_L = 60, PAD_R = 8, PAD_T = 12, PAD_B = 4;
+  const PAD_L = 68, PAD_R = 72, PAD_T = 14, PAD_B = 22;
   const chartW = W - PAD_L - PAD_R;
-  const chartH = H - PAD_T - PAD_B;
+  const chartH = PRICE_H - PAD_T - PAD_B;
 
-  const closes = bars.map(b => b.c);
+  // price range
   const highs  = bars.map(b => b.h);
   const lows   = bars.map(b => b.l);
-  const minP = Math.min(...lows)  * 0.9995;
-  const maxP = Math.max(...highs) * 1.0005;
-  const range = maxP - minP || 1;
+  const pad    = (Math.max(...highs) - Math.min(...lows)) * 0.04;
+  const minP   = Math.min(...lows)  - pad;
+  const maxP   = Math.max(...highs) + pad;
+  const pRange = maxP - minP || 1;
 
-  const toX = i => PAD_L + (i / (bars.length - 1)) * chartW;
-  const toY = v => PAD_T + chartH - ((v - minP) / range) * chartH;
+  const toX = i => PAD_L + (i / Math.max(bars.length - 1, 1)) * chartW;
+  const toY = v => PAD_T + chartH - ((v - minP) / pRange) * chartH;
 
   const isUp = bars[bars.length-1].c >= bars[0].c;
-  const lineColor = isUp ? '#10b981' : '#ef4444';
-  const fillColor = isUp ? 'rgba(16,185,129,' : 'rgba(239,68,68,';
+  const GREEN = '#10b981', RED = '#ef4444';
+  const lineColor = isUp ? GREEN : RED;
 
-  // Grid lines
-  const gridCount = 4;
-  ctx.strokeStyle = 'rgba(255,255,255,0.04)';
-  ctx.lineWidth = 1;
-  for(let i = 0; i <= gridCount; i++){
+  // ── BACKGROUND ──
+  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg3').trim() || '#0c1525';
+  ctx.fillRect(0, 0, W, TOTAL_H);
+
+  // ── GRID + Y-AXIS (left & right) ──
+  const gridCount = 5;
+  ctx.font = '10px Plus Jakarta Sans, sans-serif';
+  ctx.textBaseline = 'middle';
+  for (let i = 0; i <= gridCount; i++) {
     const y = PAD_T + (chartH / gridCount) * i;
+    const price = maxP - (pRange / gridCount) * i;
+    // grid line
+    ctx.strokeStyle = 'rgba(255,255,255,0.045)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([4, 6]);
     ctx.beginPath(); ctx.moveTo(PAD_L, y); ctx.lineTo(W - PAD_R, y); ctx.stroke();
-    const price = maxP - (range / gridCount) * i;
-    ctx.fillStyle = 'rgba(240,244,255,0.35)';
-    ctx.font = '10px Plus Jakarta Sans, sans-serif';
+    ctx.setLineDash([]);
+    // left label
+    ctx.fillStyle = 'rgba(240,244,255,0.3)';
     ctx.textAlign = 'right';
-    ctx.fillText(price.toLocaleString('en-US',{maximumFractionDigits:0}), PAD_L - 5, y + 3);
+    ctx.fillText(price.toLocaleString('en-US', {maximumFractionDigits:0}), PAD_L - 6, y);
+    // right label
+    ctx.textAlign = 'left';
+    ctx.fillText(price.toLocaleString('en-US', {maximumFractionDigits:0}), W - PAD_R + 6, y);
   }
 
-  // Gradient fill
-  const grad = ctx.createLinearGradient(0, PAD_T, 0, PAD_T + chartH);
-  grad.addColorStop(0, fillColor + '0.18)');
-  grad.addColorStop(1, fillColor + '0.0)');
-  ctx.beginPath();
-  ctx.moveTo(toX(0), PAD_T + chartH);
-  bars.forEach((b, i) => ctx.lineTo(toX(i), toY(b.c)));
-  ctx.lineTo(toX(bars.length - 1), PAD_T + chartH);
-  ctx.closePath();
-  ctx.fillStyle = grad;
-  ctx.fill();
+  // ── X-AXIS ticks ──
+  const labelEvery = Math.max(1, Math.ceil(bars.length / 8));
+  ctx.fillStyle = 'rgba(240,244,255,0.3)';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  for (let i = 0; i < bars.length; i += labelEvery) {
+    const x = toX(i);
+    ctx.fillText(bars[i].label || '', x, PAD_T + chartH + 5);
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(x, PAD_T + chartH); ctx.lineTo(x, PAD_T + chartH + 3); ctx.stroke();
+  }
 
-  // Line
-  ctx.beginPath();
-  ctx.strokeStyle = lineColor;
-  ctx.lineWidth = 2;
-  ctx.lineJoin = 'round';
-  bars.forEach((b, i) => i === 0 ? ctx.moveTo(toX(i), toY(b.c)) : ctx.lineTo(toX(i), toY(b.c)));
-  ctx.stroke();
+  // ── CHART: LINE or CANDLE ──
+  if (_nqChartType === 'line') {
+    // gradient fill under line
+    const grad = ctx.createLinearGradient(0, PAD_T, 0, PAD_T + chartH);
+    grad.addColorStop(0, isUp ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.12)');
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.beginPath();
+    ctx.moveTo(toX(0), PAD_T + chartH);
+    bars.forEach((b, i) => ctx.lineTo(toX(i), toY(b.c)));
+    ctx.lineTo(toX(bars.length - 1), PAD_T + chartH);
+    ctx.closePath();
+    ctx.fillStyle = grad;
+    ctx.fill();
+    // line
+    ctx.beginPath();
+    ctx.strokeStyle = lineColor;
+    ctx.lineWidth = 2;
+    ctx.lineJoin = 'round';
+    ctx.shadowColor = lineColor;
+    ctx.shadowBlur = 6;
+    bars.forEach((b, i) => i === 0 ? ctx.moveTo(toX(i), toY(b.c)) : ctx.lineTo(toX(i), toY(b.c)));
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+    // last price dot
+    const lx = toX(bars.length - 1), ly = toY(bars[bars.length-1].c);
+    ctx.beginPath();
+    ctx.arc(lx, ly, 4, 0, Math.PI * 2);
+    ctx.fillStyle = lineColor;
+    ctx.fill();
+    ctx.strokeStyle = '#0c1525';
+    ctx.lineWidth = 2;
+    ctx.stroke();
 
-  // Price / change header
-  const last = bars[bars.length - 1];
+  } else {
+    // CANDLESTICK
+    const candleW = Math.max(1, Math.min(12, chartW / bars.length * 0.7));
+    bars.forEach((b, i) => {
+      const x  = toX(i);
+      const co = b.c >= b.o;
+      const bodyTop = toY(Math.max(b.o, b.c));
+      const bodyBot = toY(Math.min(b.o, b.c));
+      const bodyH   = Math.max(1, bodyBot - bodyTop);
+      const wickTop = toY(b.h);
+      const wickBot = toY(b.l);
+      const col = co ? GREEN : RED;
+      // wick
+      ctx.strokeStyle = col;
+      ctx.lineWidth = 1;
+      ctx.globalAlpha = 0.7;
+      ctx.beginPath(); ctx.moveTo(x, wickTop); ctx.lineTo(x, wickBot); ctx.stroke();
+      ctx.globalAlpha = 1;
+      // body
+      ctx.fillStyle = co ? 'rgba(16,185,129,0.85)' : 'rgba(239,68,68,0.85)';
+      ctx.strokeStyle = col;
+      ctx.lineWidth = 1;
+      ctx.fillRect(x - candleW/2, bodyTop, candleW, bodyH);
+      ctx.strokeRect(x - candleW/2, bodyTop, candleW, bodyH);
+    });
+  }
+
+  // ── EMA 9 ──
+  if (_nqIndicators.ema9) {
+    const ema9 = nqEMA(bars.map(b => b.c), 9);
+    ctx.beginPath();
+    ctx.strokeStyle = '#f59e0b';
+    ctx.lineWidth = 1.5;
+    ctx.lineJoin = 'round';
+    ctx.setLineDash([]);
+    let started = false;
+    ema9.forEach((v, i) => {
+      if (v == null) return;
+      started ? ctx.lineTo(toX(i), toY(v)) : ctx.moveTo(toX(i), toY(v));
+      started = true;
+    });
+    ctx.stroke();
+    // label at end
+    const lastEma9 = ema9.filter(v => v != null).pop();
+    if (lastEma9) {
+      ctx.fillStyle = '#f59e0b';
+      ctx.font = '9px Plus Jakarta Sans, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('E9', W - PAD_R + 6, toY(lastEma9));
+    }
+  }
+
+  // ── EMA 21 ──
+  if (_nqIndicators.ema21) {
+    const ema21 = nqEMA(bars.map(b => b.c), 21);
+    ctx.beginPath();
+    ctx.strokeStyle = '#818cf8';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([4, 3]);
+    let started = false;
+    ema21.forEach((v, i) => {
+      if (v == null) return;
+      started ? ctx.lineTo(toX(i), toY(v)) : ctx.moveTo(toX(i), toY(v));
+      started = true;
+    });
+    ctx.stroke();
+    ctx.setLineDash([]);
+    const lastEma21 = ema21.filter(v => v != null).pop();
+    if (lastEma21) {
+      ctx.fillStyle = '#818cf8';
+      ctx.font = '9px Plus Jakarta Sans, sans-serif';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('E21', W - PAD_R + 6, toY(lastEma21) + 10);
+    }
+  }
+
+  // ── VOLUME PANE ──
+  if (hasVol) {
+    const volTop = PRICE_H + 4;
+    const volH   = VOL_H - 8;
+    const volumes = bars.map(b => b.v || 0);
+    const maxVol  = Math.max(...volumes, 1);
+    const barW    = Math.max(1, chartW / bars.length * 0.65);
+    // separator
+    ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(PAD_L, PRICE_H); ctx.lineTo(W - PAD_R, PRICE_H); ctx.stroke();
+    // Vol label
+    ctx.fillStyle = 'rgba(240,244,255,0.25)';
+    ctx.font = '9px Plus Jakarta Sans, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'top';
+    ctx.fillText('VOL', PAD_L - 6, volTop);
+    // bars
+    bars.forEach((b, i) => {
+      const x  = toX(i);
+      const h  = Math.max(1, (b.v / maxVol) * volH);
+      const co = b.c >= b.o;
+      ctx.fillStyle = co ? 'rgba(16,185,129,0.45)' : 'rgba(239,68,68,0.4)';
+      ctx.fillRect(x - barW/2, volTop + volH - h, barW, h);
+    });
+    // max vol label
+    ctx.fillStyle = 'rgba(240,244,255,0.25)';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'top';
+    ctx.fillText(nqFmtK(maxVol), PAD_L - 6, volTop + 8);
+  }
+
+  // ── LAST PRICE LINE ──
+  const lastClose = bars[bars.length-1].c;
+  const lastY = toY(lastClose);
+  ctx.strokeStyle = isUp ? 'rgba(16,185,129,0.6)' : 'rgba(239,68,68,0.6)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([3, 4]);
+  ctx.beginPath(); ctx.moveTo(PAD_L, lastY); ctx.lineTo(W - PAD_R, lastY); ctx.stroke();
+  ctx.setLineDash([]);
+  // price tag right side
+  const tag = document.getElementById('nq-price-tag');
+  if (tag) {
+    tag.style.display = 'block';
+    tag.textContent = lastClose.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+    tag.style.top = (lastY - 9) + 'px';
+    tag.style.background = isUp ? '#10b981' : '#ef4444';
+  }
+
+  // ── HEADER STATS ──
+  const last  = bars[bars.length - 1];
   const first = bars[0];
-  const chg = last.c - first.c;
+  const chg   = last.c - first.c;
   const chgPct = (chg / first.c) * 100;
-  const pe = document.getElementById('nq-price');
-  const ce = document.getElementById('nq-change');
-  const ue = document.getElementById('nq-updated');
-  if(pe) pe.textContent = last.c.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
-  if(ce){ ce.textContent = (chg >= 0 ? '+' : '') + chg.toFixed(2) + ' (' + (chgPct >= 0 ? '+' : '') + chgPct.toFixed(2) + '%)'; ce.style.color = chg >= 0 ? 'var(--green)' : 'var(--red)'; }
-  if(ue) ue.textContent = 'NQ=F · ' + new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  const g = id => document.getElementById(id);
+  const pe = g('nq-price'), ce = g('nq-change'), ue = g('nq-updated');
+  const so = g('nq-stat-o'), sh = g('nq-stat-h'), sl = g('nq-stat-l'), sc = g('nq-stat-c'), sv = g('nq-stat-v');
+  if (pe) { pe.textContent = nqFmt(last.c); pe.style.color = isUp ? GREEN : RED; }
+  if (ce) { ce.textContent = (chg >= 0 ? '+' : '') + chg.toFixed(2) + '  (' + (chgPct >= 0 ? '+' : '') + chgPct.toFixed(2) + '%)'; ce.style.color = isUp ? GREEN : RED; }
+  if (ue) ue.textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
+  if (so) so.textContent = nqFmt(last.o);
+  if (sh) sh.textContent = nqFmt(last.h);
+  if (sl) sl.textContent = nqFmt(last.l);
+  if (sc) sc.textContent = nqFmt(last.c);
+  if (sv) sv.textContent = nqFmtK(last.v);
 
-  // X-axis labels
-  const lbl = document.getElementById('nq-xlabels');
-  if(lbl){
-    const step = Math.max(1, Math.floor(bars.length / 6));
-    const items = [];
-    for(let i = 0; i < bars.length; i += step) items.push(`<span>${bars[i].label||''}</span>`);
-    lbl.innerHTML = items.join('');
-  }
-
-  // Hover interaction
-  canvas._nqBars = bars; canvas._nqToX = toX; canvas._nqToY = toY;
-  canvas._nqPAD_L = PAD_L; canvas._nqChartW = chartW; canvas._nqLen = bars.length;
-  canvas._nqDPR = DPR;
+  // store for hover
+  canvas._nq = { bars, toX, toY, PAD_L, chartW, len: bars.length };
 }
 
-// Hover
-(function setupNQHover(){
-  function onMove(e){
+// ── HOVER ──
+(function setupNQHover() {
+  function onMove(e) {
     const canvas = document.getElementById('nq-canvas');
-    if(!canvas || !canvas._nqBars) return;
+    if (!canvas || !canvas._nq) return;
     const rect = canvas.getBoundingClientRect();
     const mx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
     const my = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-    const {_nqBars:bars, _nqToX:toX, _nqToY:toY, _nqPAD_L:PAD_L, _nqChartW:chartW, _nqLen:len} = canvas;
-    const idx = Math.max(0, Math.min(len-1, Math.round((mx - PAD_L) / chartW * (len-1))));
+    const { bars, toX, toY, PAD_L, chartW, len } = canvas._nq;
+    const idx = Math.max(0, Math.min(len - 1, Math.round((mx - PAD_L) / chartW * (len - 1))));
     const b = bars[idx];
-    if(!b) return;
+    if (!b) return;
     const cx = toX(idx), cy = toY(b.c);
     const tip = document.getElementById('nq-tooltip');
-    const cv = document.getElementById('nq-crosshair-v');
-    const ch = document.getElementById('nq-crosshair-h');
-    if(tip){
+    const cv  = document.getElementById('nq-cv');
+    const ch  = document.getElementById('nq-ch');
+    const tag = document.getElementById('nq-price-tag');
+    const isUp = b.c >= b.o;
+    const col  = isUp ? '#10b981' : '#ef4444';
+
+    // update header OHLCV to hovered bar
+    const g = id => document.getElementById(id);
+    const so=g('nq-stat-o'),sh=g('nq-stat-h'),sl=g('nq-stat-l'),sc=g('nq-stat-c'),sv=g('nq-stat-v');
+    if(so) so.textContent = nqFmt(b.o);
+    if(sh) sh.textContent = nqFmt(b.h);
+    if(sl) sl.textContent = nqFmt(b.l);
+    if(sc) { sc.textContent = nqFmt(b.c); sc.style.color = col; }
+    if(sv) sv.textContent  = nqFmtK(b.v);
+
+    if (tip) {
+      const chgBar = b.c - b.o;
+      const chgBarPct = b.o ? (chgBar / b.o * 100) : 0;
       tip.style.display = 'block';
-      tip.innerHTML = `<span style="color:var(--sub);font-weight:500">${b.label||''}</span><br>O: ${b.o?.toLocaleString('en-US',{maximumFractionDigits:2})}  H: <span style="color:var(--green)">${b.h?.toLocaleString('en-US',{maximumFractionDigits:2})}</span>  L: <span style="color:var(--red)">${b.l?.toLocaleString('en-US',{maximumFractionDigits:2})}</span>  C: <b>${b.c?.toLocaleString('en-US',{maximumFractionDigits:2})}</b>`;
-      // keep tip inside canvas
-      const tipW = 320, tipH = 50;
-      tip.style.left = Math.min(cx + 10, rect.width - tipW - 8) + 'px';
-      tip.style.top = Math.max(8, cy - tipH/2) + 'px';
+      tip.innerHTML =
+        `<div style="color:var(--sub);font-size:10px;margin-bottom:3px;">${b.label || ''}</div>` +
+        `<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;">` +
+        `<span style="color:var(--sub)">Open</span><span>${nqFmt(b.o)}</span>` +
+        `<span style="color:var(--sub)">High</span><span style="color:#10b981">${nqFmt(b.h)}</span>` +
+        `<span style="color:var(--sub)">Low</span><span style="color:#ef4444">${nqFmt(b.l)}</span>` +
+        `<span style="color:var(--sub)">Close</span><span style="color:${col};font-weight:700">${nqFmt(b.c)}</span>` +
+        `<span style="color:var(--sub)">Chg</span><span style="color:${col}">${chgBar >= 0 ? '+' : ''}${chgBar.toFixed(2)} (${chgBarPct.toFixed(2)}%)</span>` +
+        (b.v ? `<span style="color:var(--sub)">Vol</span><span>${nqFmtK(b.v)}</span>` : '') +
+        `</div>`;
+      // position tooltip — avoid edges
+      const TW = 210, TH = 130;
+      let tx = cx + 14, ty = cy - TH / 2;
+      if (tx + TW > rect.width - 10) tx = cx - TW - 10;
+      if (ty < 8) ty = 8;
+      if (ty + TH > rect.height - 8) ty = rect.height - TH - 8;
+      tip.style.left = tx + 'px';
+      tip.style.top  = ty + 'px';
     }
-    if(cv){ cv.style.display='block'; cv.style.left = cx + 'px'; }
-    if(ch){ ch.style.display='block'; ch.style.top = cy + 'px'; }
+    if (cv) { cv.style.display = 'block'; cv.style.left = cx + 'px'; }
+    if (ch) { ch.style.display = 'block'; ch.style.top  = cy + 'px'; }
+    // live price tag follows hover
+    if (tag) { tag.textContent = nqFmt(b.c); tag.style.top = (cy - 9) + 'px'; tag.style.background = col; }
   }
-  function onLeave(){
-    ['nq-tooltip','nq-crosshair-v','nq-crosshair-h'].forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+  function onLeave() {
+    ['nq-tooltip','nq-cv','nq-ch'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+    const tag = document.getElementById('nq-price-tag');
+    // restore to last close
+    if (_nqData && _nqData.bars) {
+      const last = _nqData.bars[_nqData.bars.length - 1];
+      // redraw to restore header
+      const canvas = document.getElementById('nq-canvas');
+      if (canvas && canvas._nq) {
+        const { bars, toY } = canvas._nq;
+        const lb = bars[bars.length - 1];
+        const isUp = lb.c >= bars[0].c;
+        const g = id => document.getElementById(id);
+        const so=g('nq-stat-o'),sh=g('nq-stat-h'),sl=g('nq-stat-l'),sc=g('nq-stat-c'),sv=g('nq-stat-v');
+        if(so) so.textContent=nqFmt(lb.o); if(sh) sh.textContent=nqFmt(lb.h);
+        if(sl) sl.textContent=nqFmt(lb.l); if(sc){sc.textContent=nqFmt(lb.c);sc.style.color=isUp?'#10b981':'#ef4444';}
+        if(sv) sv.textContent=nqFmtK(lb.v);
+        if(tag){tag.style.display='block';tag.textContent=nqFmt(lb.c);tag.style.top=(toY(lb.c)-9)+'px';tag.style.background=isUp?'#10b981':'#ef4444';}
+      }
+    }
   }
-  document.addEventListener('DOMContentLoaded', () => {
+  function wire() {
     const c = document.getElementById('nq-canvas');
-    if(!c) return;
+    if (!c) return;
     c.addEventListener('mousemove', onMove);
     c.addEventListener('mouseleave', onLeave);
-    c.addEventListener('touchmove', onMove, {passive:true});
+    c.addEventListener('touchmove', onMove, {passive: true});
     c.addEventListener('touchend', onLeave);
-  });
-  // also wire immediately in case DOM already ready
-  const c = document.getElementById('nq-canvas');
-  if(c){ c.addEventListener('mousemove', onMove); c.addEventListener('mouseleave', onLeave); }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
+  else wire();
 })();
 
-// spin animation
-(function addSpinCSS(){
-  if(document.getElementById('nq-spin-style')) return;
+// spin keyframes
+(function(){
+  if (document.getElementById('_nqcss')) return;
   const s = document.createElement('style');
-  s.id = 'nq-spin-style';
-  s.textContent = '@keyframes spin{to{transform:rotate(360deg)}}';
+  s.id = '_nqcss';
+  s.textContent = '@keyframes nqspin{to{transform:rotate(360deg)}}';
   document.head.appendChild(s);
 })();
 
-// Auto-refresh every 5min
-function nqScheduleRefresh(){
+// auto-refresh every 5min
+function nqScheduleRefresh() {
   clearInterval(_nqAutoTimer);
   _nqAutoTimer = setInterval(() => nqFetch(_nqInterval, _nqRange, false), 5 * 60 * 1000);
 }
 nqFetch(_nqInterval, _nqRange, false);
 nqScheduleRefresh();
-window.addEventListener('resize', () => { if(_nqData) nqDraw(_nqData); });
+window.addEventListener('resize', () => { if (_nqData) nqDraw(_nqData); });
 
 let _navLock=false;
 function navTo(url){
@@ -743,10 +1030,56 @@ function initUserInfo(){
   const pe=document.getElementById('prof-menu-email');if(pe)pe.textContent=email;
 }
 
-function initSubUI(){
-  const hasTB=_autoSubData?.status==='active'&&_autoSubData?.plan==='trenbot';
-  const hasAS=_autoSignalsSubData?.status==='active'&&_autoSignalsSubData?.plan==='auto';
-  const hasP=_subData?.status&&_subData.status!=='inactive'&&_subData.status!=='cancelled';
+// ── LIVE SUPABASE SUBSCRIPTION CHECKS ────────────────────────────
+async function checkTrenBotAccess(){
+  const email=getSessionEmail();if(!email||email==='—')return false;
+  if(_autoSubData?.status==='active'&&_autoSubData?.plan==='trenbot')return true;
+  try{
+    const res=await fetch(
+      `${SUPABASE_AUTH_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&plan=eq.trenbot&status=eq.active&select=*`,
+      {headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}}
+    );
+    const rows=await res.json();
+    if(rows&&rows.length>0&&rows[0].status==='active'&&rows[0].plan==='trenbot'){
+      _autoSubData=rows[0];localStorage.setItem('tren_trenbot_sub',JSON.stringify(_autoSubData));return true;
+    }
+  }catch(e){console.error('TrenBot check failed:',e);}
+  return false;
+}
+
+async function checkPremiumAccess(){
+  const email=getSessionEmail();if(!email||email==='—')return false;
+  if(_subData?.status==='active'&&_subData?.plan==='premium')return true;
+  try{
+    const res=await fetch(
+      `${SUPABASE_AUTH_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&plan=eq.premium&status=eq.active&select=*`,
+      {headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}}
+    );
+    const rows=await res.json();
+    if(rows&&rows.length>0&&rows[0].status==='active'){
+      _subData=rows[0];localStorage.setItem('tren_sub',JSON.stringify(_subData));return true;
+    }
+  }catch(e){console.error('Premium check failed:',e);}
+  return false;
+}
+
+async function checkAutoSignalsAccess(){
+  const email=getSessionEmail();if(!email||email==='—')return false;
+  if(_autoSignalsSubData?.status==='active'&&_autoSignalsSubData?.plan==='auto')return true;
+  try{
+    const res=await fetch(
+      `${SUPABASE_AUTH_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&plan=eq.auto&status=eq.active&select=*`,
+      {headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}}
+    );
+    const rows=await res.json();
+    if(rows&&rows.length>0&&rows[0].status==='active'){
+      _autoSignalsSubData=rows[0];localStorage.setItem('tren_autosignals_sub',JSON.stringify(_autoSignalsSubData));return true;
+    }
+  }catch(e){console.error('AutoSignals check failed:',e);}
+  return false;
+}
+
+function applySubUI(hasTB, hasAS, hasP){
   const tc=document.getElementById('trial-card');
   const tp=document.getElementById('trial-pill');
   const sb=document.getElementById('sidebar-plan-badge');
@@ -757,6 +1090,10 @@ function initSubUI(){
     else if(hasAS){lbl='⚡ AutoSignals';cls='autosignals';}
     if(tp){tp.textContent=lbl+' Active';tp.className='t-pill '+cls;}
     if(sb){sb.textContent=lbl;sb.className='sub-status-badge '+cls;}
+  } else {
+    if(tc)tc.style.display='';
+    if(tp){tp.innerHTML='⏱ <span id="pill-days">7</span> days left in trial';tp.className='t-pill';}
+    if(sb){sb.textContent='⏱ Trial';sb.className='sub-status-badge trial';}
   }
 }
 
@@ -1175,7 +1512,7 @@ function lcDotLeave(dot){
 (function initTF(){
   const lbl=TF_LABELS[_activeDays]||_activeDays+' days';
   document.querySelectorAll('.tf-btn').forEach(btn=>{
-    if(btn.closest('#nq-tf-seg')) return;
+    if(btn.closest('#nq-tf-seg')||btn.closest('#nq-type-seg')||btn.closest('#nq-ind-seg')) return;
     const v=btn.textContent==='1Y'?365:parseInt(btn.textContent);
     btn.classList.toggle('active',v===_activeDays);
   });
@@ -1184,9 +1521,20 @@ function lcDotLeave(dot){
 })();
 
 initUserInfo();
-initSubUI();
 applyPrefs();
 renderOvStats();
+
+// Apply cached state instantly, then verify live from Supabase
+const cachedTB=_autoSubData?.status==='active'&&_autoSubData?.plan==='trenbot';
+const cachedAS=_autoSignalsSubData?.status==='active'&&_autoSignalsSubData?.plan==='auto';
+const cachedP=_subData?.status&&_subData.status!=='inactive'&&_subData.status!=='cancelled';
+applySubUI(cachedTB,cachedAS,cachedP);
+
+(async()=>{
+  const [hasTB,hasAS,hasP]=await Promise.all([checkTrenBotAccess(),checkAutoSignalsAccess(),checkPremiumAccess()]);
+  applySubUI(hasTB,hasAS,hasP);
+})();
+
 setInterval(renderOvStats,60000);
 </script>
 </body>
