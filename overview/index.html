@@ -269,6 +269,37 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 
 
 <base target="_blank">
+<script>// auth-guard-injected
+(function(){
+  const SESSION_KEY="tren_session";
+  const SUPABASE_AUTH_URL="https://sjntsmzbiqvtstvofcnx.supabase.co";
+  const SUPABASE_AUTH_KEY="sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg";
+  const CHECKOUT="https://trenai.vercel.app/checkout-premium";
+  const PLANS=["premium","trenbot","auto"];
+
+  async function check(){
+    try{
+      const s=localStorage.getItem(SESSION_KEY);
+      if(!s){ window.location.href=CHECKOUT; return; }
+      const session=JSON.parse(s);
+      const email=session?.user?.email;
+      if(!email){ window.location.href=CHECKOUT; return; }
+      const cached=["tren_sub","tren_trenbot_sub","tren_autosignals_sub"]
+        .map(k=>{ try{ return JSON.parse(localStorage.getItem(k)||"null"); }catch{ return null; } })
+        .find(d=>d&&d.status==="active"&&PLANS.includes(d.plan));
+      if(cached) return;
+      const res=await fetch(
+        `${SUPABASE_AUTH_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&status=eq.active&select=plan,status`,
+        { headers:{ "apikey": SUPABASE_AUTH_KEY, "Authorization": "Bearer "+SUPABASE_AUTH_KEY } }
+      );
+      const rows=await res.json();
+      const active=Array.isArray(rows)&&rows.find(r=>PLANS.includes(r.plan)&&r.status==="active");
+      if(!active){ window.location.href=CHECKOUT; }
+    }catch(e){}
+  }
+  check();
+})();
+</script>
 </head>
 <body>
 <div class="shell">
