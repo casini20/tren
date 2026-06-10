@@ -3,6 +3,10 @@
 // It proxies Groq (Llama 3.3 70B) on the server (no CORS issues) and
 // returns AI market analysis text for the dashboard.
 
+export const config = {
+  api: { bodyParser: true }
+};
+
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -15,9 +19,15 @@ export default async function handler(req, res) {
     return res.status(500).json({ error: 'GROQ_API_KEY not set in environment variables' });
   }
 
-  const { systemPrompt, messages } = req.body;
+  let systemPrompt, messages;
+  try {
+    ({ systemPrompt, messages } = req.body);
+  } catch (e) {
+    return res.status(400).json({ error: 'Could not parse request body: ' + e.message });
+  }
+
   if (!messages || !Array.isArray(messages)) {
-    return res.status(400).json({ error: 'Invalid request body' });
+    return res.status(400).json({ error: 'Invalid request body — messages missing' });
   }
 
   const groqMessages = [
@@ -41,7 +51,8 @@ export default async function handler(req, res) {
     });
 
     if (!groqRes.ok) {
-      return res.status(502).json({ error: `Groq returned ${groqRes.status}` });
+      const errData = await groqRes.json().catch(() => ({}));
+      return res.status(502).json({ error: `Groq returned ${groqRes.status}: ${errData?.error?.message || ''}` });
     }
 
     const data = await groqRes.json();
