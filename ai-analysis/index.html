@@ -7,7 +7,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
+html,body{width:100%;height:100%;background:#04080f;}
 :root{
   --bg:#04080f;--bg2:#080e1a;--bg3:#0c1525;
   --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
@@ -16,13 +16,12 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
   --sw:220px;
 }
 
-/* ── LAYOUT ── */
-.shell{position:fixed;inset:0;display:flex;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--bg);}
+.shell{display:flex;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--bg);min-height:100vh;}
 
-/* ── SIDEBAR ── */
-.sidebar{width:var(--sw);min-width:var(--sw);height:100vh;border-right:1px solid var(--border);background:linear-gradient(180deg,#080e1a,#04080f);display:flex;flex-direction:column;padding:1.6rem .9rem 0;position:relative;z-index:20;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;}
+/* SIDEBAR */
+.sidebar{width:var(--sw);min-width:var(--sw);min-height:100vh;border-right:1px solid var(--border);background:linear-gradient(180deg,#080e1a,#04080f);display:flex;flex-direction:column;padding:1.6rem .9rem 0;position:sticky;top:0;height:100vh;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;flex-shrink:0;}
 .sidebar::-webkit-scrollbar{display:none;}
-.s-logo{font-size:20px;font-weight:800;padding:0 .6rem;margin-bottom:2rem;display:flex;align-items:center;gap:6px;}
+.s-logo{font-size:20px;font-weight:800;padding:0 .6rem;margin-bottom:2rem;display:flex;align-items:center;gap:6px;text-decoration:none;color:inherit;}
 .s-logo span{color:var(--al);}
 .s-logo::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);}
 .s-nav{flex:1;display:flex;flex-direction:column;gap:2px;}
@@ -45,10 +44,9 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .s-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:1.2rem .5rem .8rem;}
 .s-bot{position:sticky;bottom:0;width:100%;background:rgba(4,8,15,.95);backdrop-filter:blur(20px);padding:14px .6rem 16px;border-top:1px solid var(--border);z-index:20;margin-top:auto;flex-shrink:0;}
 .trial-card{background:linear-gradient(135deg,rgba(37,99,235,.15),rgba(59,130,246,.06));border:1px solid rgba(37,99,235,.2);border-radius:12px;padding:14px;margin-bottom:12px;}
-.trial-card h4{font-size:12px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.trial-card h4{font-size:12px;font-weight:700;margin-bottom:4px;}
 .trial-card p{font-size:11px;color:var(--sub);margin-bottom:12px;line-height:1.5;}
-.up-mini{width:100%;padding:9px;border:none;border-radius:9px;background:linear-gradient(90deg,var(--accent),var(--al));color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:opacity .2s;}
-.up-mini:hover{opacity:.9;}
+.up-mini{width:100%;padding:9px;border:none;border-radius:9px;background:linear-gradient(90deg,var(--accent),var(--al));color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
 .u-row{display:flex;align-items:center;gap:10px;padding:8px;border-radius:10px;cursor:pointer;transition:background .2s;text-decoration:none;}
 .u-row:hover{background:rgba(255,255,255,.04);}
 .u-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;color:#fff;}
@@ -57,109 +55,108 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .u-email{font-size:10px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .sub-status-badge{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:2px;letter-spacing:.3px;}
 .sub-status-badge.trial{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:var(--gold);}
-.sub-status-badge.premium{background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.3);color:var(--al);}
 .s-logout{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;font-size:12px;font-weight:500;color:rgba(239,68,68,.7);cursor:pointer;transition:all .2s;margin-top:6px;border:1px solid transparent;}
 .s-logout:hover{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.18);color:var(--red);}
 .live-dot-nav{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);animation:flicker 3.5s infinite;box-shadow:0 0 6px var(--green);}
 @keyframes flicker{0%,100%{opacity:1;transform:scale(1);}15%{opacity:.88;transform:scale(.95);}30%{opacity:1;transform:scale(1.03);}45%{opacity:.92;transform:scale(.97);}60%{opacity:1;transform:scale(1.06);}75%{opacity:.9;transform:scale(.94);}90%{opacity:1;transform:scale(1.02);}}
 
-/* ── MAIN AREA ── */
-.main-wrap{flex:1;display:flex;flex-direction:column;min-width:0;height:100vh;overflow:hidden;}
+/* MAIN */
+.main-wrap{flex:1;display:flex;flex-direction:column;min-width:0;}
 
-/* ── TOPBAR ── */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.4rem;border-bottom:1px solid var(--border);background:rgba(4,8,15,.88);backdrop-filter:blur(20px);flex-shrink:0;position:relative;z-index:10;}
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.4rem;border-bottom:1px solid var(--border);background:rgba(4,8,15,.88);backdrop-filter:blur(20px);position:sticky;top:0;z-index:10;}
 .tb-title{font-size:17px;font-weight:700;}
 .tb-right{display:flex;align-items:center;gap:11px;}
 .t-pill{display:flex;align-items:center;gap:5px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.25);color:#a78bfa;font-size:11.5px;font-weight:600;padding:5px 13px;border-radius:20px;}
-.nb{width:33px;height:33px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative;transition:border-color .2s;}
-.nb:hover{border-color:var(--border2);}
+.nb{width:33px;height:33px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;}
 .prof-wrap{position:relative;}
-.prof-av{width:33px;height:33px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;cursor:pointer;border:2px solid transparent;transition:border-color .2s;color:#fff;}
+.prof-av{width:33px;height:33px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;cursor:pointer;border:2px solid transparent;color:#fff;}
 .prof-av:hover{border-color:rgba(255,255,255,.2);}
-.prof-av.open{border-color:var(--al);}
 .prof-menu{position:absolute;top:calc(100% + 10px);right:0;background:linear-gradient(145deg,#0d1628,#080e1a);border:1px solid rgba(255,255,255,.12);border-radius:13px;padding:6px;min-width:190px;z-index:200;box-shadow:0 12px 40px rgba(0,0,0,.55);display:none;}
-.prof-menu.open{display:block;animation:pf .2s ease;}
-@keyframes pf{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.prof-menu.open{display:block;}
 .prof-menu-header{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:5px;}
-.prof-menu-name{font-size:13px;font-weight:700;color:var(--text);}
+.prof-menu-name{font-size:13px;font-weight:700;}
 .prof-menu-email{font-size:11px;color:var(--sub);margin-top:2px;}
-.prof-menu-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;font-size:13px;font-weight:500;color:var(--sub2);cursor:pointer;transition:all .15s;}
+.prof-menu-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;font-size:13px;font-weight:500;color:var(--sub2);cursor:pointer;}
 .prof-menu-item:hover{background:rgba(255,255,255,.06);color:var(--text);}
 .prof-menu-item.danger{color:rgba(239,68,68,.75);}
 .prof-menu-item.danger:hover{background:rgba(239,68,68,.09);color:var(--red);}
 
-/* ── PAGE ── */
-.page{flex:1;overflow-y:auto;padding:1.8rem 2.4rem;scrollbar-width:none;display:flex;flex-direction:column;gap:1.4rem;}
-.page::-webkit-scrollbar{display:none;}
+/* PAGE */
+.page{padding:1.8rem 2.4rem;display:flex;flex-direction:column;gap:1.4rem;}
 
-/* ── AI PAGE SPECIFIC ── */
-
-/* Hero strip */
+/* HERO */
 .ai-hero{background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(37,99,235,.07));border:1px solid rgba(139,92,246,.2);border-radius:14px;padding:1.2rem 1.6rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
 .ai-hero-left{display:flex;align-items:center;gap:14px;}
-.ai-hero-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#8b5cf6,#6366f1);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 20px rgba(139,92,246,.35);}
+.ai-hero-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#8b5cf6,#6366f1);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
 .ai-hero-text h2{font-size:15px;font-weight:700;margin-bottom:2px;}
 .ai-hero-text p{font-size:12px;color:var(--sub);line-height:1.5;}
 .ai-hero-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
 .ai-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;border:none;transition:all .2s;}
-.ai-btn.primary{background:linear-gradient(90deg,#8b5cf6,#6366f1);color:#fff;box-shadow:0 4px 14px rgba(139,92,246,.3);}
-.ai-btn.primary:hover{box-shadow:0 4px 22px rgba(139,92,246,.5);transform:translateY(-1px);}
-.ai-btn.primary:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none;}
+.ai-btn.primary{background:linear-gradient(90deg,#8b5cf6,#6366f1);color:#fff;}
+.ai-btn.primary:hover{opacity:.9;}
+.ai-btn.primary:disabled{opacity:.5;cursor:not-allowed;}
 .ai-btn.outline{background:rgba(255,255,255,.04);color:var(--sub2);border:1px solid var(--border2);}
 .ai-btn.outline:hover{background:rgba(255,255,255,.07);color:var(--text);}
 
-/* Context controls */
+/* SELECTORS */
+.selectors-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.sel-label{font-size:11.5px;color:var(--sub);font-weight:500;}
+.tf-seg{display:flex;align-items:center;gap:1px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:2px;}
+.tf-btn{padding:4px 10px;border-radius:6px;font-size:11.5px;font-weight:600;color:var(--sub);cursor:pointer;transition:all .15s;border:none;font-family:'Plus Jakarta Sans',sans-serif;background:none;}
+.tf-btn:hover{color:var(--sub2);}
+.tf-btn.active{background:rgba(255,255,255,.08);color:var(--text);}
+.mode-seg{display:flex;align-items:center;gap:1px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:2px;}
+.mode-btn{padding:4px 12px;border-radius:6px;font-size:11.5px;font-weight:600;color:var(--sub);cursor:pointer;transition:all .15s;border:none;font-family:'Plus Jakarta Sans',sans-serif;background:none;}
+.mode-btn:hover{color:var(--sub2);}
+.mode-btn.active{background:rgba(139,92,246,.18);color:#c4b5fd;}
+
+/* SNAPSHOT */
+.snapshot-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
+.snap-card{background:var(--bg3);border:1px solid var(--border);border-radius:11px;padding:.8rem 1rem;}
+.snap-label{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;}
+.snap-val{font-size:15px;font-weight:700;}
+.snap-chg{font-size:11px;margin-top:2px;}
+.snap-chg.up{color:var(--green);}
+.snap-chg.dn{color:var(--red);}
+
+/* CHART WRAP */
+.nq-chart-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:.9rem 1.2rem .7rem;position:relative;}
+.chart-controls{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+
+/* CONTEXT CARDS */
 .context-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
 .ctx-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
 .ctx-card:hover{border-color:var(--border2);}
 .ctx-card.selected{border-color:rgba(139,92,246,.4);background:rgba(139,92,246,.07);}
 .ctx-card.selected::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#8b5cf6,#6366f1);}
 .ctx-card-label{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;}
-.ctx-card-val{font-size:13px;font-weight:700;color:var(--text);}
+.ctx-card-val{font-size:13px;font-weight:700;}
 .ctx-card-sub{font-size:11px;color:var(--sub);margin-top:3px;}
 .ctx-check{position:absolute;top:10px;right:10px;width:18px;height:18px;border-radius:5px;background:linear-gradient(135deg,#8b5cf6,#6366f1);display:none;align-items:center;justify-content:center;font-size:10px;}
 .ctx-card.selected .ctx-check{display:flex;}
 
-/* Timeframe + mode selectors */
-.selectors-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.sel-label{font-size:11.5px;color:var(--sub);font-weight:500;}
-.tf-seg{display:flex;align-items:center;gap:1px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:2px;}
-.tf-btn{padding:4px 10px;border-radius:6px;font-size:11.5px;font-weight:600;color:var(--sub);cursor:pointer;transition:all .15s;border:none;font-family:'Plus Jakarta Sans',sans-serif;background:none;letter-spacing:.2px;}
-.tf-btn:hover{color:var(--sub2);}
-.tf-btn.active{background:rgba(255,255,255,.08);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.3);}
-.mode-seg{display:flex;align-items:center;gap:1px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:2px;}
-.mode-btn{padding:4px 12px;border-radius:6px;font-size:11.5px;font-weight:600;color:var(--sub);cursor:pointer;transition:all .15s;border:none;font-family:'Plus Jakarta Sans',sans-serif;background:none;}
-.mode-btn:hover{color:var(--sub2);}
-.mode-btn.active{background:rgba(139,92,246,.18);color:#c4b5fd;}
-
-/* Chat area */
-.chat-outer{background:var(--bg3);border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column;min-height:0;flex:1;overflow:hidden;position:relative;}
+/* CHAT */
+.chat-outer{background:var(--bg3);border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column;min-height:520px;}
 .chat-header{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.2rem;border-bottom:1px solid var(--border);flex-shrink:0;}
 .chat-header-left{display:flex;align-items:center;gap:10px;}
 .chat-header-title{font-size:13.5px;font-weight:700;}
 .chat-header-sub{font-size:11px;color:var(--sub);}
 .chat-live-badge{display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:#a78bfa;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.2);border-radius:6px;padding:3px 9px;}
 .chat-live-dot{width:6px;height:6px;border-radius:50%;background:#8b5cf6;animation:flicker 2s infinite;}
-.chat-body{flex:1;overflow-y:auto;padding:1.2rem;display:flex;flex-direction:column;gap:.9rem;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.08) transparent;}
-.chat-body::-webkit-scrollbar{width:4px;}
-.chat-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px;}
-
-/* Messages */
-.msg{display:flex;gap:10px;max-width:100%;}
+.chat-body{flex:1;overflow-y:auto;padding:1.2rem;display:flex;flex-direction:column;gap:.9rem;min-height:300px;max-height:440px;}
+.msg{display:flex;gap:10px;}
 .msg.user{flex-direction:row-reverse;}
 .msg-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px;}
 .msg-avatar.ai{background:linear-gradient(135deg,#8b5cf6,#6366f1);}
 .msg-avatar.user{background:linear-gradient(135deg,var(--accent),var(--al));}
-.msg-bubble{max-width:88%;padding:.9rem 1.1rem;border-radius:13px;font-size:13px;line-height:1.7;position:relative;}
-.msg.ai .msg-bubble{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px 13px 13px 13px;color:var(--text);}
-.msg.user .msg-bubble{background:linear-gradient(135deg,rgba(37,99,235,.18),rgba(59,130,246,.12));border:1px solid rgba(59,130,246,.2);border-radius:13px 4px 13px 13px;color:var(--text);}
+.msg-bubble{max-width:88%;padding:.9rem 1.1rem;border-radius:13px;font-size:13px;line-height:1.7;}
+.msg.ai .msg-bubble{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px 13px 13px 13px;}
+.msg.user .msg-bubble{background:linear-gradient(135deg,rgba(37,99,235,.18),rgba(59,130,246,.12));border:1px solid rgba(59,130,246,.2);border-radius:13px 4px 13px 13px;}
 .msg-time{font-size:10px;color:var(--sub);margin-top:5px;}
 .msg.user .msg-time{text-align:right;}
-
-/* AI message rich content */
-.ai-section{margin:.5rem 0;}
-.ai-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#a78bfa;margin-bottom:.5rem;display:flex;align-items:center;gap:6px;}
-.ai-section-title::before{content:'';width:3px;height:12px;background:linear-gradient(#8b5cf6,#6366f1);border-radius:2px;}
+.ai-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#a78bfa;margin:.6rem 0 .4rem;display:flex;align-items:center;gap:6px;}
+.ai-section-title::before{content:'';width:3px;height:12px;background:linear-gradient(#8b5cf6,#6366f1);border-radius:2px;flex-shrink:0;}
 .signal-chips{display:flex;gap:7px;flex-wrap:wrap;margin:.4rem 0;}
 .schip{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;font-size:12px;font-weight:600;}
 .schip.bull{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.22);color:var(--green);}
@@ -171,78 +168,25 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .level-row .lv-label{color:var(--sub);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
 .level-row .lv-price{font-weight:700;font-family:monospace;font-size:13.5px;}
 .level-row .lv-note{font-size:11px;color:var(--sub);}
-.bias-bar{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:9px;padding:.7rem 1rem;margin:.4rem 0;display:flex;align-items:center;gap:12px;}
-.bias-label{font-size:11px;color:var(--sub);font-weight:600;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;}
-.bias-track{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
-.bias-fill{height:100%;border-radius:3px;transition:width .6s ease;}
-.bias-score{font-size:13px;font-weight:700;min-width:40px;text-align:right;}
-
-/* Thinking / streaming */
 .thinking{display:flex;align-items:center;gap:8px;padding:.7rem 1rem;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.14);border-radius:10px;font-size:12.5px;color:#a78bfa;font-weight:500;}
 .think-dots{display:flex;gap:4px;}
 .think-dot{width:5px;height:5px;border-radius:50%;background:#8b5cf6;animation:tdot 1.4s infinite;}
 .think-dot:nth-child(2){animation-delay:.2s;}
 .think-dot:nth-child(3){animation-delay:.4s;}
 @keyframes tdot{0%,80%,100%{transform:scale(.6);opacity:.4;}40%{transform:scale(1);opacity:1;}}
-
-/* Streaming cursor */
 .stream-cursor{display:inline-block;width:2px;height:14px;background:#a78bfa;border-radius:1px;margin-left:2px;vertical-align:middle;animation:blink .7s infinite;}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-
-/* Quick prompts */
 .quick-prompts{display:flex;gap:7px;flex-wrap:wrap;padding:.7rem 1.2rem;border-top:1px solid var(--border);}
-.qp-btn{padding:6px 12px;border-radius:7px;font-size:11.5px;font-weight:600;color:var(--sub2);background:rgba(255,255,255,.04);border:1px solid var(--border);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .18s;white-space:nowrap;}
+.qp-btn{padding:6px 12px;border-radius:7px;font-size:11.5px;font-weight:600;color:var(--sub2);background:rgba(255,255,255,.04);border:1px solid var(--border);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;white-space:nowrap;}
 .qp-btn:hover{background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.25);color:#c4b5fd;}
-
-/* Input area */
-.chat-input-wrap{padding:.9rem 1.2rem;border-top:1px solid var(--border);display:flex;gap:9px;align-items:flex-end;background:rgba(4,8,15,.5);backdrop-filter:blur(12px);}
-.chat-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:.7rem 1rem;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);resize:none;min-height:42px;max-height:120px;line-height:1.5;transition:border-color .2s;outline:none;}
+.chat-input-wrap{padding:.9rem 1.2rem;border-top:1px solid var(--border);display:flex;gap:9px;align-items:flex-end;}
+.chat-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:.7rem 1rem;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);resize:none;min-height:42px;max-height:120px;line-height:1.5;outline:none;}
 .chat-input:focus{border-color:rgba(139,92,246,.4);}
 .chat-input::placeholder{color:var(--sub);}
-.send-btn{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#6366f1);border:none;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;box-shadow:0 2px 12px rgba(139,92,246,.3);}
-.send-btn:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(139,92,246,.5);}
-.send-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
+.send-btn{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#6366f1);border:none;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.send-btn:disabled{opacity:.4;cursor:not-allowed;}
 
-/* Market snapshot bar */
-.snapshot-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
-.snap-card{background:var(--bg3);border:1px solid var(--border);border-radius:11px;padding:.8rem 1rem;transition:border-color .18s;}
-.snap-card:hover{border-color:var(--border2);}
-.snap-label{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;}
-.snap-val{font-size:15px;font-weight:700;}
-.snap-chg{font-size:11px;margin-top:2px;}
-.snap-chg.up{color:var(--green);}
-.snap-chg.dn{color:var(--red);}
-
-/* Skel */
-.skel{background:rgba(255,255,255,.04);border-radius:8px;animation:sk 1.4s ease infinite;}
-@keyframes sk{0%,100%{opacity:.4}50%{opacity:.9}}
-
-/* Mobile */
-.mobile-toggle{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;flex-shrink:0;}
-.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:19;}
-
-@media(max-width:850px){
-  .mobile-toggle{display:flex;}
-  .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:20;box-shadow:4px 0 30px rgba(0,0,0,.5);}
-  .sidebar.open{transform:translateX(0);}
-  .sidebar-overlay.open{display:block;}
-  .main-wrap{width:100%;}
-  .topbar{padding:1rem 1.2rem;}
-  .page{padding:1.2rem 1.4rem;}
-  .t-pill{display:none;}
-  .snapshot-bar{grid-template-columns:repeat(2,1fr);}
-  .context-row{grid-template-columns:1fr;}
-  .selectors-row{gap:6px;}
-}
-@media(max-width:600px){
-  .snapshot-bar{grid-template-columns:1fr 1fr;}
-  .page{padding:1rem;}
-  .context-row{grid-template-columns:1fr 1fr;}
-}
-
-/* ── NQ CHART ── */
-.nq-chart-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:13px;overflow:hidden;margin-bottom:1.4rem;}
-/* ── CHART ANNOTATIONS ── */
+/* ANNOTATIONS */
 .chart-annotation-line{position:absolute;left:0;right:0;height:1px;pointer-events:none;z-index:10;}
 .chart-annotation-line.support{border-top:1px dashed rgba(16,185,129,0.6);}
 .chart-annotation-line.resist{border-top:1px dashed rgba(239,68,68,0.6);}
@@ -256,75 +200,91 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .chart-annotation-tag.entry{background:rgba(59,130,246,0.12);color:#60a5fa;border:1px solid rgba(59,130,246,0.2);}
 .chart-annotation-tag.stop{background:rgba(239,68,68,0.1);color:#f87171;border:1px solid rgba(239,68,68,0.18);}
 .chart-annotation-tag.target{background:rgba(16,185,129,0.1);color:#34d399;border:1px solid rgba(16,185,129,0.18);}
-.chart-annotation-tag.ema{background:rgba(245,158,11,0.1);color:#fbbf24;border:1px solid rgba(245,158,11,0.18);}
-.chart-annotation-zone{position:absolute;left:0;right:0;pointer-events:none;z-index:9;opacity:0.12;}
-.chart-annotation-zone.support{background:rgba(16,185,129,0.25);}
-.chart-annotation-zone.resist{background:rgba(239,68,68,0.2);}
-.show-chart-btn{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;color:#a78bfa;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.18);cursor:pointer;transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif;margin-top:8px;}
-.show-chart-btn:hover{background:rgba(139,92,246,0.15);border-color:rgba(139,92,246,0.3);}
+.show-chart-btn{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;color:#a78bfa;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.18);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;margin-top:8px;}
 .show-chart-btn.on{background:rgba(139,92,246,0.2);border-color:rgba(139,92,246,0.4);color:#c4b5fd;}
-.show-chart-btn .dot{width:5px;height:5px;border-radius:50%;background:#a78bfa;opacity:0;transition:opacity .15s;}
-.show-chart-btn.on .dot{opacity:1;}
 
+/* SKEL */
+.skel{background:rgba(255,255,255,.04);border-radius:8px;animation:sk 1.4s ease infinite;}
+@keyframes sk{0%,100%{opacity:.4}50%{opacity:.9}}
+@keyframes nqspin{to{transform:rotate(360deg)}}
+
+/* MOBILE */
+.mobile-toggle{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:19;}
+
+@media(max-width:850px){
+  .shell{position:relative;}
+  .mobile-toggle{display:flex;}
+  .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .3s ease;z-index:20;height:100vh;}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-overlay.open{display:block;}
+  .topbar{padding:1rem 1.2rem;}
+  .page{padding:1.2rem 1rem;}
+  .t-pill{display:none;}
+  .snapshot-bar{grid-template-columns:repeat(2,1fr);}
+  .context-row{grid-template-columns:1fr;}
+}
+@media(max-width:600px){
+  .snapshot-bar{grid-template-columns:1fr 1fr;}
+  .context-row{grid-template-columns:1fr 1fr;}
+}
 </style>
-<base target="_blank">
 </head>
 <body>
+<div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
 <div class="shell">
-
-  <div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
 
   <!-- SIDEBAR -->
   <nav class="sidebar" id="sidebar">
-    <a class="s-logo" href="https://trenai.vercel.app" style="text-decoration:none;color:inherit;">tren<span>.</span></a>
+    <a class="s-logo" href="https://trenai.vercel.app">tren<span>.</span></a>
     <div class="s-nav">
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/live-signals')">
+      <a class="s-item" href="https://trenai.vercel.app/live-signals">
         <span class="s-ic"><span class="live-dot-nav"></span></span>
         <span>Live Signals</span>
       </a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/overview')">
+      <a class="s-item" href="https://trenai.vercel.app/overview">
         <span class="s-ic">📊</span><span>Overview</span>
       </a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/signals')">
+      <a class="s-item" href="https://trenai.vercel.app/signals">
         <span class="s-ic">⚡</span><span>Recent Trades</span>
       </a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/journal')">
+      <a class="s-item" href="https://trenai.vercel.app/journal">
         <span class="s-ic">📓</span><span>Journal</span>
       </a>
       <div class="s-divider"></div>
-      <a class="s-item ai-on" onclick="navTo('https://trenai.vercel.app/ai-analysis')">
+      <a class="s-item ai-on" href="https://trenai.vercel.app/ai-analysis">
         <span class="s-ic">✦</span><span>AI Analysis</span>
         <span class="s-badge ai">NEW</span>
       </a>
-      <a class="s-item gold" onclick="navTo('https://trenai.vercel.app/upgrade')">
+      <a class="s-item gold" href="https://trenai.vercel.app/upgrade">
         <span class="s-ic">👑</span><span>Upgrade</span>
         <span class="s-badge gd">PRO</span>
       </a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/trenbot')">
+      <a class="s-item" href="https://trenai.vercel.app/trenbot">
         <span class="s-ic">🤖</span><span>TrenBot</span>
       </a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/autosignals')">
+      <a class="s-item" href="https://trenai.vercel.app/autosignals">
         <span class="s-ic">⚡</span><span>AutoSignals</span>
       </a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/indicator')">
+      <a class="s-item" href="https://trenai.vercel.app/indicator">
         <span class="s-ic">📈</span><span>Indicator</span>
       </a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/settings')">
+      <a class="s-item" href="https://trenai.vercel.app/settings">
         <span class="s-ic">⚙</span><span>Settings</span>
       </a>
     </div>
     <div class="s-bot">
-      <div class="trial-card" id="trial-card">
+      <div class="trial-card">
         <h4>🔥 7 Days Left</h4>
         <p>Your free trial ends soon. Upgrade to keep full access.</p>
         <button class="up-mini" onclick="window.open('https://trenai.vercel.app/checkout-trenbot','_blank')">Upgrade Now</button>
       </div>
-      <a class="u-row" onclick="navTo('https://trenai.vercel.app/settings')">
+      <a class="u-row" href="https://trenai.vercel.app/settings">
         <div class="u-av" id="s-av">T</div>
         <div class="u-info">
           <div class="u-name" id="s-nm">Trader</div>
           <div class="u-email" id="s-email-display">—</div>
-          <span class="sub-status-badge trial" id="sidebar-plan-badge">⏱ Trial</span>
+          <span class="sub-status-badge trial">⏱ Trial</span>
         </div>
       </a>
       <div class="s-logout" onclick="doLogout()">
@@ -335,8 +295,6 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 
   <!-- MAIN -->
   <div class="main-wrap">
-
-    <!-- TOPBAR -->
     <div class="topbar">
       <div style="display:flex;align-items:center;gap:12px;">
         <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
@@ -352,15 +310,14 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
               <div class="prof-menu-name" id="prof-menu-name">Trader</div>
               <div class="prof-menu-email" id="prof-menu-email">—</div>
             </div>
-            <a class="prof-menu-item" onclick="navTo('https://trenai.vercel.app/settings')">👤 Profile settings</a>
+            <a class="prof-menu-item" href="https://trenai.vercel.app/settings">👤 Profile settings</a>
             <div class="prof-menu-item danger" onclick="doLogout()">→ Sign out</div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- PAGE CONTENT -->
-    <div class="page" id="main-page">
+    <div class="page">
 
       <!-- HERO -->
       <div class="ai-hero">
@@ -396,31 +353,31 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         </div>
       </div>
 
-      <!-- MARKET SNAPSHOT -->
+      <!-- SNAPSHOT -->
       <div class="snapshot-bar" id="snapshot-bar">
-        <div class="snap-card"><div class="snap-label">NQ Price</div><div class="snap-val skel" style="width:80px;height:20px;"></div><div class="snap-chg skel" style="width:60px;height:12px;margin-top:4px;"></div></div>
-        <div class="snap-card"><div class="snap-label">Daily Change</div><div class="snap-val skel" style="width:70px;height:20px;"></div><div class="snap-chg skel" style="width:50px;height:12px;margin-top:4px;"></div></div>
-        <div class="snap-card"><div class="snap-label">Day High</div><div class="snap-val skel" style="width:80px;height:20px;"></div><div class="snap-chg skel" style="width:55px;height:12px;margin-top:4px;"></div></div>
-        <div class="snap-card"><div class="snap-label">Day Low</div><div class="snap-val skel" style="width:80px;height:20px;"></div><div class="snap-chg skel" style="width:55px;height:12px;margin-top:4px;"></div></div>
-        <div class="snap-card"><div class="snap-label">Volume</div><div class="snap-val skel" style="width:65px;height:20px;"></div><div class="snap-chg" style="color:var(--sub);font-size:11px;margin-top:2px;">E-mini NQ</div></div>
+        <div class="snap-card"><div class="snap-label">NQ Price</div><div class="skel" style="width:80px;height:20px;border-radius:6px;"></div><div class="skel" style="width:60px;height:12px;border-radius:4px;margin-top:4px;"></div></div>
+        <div class="snap-card"><div class="snap-label">Period Change</div><div class="skel" style="width:70px;height:20px;border-radius:6px;"></div><div class="skel" style="width:50px;height:12px;border-radius:4px;margin-top:4px;"></div></div>
+        <div class="snap-card"><div class="snap-label">Period High</div><div class="skel" style="width:80px;height:20px;border-radius:6px;"></div></div>
+        <div class="snap-card"><div class="snap-label">Period Low</div><div class="skel" style="width:80px;height:20px;border-radius:6px;"></div></div>
+        <div class="snap-card"><div class="snap-label">Volume</div><div class="skel" style="width:65px;height:20px;border-radius:6px;"></div><div style="color:var(--sub);font-size:11px;margin-top:4px;">E-mini NQ</div></div>
       </div>
 
-            <!-- ── NASDAQ FUTURES CHART ── -->
-      <div class="sh" style="margin-bottom:.7rem;">
+      <!-- CHART HEADER -->
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
         <div style="display:flex;align-items:center;gap:10px;">
-          <div class="st">NASDAQ Futures</div>
+          <span style="font-size:13px;font-weight:700;">NASDAQ Futures</span>
           <span style="font-size:10px;color:var(--sub);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:5px;padding:2px 7px;">NQ=F · E-mini</span>
         </div>
-        <div style="display:flex;align-items:center;gap:6px;">
-          <button id="nq-clear-ann" onclick="clearAnnotations()" title="Clear AI annotations" style="display:none;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;color:var(--sub2);background:rgba(255,255,255,.04);border:1px solid var(--border);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;">Clear AI</button>
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+          <button id="nq-clear-ann" onclick="clearAnnotations()" style="display:none;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;color:var(--sub2);background:rgba(255,255,255,.04);border:1px solid var(--border);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;">Clear AI</button>
           <div class="tf-seg" id="nq-type-seg">
             <button class="tf-btn active" onclick="setNQType(this,'line')" title="Line">〜</button>
             <button class="tf-btn" onclick="setNQType(this,'candle')" title="Candles">▮</button>
           </div>
           <div class="tf-seg" id="nq-ind-seg">
-            <button class="tf-btn active" onclick="toggleNQInd(this,'ema9')" title="EMA 9">E9</button>
-            <button class="tf-btn active" onclick="toggleNQInd(this,'ema21')" title="EMA 21">E21</button>
-            <button class="tf-btn active" onclick="toggleNQInd(this,'vol')" title="Volume">Vol</button>
+            <button class="tf-btn active" onclick="toggleNQInd(this,'ema9')">E9</button>
+            <button class="tf-btn active" onclick="toggleNQInd(this,'ema21')">E21</button>
+            <button class="tf-btn active" onclick="toggleNQInd(this,'vol')">Vol</button>
           </div>
           <div class="tf-seg" id="nq-tf-seg">
             <button class="tf-btn" onclick="setNQInterval(this,'5m','1d')">5M</button>
@@ -429,17 +386,18 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
             <button class="tf-btn active" onclick="setNQInterval(this,'1d','6mo')">1D</button>
             <button class="tf-btn" onclick="setNQInterval(this,'1wk','2y')">1W</button>
           </div>
-          <div id="nq-refresh-btn" onclick="nqFetch(_nqInterval,_nqRange,true)" title="Refresh" style="width:28px;height:28px;border-radius:7px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;flex-shrink:0;transition:border-color .2s;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">↻</div>
+          <div onclick="nqFetch(_nqInterval,_nqRange,true)" title="Refresh" style="width:28px;height:28px;border-radius:7px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;">↻</div>
         </div>
       </div>
 
-      <div class="nq-chart-wrap" style="position:relative;padding:.9rem 1.2rem .7rem;">
+      <!-- CHART -->
+      <div class="nq-chart-wrap">
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
           <div>
             <span id="nq-price" style="font-size:24px;font-weight:800;letter-spacing:-.5px;">—</span>
             <span id="nq-change" style="font-size:13px;font-weight:600;margin-left:8px;">—</span>
           </div>
-          <div style="display:flex;gap:16px;margin-left:4px;">
+          <div style="display:flex;gap:16px;">
             <div style="font-size:11px;color:var(--sub);">O: <span id="nq-stat-o" style="color:var(--sub2);font-weight:600;">—</span></div>
             <div style="font-size:11px;color:var(--sub);">H: <span id="nq-stat-h" style="color:var(--green);font-weight:600;">—</span></div>
             <div style="font-size:11px;color:var(--sub);">L: <span id="nq-stat-l" style="color:var(--red);font-weight:600;">—</span></div>
@@ -451,8 +409,8 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <div style="position:relative;" id="nq-canvas-wrap">
           <div id="nq-annotations" style="position:absolute;inset:0;pointer-events:none;z-index:12;"></div>
           <canvas id="nq-canvas" style="width:100%;display:block;cursor:crosshair;"></canvas>
-          <div id="nq-tooltip" style="display:none;position:absolute;pointer-events:none;background:rgba(8,14,26,.95);border:1px solid var(--border2);border-radius:10px;padding:8px 13px;font-size:11px;font-weight:600;white-space:nowrap;z-index:20;line-height:1.9;backdrop-filter:blur(8px);"></div>
-          <div id="nq-price-tag" style="display:none;position:absolute;right:0;pointer-events:none;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap;z-index:15;"></div>
+          <div id="nq-tooltip" style="display:none;position:absolute;pointer-events:none;background:rgba(8,14,26,.95);border:1px solid var(--border2);border-radius:10px;padding:8px 13px;font-size:11px;font-weight:600;white-space:nowrap;z-index:20;line-height:1.9;"></div>
+          <div id="nq-price-tag" style="display:none;position:absolute;right:0;pointer-events:none;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap;z-index:15;"></div>
           <div id="nq-cv" style="display:none;position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.12);pointer-events:none;border-left:1px dashed rgba(255,255,255,.1);"></div>
           <div id="nq-ch" style="display:none;position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.12);pointer-events:none;border-top:1px dashed rgba(255,255,255,.1);"></div>
         </div>
@@ -462,12 +420,12 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         </div>
       </div>
 
-<!-- ANALYSIS CONTEXT CARDS -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:-.5rem;">
+      <!-- CONTEXT CARDS -->
+      <div style="display:flex;align-items:center;justify-content:space-between;">
         <div style="font-size:13px;font-weight:700;">Analysis Context</div>
         <div style="font-size:11px;color:var(--sub);">Select what to include</div>
       </div>
-      <div class="context-row" id="ctx-row">
+      <div class="context-row">
         <div class="ctx-card selected" onclick="toggleCtx(this,'price')">
           <div class="ctx-card-label">Price Action</div>
           <div class="ctx-card-val">OHLC + Trend</div>
@@ -488,8 +446,8 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         </div>
       </div>
 
-      <!-- CHAT WINDOW -->
-      <div class="chat-outer" id="chat-outer">
+      <!-- CHAT -->
+      <div class="chat-outer">
         <div class="chat-header">
           <div class="chat-header-left">
             <div style="font-size:16px;">✦</div>
@@ -507,8 +465,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         </div>
 
         <div class="chat-body" id="chat-body">
-          <!-- Welcome message -->
-          <div class="msg ai" id="welcome-msg">
+          <div class="msg ai">
             <div class="msg-avatar ai">✦</div>
             <div>
               <div class="msg-bubble">
@@ -527,1557 +484,614 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
           </div>
         </div>
 
-        <!-- Quick prompt chips -->
-        <div class="quick-prompts" id="quick-prompts">
+        <div class="quick-prompts">
           <button class="qp-btn" onclick="sendQuick('What is the current NQ trend and bias?')">Trend &amp; bias</button>
           <button class="qp-btn" onclick="sendQuick('Give me the key support and resistance levels on NQ right now.')">Key S/R levels</button>
           <button class="qp-btn" onclick="sendQuick('What is a high-probability long setup on NQ today?')">Long setup</button>
           <button class="qp-btn" onclick="sendQuick('What is a high-probability short setup on NQ today?')">Short setup</button>
-          <button class="qp-btn" onclick="sendQuick('What does the NQ volume profile tell us about current price?')">Volume profile</button>
           <button class="qp-btn" onclick="sendQuick('Where are the EMA 9 and EMA 21 relative to price, and what does that signal?')">EMA signals</button>
         </div>
 
-        <!-- Input -->
         <div class="chat-input-wrap">
           <textarea class="chat-input" id="chat-input" placeholder="Ask anything about NQ…" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
           <button class="send-btn" id="send-btn" onclick="sendMessage()">↑</button>
         </div>
       </div>
 
-    </div><!-- end .page -->
-  </div><!-- end .main-wrap -->
-</div><!-- end .shell -->
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Tren – AI Analysis</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
-:root{
-  --bg:#04080f;--bg2:#080e1a;--bg3:#0c1525;
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
-  --accent:#2563eb;--al:#3b82f6;--green:#10b981;--red:#ef4444;--gold:#f59e0b;
-  --text:#f0f4ff;--sub:rgba(240,244,255,0.45);--sub2:rgba(240,244,255,0.72);
-  --sw:220px;
-}
-
-/* ── LAYOUT ── */
-.shell{position:fixed;inset:0;display:flex;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--bg);}
-
-/* ── SIDEBAR ── */
-.sidebar{width:var(--sw);min-width:var(--sw);height:100vh;border-right:1px solid var(--border);background:linear-gradient(180deg,#080e1a,#04080f);display:flex;flex-direction:column;padding:1.6rem .9rem 0;position:relative;z-index:20;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;}
-.sidebar::-webkit-scrollbar{display:none;}
-.s-logo{font-size:20px;font-weight:800;padding:0 .6rem;margin-bottom:2rem;display:flex;align-items:center;gap:6px;}
-.s-logo span{color:var(--al);}
-.s-logo::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);}
-.s-nav{flex:1;display:flex;flex-direction:column;gap:2px;}
-.s-item{display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:500;color:var(--sub2);cursor:pointer;transition:all .2s;margin-bottom:1px;border:1px solid transparent;position:relative;text-decoration:none;}
-.s-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%) scaleY(0);width:3px;height:20px;background:var(--accent);border-radius:0 3px 3px 0;transition:transform .2s;}
-.s-item:hover{background:rgba(255,255,255,.04);color:var(--text);}
-.s-item:hover::before{transform:translateY(-50%) scaleY(.6);}
-.s-item.on{background:rgba(37,99,235,.1);border-color:rgba(37,99,235,.15);color:var(--al);}
-.s-item.on::before{transform:translateY(-50%) scaleY(1);box-shadow:0 0 8px var(--accent);}
-.s-item.ai-on{background:linear-gradient(90deg,rgba(139,92,246,.12),rgba(59,130,246,.08));border-color:rgba(139,92,246,.2);color:#a78bfa;}
-.s-item.ai-on::before{transform:translateY(-50%) scaleY(1);background:#8b5cf6;box-shadow:0 0 8px #8b5cf6;}
-.s-item.gold{color:var(--gold);}
-.s-item.gold:hover{background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.35);}
-.s-item.gold.on{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.25);}
-.s-item.gold.on::before{background:var(--gold);}
-.s-ic{font-size:16px;width:22px;text-align:center;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.s-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;padding:3px 8px;border-radius:20px;font-weight:700;min-width:22px;text-align:center;}
-.s-badge.gd{background:var(--gold);color:#000;}
-.s-badge.ai{background:linear-gradient(90deg,#8b5cf6,#6366f1);color:#fff;}
-.s-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:1.2rem .5rem .8rem;}
-.s-bot{position:sticky;bottom:0;width:100%;background:rgba(4,8,15,.95);backdrop-filter:blur(20px);padding:14px .6rem 16px;border-top:1px solid var(--border);z-index:20;margin-top:auto;flex-shrink:0;}
-.trial-card{background:linear-gradient(135deg,rgba(37,99,235,.15),rgba(59,130,246,.06));border:1px solid rgba(37,99,235,.2);border-radius:12px;padding:14px;margin-bottom:12px;}
-.trial-card h4{font-size:12px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
-.trial-card p{font-size:11px;color:var(--sub);margin-bottom:12px;line-height:1.5;}
-.up-mini{width:100%;padding:9px;border:none;border-radius:9px;background:linear-gradient(90deg,var(--accent),var(--al));color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:opacity .2s;}
-.up-mini:hover{opacity:.9;}
-.u-row{display:flex;align-items:center;gap:10px;padding:8px;border-radius:10px;cursor:pointer;transition:background .2s;text-decoration:none;}
-.u-row:hover{background:rgba(255,255,255,.04);}
-.u-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;color:#fff;}
-.u-info{min-width:0;flex:1;display:flex;flex-direction:column;gap:1px;}
-.u-name{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.u-email{font-size:10px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sub-status-badge{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:2px;letter-spacing:.3px;}
-.sub-status-badge.trial{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:var(--gold);}
-.sub-status-badge.premium{background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.3);color:var(--al);}
-.s-logout{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;font-size:12px;font-weight:500;color:rgba(239,68,68,.7);cursor:pointer;transition:all .2s;margin-top:6px;border:1px solid transparent;}
-.s-logout:hover{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.18);color:var(--red);}
-.live-dot-nav{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);animation:flicker 3.5s infinite;box-shadow:0 0 6px var(--green);}
-@keyframes flicker{0%,100%{opacity:1;transform:scale(1);}15%{opacity:.88;transform:scale(.95);}30%{opacity:1;transform:scale(1.03);}45%{opacity:.92;transform:scale(.97);}60%{opacity:1;transform:scale(1.06);}75%{opacity:.9;transform:scale(.94);}90%{opacity:1;transform:scale(1.02);}}
-
-/* ── MAIN AREA ── */
-.main-wrap{flex:1;display:flex;flex-direction:column;min-width:0;height:100vh;overflow:hidden;}
-
-/* ── TOPBAR ── */
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.4rem;border-bottom:1px solid var(--border);background:rgba(4,8,15,.88);backdrop-filter:blur(20px);flex-shrink:0;position:relative;z-index:10;}
-.tb-title{font-size:17px;font-weight:700;}
-.tb-right{display:flex;align-items:center;gap:11px;}
-.t-pill{display:flex;align-items:center;gap:5px;background:rgba(139,92,246,.12);border:1px solid rgba(139,92,246,.25);color:#a78bfa;font-size:11.5px;font-weight:600;padding:5px 13px;border-radius:20px;}
-.nb{width:33px;height:33px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative;transition:border-color .2s;}
-.nb:hover{border-color:var(--border2);}
-.prof-wrap{position:relative;}
-.prof-av{width:33px;height:33px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;cursor:pointer;border:2px solid transparent;transition:border-color .2s;color:#fff;}
-.prof-av:hover{border-color:rgba(255,255,255,.2);}
-.prof-av.open{border-color:var(--al);}
-.prof-menu{position:absolute;top:calc(100% + 10px);right:0;background:linear-gradient(145deg,#0d1628,#080e1a);border:1px solid rgba(255,255,255,.12);border-radius:13px;padding:6px;min-width:190px;z-index:200;box-shadow:0 12px 40px rgba(0,0,0,.55);display:none;}
-.prof-menu.open{display:block;animation:pf .2s ease;}
-@keyframes pf{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.prof-menu-header{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:5px;}
-.prof-menu-name{font-size:13px;font-weight:700;color:var(--text);}
-.prof-menu-email{font-size:11px;color:var(--sub);margin-top:2px;}
-.prof-menu-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;font-size:13px;font-weight:500;color:var(--sub2);cursor:pointer;transition:all .15s;}
-.prof-menu-item:hover{background:rgba(255,255,255,.06);color:var(--text);}
-.prof-menu-item.danger{color:rgba(239,68,68,.75);}
-.prof-menu-item.danger:hover{background:rgba(239,68,68,.09);color:var(--red);}
-
-/* ── PAGE ── */
-.page{flex:1;overflow-y:auto;padding:1.8rem 2.4rem;scrollbar-width:none;display:flex;flex-direction:column;gap:1.4rem;}
-.page::-webkit-scrollbar{display:none;}
-
-/* ── AI PAGE SPECIFIC ── */
-
-/* Hero strip */
-.ai-hero{background:linear-gradient(135deg,rgba(139,92,246,.1),rgba(37,99,235,.07));border:1px solid rgba(139,92,246,.2);border-radius:14px;padding:1.2rem 1.6rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;}
-.ai-hero-left{display:flex;align-items:center;gap:14px;}
-.ai-hero-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#8b5cf6,#6366f1);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;box-shadow:0 4px 20px rgba(139,92,246,.35);}
-.ai-hero-text h2{font-size:15px;font-weight:700;margin-bottom:2px;}
-.ai-hero-text p{font-size:12px;color:var(--sub);line-height:1.5;}
-.ai-hero-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.ai-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;border:none;transition:all .2s;}
-.ai-btn.primary{background:linear-gradient(90deg,#8b5cf6,#6366f1);color:#fff;box-shadow:0 4px 14px rgba(139,92,246,.3);}
-.ai-btn.primary:hover{box-shadow:0 4px 22px rgba(139,92,246,.5);transform:translateY(-1px);}
-.ai-btn.primary:disabled{opacity:.55;cursor:not-allowed;transform:none;box-shadow:none;}
-.ai-btn.outline{background:rgba(255,255,255,.04);color:var(--sub2);border:1px solid var(--border2);}
-.ai-btn.outline:hover{background:rgba(255,255,255,.07);color:var(--text);}
-
-/* Context controls */
-.context-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-.ctx-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;cursor:pointer;transition:all .2s;position:relative;overflow:hidden;}
-.ctx-card:hover{border-color:var(--border2);}
-.ctx-card.selected{border-color:rgba(139,92,246,.4);background:rgba(139,92,246,.07);}
-.ctx-card.selected::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,#8b5cf6,#6366f1);}
-.ctx-card-label{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.7px;margin-bottom:6px;}
-.ctx-card-val{font-size:13px;font-weight:700;color:var(--text);}
-.ctx-card-sub{font-size:11px;color:var(--sub);margin-top:3px;}
-.ctx-check{position:absolute;top:10px;right:10px;width:18px;height:18px;border-radius:5px;background:linear-gradient(135deg,#8b5cf6,#6366f1);display:none;align-items:center;justify-content:center;font-size:10px;}
-.ctx-card.selected .ctx-check{display:flex;}
-
-/* Timeframe + mode selectors */
-.selectors-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-.sel-label{font-size:11.5px;color:var(--sub);font-weight:500;}
-.tf-seg{display:flex;align-items:center;gap:1px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:2px;}
-.tf-btn{padding:4px 10px;border-radius:6px;font-size:11.5px;font-weight:600;color:var(--sub);cursor:pointer;transition:all .15s;border:none;font-family:'Plus Jakarta Sans',sans-serif;background:none;letter-spacing:.2px;}
-.tf-btn:hover{color:var(--sub2);}
-.tf-btn.active{background:rgba(255,255,255,.08);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.3);}
-.mode-seg{display:flex;align-items:center;gap:1px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:2px;}
-.mode-btn{padding:4px 12px;border-radius:6px;font-size:11.5px;font-weight:600;color:var(--sub);cursor:pointer;transition:all .15s;border:none;font-family:'Plus Jakarta Sans',sans-serif;background:none;}
-.mode-btn:hover{color:var(--sub2);}
-.mode-btn.active{background:rgba(139,92,246,.18);color:#c4b5fd;}
-
-/* Chat area */
-.chat-outer{background:var(--bg3);border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column;min-height:0;flex:1;overflow:hidden;position:relative;}
-.chat-header{display:flex;align-items:center;justify-content:space-between;padding:.9rem 1.2rem;border-bottom:1px solid var(--border);flex-shrink:0;}
-.chat-header-left{display:flex;align-items:center;gap:10px;}
-.chat-header-title{font-size:13.5px;font-weight:700;}
-.chat-header-sub{font-size:11px;color:var(--sub);}
-.chat-live-badge{display:flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;color:#a78bfa;background:rgba(139,92,246,.1);border:1px solid rgba(139,92,246,.2);border-radius:6px;padding:3px 9px;}
-.chat-live-dot{width:6px;height:6px;border-radius:50%;background:#8b5cf6;animation:flicker 2s infinite;}
-.chat-body{flex:1;overflow-y:auto;padding:1.2rem;display:flex;flex-direction:column;gap:.9rem;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.08) transparent;}
-.chat-body::-webkit-scrollbar{width:4px;}
-.chat-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px;}
-
-/* Messages */
-.msg{display:flex;gap:10px;max-width:100%;}
-.msg.user{flex-direction:row-reverse;}
-.msg-avatar{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px;}
-.msg-avatar.ai{background:linear-gradient(135deg,#8b5cf6,#6366f1);}
-.msg-avatar.user{background:linear-gradient(135deg,var(--accent),var(--al));}
-.msg-bubble{max-width:88%;padding:.9rem 1.1rem;border-radius:13px;font-size:13px;line-height:1.7;position:relative;}
-.msg.ai .msg-bubble{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:4px 13px 13px 13px;color:var(--text);}
-.msg.user .msg-bubble{background:linear-gradient(135deg,rgba(37,99,235,.18),rgba(59,130,246,.12));border:1px solid rgba(59,130,246,.2);border-radius:13px 4px 13px 13px;color:var(--text);}
-.msg-time{font-size:10px;color:var(--sub);margin-top:5px;}
-.msg.user .msg-time{text-align:right;}
-
-/* AI message rich content */
-.ai-section{margin:.5rem 0;}
-.ai-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#a78bfa;margin-bottom:.5rem;display:flex;align-items:center;gap:6px;}
-.ai-section-title::before{content:'';width:3px;height:12px;background:linear-gradient(#8b5cf6,#6366f1);border-radius:2px;}
-.signal-chips{display:flex;gap:7px;flex-wrap:wrap;margin:.4rem 0;}
-.schip{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:7px;font-size:12px;font-weight:600;}
-.schip.bull{background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.22);color:var(--green);}
-.schip.bear{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:var(--red);}
-.schip.neut{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);color:var(--gold);}
-.level-row{display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-radius:8px;margin:.3rem 0;font-size:12.5px;}
-.level-row.support{background:rgba(16,185,129,.06);border-left:3px solid var(--green);}
-.level-row.resist{background:rgba(239,68,68,.05);border-left:3px solid var(--red);}
-.level-row .lv-label{color:var(--sub);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px;}
-.level-row .lv-price{font-weight:700;font-family:monospace;font-size:13.5px;}
-.level-row .lv-note{font-size:11px;color:var(--sub);}
-.bias-bar{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:9px;padding:.7rem 1rem;margin:.4rem 0;display:flex;align-items:center;gap:12px;}
-.bias-label{font-size:11px;color:var(--sub);font-weight:600;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;}
-.bias-track{flex:1;height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;}
-.bias-fill{height:100%;border-radius:3px;transition:width .6s ease;}
-.bias-score{font-size:13px;font-weight:700;min-width:40px;text-align:right;}
-
-/* Thinking / streaming */
-.thinking{display:flex;align-items:center;gap:8px;padding:.7rem 1rem;background:rgba(139,92,246,.06);border:1px solid rgba(139,92,246,.14);border-radius:10px;font-size:12.5px;color:#a78bfa;font-weight:500;}
-.think-dots{display:flex;gap:4px;}
-.think-dot{width:5px;height:5px;border-radius:50%;background:#8b5cf6;animation:tdot 1.4s infinite;}
-.think-dot:nth-child(2){animation-delay:.2s;}
-.think-dot:nth-child(3){animation-delay:.4s;}
-@keyframes tdot{0%,80%,100%{transform:scale(.6);opacity:.4;}40%{transform:scale(1);opacity:1;}}
-
-/* Streaming cursor */
-.stream-cursor{display:inline-block;width:2px;height:14px;background:#a78bfa;border-radius:1px;margin-left:2px;vertical-align:middle;animation:blink .7s infinite;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-
-/* Quick prompts */
-.quick-prompts{display:flex;gap:7px;flex-wrap:wrap;padding:.7rem 1.2rem;border-top:1px solid var(--border);}
-.qp-btn{padding:6px 12px;border-radius:7px;font-size:11.5px;font-weight:600;color:var(--sub2);background:rgba(255,255,255,.04);border:1px solid var(--border);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .18s;white-space:nowrap;}
-.qp-btn:hover{background:rgba(139,92,246,.1);border-color:rgba(139,92,246,.25);color:#c4b5fd;}
-
-/* Input area */
-.chat-input-wrap{padding:.9rem 1.2rem;border-top:1px solid var(--border);display:flex;gap:9px;align-items:flex-end;background:rgba(4,8,15,.5);backdrop-filter:blur(12px);}
-.chat-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;padding:.7rem 1rem;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);resize:none;min-height:42px;max-height:120px;line-height:1.5;transition:border-color .2s;outline:none;}
-.chat-input:focus{border-color:rgba(139,92,246,.4);}
-.chat-input::placeholder{color:var(--sub);}
-.send-btn{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#8b5cf6,#6366f1);border:none;color:#fff;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s;box-shadow:0 2px 12px rgba(139,92,246,.3);}
-.send-btn:hover{transform:translateY(-1px);box-shadow:0 4px 18px rgba(139,92,246,.5);}
-.send-btn:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none;}
-
-/* Market snapshot bar */
-.snapshot-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;}
-.snap-card{background:var(--bg3);border:1px solid var(--border);border-radius:11px;padding:.8rem 1rem;transition:border-color .18s;}
-.snap-card:hover{border-color:var(--border2);}
-.snap-label{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;}
-.snap-val{font-size:15px;font-weight:700;}
-.snap-chg{font-size:11px;margin-top:2px;}
-.snap-chg.up{color:var(--green);}
-.snap-chg.dn{color:var(--red);}
-
-/* Skel */
-.skel{background:rgba(255,255,255,.04);border-radius:8px;animation:sk 1.4s ease infinite;}
-@keyframes sk{0%,100%{opacity:.4}50%{opacity:.9}}
-
-/* Mobile */
-.mobile-toggle{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;flex-shrink:0;}
-.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:19;}
-
-@media(max-width:850px){
-  .mobile-toggle{display:flex;}
-  .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:20;box-shadow:4px 0 30px rgba(0,0,0,.5);}
-  .sidebar.open{transform:translateX(0);}
-  .sidebar-overlay.open{display:block;}
-  .main-wrap{width:100%;}
-  .topbar{padding:1rem 1.2rem;}
-  .page{padding:1.2rem 1.4rem;}
-  .t-pill{display:none;}
-  .snapshot-bar{grid-template-columns:repeat(2,1fr);}
-  .context-row{grid-template-columns:1fr;}
-  .selectors-row{gap:6px;}
-}
-@media(max-width:600px){
-  .snapshot-bar{grid-template-columns:1fr 1fr;}
-  .page{padding:1rem;}
-  .context-row{grid-template-columns:1fr 1fr;}
-}
-
-/* ── NQ CHART ── */
-.nq-chart-wrap{background:var(--bg3);border:1px solid var(--border);border-radius:13px;overflow:hidden;margin-bottom:1.4rem;}
-/* ── CHART ANNOTATIONS ── */
-.chart-annotation-line{position:absolute;left:0;right:0;height:1px;pointer-events:none;z-index:10;}
-.chart-annotation-line.support{border-top:1px dashed rgba(16,185,129,0.6);}
-.chart-annotation-line.resist{border-top:1px dashed rgba(239,68,68,0.6);}
-.chart-annotation-line.entry{border-top:1px dashed rgba(59,130,246,0.7);}
-.chart-annotation-line.stop{border-top:1px dashed rgba(239,68,68,0.5);}
-.chart-annotation-line.target{border-top:1px dashed rgba(16,185,129,0.5);}
-.chart-annotation-line.ema{border-top:1px dashed rgba(245,158,11,0.5);}
-.chart-annotation-tag{position:absolute;right:4px;transform:translateY(-50%);font-size:9px;font-weight:700;padding:1px 6px;border-radius:3px;pointer-events:none;white-space:nowrap;}
-.chart-annotation-tag.support{background:rgba(16,185,129,0.15);color:#10b981;border:1px solid rgba(16,185,129,0.25);}
-.chart-annotation-tag.resist{background:rgba(239,68,68,0.12);color:#ef4444;border:1px solid rgba(239,68,68,0.2);}
-.chart-annotation-tag.entry{background:rgba(59,130,246,0.12);color:#60a5fa;border:1px solid rgba(59,130,246,0.2);}
-.chart-annotation-tag.stop{background:rgba(239,68,68,0.1);color:#f87171;border:1px solid rgba(239,68,68,0.18);}
-.chart-annotation-tag.target{background:rgba(16,185,129,0.1);color:#34d399;border:1px solid rgba(16,185,129,0.18);}
-.chart-annotation-tag.ema{background:rgba(245,158,11,0.1);color:#fbbf24;border:1px solid rgba(245,158,11,0.18);}
-.chart-annotation-zone{position:absolute;left:0;right:0;pointer-events:none;z-index:9;opacity:0.12;}
-.chart-annotation-zone.support{background:rgba(16,185,129,0.25);}
-.chart-annotation-zone.resist{background:rgba(239,68,68,0.2);}
-.show-chart-btn{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;color:#a78bfa;background:rgba(139,92,246,0.08);border:1px solid rgba(139,92,246,0.18);cursor:pointer;transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif;margin-top:8px;}
-.show-chart-btn:hover{background:rgba(139,92,246,0.15);border-color:rgba(139,92,246,0.3);}
-.show-chart-btn.on{background:rgba(139,92,246,0.2);border-color:rgba(139,92,246,0.4);color:#c4b5fd;}
-.show-chart-btn .dot{width:5px;height:5px;border-radius:50%;background:#a78bfa;opacity:0;transition:opacity .15s;}
-.show-chart-btn.on .dot{opacity:1;}
-
-</style>
-</head>
-<body>
-<div class="shell">
-
-  <div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
-
-  <!-- SIDEBAR -->
-  <nav class="sidebar" id="sidebar">
-    <a class="s-logo" href="https://trenai.vercel.app" style="text-decoration:none;color:inherit;">tren<span>.</span></a>
-    <div class="s-nav">
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/live-signals')">
-        <span class="s-ic"><span class="live-dot-nav"></span></span>
-        <span>Live Signals</span>
-      </a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/overview')">
-        <span class="s-ic">📊</span><span>Overview</span>
-      </a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/signals')">
-        <span class="s-ic">⚡</span><span>Recent Trades</span>
-      </a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/journal')">
-        <span class="s-ic">📓</span><span>Journal</span>
-      </a>
-      <div class="s-divider"></div>
-      <a class="s-item ai-on" onclick="navTo('https://trenai.vercel.app/ai-analysis')">
-        <span class="s-ic">✦</span><span>AI Analysis</span>
-        <span class="s-badge ai">NEW</span>
-      </a>
-      <a class="s-item gold" onclick="navTo('https://trenai.vercel.app/upgrade')">
-        <span class="s-ic">👑</span><span>Upgrade</span>
-        <span class="s-badge gd">PRO</span>
-      </a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/trenbot')">
-        <span class="s-ic">🤖</span><span>TrenBot</span>
-      </a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/autosignals')">
-        <span class="s-ic">⚡</span><span>AutoSignals</span>
-      </a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/indicator')">
-        <span class="s-ic">📈</span><span>Indicator</span>
-      </a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/settings')">
-        <span class="s-ic">⚙</span><span>Settings</span>
-      </a>
+      <!-- bottom padding -->
+      <div style="height:1rem;"></div>
     </div>
-    <div class="s-bot">
-      <div class="trial-card" id="trial-card">
-        <h4>🔥 7 Days Left</h4>
-        <p>Your free trial ends soon. Upgrade to keep full access.</p>
-        <button class="up-mini" onclick="window.open('https://trenai.vercel.app/checkout-trenbot','_blank')">Upgrade Now</button>
-      </div>
-      <a class="u-row" onclick="navTo('https://trenai.vercel.app/settings')">
-        <div class="u-av" id="s-av">T</div>
-        <div class="u-info">
-          <div class="u-name" id="s-nm">Trader</div>
-          <div class="u-email" id="s-email-display">—</div>
-          <span class="sub-status-badge trial" id="sidebar-plan-badge">⏱ Trial</span>
-        </div>
-      </a>
-      <div class="s-logout" onclick="doLogout()">
-        <span style="font-size:14px">→</span> Sign out
-      </div>
-    </div>
-  </nav>
-
-  <!-- MAIN -->
-  <div class="main-wrap">
-
-    <!-- TOPBAR -->
-    <div class="topbar">
-      <div style="display:flex;align-items:center;gap:12px;">
-        <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
-        <div class="tb-title">AI Analysis</div>
-      </div>
-      <div class="tb-right">
-        <div class="t-pill">✦ AI Powered</div>
-        <div class="nb">🔔</div>
-        <div class="prof-wrap">
-          <div class="prof-av" id="prof-av-btn" onclick="toggleProfileMenu()">T</div>
-          <div class="prof-menu" id="prof-menu">
-            <div class="prof-menu-header">
-              <div class="prof-menu-name" id="prof-menu-name">Trader</div>
-              <div class="prof-menu-email" id="prof-menu-email">—</div>
-            </div>
-            <a class="prof-menu-item" onclick="navTo('https://trenai.vercel.app/settings')">👤 Profile settings</a>
-            <div class="prof-menu-item danger" onclick="doLogout()">→ Sign out</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- PAGE CONTENT -->
-    <div class="page" id="main-page">
-
-      <!-- HERO -->
-      <div class="ai-hero">
-        <div class="ai-hero-left">
-          <div class="ai-hero-icon">✦</div>
-          <div class="ai-hero-text">
-            <h2>NQ Futures AI Analysis</h2>
-            <p>Real-time chart analysis, key levels, bias, and trade setups — powered by Claude AI.</p>
-          </div>
-        </div>
-        <div class="ai-hero-right">
-          <div class="selectors-row">
-            <span class="sel-label">Timeframe</span>
-            <div class="tf-seg" id="ai-tf-seg">
-              <button class="tf-btn" onclick="setAITF(this,'5m')">5M</button>
-              <button class="tf-btn" onclick="setAITF(this,'15m')">15M</button>
-              <button class="tf-btn" onclick="setAITF(this,'1h')">1H</button>
-              <button class="tf-btn active" onclick="setAITF(this,'1d')">1D</button>
-              <button class="tf-btn" onclick="setAITF(this,'1w')">1W</button>
-            </div>
-          </div>
-          <div class="selectors-row">
-            <span class="sel-label">Mode</span>
-            <div class="mode-seg">
-              <button class="mode-btn active" onclick="setMode(this,'analysis')">Analysis</button>
-              <button class="mode-btn" onclick="setMode(this,'context')">Context</button>
-              <button class="mode-btn" onclick="setMode(this,'levels')">Levels</button>
-            </div>
-          </div>
-          <button class="ai-btn primary" id="analyze-btn" onclick="runFullAnalysis()">
-            <span>✦</span> Analyze Now
-          </button>
-        </div>
-      </div>
-
-      <!-- MARKET SNAPSHOT -->
-      <div class="snapshot-bar" id="snapshot-bar">
-        <div class="snap-card"><div class="snap-label">NQ Price</div><div class="snap-val skel" style="width:80px;height:20px;"></div><div class="snap-chg skel" style="width:60px;height:12px;margin-top:4px;"></div></div>
-        <div class="snap-card"><div class="snap-label">Daily Change</div><div class="snap-val skel" style="width:70px;height:20px;"></div><div class="snap-chg skel" style="width:50px;height:12px;margin-top:4px;"></div></div>
-        <div class="snap-card"><div class="snap-label">Day High</div><div class="snap-val skel" style="width:80px;height:20px;"></div><div class="snap-chg skel" style="width:55px;height:12px;margin-top:4px;"></div></div>
-        <div class="snap-card"><div class="snap-label">Day Low</div><div class="snap-val skel" style="width:80px;height:20px;"></div><div class="snap-chg skel" style="width:55px;height:12px;margin-top:4px;"></div></div>
-        <div class="snap-card"><div class="snap-label">Volume</div><div class="snap-val skel" style="width:65px;height:20px;"></div><div class="snap-chg" style="color:var(--sub);font-size:11px;margin-top:2px;">E-mini NQ</div></div>
-      </div>
-
-            <!-- ── NASDAQ FUTURES CHART ── -->
-      <div class="sh" style="margin-bottom:.7rem;">
-        <div style="display:flex;align-items:center;gap:10px;">
-          <div class="st">NASDAQ Futures</div>
-          <span style="font-size:10px;color:var(--sub);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:5px;padding:2px 7px;">NQ=F · E-mini</span>
-        </div>
-        <div style="display:flex;align-items:center;gap:6px;">
-          <button id="nq-clear-ann" onclick="clearAnnotations()" title="Clear AI annotations" style="display:none;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;color:var(--sub2);background:rgba(255,255,255,.04);border:1px solid var(--border);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;">Clear AI</button>
-          <div class="tf-seg" id="nq-type-seg">
-            <button class="tf-btn active" onclick="setNQType(this,'line')" title="Line">〜</button>
-            <button class="tf-btn" onclick="setNQType(this,'candle')" title="Candles">▮</button>
-          </div>
-          <div class="tf-seg" id="nq-ind-seg">
-            <button class="tf-btn active" onclick="toggleNQInd(this,'ema9')" title="EMA 9">E9</button>
-            <button class="tf-btn active" onclick="toggleNQInd(this,'ema21')" title="EMA 21">E21</button>
-            <button class="tf-btn active" onclick="toggleNQInd(this,'vol')" title="Volume">Vol</button>
-          </div>
-          <div class="tf-seg" id="nq-tf-seg">
-            <button class="tf-btn" onclick="setNQInterval(this,'5m','1d')">5M</button>
-            <button class="tf-btn" onclick="setNQInterval(this,'15m','5d')">15M</button>
-            <button class="tf-btn" onclick="setNQInterval(this,'1h','1mo')">1H</button>
-            <button class="tf-btn active" onclick="setNQInterval(this,'1d','6mo')">1D</button>
-            <button class="tf-btn" onclick="setNQInterval(this,'1wk','2y')">1W</button>
-          </div>
-          <div id="nq-refresh-btn" onclick="nqFetch(_nqInterval,_nqRange,true)" title="Refresh" style="width:28px;height:28px;border-radius:7px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;flex-shrink:0;transition:border-color .2s;" onmouseover="this.style.borderColor='var(--border2)'" onmouseout="this.style.borderColor='var(--border)'">↻</div>
-        </div>
-      </div>
-
-      <div class="nq-chart-wrap" style="position:relative;padding:.9rem 1.2rem .7rem;">
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;flex-wrap:wrap;">
-          <div>
-            <span id="nq-price" style="font-size:24px;font-weight:800;letter-spacing:-.5px;">—</span>
-            <span id="nq-change" style="font-size:13px;font-weight:600;margin-left:8px;">—</span>
-          </div>
-          <div style="display:flex;gap:16px;margin-left:4px;">
-            <div style="font-size:11px;color:var(--sub);">O: <span id="nq-stat-o" style="color:var(--sub2);font-weight:600;">—</span></div>
-            <div style="font-size:11px;color:var(--sub);">H: <span id="nq-stat-h" style="color:var(--green);font-weight:600;">—</span></div>
-            <div style="font-size:11px;color:var(--sub);">L: <span id="nq-stat-l" style="color:var(--red);font-weight:600;">—</span></div>
-            <div style="font-size:11px;color:var(--sub);">C: <span id="nq-stat-c" style="color:var(--sub2);font-weight:600;">—</span></div>
-            <div style="font-size:11px;color:var(--sub);">Vol: <span id="nq-stat-v" style="color:var(--sub2);font-weight:600;">—</span></div>
-          </div>
-          <div style="margin-left:auto;font-size:10px;color:var(--sub);" id="nq-updated"></div>
-        </div>
-        <div style="position:relative;" id="nq-canvas-wrap">
-          <div id="nq-annotations" style="position:absolute;inset:0;pointer-events:none;z-index:12;"></div>
-          <canvas id="nq-canvas" style="width:100%;display:block;cursor:crosshair;"></canvas>
-          <div id="nq-tooltip" style="display:none;position:absolute;pointer-events:none;background:rgba(8,14,26,.95);border:1px solid var(--border2);border-radius:10px;padding:8px 13px;font-size:11px;font-weight:600;white-space:nowrap;z-index:20;line-height:1.9;backdrop-filter:blur(8px);"></div>
-          <div id="nq-price-tag" style="display:none;position:absolute;right:0;pointer-events:none;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;white-space:nowrap;z-index:15;"></div>
-          <div id="nq-cv" style="display:none;position:absolute;top:0;bottom:0;width:1px;background:rgba(255,255,255,.12);pointer-events:none;border-left:1px dashed rgba(255,255,255,.1);"></div>
-          <div id="nq-ch" style="display:none;position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.12);pointer-events:none;border-top:1px dashed rgba(255,255,255,.1);"></div>
-        </div>
-        <div id="nq-overlay" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;border-radius:13px;background:var(--bg3);z-index:30;">
-          <div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:nqspin .7s linear infinite;"></div>
-          <div style="font-size:12px;color:var(--sub);">Loading NQ futures…</div>
-        </div>
-      </div>
-
-<!-- ANALYSIS CONTEXT CARDS -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:-.5rem;">
-        <div style="font-size:13px;font-weight:700;">Analysis Context</div>
-        <div style="font-size:11px;color:var(--sub);">Select what to include</div>
-      </div>
-      <div class="context-row" id="ctx-row">
-        <div class="ctx-card selected" onclick="toggleCtx(this,'price')">
-          <div class="ctx-card-label">Price Action</div>
-          <div class="ctx-card-val">OHLC + Trend</div>
-          <div class="ctx-card-sub">Open, High, Low, Close + direction</div>
-          <div class="ctx-check">✓</div>
-        </div>
-        <div class="ctx-card selected" onclick="toggleCtx(this,'levels')">
-          <div class="ctx-card-label">Key Levels</div>
-          <div class="ctx-card-val">Support &amp; Resistance</div>
-          <div class="ctx-card-sub">Auto-detected S/R from price history</div>
-          <div class="ctx-check">✓</div>
-        </div>
-        <div class="ctx-card selected" onclick="toggleCtx(this,'indicators')">
-          <div class="ctx-card-label">Indicators</div>
-          <div class="ctx-card-val">EMA 9, EMA 21, Vol</div>
-          <div class="ctx-card-sub">Moving averages and volume profile</div>
-          <div class="ctx-check">✓</div>
-        </div>
-      </div>
-
-      <!-- CHAT WINDOW -->
-      <div class="chat-outer" id="chat-outer">
-        <div class="chat-header">
-          <div class="chat-header-left">
-            <div style="font-size:16px;">✦</div>
-            <div>
-              <div class="chat-header-title">Tren AI · NQ Analysis</div>
-              <div class="chat-header-sub" id="chat-status">Ready to analyze</div>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div class="chat-live-badge" id="live-badge" style="display:none;">
-              <div class="chat-live-dot"></div>Thinking…
-            </div>
-            <button class="ai-btn outline" style="padding:5px 11px;font-size:11.5px;" onclick="clearChat()">Clear</button>
-          </div>
-        </div>
-
-        <div class="chat-body" id="chat-body">
-          <!-- Welcome message -->
-          <div class="msg ai" id="welcome-msg">
-            <div class="msg-avatar ai">✦</div>
-            <div>
-              <div class="msg-bubble">
-                <div>Hey! I'm your AI market analyst for NQ Futures. I can help you with:</div>
-                <div class="signal-chips" style="margin-top:.6rem;">
-                  <span class="schip neut">📊 Price structure</span>
-                  <span class="schip bull">🟢 Support levels</span>
-                  <span class="schip bear">🔴 Resistance zones</span>
-                  <span class="schip neut">📐 Trade setups</span>
-                  <span class="schip neut">📉 Bias &amp; trend</span>
-                </div>
-                <div style="margin-top:.6rem;color:var(--sub2);">Hit <strong style="color:#a78bfa;">Analyze Now</strong> for a full breakdown, or ask me anything below.</div>
-              </div>
-              <div class="msg-time">Now</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Quick prompt chips -->
-        <div class="quick-prompts" id="quick-prompts">
-          <button class="qp-btn" onclick="sendQuick('What is the current NQ trend and bias?')">Trend &amp; bias</button>
-          <button class="qp-btn" onclick="sendQuick('Give me the key support and resistance levels on NQ right now.')">Key S/R levels</button>
-          <button class="qp-btn" onclick="sendQuick('What is a high-probability long setup on NQ today?')">Long setup</button>
-          <button class="qp-btn" onclick="sendQuick('What is a high-probability short setup on NQ today?')">Short setup</button>
-          <button class="qp-btn" onclick="sendQuick('What does the NQ volume profile tell us about current price?')">Volume profile</button>
-          <button class="qp-btn" onclick="sendQuick('Where are the EMA 9 and EMA 21 relative to price, and what does that signal?')">EMA signals</button>
-        </div>
-
-        <!-- Input -->
-        <div class="chat-input-wrap">
-          <textarea class="chat-input" id="chat-input" placeholder="Ask anything about NQ…" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-          <button class="send-btn" id="send-btn" onclick="sendMessage()">↑</button>
-        </div>
-      </div>
-
-    </div><!-- end .page -->
-  </div><!-- end .main-wrap -->
-</div><!-- end .shell -->
+  </div>
+</div>
 
 <script>
-// ── CONFIG ────────────────────────────────────────────────────────
+// ── SESSION ───────────────────────────────────────────────────────
 const SESSION_KEY = 'tren_session';
 const SUPABASE_AUTH_URL = 'https://sjntsmzbiqvtstvofcnx.supabase.co';
 const SUPABASE_AUTH_KEY = 'sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg';
 
-// ── NAV + SESSION ─────────────────────────────────────────────────
-let _navLock = false;
-function navTo(url) {
-  if (_navLock) return;
-  _navLock = true;
-  setTimeout(() => { _navLock = false; }, 800);
-  try {
-    const s = localStorage.getItem(SESSION_KEY);
-    if (s) { const encoded = encodeURIComponent(btoa(s)); url += (url.includes('?') ? '&' : '?') + '_t=' + encoded; }
-  } catch(e) {}
-  window.location.href = url;
-}
+let _session = (function(){ try { var r = localStorage.getItem(SESSION_KEY); return r ? JSON.parse(r) : null; } catch(e){ return null; } })();
 
-let _session = (() => { try { const r = localStorage.getItem(SESSION_KEY); return r ? JSON.parse(r) : null; } catch { return null; } })();
-function getSessionEmail() { return _session?.user?.email || '—'; }
-function getSessionFullName() {
-  if (_session?.user) {
-    const m = _session.user.user_metadata || {};
+function getSessionEmail(){ return (_session && _session.user && _session.user.email) ? _session.user.email : '—'; }
+function getSessionFullName(){
+  if (_session && _session.user){
+    var m = _session.user.user_metadata || {};
     if (m.full_name) return m.full_name;
     if (m.name) return m.name;
-    if (_session.user.email) return _session.user.email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());
+    if (_session.user.email) return _session.user.email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g, function(c){ return c.toUpperCase(); });
   }
   return 'Trader';
 }
-function getUserDisplayName() {
-  const prefs = JSON.parse(localStorage.getItem('tren_prefs') || '{}');
-  return (prefs.display_names || {})[getSessionEmail()] || getSessionFullName();
+function getUserDisplayName(){
+  try { var prefs = JSON.parse(localStorage.getItem('tren_prefs') || '{}'); return (prefs.display_names || {})[getSessionEmail()] || getSessionFullName(); } catch(e){ return getSessionFullName(); }
 }
 
-function initUserInfo() {
-  const name = getUserDisplayName(), email = getSessionEmail(), init = name.charAt(0).toUpperCase();
-  ['s-nm','prof-menu-name'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = name; });
-  ['s-av','prof-av-btn'].forEach(id => { const el = document.getElementById(id); if (el) el.textContent = init; });
-  const se = document.getElementById('s-email-display'); if (se) se.textContent = email;
-  const pe = document.getElementById('prof-menu-email'); if (pe) pe.textContent = email;
+function initUserInfo(){
+  var name = getUserDisplayName(), email = getSessionEmail(), init = name.charAt(0).toUpperCase();
+  ['s-nm','prof-menu-name'].forEach(function(id){ var el = document.getElementById(id); if (el) el.textContent = name; });
+  ['s-av','prof-av-btn'].forEach(function(id){ var el = document.getElementById(id); if (el) el.textContent = init; });
+  var se = document.getElementById('s-email-display'); if (se) se.textContent = email;
+  var pe = document.getElementById('prof-menu-email'); if (pe) pe.textContent = email;
 }
 
-async function doLogout() {
-  const tok = _session ? _session.access_token : '';
+function doLogout(){
+  var tok = _session ? _session.access_token : '';
   localStorage.removeItem(SESSION_KEY);
-  ['tren_sub','tren_prefs','tren_auto_sub','tren_autosignals_sub','tren_trenbot_sub'].forEach(k => localStorage.removeItem(k));
-  try { fetch(`${SUPABASE_AUTH_URL}/auth/v1/logout`, { method:'POST', headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':'Bearer '+tok}}).catch(()=>{}); } catch(e){}
+  ['tren_sub','tren_prefs','tren_auto_sub','tren_autosignals_sub','tren_trenbot_sub'].forEach(function(k){ localStorage.removeItem(k); });
+  try { fetch(SUPABASE_AUTH_URL+'/auth/v1/logout',{method:'POST',headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':'Bearer '+tok}}).catch(function(){}); } catch(e){}
   window.location.href = 'https://trenai.vercel.app/login-page';
 }
 
-function toggleProfileMenu() {
-  const m = document.getElementById('prof-menu'), b = document.getElementById('prof-av-btn');
-  const o = m.classList.contains('open');
-  m.classList.toggle('open', !o); b.classList.toggle('open', !o);
+function toggleProfileMenu(){
+  var m = document.getElementById('prof-menu'); if (m) m.classList.toggle('open');
 }
-document.addEventListener('click', e => {
-  const pw = document.querySelector('.prof-wrap');
-  if (pw && !pw.contains(e.target)) { document.getElementById('prof-menu').classList.remove('open'); document.getElementById('prof-av-btn').classList.remove('open'); }
-  const sb = document.getElementById('sidebar'), tog = document.querySelector('.mobile-toggle');
-  if (window.innerWidth <= 850 && sb.classList.contains('open') && !sb.contains(e.target) && e.target !== tog) closeSidebar();
+document.addEventListener('click', function(e){
+  var pw = document.querySelector('.prof-wrap');
+  if (pw && !pw.contains(e.target)) { var m = document.getElementById('prof-menu'); if (m) m.classList.remove('open'); }
+  var sb = document.getElementById('sidebar'), tog = document.querySelector('.mobile-toggle');
+  if (window.innerWidth <= 850 && sb && sb.classList.contains('open') && !sb.contains(e.target) && e.target !== tog) closeSidebar();
 });
 
-function toggleSidebar() {
-  const sb = document.getElementById('sidebar'), ov = document.getElementById('sb-overlay');
+function toggleSidebar(){
+  var sb = document.getElementById('sidebar'), ov = document.getElementById('sb-overlay');
   sb.classList.toggle('open'); ov.classList.toggle('open');
 }
-function closeSidebar() {
-  document.getElementById('sidebar').classList.remove('open');
-  document.getElementById('sb-overlay').classList.remove('open');
+function closeSidebar(){
+  var sb = document.getElementById('sidebar'), ov = document.getElementById('sb-overlay');
+  if (sb) sb.classList.remove('open'); if (ov) ov.classList.remove('open');
 }
 
-// ── NQ DATA FETCH ─────────────────────────────────────────────────
-let _nqSnapshot = null;
-let _nqBars = null;
-let _aiTF = '1d';
-let _aiMode = 'analysis';
-let _ctxSelected = { price: true, levels: true, indicators: true };
-
-async function fetchNQData(interval, range) {
-  try {
-    const res = await fetch(`/api/nq-chart?interval=${interval}&range=${range}`);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const json = await res.json();
-    if (!json.bars || !json.bars.length) throw new Error('no data');
-    return json;
-  } catch(e) {
-    console.error('NQ fetch error:', e);
-    return null;
-  }
-}
-
-function nqFmt(n) { return n == null ? '—' : n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2}); }
-function nqFmtK(n) {
+// ── HELPERS ───────────────────────────────────────────────────────
+function nqFmt(n){ return n == null ? '—' : n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function nqFmtK(n){
   if (n == null) return '—';
   if (n >= 1e9) return (n/1e9).toFixed(1)+'B';
   if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
   if (n >= 1e3) return (n/1e3).toFixed(0)+'K';
   return String(n);
 }
+function nowStr(){ return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
+function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
-async function loadSnapshot() {
-  const rangeMap = { '5m':'1d', '15m':'5d', '1h':'1mo', '1d':'6mo', '1w':'2y' };
-  const data = await fetchNQData(_aiTF, rangeMap[_aiTF] || '6mo');
-  if (!data || !data.bars.length) return;
-  _nqBars = data.bars;
-  const last = data.bars[data.bars.length - 1];
-  const first = data.bars[0];
-  const chg = last.c - first.c;
-  const chgPct = (chg / first.c) * 100;
-  const isUp = chg >= 0;
+// ── NQ DATA FETCH via Yahoo Finance CORS proxy ────────────────────
+var _nqInterval = '1d', _nqRange = '6mo';
+var _nqChartType = 'line';
+var _nqIndicators = { ema9: true, ema21: true, vol: true };
+var _nqData = null;
+var _nqAutoTimer = null;
+var _nqSnapshot = null;
+var _nqBars = null;
+var _aiTF = '1d', _aiMode = 'analysis';
+var _ctxSelected = { price: true, levels: true, indicators: true };
 
-  const sb = document.getElementById('snapshot-bar');
-  const G = '#10b981', R = '#ef4444';
-  sb.innerHTML = `
-    <div class="snap-card">
-      <div class="snap-label">NQ Price</div>
-      <div class="snap-val" style="color:${isUp?G:R}">${nqFmt(last.c)}</div>
-      <div class="snap-chg ${isUp?'up':'dn'}">${isUp?'▲':'▼'} ${Math.abs(chg).toFixed(2)}</div>
-    </div>
-    <div class="snap-card">
-      <div class="snap-label">Period Change</div>
-      <div class="snap-val" style="color:${isUp?G:R}">${isUp?'+':''}${chgPct.toFixed(2)}%</div>
-      <div class="snap-chg ${isUp?'up':'dn'}">${isUp?'Bullish':'Bearish'} trend</div>
-    </div>
-    <div class="snap-card">
-      <div class="snap-label">Period High</div>
-      <div class="snap-val" style="color:${G}">${nqFmt(Math.max(...data.bars.map(b=>b.h)))}</div>
-      <div class="snap-chg" style="color:var(--sub);">${_aiTF.toUpperCase()} range</div>
-    </div>
-    <div class="snap-card">
-      <div class="snap-label">Period Low</div>
-      <div class="snap-val" style="color:${R}">${nqFmt(Math.min(...data.bars.map(b=>b.l)))}</div>
-      <div class="snap-chg" style="color:var(--sub);">${_aiTF.toUpperCase()} range</div>
-    </div>
-    <div class="snap-card">
-      <div class="snap-label">Last Volume</div>
-      <div class="snap-val">${nqFmtK(last.v)}</div>
-      <div class="snap-chg" style="color:var(--sub);">E-mini NQ</div>
-    </div>
-  `;
-  _nqSnapshot = { last, first, chg, chgPct, bars: data.bars, isUp };
-  return data;
+// Uses allorigins proxy to bypass CORS on Yahoo Finance
+async function fetchYahooNQ(interval, range){
+  var symbol = 'NQ%3DF'; // NQ=F URL encoded
+  var url = 'https://query1.finance.yahoo.com/v8/finance/chart/'+symbol+'?interval='+interval+'&range='+range+'&includePrePost=false';
+  var proxyUrl = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(url);
+  var res = await fetch(proxyUrl);
+  if (!res.ok) throw new Error('HTTP '+res.status);
+  var json = await res.json();
+  var result = json.chart && json.chart.result && json.chart.result[0];
+  if (!result) throw new Error('No data from Yahoo');
+  var timestamps = result.timestamp || [];
+  var q = result.indicators.quote[0];
+  var opens = q.open, highs = q.high, lows = q.low, closes = q.close, volumes = q.volume;
+  var bars = [];
+  for (var i = 0; i < timestamps.length; i++){
+    if (closes[i] == null) continue;
+    var d = new Date(timestamps[i] * 1000);
+    var label;
+    if (interval === '1d' || interval === '1wk'){
+      label = d.toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    } else {
+      label = d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+    }
+    bars.push({ t: timestamps[i], label: label, o: opens[i]||closes[i], h: highs[i]||closes[i], l: lows[i]||closes[i], c: closes[i], v: volumes[i]||0 });
+  }
+  if (!bars.length) throw new Error('Empty bars');
+  return { bars: bars };
+}
+
+async function nqFetch(interval, range, isRefresh){
+  var overlay = document.getElementById('nq-overlay');
+  if (overlay){ overlay.style.display = 'flex'; overlay.innerHTML = '<div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:nqspin .7s linear infinite;"></div><div style="font-size:12px;color:var(--sub);">Loading NQ futures…</div>'; }
+  try {
+    var json = await fetchYahooNQ(interval, range);
+    _nqData = json; _nqBars = json.bars;
+    nqDraw(json);
+    updateSnapshot(json);
+    if (overlay) overlay.style.display = 'none';
+  } catch(e){
+    console.error('NQ fetch error:', e);
+    if (overlay) overlay.innerHTML = '<span style="font-size:22px">📡</span><div style="font-size:12px;color:var(--sub);text-align:center;line-height:1.7;">Could not load NQ data<br><small style="opacity:.6">'+escHtml(e.message)+'</small><br><span style="color:var(--al);cursor:pointer;font-weight:600;" onclick="nqFetch(\''+interval+'\',\''+range+'\',false)">Retry</span></div>';
+  }
+}
+
+function updateSnapshot(data){
+  if (!data || !data.bars || !data.bars.length) return;
+  var bars = data.bars;
+  var last = bars[bars.length-1], first = bars[0];
+  var chg = last.c - first.c, chgPct = (chg/first.c)*100, isUp = chg >= 0;
+  var G='#10b981', R='#ef4444';
+  var periodHigh = Math.max.apply(null, bars.map(function(b){ return b.h; }));
+  var periodLow  = Math.min.apply(null, bars.map(function(b){ return b.l; }));
+  var sb = document.getElementById('snapshot-bar');
+  if (sb) sb.innerHTML =
+    '<div class="snap-card"><div class="snap-label">NQ Price</div><div class="snap-val" style="color:'+(isUp?G:R)+'">'+nqFmt(last.c)+'</div><div class="snap-chg '+(isUp?'up':'dn')+'">'+(isUp?'▲':'▼')+' '+Math.abs(chg).toFixed(2)+'</div></div>'+
+    '<div class="snap-card"><div class="snap-label">Period Change</div><div class="snap-val" style="color:'+(isUp?G:R)+'">'+(isUp?'+':'')+chgPct.toFixed(2)+'%</div><div class="snap-chg '+(isUp?'up':'dn')+'">'+(isUp?'Bullish':'Bearish')+' trend</div></div>'+
+    '<div class="snap-card"><div class="snap-label">Period High</div><div class="snap-val" style="color:'+G+'">'+nqFmt(periodHigh)+'</div><div class="snap-chg" style="color:var(--sub);">'+_aiTF.toUpperCase()+' range</div></div>'+
+    '<div class="snap-card"><div class="snap-label">Period Low</div><div class="snap-val" style="color:'+R+'">'+nqFmt(periodLow)+'</div><div class="snap-chg" style="color:var(--sub);">'+_aiTF.toUpperCase()+' range</div></div>'+
+    '<div class="snap-card"><div class="snap-label">Last Volume</div><div class="snap-val">'+nqFmtK(last.v)+'</div><div class="snap-chg" style="color:var(--sub);">E-mini NQ</div></div>';
+  _nqSnapshot = { last: last, first: first, chg: chg, chgPct: chgPct, bars: bars, isUp: isUp };
 }
 
 // ── CONTROLS ──────────────────────────────────────────────────────
-window.setAITF = function(btn, tf) {
+window.setAITF = function(btn, tf){
   _aiTF = tf;
-  document.querySelectorAll('#ai-tf-seg .tf-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#ai-tf-seg .tf-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
-  loadSnapshot();
+  var rangeMap = {'5m':'1d','15m':'5d','1h':'1mo','1d':'6mo','1w':'2y'};
+  nqFetch(tf, rangeMap[tf]||'6mo', false);
 };
-
-window.setMode = function(btn, mode) {
+window.setMode = function(btn, mode){
   _aiMode = mode;
-  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.mode-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
 };
-
-window.toggleCtx = function(card, key) {
+window.toggleCtx = function(card, key){
   _ctxSelected[key] = !_ctxSelected[key];
   card.classList.toggle('selected', _ctxSelected[key]);
 };
-
-// ── CHAT STATE ─────────────────────────────────────────────────────
-let _chatHistory = [];
-let _isStreaming = false;
-
-function escHtml(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function nowStr() { return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}); }
-
-function appendMsg(role, content, isStreaming) {
-  const body = document.getElementById('chat-body');
-  const id = 'msg-' + Date.now() + '-' + Math.random().toString(36).slice(2);
-  const div = document.createElement('div');
-  div.className = 'msg ' + role;
-  div.id = id;
-
-  if (role === 'ai') {
-    div.innerHTML = `<div class="msg-avatar ai">✦</div>
-      <div>
-        <div class="msg-bubble" id="bubble-${id}">${isStreaming ? '<span class="stream-cursor"></span>' : formatAIMessage(content)}</div>
-        <div class="msg-actions" id="actions-${id}" style="display:none;margin-top:4px;padding-left:2px;"></div>
-        <div class="msg-time" id="time-${id}">${nowStr()}</div>
-      </div>`;
-  } else {
-    div.innerHTML = `<div class="msg-avatar user" id="u-av-user">T</div>
-      <div>
-        <div class="msg-bubble">${escHtml(content)}</div>
-        <div class="msg-time">${nowStr()}</div>
-      </div>`;
-    // set user initial
-    const av = div.querySelector('.msg-avatar.user');
-    if (av) av.textContent = getUserDisplayName().charAt(0).toUpperCase();
-  }
-
-  body.appendChild(div);
-  body.scrollTop = body.scrollHeight;
-  return id;
-}
-
-function formatAIMessage(text) {
-  if (!text) return '';
-  // Convert markdown-like formatting
-  let html = text
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\*(.*?)\*/g, '<em>$1</em>')
-    .replace(/`(.*?)`/g, '<code style="font-size:11.5px;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px;font-family:monospace;">$1</code>')
-    .replace(/^### (.*$)/gm, '<div class="ai-section-title">$1</div>')
-    .replace(/^## (.*$)/gm, '<div style="font-size:14px;font-weight:700;margin:.7rem 0 .3rem;color:var(--text);">$1</div>')
-    .replace(/^- (.*$)/gm, '<div style="display:flex;gap:7px;margin:.2rem 0;"><span style="color:#8b5cf6;flex-shrink:0;">•</span><span>$1</span></div>')
-    .replace(/\n\n/g, '<br><br>')
-    .replace(/\n/g, '<br>');
-  return html;
-}
-
-function setStreaming(on) {
-  _isStreaming = on;
-  const btn = document.getElementById('analyze-btn');
-  const sendBtn = document.getElementById('send-btn');
-  const badge = document.getElementById('live-badge');
-  const status = document.getElementById('chat-status');
-  if (btn) { btn.disabled = on; btn.innerHTML = on ? '<span>⏳</span> Analyzing…' : '<span>✦</span> Analyze Now'; }
-  if (sendBtn) sendBtn.disabled = on;
-  if (badge) badge.style.display = on ? 'flex' : 'none';
-  if (status) status.textContent = on ? 'Analyzing market…' : 'Ready';
-}
-
-// ── CONTEXT BUILDER ───────────────────────────────────────────────
-function buildMarketContext() {
-  if (!_nqSnapshot || !_nqBars) return 'No market data available.';
-  const { last, first, chg, chgPct, bars, isUp } = _nqSnapshot;
-  const periodHigh = Math.max(...bars.map(b=>b.h));
-  const periodLow  = Math.min(...bars.map(b=>b.l));
-  const closes     = bars.map(b=>b.c);
-  const recent     = bars.slice(-20);
-
-  // EMA helper
-  function ema(arr, p) {
-    const k=2/(p+1); let e=arr[0];
-    for(let i=1;i<arr.length;i++) e=arr[i]*k+e*(1-k);
-    return e;
-  }
-  const ema9  = _ctxSelected.indicators ? ema(closes, 9)  : null;
-  const ema21 = _ctxSelected.indicators ? ema(closes, 21) : null;
-
-  // Key levels (simple: look for S/R clusters in recent data)
-  function findLevels(bars) {
-    const levels = [];
-    for (let i=2; i<bars.length-2; i++) {
-      const b=bars[i], prev=bars[i-1], next=bars[i+1];
-      if (b.h > prev.h && b.h > next.h) levels.push({ type:'resist', price:b.h, label:`${bars[i].label||''} high` });
-      if (b.l < prev.l && b.l < next.l) levels.push({ type:'support', price:b.l, label:`${bars[i].label||''} low` });
-    }
-    // deduplicate within 0.3% of each other
-    const deduped=[];
-    for (const lv of levels) {
-      if (!deduped.find(d=>Math.abs(d.price-lv.price)/lv.price < 0.003)) deduped.push(lv);
-    }
-    return deduped.slice(-10);
-  }
-
-  const levels = _ctxSelected.levels ? findLevels(bars.slice(-60)) : [];
-  const supports  = levels.filter(l=>l.type==='support').sort((a,b)=>b.price-a.price).slice(0,3);
-  const resists   = levels.filter(l=>l.type==='resist').sort((a,b)=>a.price-b.price).slice(0,3);
-
-  // Trend
-  const shortTrend = closes.at(-1) > closes.at(-5) ? 'up' : 'down';
-  const medTrend   = closes.at(-1) > closes.at(-20) ? 'up' : 'down';
-
-  let ctx = `NASDAQ E-mini Futures (NQ) Market Data — Timeframe: ${_aiTF.toUpperCase()}\n\n`;
-  if (_ctxSelected.price) {
-    ctx += `PRICE ACTION:\n`;
-    ctx += `Current price: ${nqFmt(last.c)}\n`;
-    ctx += `Period open: ${nqFmt(first.o || first.c)}\n`;
-    ctx += `Period high: ${nqFmt(periodHigh)}\n`;
-    ctx += `Period low: ${nqFmt(periodLow)}\n`;
-    ctx += `Net change: ${chg >= 0 ? '+' : ''}${chg.toFixed(2)} (${chgPct.toFixed(2)}%)\n`;
-    ctx += `Short-term trend (5 bars): ${shortTrend.toUpperCase()}\n`;
-    ctx += `Medium-term trend (20 bars): ${medTrend.toUpperCase()}\n\n`;
-    ctx += `LAST 5 BARS (${_aiTF.toUpperCase()}):\n`;
-    bars.slice(-5).forEach(b => {
-      ctx += `${b.label||''}: O=${nqFmt(b.o)} H=${nqFmt(b.h)} L=${nqFmt(b.l)} C=${nqFmt(b.c)} Vol=${nqFmtK(b.v)}\n`;
-    });
-    ctx += '\n';
-  }
-  if (_ctxSelected.indicators && ema9 && ema21) {
-    ctx += `INDICATORS:\n`;
-    ctx += `EMA 9: ${nqFmt(ema9)}\n`;
-    ctx += `EMA 21: ${nqFmt(ema21)}\n`;
-    ctx += `Price vs EMA9: ${last.c > ema9 ? 'ABOVE (bullish)' : 'BELOW (bearish)'}\n`;
-    ctx += `Price vs EMA21: ${last.c > ema21 ? 'ABOVE (bullish)' : 'BELOW (bearish)'}\n`;
-    ctx += `EMA9 vs EMA21: ${ema9 > ema21 ? 'EMA9 above EMA21 (bullish stack)' : 'EMA9 below EMA21 (bearish stack)'}\n\n`;
-  }
-  if (_ctxSelected.levels && levels.length) {
-    ctx += `KEY LEVELS:\n`;
-    resists.forEach(l  => { ctx += `RESISTANCE: ${nqFmt(l.price)} (${l.label})\n`; });
-    ctx += `CURRENT:    ${nqFmt(last.c)}\n`;
-    supports.forEach(l => { ctx += `SUPPORT:    ${nqFmt(l.price)} (${l.label})\n`; });
-    ctx += '\n';
-  }
-  return ctx;
-}
-
-function buildSystemPrompt() {
-  const modeInstructions = {
-    analysis: `You are a professional NQ Futures trading analyst. Provide a comprehensive market analysis including: current bias, trend, key price levels, EMA positioning, and overall market structure. Be specific with price levels and actionable in your insights. Use clear sections with ### headers. Format prices in bold where relevant.`,
-    context: `You are a market context analyst for NQ Futures. Your job is to orient the trader — not to tell them what to do. Cover: the session range and where price currently sits within it, how price is positioned relative to recent structure (is it in a range, trending, extended?), and where the key reference prices are that traders will be watching. Describe the environment objectively. Do not suggest entries, stops, or targets. Use clear sections with ### headers.`,
-    levels: `You are a technical analyst specializing in NQ Futures support and resistance. Provide a detailed breakdown of all key price levels including: immediate support/resistance, major S/R zones, psychological levels, and how price is interacting with each. Be very specific with exact price levels.`
-  };
-  return modeInstructions[_aiMode] || modeInstructions.analysis;
-}
-
-// ── GROQ API CALL ──────────────────────────────────────────────────
-async function callGeminiAPI(messages) {
-  const response = await fetch('/api/ai-analysis', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      systemPrompt: buildSystemPrompt(),
-      messages
-    })
-  });
-  if (!response.ok) {
-    const err = await response.json().catch(()=>({}));
-    throw new Error(err.error?.message || 'API error ' + response.status);
-  }
-  const data = await response.json();
-  return data.text || '';
-}
-
-async function streamToMessage(msgId, messages) {
-  const bubble = document.getElementById('bubble-' + msgId);
-  if (!bubble) return;
-  bubble.innerHTML = '<span class="stream-cursor"></span>';
-
-  try {
-    const fullText = await callGeminiAPI(messages);
-    // Simulate streaming by progressively revealing text
-    let displayed = '';
-    const words = fullText.split(' ');
-    for (let i = 0; i < words.length; i++) {
-      displayed += (i === 0 ? '' : ' ') + words[i];
-      bubble.innerHTML = formatAIMessage(displayed) + '<span class="stream-cursor"></span>';
-      const body = document.getElementById('chat-body');
-      body.scrollTop = body.scrollHeight;
-      await new Promise(r => setTimeout(r, 18));
-    }
-    bubble.innerHTML = formatAIMessage(fullText);
-    addShowChartButton(msgId, fullText);
-    return fullText;
-  } catch(e) {
-    bubble.innerHTML = `<span style="color:var(--red);">⚠ Could not reach AI: ${escHtml(e.message)}</span><br><span style="font-size:11px;color:var(--sub);">Check your API connection and try again.</span>`;
-    return null;
-  }
-}
-
-// ── FULL ANALYSIS ─────────────────────────────────────────────────
-async function runFullAnalysis() {
-  if (_isStreaming) return;
-
-  // Fetch fresh data if needed
-  if (!_nqSnapshot) await loadSnapshot();
-  if (!_nqSnapshot) {
-    appendMsg('ai', '⚠ Unable to load NQ market data. Please check your API connection and try again.');
-    return;
-  }
-
-  setStreaming(true);
-
-  const ctx = buildMarketContext();
-  const modeLabels = { analysis: 'Full Market Analysis', context: 'Market Context', levels: 'Key Levels' };
-  const userPrompt = `Please provide a ${modeLabels[_aiMode] || 'Full Market Analysis'} for NQ Futures.\n\nHere is the current market data:\n\n${ctx}`;
-
-  appendMsg('user', `Run ${modeLabels[_aiMode] || 'full analysis'} on NQ ${_aiTF.toUpperCase()}`);
-  const msgId = appendMsg('ai', '', true);
-
-  _chatHistory.push({ role: 'user', content: userPrompt });
-
-  const reply = await streamToMessage(msgId, _chatHistory);
-  if (reply) _chatHistory.push({ role: 'assistant', content: reply });
-
-  setStreaming(false);
-}
-
-// ── SEND MESSAGE ──────────────────────────────────────────────────
-async function sendMessage() {
-  const input = document.getElementById('chat-input');
-  const text = input.value.trim();
-  if (!text || _isStreaming) return;
-  input.value = '';
-  autoResize(input);
-  await sendUserMessage(text);
-}
-
-async function sendQuick(text) {
-  if (_isStreaming) return;
-  await sendUserMessage(text);
-}
-
-async function sendUserMessage(text) {
-  if (_isStreaming) return;
-
-  if (!_nqSnapshot) await loadSnapshot();
-
-  setStreaming(true);
-  appendMsg('user', text);
-
-  // Build messages with market context injected in first user message if history is empty
-  let messages = [..._chatHistory];
-  const ctx = buildMarketContext();
-  const enriched = messages.length === 0
-    ? `${text}\n\nCurrent NQ market data for reference:\n${ctx}`
-    : text;
-
-  messages.push({ role: 'user', content: enriched });
-  const msgId = appendMsg('ai', '', true);
-
-  const reply = await streamToMessage(msgId, messages);
-  if (reply) {
-    _chatHistory.push({ role: 'user', content: text });
-    _chatHistory.push({ role: 'assistant', content: reply });
-  }
-
-  setStreaming(false);
-}
-
-window.sendQuick = sendQuick;
-
-// ── CLEAR CHAT ────────────────────────────────────────────────────
-function clearChat() {
-  _chatHistory = [];
-  const body = document.getElementById('chat-body');
-  body.innerHTML = '';
-  const welcome = document.createElement('div');
-  welcome.className = 'msg ai';
-  welcome.id = 'welcome-msg';
-  welcome.innerHTML = `<div class="msg-avatar ai">✦</div>
-    <div>
-      <div class="msg-bubble">
-        <div>Chat cleared. Ready for a fresh analysis.</div>
-        <div class="signal-chips" style="margin-top:.6rem;">
-          <span class="schip neut">📊 Price structure</span>
-          <span class="schip bull">🟢 Support levels</span>
-          <span class="schip bear">🔴 Resistance zones</span>
-          <span class="schip neut">📐 Trade setups</span>
-        </div>
-        <div style="margin-top:.6rem;color:var(--sub2);">Hit <strong style="color:#a78bfa;">Analyze Now</strong> to start.</div>
-      </div>
-      <div class="msg-time">${nowStr()}</div>
-    </div>`;
-  body.appendChild(welcome);
-  document.getElementById('chat-status').textContent = 'Ready';
-}
-
-// ── INPUT HELPERS ─────────────────────────────────────────────────
-function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-}
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
-}
-
-
-// ── NQ FUTURES CHART ──────────────────────────────────────────────
-let _nqInterval = '1d', _nqRange = '6mo';
-let _nqChartType = 'line';
-let _nqIndicators = { ema9: true, ema21: true, vol: true };
-let _nqData = null, _nqAutoTimer = null;
-
-function nqEMA(arr, period) {
-  const k = 2 / (period + 1), out = [];
-  let prev = null;
-  for (let i = 0; i < arr.length; i++) {
-    if (arr[i] == null) { out.push(null); continue; }
-    if (prev == null) { prev = arr[i]; out.push(prev); continue; }
-    prev = arr[i] * k + prev * (1 - k);
-    out.push(prev);
-  }
-  return out;
-}
-
-function nqFmt(n) {
-  return n == null ? '—' : n.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
-}
-
-function nqFmtK(n) {
-  if (n == null) return '—';
-  if (n >= 1e9) return (n/1e9).toFixed(1)+'B';
-  if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
-  if (n >= 1e3) return (n/1e3).toFixed(0)+'K';
-  return String(n);
-}
-
-window.setNQInterval = function(btn, interval, range) {
+window.setNQInterval = function(btn, interval, range){
   _nqInterval = interval; _nqRange = range;
-  document.querySelectorAll('#nq-tf-seg .tf-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#nq-tf-seg .tf-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
   nqFetch(interval, range, false);
 };
-
-window.setNQType = function(btn, type) {
+window.setNQType = function(btn, type){
   _nqChartType = type;
-  document.querySelectorAll('#nq-type-seg .tf-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('#nq-type-seg .tf-btn').forEach(function(b){ b.classList.remove('active'); });
   btn.classList.add('active');
   if (_nqData) nqDraw(_nqData);
 };
-
-window.toggleNQInd = function(btn, ind) {
+window.toggleNQInd = function(btn, ind){
   _nqIndicators[ind] = !_nqIndicators[ind];
   btn.classList.toggle('active', _nqIndicators[ind]);
   if (_nqData) nqDraw(_nqData);
 };
 
-async function nqFetch(interval, range, isRefresh) {
-  const overlay = document.getElementById('nq-overlay');
-  if (overlay) {
-    overlay.style.display = 'flex';
-    overlay.innerHTML = '<div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:nqspin .7s linear infinite;"></div><div style="font-size:12px;color:var(--sub);">Loading NQ futures…</div>';
+// ── CHART DRAW ────────────────────────────────────────────────────
+function nqEMA(arr, period){
+  var k = 2/(period+1), out = [], prev = null;
+  for (var i = 0; i < arr.length; i++){
+    if (arr[i] == null){ out.push(null); continue; }
+    if (prev == null){ prev = arr[i]; out.push(prev); continue; }
+    prev = arr[i]*k + prev*(1-k); out.push(prev);
   }
-  if (isRefresh) {
-    const rb = document.getElementById('nq-refresh-btn');
-    if (rb) { rb.style.transform='rotate(360deg)'; rb.style.transition='transform .5s'; setTimeout(function(){ rb.style.transform=''; rb.style.transition=''; }, 500); }
-  }
-  try {
-    const res = await fetch('/api/nq-chart?interval='+interval+'&range='+range);
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const json = await res.json();
-    if (!json.bars || !json.bars.length) throw new Error('no data');
-    _nqData = json;
-    nqDraw(json);
-    if (overlay) overlay.style.display = 'none';
-  } catch(e) {
-    if (overlay) overlay.innerHTML = '<span style="font-size:22px">📡</span><div style="font-size:12px;color:var(--sub);text-align:center;line-height:1.7;">Could not load NQ data<br><small style="opacity:.6">'+e.message+'</small><br><span style="color:var(--al);cursor:pointer;font-weight:600;" onclick="nqFetch(''+interval+'',''+range+'',false)">retry</span></div>';
-  }
+  return out;
 }
 
-function nqDraw(data) {
-  const canvas = document.getElementById('nq-canvas');
+function nqDraw(data){
+  var canvas = document.getElementById('nq-canvas');
   if (!canvas || !data || !data.bars || !data.bars.length) return;
-  const bars = data.bars;
-  const DPR = window.devicePixelRatio || 1;
-  const W = canvas.offsetWidth || canvas.parentElement.offsetWidth || 800;
-  const hasVol = _nqIndicators.vol && bars.some(function(b){ return b.v > 0; });
-  const TOTAL_H = 220;
-  const VOL_H = hasVol ? 44 : 0;
-  const PRICE_H = TOTAL_H - VOL_H;
-  canvas.width = W * DPR;
-  canvas.height = TOTAL_H * DPR;
-  canvas.style.width = W + 'px';
-  canvas.style.height = TOTAL_H + 'px';
-  const ctx = canvas.getContext('2d');
+  var bars = data.bars;
+  var DPR = window.devicePixelRatio || 1;
+  var W = canvas.offsetWidth || canvas.parentElement.offsetWidth || 800;
+  var hasVol = _nqIndicators.vol && bars.some(function(b){ return b.v > 0; });
+  var TOTAL_H = 220, VOL_H = hasVol ? 44 : 0, PRICE_H = TOTAL_H - VOL_H;
+  canvas.width = W * DPR; canvas.height = TOTAL_H * DPR;
+  canvas.style.width = W+'px'; canvas.style.height = TOTAL_H+'px';
+  var ctx = canvas.getContext('2d');
   ctx.scale(DPR, DPR);
-  const PAD_L = 68, PAD_R = 72, PAD_T = 14, PAD_B = 22;
-  const chartW = W - PAD_L - PAD_R;
-  const chartH = PRICE_H - PAD_T - PAD_B;
-  const highs = bars.map(function(b){ return b.h; });
-  const lows = bars.map(function(b){ return b.l; });
-  const pad = (Math.max.apply(null, highs) - Math.min.apply(null, lows)) * 0.04;
-  const minP = Math.min.apply(null, lows) - pad;
-  const maxP = Math.max.apply(null, highs) + pad;
-  const pRange = maxP - minP || 1;
-  const toX = function(i){ return PAD_L + (i / Math.max(bars.length - 1, 1)) * chartW; };
-  const toY = function(v){ return PAD_T + chartH - ((v - minP) / pRange) * chartH; };
-  const isUp = bars[bars.length-1].c >= bars[0].c;
-  const GREEN = '#10b981', RED = '#ef4444';
-  const lineColor = isUp ? GREEN : RED;
-  ctx.fillStyle = '#0c1525';
-  ctx.fillRect(0, 0, W, TOTAL_H);
-  const gridCount = 5;
-  ctx.font = '10px Plus Jakarta Sans, sans-serif';
-  ctx.textBaseline = 'middle';
-  for (let i = 0; i <= gridCount; i++) {
-    const y = PAD_T + (chartH / gridCount) * i;
-    const price = maxP - (pRange / gridCount) * i;
-    ctx.strokeStyle = 'rgba(255,255,255,0.045)';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([4, 6]);
-    ctx.beginPath(); ctx.moveTo(PAD_L, y); ctx.lineTo(W - PAD_R, y); ctx.stroke();
-    ctx.setLineDash([]);
-    ctx.fillStyle = 'rgba(240,244,255,0.3)';
-    ctx.textAlign = 'right';
-    ctx.fillText(price.toLocaleString('en-US', {maximumFractionDigits:0}), PAD_L - 6, y);
-    ctx.textAlign = 'left';
-    ctx.fillText(price.toLocaleString('en-US', {maximumFractionDigits:0}), W - PAD_R + 6, y);
+  var PAD_L=68, PAD_R=72, PAD_T=14, PAD_B=22;
+  var chartW = W-PAD_L-PAD_R, chartH = PRICE_H-PAD_T-PAD_B;
+  var highs = bars.map(function(b){ return b.h; }), lows = bars.map(function(b){ return b.l; });
+  var pad = (Math.max.apply(null,highs) - Math.min.apply(null,lows))*0.04;
+  var minP = Math.min.apply(null,lows)-pad, maxP = Math.max.apply(null,highs)+pad, pRange = maxP-minP||1;
+  var toX = function(i){ return PAD_L+(i/Math.max(bars.length-1,1))*chartW; };
+  var toY = function(v){ return PAD_T+chartH-((v-minP)/pRange)*chartH; };
+  var isUp = bars[bars.length-1].c >= bars[0].c;
+  var GREEN='#10b981', RED='#ef4444';
+  ctx.fillStyle='#0c1525'; ctx.fillRect(0,0,W,TOTAL_H);
+  // grid
+  for (var gi=0; gi<=5; gi++){
+    var gy = PAD_T+(chartH/5)*gi, gp = maxP-(pRange/5)*gi;
+    ctx.strokeStyle='rgba(255,255,255,0.045)'; ctx.lineWidth=1; ctx.setLineDash([4,6]);
+    ctx.beginPath(); ctx.moveTo(PAD_L,gy); ctx.lineTo(W-PAD_R,gy); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle='rgba(240,244,255,0.3)'; ctx.font='10px Plus Jakarta Sans,sans-serif'; ctx.textBaseline='middle';
+    ctx.textAlign='right'; ctx.fillText(gp.toLocaleString('en-US',{maximumFractionDigits:0}),PAD_L-6,gy);
+    ctx.textAlign='left'; ctx.fillText(gp.toLocaleString('en-US',{maximumFractionDigits:0}),W-PAD_R+6,gy);
   }
-  const labelEvery = Math.max(1, Math.ceil(bars.length / 8));
-  ctx.fillStyle = 'rgba(240,244,255,0.3)';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'top';
-  for (let i = 0; i < bars.length; i += labelEvery) {
-    const x = toX(i);
-    ctx.fillText(bars[i].label || '', x, PAD_T + chartH + 5);
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(x, PAD_T + chartH); ctx.lineTo(x, PAD_T + chartH + 3); ctx.stroke();
-  }
-  if (_nqChartType === 'line') {
-    const grad = ctx.createLinearGradient(0, PAD_T, 0, PAD_T + chartH);
-    grad.addColorStop(0, isUp ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.12)');
-    grad.addColorStop(1, 'rgba(0,0,0,0)');
-    ctx.beginPath();
-    ctx.moveTo(toX(0), PAD_T + chartH);
-    bars.forEach(function(b, i){ ctx.lineTo(toX(i), toY(b.c)); });
-    ctx.lineTo(toX(bars.length - 1), PAD_T + chartH);
-    ctx.closePath();
-    ctx.fillStyle = grad;
-    ctx.fill();
-    ctx.beginPath();
-    ctx.strokeStyle = lineColor;
-    ctx.lineWidth = 2;
-    ctx.lineJoin = 'round';
-    ctx.shadowColor = lineColor;
-    ctx.shadowBlur = 6;
-    bars.forEach(function(b, i){ if (i === 0) ctx.moveTo(toX(i), toY(b.c)); else ctx.lineTo(toX(i), toY(b.c)); });
-    ctx.stroke();
-    ctx.shadowBlur = 0;
-    const lx = toX(bars.length - 1), ly = toY(bars[bars.length-1].c);
-    ctx.beginPath();
-    ctx.arc(lx, ly, 4, 0, Math.PI * 2);
-    ctx.fillStyle = lineColor;
-    ctx.fill();
-    ctx.strokeStyle = '#0c1525';
-    ctx.lineWidth = 2;
-    ctx.stroke();
+  // x labels
+  var labelEvery = Math.max(1,Math.ceil(bars.length/8));
+  ctx.fillStyle='rgba(240,244,255,0.3)'; ctx.textAlign='center'; ctx.textBaseline='top'; ctx.font='10px Plus Jakarta Sans,sans-serif';
+  for (var li=0; li<bars.length; li+=labelEvery){ ctx.fillText(bars[li].label||'',toX(li),PAD_T+chartH+5); }
+  // line or candle
+  if (_nqChartType==='line'){
+    var grad = ctx.createLinearGradient(0,PAD_T,0,PAD_T+chartH);
+    grad.addColorStop(0, isUp?'rgba(16,185,129,0.15)':'rgba(239,68,68,0.12)'); grad.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.beginPath(); ctx.moveTo(toX(0),PAD_T+chartH);
+    bars.forEach(function(b,i){ ctx.lineTo(toX(i),toY(b.c)); });
+    ctx.lineTo(toX(bars.length-1),PAD_T+chartH); ctx.closePath();
+    ctx.fillStyle=grad; ctx.fill();
+    ctx.beginPath(); ctx.strokeStyle=isUp?GREEN:RED; ctx.lineWidth=2; ctx.lineJoin='round'; ctx.shadowColor=isUp?GREEN:RED; ctx.shadowBlur=6;
+    bars.forEach(function(b,i){ if(i===0)ctx.moveTo(toX(i),toY(b.c)); else ctx.lineTo(toX(i),toY(b.c)); });
+    ctx.stroke(); ctx.shadowBlur=0;
+    var lx=toX(bars.length-1),ly=toY(bars[bars.length-1].c);
+    ctx.beginPath(); ctx.arc(lx,ly,4,0,Math.PI*2); ctx.fillStyle=isUp?GREEN:RED; ctx.fill();
+    ctx.strokeStyle='#0c1525'; ctx.lineWidth=2; ctx.stroke();
   } else {
-    const candleW = Math.max(1, Math.min(12, chartW / bars.length * 0.7));
-    bars.forEach(function(b, i){
-      const x = toX(i);
-      const co = b.c >= b.o;
-      const bodyTop = toY(Math.max(b.o, b.c));
-      const bodyBot = toY(Math.min(b.o, b.c));
-      const bodyH = Math.max(1, bodyBot - bodyTop);
-      const wickTop = toY(b.h);
-      const wickBot = toY(b.l);
-      const col = co ? GREEN : RED;
-      ctx.strokeStyle = col;
-      ctx.lineWidth = 1;
-      ctx.globalAlpha = 0.7;
-      ctx.beginPath(); ctx.moveTo(x, wickTop); ctx.lineTo(x, wickBot); ctx.stroke();
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = co ? 'rgba(16,185,129,0.85)' : 'rgba(239,68,68,0.85)';
-      ctx.strokeStyle = col;
-      ctx.lineWidth = 1;
-      ctx.fillRect(x - candleW/2, bodyTop, candleW, bodyH);
-      ctx.strokeRect(x - candleW/2, bodyTop, candleW, bodyH);
+    var cw = Math.max(1,Math.min(12,chartW/bars.length*0.7));
+    bars.forEach(function(b,i){
+      var x=toX(i), co=b.c>=b.o, bTop=toY(Math.max(b.o,b.c)), bBot=toY(Math.min(b.o,b.c)), bH=Math.max(1,bBot-bTop), col=co?GREEN:RED;
+      ctx.strokeStyle=col; ctx.lineWidth=1; ctx.globalAlpha=0.7;
+      ctx.beginPath(); ctx.moveTo(x,toY(b.h)); ctx.lineTo(x,toY(b.l)); ctx.stroke(); ctx.globalAlpha=1;
+      ctx.fillStyle=co?'rgba(16,185,129,0.85)':'rgba(239,68,68,0.85)'; ctx.strokeStyle=col; ctx.lineWidth=1;
+      ctx.fillRect(x-cw/2,bTop,cw,bH); ctx.strokeRect(x-cw/2,bTop,cw,bH);
     });
   }
-  if (_nqIndicators.ema9) {
-    const ema9 = nqEMA(bars.map(function(b){ return b.c; }), 9);
-    ctx.beginPath();
-    ctx.strokeStyle = '#f59e0b';
-    ctx.lineWidth = 1.5;
-    ctx.lineJoin = 'round';
-    ctx.setLineDash([]);
-    let started = false;
-    ema9.forEach(function(v, i){
-      if (v == null) return;
-      if (started) ctx.lineTo(toX(i), toY(v)); else ctx.moveTo(toX(i), toY(v));
-      started = true;
-    });
-    ctx.stroke();
-    const lastEma9 = ema9.filter(function(v){ return v != null; }).pop();
-    if (lastEma9) {
-      ctx.fillStyle = '#f59e0b';
-      ctx.font = '9px Plus Jakarta Sans, sans-serif';
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('E9', W - PAD_R + 6, toY(lastEma9));
-    }
+  // EMAs
+  if (_nqIndicators.ema9){
+    var e9=nqEMA(bars.map(function(b){return b.c;}),9);
+    ctx.beginPath(); ctx.strokeStyle='#f59e0b'; ctx.lineWidth=1.5; ctx.setLineDash([]);
+    var s9=false; e9.forEach(function(v,i){ if(v==null)return; if(s9)ctx.lineTo(toX(i),toY(v)); else ctx.moveTo(toX(i),toY(v)); s9=true; }); ctx.stroke();
+    var le9=e9.filter(function(v){return v!=null;}).pop();
+    if(le9){ctx.fillStyle='#f59e0b';ctx.font='9px Plus Jakarta Sans,sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText('E9',W-PAD_R+6,toY(le9));}
   }
-  if (_nqIndicators.ema21) {
-    const ema21 = nqEMA(bars.map(function(b){ return b.c; }), 21);
-    ctx.beginPath();
-    ctx.strokeStyle = '#818cf8';
-    ctx.lineWidth = 1.5;
-    ctx.setLineDash([4, 3]);
-    let started = false;
-    ema21.forEach(function(v, i){
-      if (v == null) return;
-      if (started) ctx.lineTo(toX(i), toY(v)); else ctx.moveTo(toX(i), toY(v));
-      started = true;
-    });
-    ctx.stroke();
-    ctx.setLineDash([]);
-    const lastEma21 = ema21.filter(function(v){ return v != null; }).pop();
-    if (lastEma21) {
-      ctx.fillStyle = '#818cf8';
-      ctx.font = '9px Plus Jakarta Sans, sans-serif';
-      ctx.textAlign = 'left';
-      ctx.textBaseline = 'middle';
-      ctx.fillText('E21', W - PAD_R + 6, toY(lastEma21) + 10);
-    }
+  if (_nqIndicators.ema21){
+    var e21=nqEMA(bars.map(function(b){return b.c;}),21);
+    ctx.beginPath(); ctx.strokeStyle='#818cf8'; ctx.lineWidth=1.5; ctx.setLineDash([4,3]);
+    var s21=false; e21.forEach(function(v,i){ if(v==null)return; if(s21)ctx.lineTo(toX(i),toY(v)); else ctx.moveTo(toX(i),toY(v)); s21=true; }); ctx.stroke(); ctx.setLineDash([]);
+    var le21=e21.filter(function(v){return v!=null;}).pop();
+    if(le21){ctx.fillStyle='#818cf8';ctx.font='9px Plus Jakarta Sans,sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillText('E21',W-PAD_R+6,toY(le21)+10);}
   }
-  if (hasVol) {
-    const volTop = PRICE_H + 4;
-    const volH = VOL_H - 8;
-    const volumes = bars.map(function(b){ return b.v || 0; });
-    const maxVol = Math.max.apply(null, volumes.concat([1]));
-    const barW = Math.max(1, chartW / bars.length * 0.65);
-    ctx.strokeStyle = 'rgba(255,255,255,0.07)';
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(PAD_L, PRICE_H); ctx.lineTo(W - PAD_R, PRICE_H); ctx.stroke();
-    ctx.fillStyle = 'rgba(240,244,255,0.25)';
-    ctx.font = '9px Plus Jakarta Sans, sans-serif';
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'top';
-    ctx.fillText('VOL', PAD_L - 6, volTop);
-    bars.forEach(function(b, i){
-      const x = toX(i);
-      const h = Math.max(1, (b.v / maxVol) * volH);
-      const co = b.c >= b.o;
-      ctx.fillStyle = co ? 'rgba(16,185,129,0.45)' : 'rgba(239,68,68,0.4)';
-      ctx.fillRect(x - barW/2, volTop + volH - h, barW, h);
-    });
-    ctx.fillStyle = 'rgba(240,244,255,0.25)';
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'top';
-    ctx.fillText(nqFmtK(maxVol), PAD_L - 6, volTop + 8);
+  // volume
+  if (hasVol){
+    var vTop=PRICE_H+4,vH=VOL_H-8,vols=bars.map(function(b){return b.v||0;}),maxVol=Math.max.apply(null,vols.concat([1]));
+    var bw=Math.max(1,chartW/bars.length*0.65);
+    ctx.strokeStyle='rgba(255,255,255,0.07)'; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(PAD_L,PRICE_H); ctx.lineTo(W-PAD_R,PRICE_H); ctx.stroke();
+    bars.forEach(function(b,i){ var x=toX(i),h=Math.max(1,(b.v/maxVol)*vH),co=b.c>=b.o; ctx.fillStyle=co?'rgba(16,185,129,0.45)':'rgba(239,68,68,0.4)'; ctx.fillRect(x-bw/2,vTop+vH-h,bw,h); });
   }
-  const lastClose = bars[bars.length-1].c;
-  const lastY = toY(lastClose);
-  ctx.strokeStyle = isUp ? 'rgba(16,185,129,0.6)' : 'rgba(239,68,68,0.6)';
-  ctx.lineWidth = 1;
-  ctx.setLineDash([3, 4]);
-  ctx.beginPath(); ctx.moveTo(PAD_L, lastY); ctx.lineTo(W - PAD_R, lastY); ctx.stroke();
-  ctx.setLineDash([]);
-  const tag = document.getElementById('nq-price-tag');
-  if (tag) {
-    tag.style.display = 'block';
-    tag.textContent = lastClose.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
-    tag.style.top = (lastY - 9) + 'px';
-    tag.style.background = isUp ? '#10b981' : '#ef4444';
-  }
-  const last = bars[bars.length - 1];
-  const first = bars[0];
-  const chg = last.c - first.c;
-  const chgPct = (chg / first.c) * 100;
-  const g = function(id){ return document.getElementById(id); };
-  const pe = g('nq-price'), ce = g('nq-change'), ue = g('nq-updated');
-  const so = g('nq-stat-o'), sh = g('nq-stat-h'), sl = g('nq-stat-l'), sc = g('nq-stat-c'), sv = g('nq-stat-v');
-  if (pe) { pe.textContent = nqFmt(last.c); pe.style.color = isUp ? GREEN : RED; }
-  if (ce) { ce.textContent = (chg >= 0 ? '+' : '') + chg.toFixed(2) + '  (' + (chgPct >= 0 ? '+' : '') + chgPct.toFixed(2) + '%)'; ce.style.color = isUp ? GREEN : RED; }
-  if (ue) ue.textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
-  if (so) so.textContent = nqFmt(last.o);
-  if (sh) sh.textContent = nqFmt(last.h);
-  if (sl) sl.textContent = nqFmt(last.l);
-  if (sc) sc.textContent = nqFmt(last.c);
-  if (sv) sv.textContent = nqFmtK(last.v);
-  canvas._nq = { bars: bars, toX: toX, toY: toY, PAD_T: PAD_T, chartW: chartW, len: bars.length };
-  if (_currentAnnotations.length && _annotationMsgId) {
-    drawAnnotations(_currentAnnotations);
-  }
+  // last price line
+  var lastClose=bars[bars.length-1].c, lastY=toY(lastClose);
+  ctx.strokeStyle=isUp?'rgba(16,185,129,0.6)':'rgba(239,68,68,0.6)'; ctx.lineWidth=1; ctx.setLineDash([3,4]);
+  ctx.beginPath(); ctx.moveTo(PAD_L,lastY); ctx.lineTo(W-PAD_R,lastY); ctx.stroke(); ctx.setLineDash([]);
+  var ptag=document.getElementById('nq-price-tag');
+  if(ptag){ ptag.style.display='block'; ptag.textContent=nqFmt(lastClose); ptag.style.top=(lastY-9)+'px'; ptag.style.background=isUp?GREEN:RED; }
+  // update stats
+  var last=bars[bars.length-1],first=bars[0],chg=last.c-first.c,chgPct=(chg/first.c)*100;
+  var g=function(id){return document.getElementById(id);};
+  var pe=g('nq-price'),ce=g('nq-change'),ue=g('nq-updated'),so=g('nq-stat-o'),sh=g('nq-stat-h'),sl=g('nq-stat-l'),sc=g('nq-stat-c'),sv=g('nq-stat-v');
+  if(pe){pe.textContent=nqFmt(last.c);pe.style.color=isUp?GREEN:RED;}
+  if(ce){ce.textContent=(chg>=0?'+':'')+chg.toFixed(2)+'  ('+(chgPct>=0?'+':'')+chgPct.toFixed(2)+'%)';ce.style.color=isUp?GREEN:RED;}
+  if(ue)ue.textContent='Updated '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  if(so)so.textContent=nqFmt(last.o); if(sh)sh.textContent=nqFmt(last.h); if(sl)sl.textContent=nqFmt(last.l);
+  if(sc){sc.textContent=nqFmt(last.c);sc.style.color=isUp?GREEN:RED;} if(sv)sv.textContent=nqFmtK(last.v);
+  canvas._nq={bars:bars,toX:toX,toY:toY,PAD_T:PAD_T,chartW:chartW,len:bars.length};
+  if(_currentAnnotations.length&&_annotationMsgId) drawAnnotations(_currentAnnotations);
 }
 
-(function setupNQHover() {
-  function onMove(e) {
-    const canvas = document.getElementById('nq-canvas');
-    if (!canvas || !canvas._nq) return;
-    const rect = canvas.getBoundingClientRect();
-    const mx = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-    const my = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-    const nq = canvas._nq;
-    const idx = Math.max(0, Math.min(nq.len - 1, Math.round((mx - nq.PAD_L) / nq.chartW * (nq.len - 1))));
-    const b = nq.bars[idx];
-    if (!b) return;
-    const cx = nq.toX(idx), cy = nq.toY(b.c);
-    const tip = document.getElementById('nq-tooltip');
-    const cv = document.getElementById('nq-cv');
-    const ch = document.getElementById('nq-ch');
-    const tag = document.getElementById('nq-price-tag');
-    const isUp = b.c >= b.o;
-    const col = isUp ? '#10b981' : '#ef4444';
-    const g = function(id){ return document.getElementById(id); };
-    const so=g('nq-stat-o'),sh=g('nq-stat-h'),sl=g('nq-stat-l'),sc=g('nq-stat-c'),sv=g('nq-stat-v');
-    if(so) so.textContent = nqFmt(b.o);
-    if(sh) sh.textContent = nqFmt(b.h);
-    if(sl) sl.textContent = nqFmt(b.l);
-    if(sc) { sc.textContent = nqFmt(b.c); sc.style.color = col; }
-    if(sv) sv.textContent = nqFmtK(b.v);
-    if (tip) {
-      const chgBar = b.c - b.o;
-      const chgBarPct = b.o ? (chgBar / b.o * 100) : 0;
-      tip.style.display = 'block';
-      tip.innerHTML = '<div style="color:var(--sub);font-size:10px;margin-bottom:3px;">'+(b.label || '')+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;"><span style="color:var(--sub)">Open</span><span>'+nqFmt(b.o)+'</span><span style="color:var(--sub)">High</span><span style="color:#10b981">'+nqFmt(b.h)+'</span><span style="color:var(--sub)">Low</span><span style="color:#ef4444">'+nqFmt(b.l)+'</span><span style="color:var(--sub)">Close</span><span style="color:'+col+';font-weight:700">'+nqFmt(b.c)+'</span><span style="color:var(--sub)">Chg</span><span style="color:'+col+'">'+(chgBar >= 0 ? '+' : '')+chgBar.toFixed(2)+' ('+chgBarPct.toFixed(2)+'%)</span>'+(b.v ? '<span style="color:var(--sub)">Vol</span><span>'+nqFmtK(b.v)+'</span>' : '')+'</div>';
-      const TW = 210, TH = 130;
-      let tx = cx + 14, ty = cy - TH / 2;
-      if (tx + TW > rect.width - 10) tx = cx - TW - 10;
-      if (ty < 8) ty = 8;
-      if (ty + TH > rect.height - 8) ty = rect.height - TH - 8;
-      tip.style.left = tx + 'px';
-      tip.style.top = ty + 'px';
+// ── HOVER ─────────────────────────────────────────────────────────
+(function(){
+  function onMove(e){
+    var canvas=document.getElementById('nq-canvas'); if(!canvas||!canvas._nq)return;
+    var rect=canvas.getBoundingClientRect();
+    var mx=(e.touches?e.touches[0].clientX:e.clientX)-rect.left;
+    var nq=canvas._nq;
+    var idx=Math.max(0,Math.min(nq.len-1,Math.round((mx-nq.PAD_T)/nq.chartW*(nq.len-1))));
+    // fix: use correct x offset
+    idx=Math.max(0,Math.min(nq.len-1,Math.round((mx-68)/nq.chartW*(nq.len-1))));
+    var b=nq.bars[idx]; if(!b)return;
+    var cx=nq.toX(idx),cy=nq.toY(b.c);
+    var tip=document.getElementById('nq-tooltip'),cv=document.getElementById('nq-cv'),ch=document.getElementById('nq-ch'),ptag=document.getElementById('nq-price-tag');
+    var isUp=b.c>=b.o,col=isUp?'#10b981':'#ef4444';
+    var g=function(id){return document.getElementById(id);};
+    var so=g('nq-stat-o'),sh=g('nq-stat-h'),sl=g('nq-stat-l'),sc=g('nq-stat-c'),sv=g('nq-stat-v');
+    if(so)so.textContent=nqFmt(b.o); if(sh)sh.textContent=nqFmt(b.h); if(sl)sl.textContent=nqFmt(b.l);
+    if(sc){sc.textContent=nqFmt(b.c);sc.style.color=col;} if(sv)sv.textContent=nqFmtK(b.v);
+    if(tip){
+      var cb=b.c-b.o,cbp=b.o?(cb/b.o*100):0;
+      tip.style.display='block';
+      tip.innerHTML='<div style="color:var(--sub);font-size:10px;margin-bottom:3px;">'+(b.label||'')+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;"><span style="color:var(--sub)">O</span><span>'+nqFmt(b.o)+'</span><span style="color:var(--sub)">H</span><span style="color:#10b981">'+nqFmt(b.h)+'</span><span style="color:var(--sub)">L</span><span style="color:#ef4444">'+nqFmt(b.l)+'</span><span style="color:var(--sub)">C</span><span style="color:'+col+';font-weight:700">'+nqFmt(b.c)+'</span><span style="color:var(--sub)">Chg</span><span style="color:'+col+'">'+(cb>=0?'+':'')+cb.toFixed(2)+'</span>'+(b.v?'<span style="color:var(--sub)">Vol</span><span>'+nqFmtK(b.v)+'</span>':'')+'</div>';
+      var TW=200,TH=120,tx=cx+14,ty=cy-TH/2;
+      if(tx+TW>rect.width-10)tx=cx-TW-10; if(ty<8)ty=8; if(ty+TH>rect.height-8)ty=rect.height-TH-8;
+      tip.style.left=tx+'px'; tip.style.top=ty+'px';
     }
-    if (cv) { cv.style.display = 'block'; cv.style.left = cx + 'px'; }
-    if (ch) { ch.style.display = 'block'; ch.style.top = cy + 'px'; }
-    if (tag) { tag.textContent = nqFmt(b.c); tag.style.top = (cy - 9) + 'px'; tag.style.background = col; }
+    if(cv){cv.style.display='block';cv.style.left=cx+'px';}
+    if(ch){ch.style.display='block';ch.style.top=cy+'px';}
+    if(ptag){ptag.textContent=nqFmt(b.c);ptag.style.top=(cy-9)+'px';ptag.style.background=col;}
   }
-  function onLeave() {
-    ['nq-tooltip','nq-cv','nq-ch'].forEach(function(id){ const el = document.getElementById(id); if (el) el.style.display = 'none'; });
-    const tag = document.getElementById('nq-price-tag');
-    if (_nqData && _nqData.bars) {
-      const last = _nqData.bars[_nqData.bars.length - 1];
-      const canvas = document.getElementById('nq-canvas');
-      if (canvas && canvas._nq) {
-        const nq = canvas._nq;
-        const lb = nq.bars[nq.bars.length - 1];
-        const isUp = lb.c >= nq.bars[0].c;
-        const g = function(id){ return document.getElementById(id); };
-        const so=g('nq-stat-o'),sh=g('nq-stat-h'),sl=g('nq-stat-l'),sc=g('nq-stat-c'),sv=g('nq-stat-v');
-        if(so) so.textContent=nqFmt(lb.o); if(sh) sh.textContent=nqFmt(lb.h);
-        if(sl) sl.textContent=nqFmt(lb.l); if(sc){sc.textContent=nqFmt(lb.c);sc.style.color=isUp?'#10b981':'#ef4444';}
-        if(sv) sv.textContent=nqFmtK(lb.v);
-        if(tag){tag.style.display='block';tag.textContent=nqFmt(lb.c);tag.style.top=(nq.toY(lb.c)-9)+'px';tag.style.background=isUp?'#10b981':'#ef4444';}
+  function onLeave(){
+    ['nq-tooltip','nq-cv','nq-ch'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.display='none';});
+    if(_nqData&&_nqData.bars){
+      var canvas=document.getElementById('nq-canvas');
+      if(canvas&&canvas._nq){
+        var nq=canvas._nq,lb=nq.bars[nq.bars.length-1],isUp=lb.c>=nq.bars[0].c;
+        var ptag=document.getElementById('nq-price-tag'),g=function(id){return document.getElementById(id);};
+        var so=g('nq-stat-o'),sh=g('nq-stat-h'),sl=g('nq-stat-l'),sc=g('nq-stat-c'),sv=g('nq-stat-v');
+        if(so)so.textContent=nqFmt(lb.o);if(sh)sh.textContent=nqFmt(lb.h);if(sl)sl.textContent=nqFmt(lb.l);
+        if(sc){sc.textContent=nqFmt(lb.c);sc.style.color=isUp?'#10b981':'#ef4444';}if(sv)sv.textContent=nqFmtK(lb.v);
+        if(ptag){ptag.style.display='block';ptag.textContent=nqFmt(lb.c);ptag.style.top=(nq.toY(lb.c)-9)+'px';ptag.style.background=isUp?'#10b981':'#ef4444';}
       }
     }
   }
-  function wire() {
-    const c = document.getElementById('nq-canvas');
-    if (!c) return;
-    c.addEventListener('mousemove', onMove);
-    c.addEventListener('mouseleave', onLeave);
-    c.addEventListener('touchmove', onMove, {passive: true});
-    c.addEventListener('touchend', onLeave);
+  var c=document.getElementById('nq-canvas');
+  if(c){c.addEventListener('mousemove',onMove);c.addEventListener('mouseleave',onLeave);c.addEventListener('touchmove',onMove,{passive:true});c.addEventListener('touchend',onLeave);}
+})();
+
+window.addEventListener('resize', function(){ if(_nqData) nqDraw(_nqData); });
+
+function nqScheduleRefresh(){ clearInterval(_nqAutoTimer); _nqAutoTimer=setInterval(function(){nqFetch(_nqInterval,_nqRange,false);},5*60*1000); }
+
+// ── CONTEXT BUILDER ───────────────────────────────────────────────
+function buildMarketContext(){
+  if(!_nqSnapshot||!_nqBars)return 'No market data available.';
+  var bars=_nqBars, last=_nqSnapshot.last, first=_nqSnapshot.first, chg=_nqSnapshot.chg, chgPct=_nqSnapshot.chgPct, isUp=_nqSnapshot.isUp;
+  var closes=bars.map(function(b){return b.c;});
+  var periodHigh=Math.max.apply(null,bars.map(function(b){return b.h;}));
+  var periodLow=Math.min.apply(null,bars.map(function(b){return b.l;}));
+  function ema(arr,p){var k=2/(p+1),e=arr[0];for(var i=1;i<arr.length;i++)e=arr[i]*k+e*(1-k);return e;}
+  var ema9=_ctxSelected.indicators?ema(closes,9):null, ema21=_ctxSelected.indicators?ema(closes,21):null;
+  function findLevels(bars){
+    var levels=[];
+    for(var i=2;i<bars.length-2;i++){
+      var b=bars[i],prev=bars[i-1],next=bars[i+1];
+      if(b.h>prev.h&&b.h>next.h)levels.push({type:'resist',price:b.h,label:b.label+' high'});
+      if(b.l<prev.l&&b.l<next.l)levels.push({type:'support',price:b.l,label:b.label+' low'});
+    }
+    var deduped=[];
+    for(var j=0;j<levels.length;j++){if(!deduped.find(function(d){return Math.abs(d.price-levels[j].price)/levels[j].price<0.003;}))deduped.push(levels[j]);}
+    return deduped.slice(-10);
   }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', wire);
-  else wire();
-})();
-
-(function(){
-  if (document.getElementById('_nqcss')) return;
-  const s = document.createElement('style');
-  s.id = '_nqcss';
-  s.textContent = '@keyframes nqspin{to{transform:rotate(360deg)}}';
-  document.head.appendChild(s);
-})();
-
-function nqScheduleRefresh() {
-  clearInterval(_nqAutoTimer);
-  _nqAutoTimer = setInterval(function(){ nqFetch(_nqInterval, _nqRange, false); }, 5 * 60 * 1000);
+  var levels=_ctxSelected.levels?findLevels(bars.slice(-60)):[];
+  var supports=levels.filter(function(l){return l.type==='support';}).sort(function(a,b){return b.price-a.price;}).slice(0,3);
+  var resists=levels.filter(function(l){return l.type==='resist';}).sort(function(a,b){return a.price-b.price;}).slice(0,3);
+  var shortTrend=closes[closes.length-1]>closes[closes.length-5]?'UP':'DOWN';
+  var medTrend=closes[closes.length-1]>closes[closes.length-20]?'UP':'DOWN';
+  var ctx='NASDAQ E-mini Futures (NQ) Market Data — Timeframe: '+_aiTF.toUpperCase()+'\n\n';
+  if(_ctxSelected.price){
+    ctx+='PRICE ACTION:\nCurrent price: '+nqFmt(last.c)+'\nPeriod open: '+nqFmt(first.o||first.c)+'\nPeriod high: '+nqFmt(periodHigh)+'\nPeriod low: '+nqFmt(periodLow)+'\nNet change: '+(chg>=0?'+':'')+chg.toFixed(2)+' ('+chgPct.toFixed(2)+'%)\nShort-term trend (5 bars): '+shortTrend+'\nMedium-term trend (20 bars): '+medTrend+'\n\nLAST 5 BARS:\n';
+    bars.slice(-5).forEach(function(b){ctx+=(b.label||'')+': O='+nqFmt(b.o)+' H='+nqFmt(b.h)+' L='+nqFmt(b.l)+' C='+nqFmt(b.c)+' Vol='+nqFmtK(b.v)+'\n';});
+    ctx+='\n';
+  }
+  if(_ctxSelected.indicators&&ema9&&ema21){
+    ctx+='INDICATORS:\nEMA 9: '+nqFmt(ema9)+'\nEMA 21: '+nqFmt(ema21)+'\nPrice vs EMA9: '+(last.c>ema9?'ABOVE (bullish)':'BELOW (bearish)')+'\nPrice vs EMA21: '+(last.c>ema21?'ABOVE (bullish)':'BELOW (bearish)')+'\nEMA9 vs EMA21: '+(ema9>ema21?'EMA9 above EMA21 (bullish stack)':'EMA9 below EMA21 (bearish stack)')+'\n\n';
+  }
+  if(_ctxSelected.levels&&levels.length){
+    ctx+='KEY LEVELS:\n';
+    resists.forEach(function(l){ctx+='RESISTANCE: '+nqFmt(l.price)+' ('+l.label+')\n';});
+    ctx+='CURRENT:    '+nqFmt(last.c)+'\n';
+    supports.forEach(function(l){ctx+='SUPPORT:    '+nqFmt(l.price)+' ('+l.label+')\n';});
+    ctx+='\n';
+  }
+  return ctx;
 }
 
-// ── AI CHART ANNOTATIONS ─────────────────────────────────────────
-let _currentAnnotations = [];
-let _annotationMsgId = null;
+function buildSystemPrompt(){
+  var modes={
+    analysis:'You are a professional NQ Futures trading analyst. Provide a comprehensive market analysis including: current bias, trend, key price levels, EMA positioning, and overall market structure. Be specific with price levels. Use ### headers for sections.',
+    context:'You are a market context analyst for NQ Futures. Orient the trader about the session range, price position relative to structure, and key reference levels. Describe the environment objectively. Use ### headers.',
+    levels:'You are a technical analyst specializing in NQ Futures S/R. Provide a detailed breakdown of all key price levels including immediate S/R, major zones, and psychological levels. Be very specific with exact prices.'
+  };
+  return modes[_aiMode]||modes.analysis;
+}
 
-function parseLevelsFromText(text) {
-  const levels = [];
-  const lines = text.split("\n");
-  const patterns = [
-    { regex: /support.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'support', label: 'Support' },
-    { regex: /support.*?zone.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'support', label: 'Support Zone' },
-    { regex: /s\/r.*?support.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'support', label: 'S/R' },
-    { regex: /resistance.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'resist', label: 'Resistance' },
-    { regex: /resistance.*?zone.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'resist', label: 'Resist Zone' },
-    { regex: /r\/s.*?resistance.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'resist', label: 'R/S' },
-    { regex: /entry.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'entry', label: 'Entry' },
-    { regex: /long.*?above.*?\$?([\d,]+\.?\d*)/i, type: 'entry', label: 'Long Entry' },
-    { regex: /short.*?below.*?\$?([\d,]+\.?\d*)/i, type: 'entry', label: 'Short Entry' },
-    { regex: /stop[-\s]?loss.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'stop', label: 'Stop' },
-    { regex: /sl.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'stop', label: 'SL' },
-    { regex: /target.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'target', label: 'Target' },
-    { regex: /tp.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'target', label: 'TP' },
-    { regex: /take[-\s]?profit.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'target', label: 'TP' },
-    { regex: /ema\s*9.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'ema', label: 'EMA 9' },
-    { regex: /ema\s*21.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i, type: 'ema', label: 'EMA 21' },
+// ── CHAT ──────────────────────────────────────────────────────────
+var _chatHistory = [], _isStreaming = false;
+
+function formatAIMessage(text){
+  if(!text)return '';
+  return text
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\*(.*?)\*/g,'<em>$1</em>')
+    .replace(/`(.*?)`/g,'<code style="font-size:11.5px;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:4px;font-family:monospace;">$1</code>')
+    .replace(/^### (.*$)/gm,'<div class="ai-section-title">$1</div>')
+    .replace(/^## (.*$)/gm,'<div style="font-size:14px;font-weight:700;margin:.7rem 0 .3rem;">$1</div>')
+    .replace(/^- (.*$)/gm,'<div style="display:flex;gap:7px;margin:.2rem 0;"><span style="color:#8b5cf6;flex-shrink:0;">•</span><span>$1</span></div>')
+    .replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
+}
+
+function appendMsg(role, content, isStreaming){
+  var body=document.getElementById('chat-body');
+  var id='msg-'+Date.now()+'-'+Math.random().toString(36).slice(2);
+  var div=document.createElement('div');
+  div.className='msg '+role; div.id=id;
+  if(role==='ai'){
+    div.innerHTML='<div class="msg-avatar ai">✦</div><div><div class="msg-bubble" id="bubble-'+id+'">'+(isStreaming?'<span class="stream-cursor"></span>':formatAIMessage(content))+'</div><div class="msg-actions" id="actions-'+id+'" style="display:none;margin-top:4px;"></div><div class="msg-time" id="time-'+id+'">'+nowStr()+'</div></div>';
+  } else {
+    div.innerHTML='<div class="msg-avatar user">'+getUserDisplayName().charAt(0).toUpperCase()+'</div><div><div class="msg-bubble">'+escHtml(content)+'</div><div class="msg-time" style="text-align:right">'+nowStr()+'</div></div>';
+  }
+  body.appendChild(div);
+  body.scrollTop=body.scrollHeight;
+  return id;
+}
+
+function setStreaming(on){
+  _isStreaming=on;
+  var btn=document.getElementById('analyze-btn'),sb=document.getElementById('send-btn'),badge=document.getElementById('live-badge'),status=document.getElementById('chat-status');
+  if(btn){btn.disabled=on;btn.innerHTML=on?'<span>⏳</span> Analyzing…':'<span>✦</span> Analyze Now';}
+  if(sb)sb.disabled=on;
+  if(badge)badge.style.display=on?'flex':'none';
+  if(status)status.textContent=on?'Analyzing market…':'Ready';
+}
+
+async function callAI(messages){
+  var res = await fetch('/api/ai-analysis',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({systemPrompt:buildSystemPrompt(),messages:messages})
+  });
+  if(!res.ok){ var err=await res.json().catch(function(){return{};}); throw new Error(err.error||'API error '+res.status); }
+  var data=await res.json();
+  return data.text||'';
+}
+
+async function streamToMessage(msgId, messages){
+  var bubble=document.getElementById('bubble-'+msgId);
+  if(!bubble)return;
+  bubble.innerHTML='<span class="stream-cursor"></span>';
+  try{
+    var fullText=await callAI(messages);
+    var words=fullText.split(' '), displayed='';
+    for(var i=0;i<words.length;i++){
+      displayed+=(i===0?'':' ')+words[i];
+      bubble.innerHTML=formatAIMessage(displayed)+'<span class="stream-cursor"></span>';
+      var body=document.getElementById('chat-body'); body.scrollTop=body.scrollHeight;
+      await new Promise(function(r){setTimeout(r,18);});
+    }
+    bubble.innerHTML=formatAIMessage(fullText);
+    addShowChartButton(msgId,fullText);
+    return fullText;
+  }catch(e){
+    bubble.innerHTML='<span style="color:var(--red);">⚠ Could not reach AI: '+escHtml(e.message)+'</span><br><span style="font-size:11px;color:var(--sub);">Check your API connection and try again.</span>';
+    return null;
+  }
+}
+
+async function runFullAnalysis(){
+  if(_isStreaming)return;
+  if(!_nqSnapshot){await nqFetch(_nqInterval,_nqRange,false);}
+  if(!_nqSnapshot){ appendMsg('ai','⚠ Unable to load NQ market data. Please refresh and try again.',false); return; }
+  setStreaming(true);
+  var modeLabels={analysis:'Full Market Analysis',context:'Market Context',levels:'Key Levels'};
+  var ctx=buildMarketContext();
+  var userPrompt='Please provide a '+(modeLabels[_aiMode]||'Full Market Analysis')+' for NQ Futures.\n\nHere is the current market data:\n\n'+ctx;
+  appendMsg('user','Run '+(modeLabels[_aiMode]||'full analysis')+' on NQ '+_aiTF.toUpperCase());
+  var msgId=appendMsg('ai','',true);
+  _chatHistory.push({role:'user',content:userPrompt});
+  var reply=await streamToMessage(msgId,_chatHistory);
+  if(reply)_chatHistory.push({role:'assistant',content:reply});
+  setStreaming(false);
+}
+
+async function sendMessage(){
+  var input=document.getElementById('chat-input'), text=input.value.trim();
+  if(!text||_isStreaming)return;
+  input.value=''; autoResize(input);
+  await sendUserMessage(text);
+}
+
+async function sendQuick(text){ if(!_isStreaming) await sendUserMessage(text); }
+window.sendQuick=sendQuick;
+
+async function sendUserMessage(text){
+  if(_isStreaming)return;
+  if(!_nqSnapshot)await nqFetch(_nqInterval,_nqRange,false);
+  setStreaming(true);
+  appendMsg('user',text);
+  var ctx=buildMarketContext();
+  var messages=[..._chatHistory];
+  var enriched=messages.length===0?text+'\n\nCurrent NQ market data:\n'+ctx:text;
+  messages.push({role:'user',content:enriched});
+  var msgId=appendMsg('ai','',true);
+  var reply=await streamToMessage(msgId,messages);
+  if(reply){ _chatHistory.push({role:'user',content:text}); _chatHistory.push({role:'assistant',content:reply}); }
+  setStreaming(false);
+}
+
+function clearChat(){
+  _chatHistory=[];
+  var body=document.getElementById('chat-body'); body.innerHTML='';
+  var d=document.createElement('div'); d.className='msg ai';
+  d.innerHTML='<div class="msg-avatar ai">✦</div><div><div class="msg-bubble"><div>Chat cleared. Ready for a fresh analysis.</div><div class="signal-chips" style="margin-top:.6rem;"><span class="schip neut">📊 Price structure</span><span class="schip bull">🟢 Support levels</span><span class="schip bear">🔴 Resistance zones</span></div><div style="margin-top:.6rem;color:var(--sub2);">Hit <strong style="color:#a78bfa;">Analyze Now</strong> to start.</div></div><div class="msg-time">'+nowStr()+'</div></div>';
+  body.appendChild(d);
+  document.getElementById('chat-status').textContent='Ready';
+}
+
+function handleKey(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} }
+function autoResize(el){ el.style.height='auto'; el.style.height=Math.min(el.scrollHeight,120)+'px'; }
+
+// ── ANNOTATIONS ───────────────────────────────────────────────────
+var _currentAnnotations=[], _annotationMsgId=null;
+
+function parseLevelsFromText(text){
+  var levels=[],lines=text.split('\n');
+  var patterns=[
+    {regex:/support.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i,type:'support',label:'Support'},
+    {regex:/resistance.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i,type:'resist',label:'Resistance'},
+    {regex:/entry.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i,type:'entry',label:'Entry'},
+    {regex:/stop[-\s]?loss.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i,type:'stop',label:'Stop'},
+    {regex:/target.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i,type:'target',label:'Target'},
+    {regex:/ema\s*9.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i,type:'ema',label:'EMA 9'},
+    {regex:/ema\s*21.*?[:\-]?\s*\$?([\d,]+\.?\d*)/i,type:'ema',label:'EMA 21'}
   ];
   lines.forEach(function(line){
     patterns.forEach(function(p){
-      const match = line.match(p.regex);
-      if (match) {
-        const price = parseFloat(match[1].replace(/,/g, ''));
-        if (!isNaN(price) && price > 1000 && price < 50000) {
-          const dup = levels.find(function(l){ return Math.abs(l.price - price) < 5 && l.type === p.type; });
-          if (!dup) levels.push({ price: price, type: p.type, label: p.label, raw: line.trim() });
+      var match=line.match(p.regex);
+      if(match){
+        var price=parseFloat(match[1].replace(/,/g,''));
+        if(!isNaN(price)&&price>1000&&price<60000){
+          var dup=levels.find(function(l){return Math.abs(l.price-price)<5&&l.type===p.type;});
+          if(!dup)levels.push({price:price,type:p.type,label:p.label});
         }
       }
     });
   });
-  const zoneRegex = /(\d{1,2},?\d{3})\s*[-–—to]+\s*(\d{1,2},?\d{3})/g;
-  let zoneMatch;
-  while ((zoneMatch = zoneRegex.exec(text)) !== null) {
-    const low = parseFloat(zoneMatch[1].replace(/,/g, ''));
-    const high = parseFloat(zoneMatch[2].replace(/,/g, ''));
-    if (!isNaN(low) && !isNaN(high) && low > 1000 && high < 50000) {
-      const context = text.substring(Math.max(0, zoneMatch.index - 50), zoneMatch.index).toLowerCase();
-      const type = context.includes('resist') ? 'resist' : context.includes('support') ? 'support' : 'resist';
-      levels.push({ price: low, priceHigh: high, type: type, label: type === 'resist' ? 'Resist Zone' : 'Support Zone', isZone: true });
-    }
-  }
   return levels;
 }
 
-function hasChartableLevels(text) {
-  return parseLevelsFromText(text).length > 0;
+function clearAnnotations(){
+  var c=document.getElementById('nq-annotations'); if(c)c.innerHTML='';
+  _currentAnnotations=[]; _annotationMsgId=null;
+  document.querySelectorAll('.show-chart-btn').forEach(function(b){b.classList.remove('on');});
+  var cb=document.getElementById('nq-clear-ann'); if(cb)cb.style.display='none';
 }
 
-function clearAnnotations() {
-  const container = document.getElementById('nq-annotations');
-  if (container) container.innerHTML = '';
-  _currentAnnotations = [];
-  _annotationMsgId = null;
-  document.querySelectorAll('.show-chart-btn').forEach(function(btn){ btn.classList.remove('on'); });
-  const cb = document.getElementById('nq-clear-ann');
-  if (cb) cb.style.display = 'none';
-}
-
-function drawAnnotations(levels) {
-  const container = document.getElementById('nq-annotations');
-  if (!container || !levels.length) return;
-  const canvas = document.getElementById('nq-canvas');
-  if (!canvas || !canvas._nq) return;
-  const cb = document.getElementById('nq-clear-ann');
-  if (cb) cb.style.display = '';
-  const nq = canvas._nq;
-  container.innerHTML = '';
-  _currentAnnotations = levels;
+function drawAnnotations(levels){
+  var container=document.getElementById('nq-annotations'); if(!container||!levels.length)return;
+  var canvas=document.getElementById('nq-canvas'); if(!canvas||!canvas._nq)return;
+  var nq=canvas._nq, cb=document.getElementById('nq-clear-ann');
+  if(cb)cb.style.display='';
+  container.innerHTML=''; _currentAnnotations=levels;
   levels.forEach(function(lv){
-    if (lv.isZone && lv.priceHigh) {
-      const y1 = nq.toY(lv.priceHigh) - nq.PAD_T + canvas.offsetTop;
-      const y2 = nq.toY(lv.price) - nq.PAD_T + canvas.offsetTop;
-      const zone = document.createElement('div');
-      zone.className = 'chart-annotation-zone ' + lv.type;
-      zone.style.top = Math.min(y1, y2) + 'px';
-      zone.style.height = Math.abs(y2 - y1) + 'px';
-      container.appendChild(zone);
-      const tag = document.createElement('div');
-      tag.className = 'chart-annotation-tag ' + lv.type;
-      tag.textContent = lv.label + ': ' + lv.price.toLocaleString() + '–' + lv.priceHigh.toLocaleString();
-      tag.style.top = (Math.min(y1, y2) - 10) + 'px';
-      tag.style.right = '4px';
-      container.appendChild(tag);
-    } else {
-      const y = nq.toY(lv.price) - nq.PAD_T + canvas.offsetTop;
-      const line = document.createElement('div');
-      line.className = 'chart-annotation-line ' + lv.type;
-      line.style.top = y + 'px';
-      container.appendChild(line);
-      const tag = document.createElement('div');
-      tag.className = 'chart-annotation-tag ' + lv.type;
-      tag.textContent = lv.label + ': ' + lv.price.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-      tag.style.top = y + 'px';
-      tag.style.right = '4px';
-      container.appendChild(tag);
-    }
+    var y=nq.toY(lv.price);
+    var line=document.createElement('div'); line.className='chart-annotation-line '+lv.type; line.style.top=y+'px'; container.appendChild(line);
+    var tag=document.createElement('div'); tag.className='chart-annotation-tag '+lv.type; tag.textContent=lv.label+': '+lv.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}); tag.style.top=y+'px'; container.appendChild(tag);
   });
 }
 
-function toggleAnnotations(msgId, text, btn) {
-  if (_annotationMsgId === msgId) {
-    clearAnnotations();
-    return;
-  }
+function toggleAnnotations(msgId,text,btn){
+  if(_annotationMsgId===msgId){clearAnnotations();return;}
   clearAnnotations();
-  const levels = parseLevelsFromText(text);
-  if (levels.length) {
-    drawAnnotations(levels);
-    _annotationMsgId = msgId;
-    btn.classList.add('on');
-  }
+  var levels=parseLevelsFromText(text);
+  if(levels.length){drawAnnotations(levels);_annotationMsgId=msgId;btn.classList.add('on');}
 }
 
-function addShowChartButton(msgId, text) {
-  const actions = document.getElementById('actions-' + msgId);
-  if (!actions) return;
-  const levels = parseLevelsFromText(text);
-  if (levels.length === 0) {
-    actions.style.display = 'none';
-    return;
-  }
-  actions.style.display = 'block';
-  actions.innerHTML = '<button class="show-chart-btn" id="btn-chart-' + msgId + '" onclick="toggleAnnotations('' + msgId + '', this.dataset.text, this)"><span class="dot"></span> Show on Chart</button>';
-  const btn = document.getElementById('btn-chart-' + msgId);
-  if (btn) btn.dataset.text = text;
+function addShowChartButton(msgId,text){
+  var actions=document.getElementById('actions-'+msgId); if(!actions)return;
+  var levels=parseLevelsFromText(text);
+  if(!levels.length){actions.style.display='none';return;}
+  actions.style.display='block';
+  actions.innerHTML='<button class="show-chart-btn" id="btn-chart-'+msgId+'">Show on Chart</button>';
+  var btn=document.getElementById('btn-chart-'+msgId);
+  if(btn){btn.dataset.text=text;btn.onclick=function(){toggleAnnotations(msgId,text,btn);};}
 }
-// ── INIT ──
+
+// ── INIT ──────────────────────────────────────────────────────────
 initUserInfo();
-loadSnapshot();
 nqFetch(_nqInterval, _nqRange, false);
 nqScheduleRefresh();
-window.addEventListener('resize', function(){ if (_nqData) nqDraw(_nqData); });
 </script>
 </body>
 </html>
