@@ -626,15 +626,24 @@ function nqDraw(data){
   var canvas=document.getElementById('nq-canvas');
   if(!canvas||!data||!data.bars||!data.bars.length)return;
   var bars=data.bars;
-  // Init view if needed
-  if(_nqViewEnd===0||_nqViewEnd>=bars.length)_nqViewEnd=bars.length-1;
-  if(_nqViewStart<0)_nqViewStart=0;
+  // Always ensure valid view range before anything else
+  if(_nqViewEnd<=0||_nqViewEnd>bars.length-1||_nqViewStart<0||_nqViewStart>=_nqViewEnd){
+    _nqViewStart=0;_nqViewEnd=bars.length-1;
+  }
   var startI=Math.max(0,Math.floor(_nqViewStart));
   var endI=Math.min(bars.length-1,Math.ceil(_nqViewEnd));
+  if(startI>=endI){startI=0;endI=bars.length-1;}
   var visible=bars.slice(startI,endI+1);
-  if(!visible.length){visible=bars;startI=0;endI=bars.length-1;}
+  if(!visible.length)return;
   var DPR=window.devicePixelRatio||1;
-  var W=canvas.offsetWidth||canvas.parentElement.offsetWidth||800;
+  // Use parent width if canvas hasn't laid out yet
+  var wrap=canvas.parentElement;
+  var W=canvas.offsetWidth||(wrap&&wrap.offsetWidth)||0;
+  if(W<10){
+    // Not visible yet — retry after layout
+    requestAnimationFrame(function(){nqDraw(data);});
+    return;
+  }
   var hasVol=_nqIndicators.vol&&visible.some(function(b){return b.v>0;});
   var TOTAL_H=220,VOL_H=hasVol?44:0,PRICE_H=TOTAL_H-VOL_H;
   canvas.width=W*DPR;canvas.height=TOTAL_H*DPR;
@@ -924,7 +933,7 @@ function nqDraw(data){
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire);else wire();
 })();
-window.addEventListener('resize',function(){if(_nqData)nqDraw(_nqData);});
+window.addEventListener('resize',function(){if(_nqData){_nqPriceMin=null;_nqPriceMax=null;nqDraw(_nqData);}});
 function nqScheduleRefresh(){clearInterval(_nqAutoTimer);_nqAutoTimer=setInterval(function(){nqFetch(_nqInterval,_nqRange,false);},5*60*1000);}
 
 // ── CONTEXT BUILDER ───────────────────────────────────────────────
