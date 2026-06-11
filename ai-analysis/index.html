@@ -567,11 +567,12 @@ async function nqFetch(interval,range,isRefresh){
     _nqData={bars:bars};_nqBars=bars;
     _nqViewStart=0;_nqViewEnd=bars.length-1;_nqPriceMin=null;_nqPriceMax=null;
     if(overlay){overlay.style.display='none';overlay.style.pointerEvents='none';}
-    nqDraw(_nqData);
-    updateSnapshot(_nqData,_nqLiveQuote);
+    try{nqDraw(_nqData);}catch(de){console.error('nqDraw error:',de);}
+    try{updateSnapshot(_nqData,_nqLiveQuote);}catch(se){console.error('snapshot error:',se);}
   }catch(e){
     console.error('NQ fetch error:',e);
     if(overlay){
+      overlay.style.display='flex';
       overlay.style.pointerEvents='none';
       overlay.innerHTML='<span style="font-size:22px">&#128225;</span><div style="font-size:12px;color:var(--sub);text-align:center;line-height:1.7;pointer-events:auto;">Could not load NQ data<br><small style="opacity:.6">'+escHtml(e.message)+'</small><br><span style="color:var(--al);cursor:pointer;font-weight:600;pointer-events:auto;" onclick="nqFetch(\'' +interval+ '\',\'' +range+ '\',false)">Retry</span></div>';
     }
