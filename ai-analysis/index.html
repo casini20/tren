@@ -171,11 +171,7 @@ html,body{width:100%;height:100%;background:#04080f;}
 @keyframes nqspin{to{transform:rotate(360deg)}}
 .mobile-toggle{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:19;}
-/* API key prompt */
-.apikey-banner{background:linear-gradient(135deg,rgba(245,158,11,.1),rgba(239,68,68,.07));border:1px solid rgba(245,158,11,.25);border-radius:12px;padding:1rem 1.2rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
-.apikey-banner input{flex:1;min-width:200px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:8px;padding:7px 12px;font-size:12px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;outline:none;}
-.apikey-banner input:focus{border-color:rgba(139,92,246,.4);}
-.apikey-banner button{padding:7px 16px;border-radius:8px;background:linear-gradient(90deg,#8b5cf6,#6366f1);border:none;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+
 @media(max-width:850px){
   .shell{position:relative;}
   .mobile-toggle{display:flex;}
@@ -320,17 +316,7 @@ html,body{width:100%;height:100%;background:#04080f;}
       </div>
     </div>
     <div class="page">
-      <!-- API KEY BANNER -->
-      <div class="apikey-banner" id="apikey-banner">
-        <span style="font-size:18px;">🔑</span>
-        <div style="flex:1;min-width:0;">
-          <div style="font-size:12px;font-weight:700;margin-bottom:2px;">Anthropic API Key Required for AI Chat</div>
-          <div style="font-size:11px;color:var(--sub);">Enter your key to enable AI analysis. Stored locally only, never sent to our servers.</div>
-        </div>
-        <input type="password" id="apikey-input" placeholder="sk-ant-…" autocomplete="off">
-        <button onclick="saveApiKey()">Save Key</button>
-        <span id="apikey-status" style="font-size:11px;color:var(--green);display:none;">✓ Saved</span>
-      </div>
+
       <div class="ai-hero">
         <div class="ai-hero-left">
           <div class="ai-hero-icon">✦</div>
@@ -531,22 +517,7 @@ document.addEventListener('click',function(e){
 function toggleSidebar(){var sb=document.getElementById('sidebar'),ov=document.getElementById('sb-overlay');sb.classList.toggle('open');ov.classList.toggle('open');}
 function closeSidebar(){var sb=document.getElementById('sidebar'),ov=document.getElementById('sb-overlay');if(sb)sb.classList.remove('open');if(ov)ov.classList.remove('open');}
 
-// ── API KEY MANAGEMENT ────────────────────────────────────────────
-function getApiKey(){return localStorage.getItem('tren_anthropic_key')||'';}
-function saveApiKey(){
-  var k=document.getElementById('apikey-input').value.trim();
-  if(!k){alert('Please enter your Anthropic API key.');return;}
-  localStorage.setItem('tren_anthropic_key',k);
-  var s=document.getElementById('apikey-status');
-  if(s){s.style.display='inline';setTimeout(function(){s.style.display='none';},3000);}
-  var banner=document.getElementById('apikey-banner');
-  if(banner)banner.style.display='none';
-}
-(function(){
-  var k=getApiKey();
-  var banner=document.getElementById('apikey-banner');
-  if(k&&banner)banner.style.display='none';
-})();
+
 
 // ── HELPERS ───────────────────────────────────────────────────────
 function nqFmt(n){return n==null?'—':n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
@@ -899,36 +870,22 @@ function setStreaming(on){
   if(status)status.textContent=on?'Analyzing market…':'Ready';
 }
 
-// ── FIX 2: CALL ANTHROPIC API DIRECTLY ───────────────────────────
+// ── CALL GROQ VIA VERCEL SERVERLESS FUNCTION ─────────────────────
 async function callAI(messages){
-  var apiKey=getApiKey();
-  if(!apiKey){
-    // Show banner if key missing
-    var banner=document.getElementById('apikey-banner');
-    if(banner)banner.style.display='flex';
-    throw new Error('No API key set. Please enter your Anthropic API key in the banner above.');
-  }
-  var res=await fetch('https://api.anthropic.com/v1/messages',{
+  var res=await fetch('/api/ai-analysis',{
     method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'x-api-key':apiKey,
-      'anthropic-version':'2023-06-01',
-      'anthropic-dangerous-direct-browser-access':'true'
-    },
+    headers:{'Content-Type':'application/json'},
     body:JSON.stringify({
-      model:'claude-sonnet-4-20250514',
-      max_tokens:1500,
-      system:buildSystemPrompt(),
+      systemPrompt:buildSystemPrompt(),
       messages:messages
     })
   });
   if(!res.ok){
     var err=await res.json().catch(function(){return{};});
-    throw new Error((err.error&&err.error.message)||'API error '+res.status);
+    throw new Error(err.error||'API error '+res.status);
   }
   var data=await res.json();
-  return(data.content&&data.content[0]&&data.content[0].text)||'';
+  return data.text||'';
 }
 
 async function streamToMessage(msgId,messages){
