@@ -566,9 +566,9 @@ async function nqFetch(interval,range,isRefresh){
     };
     _nqData={bars:bars};_nqBars=bars;
     _nqViewStart=0;_nqViewEnd=bars.length-1;_nqPriceMin=null;_nqPriceMax=null;
+    if(overlay){overlay.style.display='none';overlay.style.pointerEvents='none';}
     nqDraw(_nqData);
     updateSnapshot(_nqData,_nqLiveQuote);
-    if(overlay){overlay.style.display='none';overlay.style.pointerEvents='none';}
   }catch(e){
     console.error('NQ fetch error:',e);
     if(overlay){
@@ -622,7 +622,7 @@ window.toggleNQInd=function(btn,ind){_nqIndicators[ind]=!_nqIndicators[ind];btn.
 // ── CHART ─────────────────────────────────────────────────────────
 function nqEMA(arr,period){var k=2/(period+1),out=[],prev=null;for(var i=0;i<arr.length;i++){if(arr[i]==null){out.push(null);continue;}if(prev==null){prev=arr[i];out.push(prev);continue;}prev=arr[i]*k+prev*(1-k);out.push(prev);}return out;}
 
-function nqDraw(data){
+function nqDraw(data,_attempt){
   var canvas=document.getElementById('nq-canvas');
   if(!canvas||!data||!data.bars||!data.bars.length)return;
   var bars=data.bars;
@@ -636,13 +636,13 @@ function nqDraw(data){
   var visible=bars.slice(startI,endI+1);
   if(!visible.length)return;
   var DPR=window.devicePixelRatio||1;
-  // Use parent width if canvas hasn't laid out yet
+  // Use parent width if canvas hasn't laid out yet; retry up to 20 frames then use 800px fallback
   var wrap=canvas.parentElement;
   var W=canvas.offsetWidth||(wrap&&wrap.offsetWidth)||0;
   if(W<10){
-    // Not visible yet — retry after layout
-    requestAnimationFrame(function(){nqDraw(data);});
-    return;
+    var attempt=(_attempt||0)+1;
+    if(attempt<20){requestAnimationFrame(function(){nqDraw(data,attempt);});return;}
+    W=800; // fallback
   }
   var hasVol=_nqIndicators.vol&&visible.some(function(b){return b.v>0;});
   var TOTAL_H=220,VOL_H=hasVol?44:0,PRICE_H=TOTAL_H-VOL_H;
