@@ -554,7 +554,6 @@ async function nqFetch(interval,range,isRefresh){
     var res=await fetch('/api/nq-chart?interval='+interval+'&range='+range);
     if(!res.ok)throw new Error('HTTP '+res.status);
     data=await res.json();
-    console.log('nq raw data:', data);
     if(data.error)throw new Error(data.error);
     var bars=data.bars;
     if(!bars||!bars.length)throw new Error('No bars returned');
@@ -1460,6 +1459,7 @@ function fsDraw(){
     });
     ctx.restore();
   }
+}
 function fsUpdateHeader(){
   if(!_fsBars||!_fsBars.length)return;
   var last=_fsBars[_fsBars.length-1],first=_fsBars[0];
