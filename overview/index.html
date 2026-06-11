@@ -895,7 +895,7 @@ function nqDraw(data) {
   const so = g('nq-stat-o'), sh = g('nq-stat-h'), sl = g('nq-stat-l'), sc = g('nq-stat-c'), sv = g('nq-stat-v');
   if (pe) { pe.textContent = nqFmt(last.c); pe.style.color = isUp ? GREEN : RED; }
   if (ce) { ce.textContent = (chg >= 0 ? '+' : '') + chg.toFixed(2) + '  (' + (chgPct >= 0 ? '+' : '') + chgPct.toFixed(2) + '%)'; ce.style.color = isUp ? GREEN : RED; }
-  if (ue) ue.textContent = 'Updated ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'});
+  if (ue) ue.innerHTML = 'Updated ' + new Date().toLocaleTimeString('en-US', {hour:'2-digit', minute:'2-digit'}) + '&nbsp;<span style="color:var(--gold);font-weight:600;">· 15-min delay</span>';
   if (so) so.textContent = nqFmt(last.o);
   if (sh) sh.textContent = nqFmt(last.h);
   if (sl) sl.textContent = nqFmt(last.l);
@@ -1573,4 +1573,3 @@ setInterval(renderOvStats,60000);
 </script>
 </body>
 </html>
-
