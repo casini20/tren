@@ -316,13 +316,7 @@ html,body{width:100%;height:100%;background:#04080f;}
       </div>
     </div>
     <div class="page">
-      
-          <div style="font-size:11px;color:var(--sub);">Enter your key to enable AI analysis. Stored locally only, never sent to our servers.</div>
-        </div>
-        <input type="password" id="apikey-input" placeholder="sk-ant-…" autocomplete="off">
-        <button onclick="saveApiKey()">Save Key</button>
-        <span id="apikey-status" style="font-size:11px;color:var(--green);display:none;">✓ Saved</span>
-      </div>
+
       <div class="ai-hero">
         <div class="ai-hero-left">
           <div class="ai-hero-icon">✦</div>
@@ -522,7 +516,6 @@ document.addEventListener('click',function(e){
 });
 function toggleSidebar(){var sb=document.getElementById('sidebar'),ov=document.getElementById('sb-overlay');sb.classList.toggle('open');ov.classList.toggle('open');}
 function closeSidebar(){var sb=document.getElementById('sidebar'),ov=document.getElementById('sb-overlay');if(sb)sb.classList.remove('open');if(ov)ov.classList.remove('open');}
-
 
 // ── HELPERS ───────────────────────────────────────────────────────
 function nqFmt(n){return n==null?'—':n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
