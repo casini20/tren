@@ -357,17 +357,21 @@ html,body{width:100%;height:100%;background:#04080f;}
     </div>
     <div class="page">
 
-      <div class="ai-hero">
-        <div class="ai-hero-left">
-          <div class="ai-hero-icon">✦</div>
-          <div class="ai-hero-text">
-            <h2>NQ Futures AI Analysis</h2>
-            <p>Real-time chart analysis, key levels, bias, and trade setups — powered by Claude AI.</p>
+      <div class="ai-hero" style="flex-direction:column;gap:1rem;padding:1.4rem 1.6rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+          <div class="ai-hero-left">
+            <div class="ai-hero-icon" style="background:linear-gradient(135deg,#7c3aed,#4f46e5);box-shadow:0 0 24px rgba(139,92,246,.35);">✦</div>
+            <div class="ai-hero-text">
+              <h2 style="font-size:16px;">NQ Futures AI Analysis</h2>
+              <p>Real-time chart analysis, key levels, bias &amp; trade setups — powered by Claude AI.</p>
+            </div>
           </div>
+          <button class="ai-btn primary" id="analyze-btn" onclick="runFullAnalysis()" style="padding:10px 22px;font-size:13px;border-radius:11px;box-shadow:0 4px 18px rgba(124,58,237,.4);gap:8px;white-space:nowrap;"><span style="font-size:15px;">✦</span> Analyze Now</button>
         </div>
-        <div class="ai-hero-right">
-          <div class="selectors-row">
-            <span class="sel-label">Timeframe</span>
+        <div style="height:1px;background:linear-gradient(90deg,transparent,rgba(139,92,246,.2),transparent);"></div>
+        <div style="display:flex;align-items:center;gap:1.4rem;flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:10.5px;color:rgba(240,244,255,.32);font-weight:700;text-transform:uppercase;letter-spacing:.6px;">Timeframe</span>
             <div class="tf-seg" id="ai-tf-seg">
               <button class="tf-btn" onclick="setAITF(this,'5m')">5M</button>
               <button class="tf-btn" onclick="setAITF(this,'15m')">15M</button>
@@ -376,15 +380,15 @@ html,body{width:100%;height:100%;background:#04080f;}
               <button class="tf-btn" onclick="setAITF(this,'1w')">1W</button>
             </div>
           </div>
-          <div class="selectors-row">
-            <span class="sel-label">Mode</span>
+          <div style="width:1px;height:18px;background:rgba(255,255,255,.08);flex-shrink:0;"></div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:10.5px;color:rgba(240,244,255,.32);font-weight:700;text-transform:uppercase;letter-spacing:.6px;">Mode</span>
             <div class="mode-seg">
               <button class="mode-btn active" onclick="setMode(this,'analysis')">Analysis</button>
               <button class="mode-btn" onclick="setMode(this,'context')">Context</button>
               <button class="mode-btn" onclick="setMode(this,'levels')">Levels</button>
             </div>
           </div>
-          <button class="ai-btn primary" id="analyze-btn" onclick="runFullAnalysis()"><span>✦</span> Analyze Now</button>
         </div>
       </div>
       <div class="snapshot-bar" id="snapshot-bar">
@@ -1100,6 +1104,8 @@ async function streamToMessage(msgId,messages){
 }
 async function runFullAnalysis(){
   if(_isStreaming)return;
+  var chatEl=document.getElementById('chat-body');
+  if(chatEl){chatEl.closest('.chat-outer').scrollIntoView({behavior:'smooth',block:'start'});}
   if(!_nqSnapshot){await nqFetch(_nqInterval,_nqRange,false);}
   if(!_nqSnapshot){appendMsg('ai','⚠ Unable to load NQ market data. Please refresh and try again.',false);return;}
   setStreaming(true);
