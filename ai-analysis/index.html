@@ -604,7 +604,7 @@ function updateSnapshot(data,liveQuote){
   var dayChgStr=dayChg!=null?(dayUp?'+':'')+dayChg.toFixed(2)+' ('+(dayUp?'+':'')+dayChgPct.toFixed(2)+'%)':'—';
   var sb=document.getElementById('snapshot-bar');
   if(sb)sb.innerHTML=
-    '<div class="snap-card"><div class="snap-label">NQ Price (Live)</div><div class="snap-val" style="color:'+(dayUp?G:R)+'">'+nqFmt(livePrice)+'</div><div class="snap-chg '+(dayUp?'up':'dn')+'">Day: '+dayChgStr+'</div></div>'+
+    '<div class="snap-card"><div class="snap-label">NQ Price <span style="color:var(--gold);font-size:9px;font-weight:600;">15-MIN DELAY</span></div><div class="snap-val" style="color:'+(dayUp?G:R)+'">'+nqFmt(livePrice)+'</div><div class="snap-chg '+(dayUp?'up':'dn')+'">Day: '+dayChgStr+'</div></div>'+
     '<div class="snap-card"><div class="snap-label">Period Change ('+_aiTF.toUpperCase()+')</div><div class="snap-val" style="color:'+(periodUp?G:R)+'">'+(periodUp?'+':'')+periodChgPct.toFixed(2)+'%</div><div class="snap-chg '+(periodUp?'up':'dn')+'">'+(periodUp?'Bullish':'Bearish')+' over period</div></div>'+
     '<div class="snap-card"><div class="snap-label">Period High</div><div class="snap-val" style="color:'+G+'">'+nqFmt(periodHigh)+'</div><div class="snap-chg" style="color:var(--sub);">'+_aiTF.toUpperCase()+' range</div></div>'+
     '<div class="snap-card"><div class="snap-label">Period Low</div><div class="snap-val" style="color:'+R+'">'+nqFmt(periodLow)+'</div><div class="snap-chg" style="color:var(--sub);">'+_aiTF.toUpperCase()+' range</div></div>'+
@@ -739,7 +739,7 @@ function nqDraw(data,_attempt){
   var pe=g('nq-price'),ce=g('nq-change'),ue=g('nq-updated'),so=g('nq-stat-o'),sh=g('nq-stat-h'),sl=g('nq-stat-l'),sc=g('nq-stat-c'),sv=g('nq-stat-v');
   if(pe){pe.textContent=nqFmt(displayPrice);pe.style.color=displayUp?GREEN:RED;}
   if(ce){ce.textContent=(displayChg>=0?'+':'')+displayChg.toFixed(2)+'  ('+(displayPct>=0?'+':'')+displayPct.toFixed(2)+'%)';ce.style.color=displayUp?GREEN:RED;}
-  if(ue)ue.textContent='Updated '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+  if(ue)ue.innerHTML='Updated '+new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'})+'&nbsp;<span style="color:var(--gold);font-weight:600;">· 15-min delay</span>';
   if(so)so.textContent=nqFmt(last.o);if(sh)sh.textContent=nqFmt(last.h);if(sl)sl.textContent=nqFmt(last.l);
   if(sc){sc.textContent=nqFmt(last.c);sc.style.color=isUp?GREEN:RED;}if(sv)sv.textContent=nqFmtK(last.v);
   canvas._nq={bars:visible,allBars:bars,startI:startI,endI:endI,toX:toX,toY:toY,PAD_T:PAD_T,PAD_L:PAD_L,PAD_R:PAD_R,chartW:chartW,chartH:chartH,W:W,PRICE_H:PRICE_H,minP:minP,maxP:maxP,len:visible.length};
