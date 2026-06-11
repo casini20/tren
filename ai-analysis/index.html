@@ -512,41 +512,8 @@ function nqFmtK(n){if(n==null)return'—';if(n>=1e9)return(n/1e9).toFixed(1)+'B'
 function nowStr(){return new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
 function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-// ── PROXY WATERFALL — tries 5 proxies, validates response shape ───
-var _PROXIES=[
-  'https://corsproxy.io/?',
-  'https://api.allorigins.win/raw?url=',
-  'https://api.codetabs.com/v1/proxy?quest=',
-  'https://thingproxy.freeboard.io/fetch/',
-  'https://api.allorigins.win/get?url=',
-];
-var _PROXY_IS_WRAPPED=[false,false,false,false,true];
-
-async function proxyFetch(targetUrl){
-  var lastErr=null;
-  for(var pi=0;pi<_PROXIES.length;pi++){
-    try{
-      var controller=new AbortController();
-      var tid=setTimeout(function(){controller.abort();},9000);
-      var proxyUrl=_PROXIES[pi]+encodeURIComponent(targetUrl);
-      var res=await fetch(proxyUrl,{signal:controller.signal});
-      clearTimeout(tid);
-      if(!res.ok){lastErr=new Error('HTTP '+res.status+' proxy'+pi);continue;}
-      var text=await res.text();
-      var json;
-      if(_PROXY_IS_WRAPPED[pi]){
-        var wrapper=JSON.parse(text);
-        json=JSON.parse(wrapper.contents||wrapper.body||text);
-      }else{
-        json=JSON.parse(text);
-      }
-      if(json&&json.chart&&json.chart.result)return json;
-      if(json&&json.quoteResponse)return json;
-      lastErr=new Error('Unexpected response shape from proxy'+pi);
-    }catch(e){lastErr=e;}
-  }
-  throw lastErr||new Error('All proxies failed');
-}
+// ── SERVER-SIDE FETCH via Vercel API (same as overview page) ──────
+// No CORS proxies needed — /api/nq-chart handles Yahoo Finance server-side
 
 // ── STATE ─────────────────────────────────────────────────────────
 var _nqInterval='1d',_nqRange='6mo';
@@ -556,59 +523,19 @@ var _nqData=null,_nqAutoTimer=null,_nqSnapshot=null,_nqBars=null,_nqLiveQuote=nu
 var _aiTF='1d',_aiMode='analysis';
 var _ctxSelected={price:true,levels:true,indicators:true};
 
-// ── FETCH CHART BARS ──────────────────────────────────────────────
-async function fetchYahooNQ(interval,range){
-  var symbol='NQ%3DF';
-  var urls=[
-    'https://query1.finance.yahoo.com/v8/finance/chart/'+symbol+'?interval='+interval+'&range='+range+'&includePrePost=false',
-    'https://query2.finance.yahoo.com/v8/finance/chart/'+symbol+'?interval='+interval+'&range='+range+'&includePrePost=false',
-  ];
-  var json=null,lastErr=null;
-  for(var ui=0;ui<urls.length;ui++){
-    try{json=await proxyFetch(urls[ui]);break;}catch(e){lastErr=e;}
-  }
-  if(!json)throw lastErr||new Error('No chart data from Yahoo');
-  var result=json.chart&&json.chart.result&&json.chart.result[0];
-  if(!result)throw new Error('Empty chart result');
-  var timestamps=result.timestamp||[];
-  var q=result.indicators.quote[0];
-  var opens=q.open,highs=q.high,lows=q.low,closes=q.close,volumes=q.volume;
-  var bars=[];
-  for(var i=0;i<timestamps.length;i++){
-    if(closes[i]==null)continue;
-    var d=new Date(timestamps[i]*1000);
-    var label;
-    if(interval==='1d'||interval==='1wk'){label=d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
-    else{label=d.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});}
-    bars.push({t:timestamps[i],label:label,o:opens[i]||closes[i],h:highs[i]||closes[i],l:lows[i]||closes[i],c:closes[i],v:volumes[i]||0});
-  }
-  if(!bars.length)throw new Error('Empty bars returned');
-  return{bars:bars};
-}
-
-// ── FETCH LIVE QUOTE — independent of chart timeframe ─────────────
-async function fetchNQLiveQuote(){
-  var url='https://query1.finance.yahoo.com/v7/finance/quote?symbols=NQ%3DF&fields=regularMarketPrice,regularMarketChange,regularMarketChangePercent,regularMarketPreviousClose';
-  try{
-    var json=await proxyFetch(url);
-    var q=json&&json.quoteResponse&&json.quoteResponse.result&&json.quoteResponse.result[0];
-    if(q&&q.regularMarketPrice)return q;
-  }catch(e){/* non-fatal */}
-  return null;
-}
-
-// ── MAIN FETCH ────────────────────────────────────────────────────
+// ── MAIN FETCH — uses same Vercel API route as overview page ──────
 async function nqFetch(interval,range,isRefresh){
   var overlay=document.getElementById('nq-overlay');
   if(overlay){overlay.style.display='flex';overlay.innerHTML='<div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:nqspin .7s linear infinite;"></div><div style="font-size:12px;color:var(--sub);">Loading NQ futures…</div>';}
   try{
-    var results=await Promise.allSettled([fetchYahooNQ(interval,range),fetchNQLiveQuote()]);
-    if(results[0].status==='rejected')throw results[0].reason;
-    var json=results[0].value;
-    _nqLiveQuote=results[1].status==='fulfilled'?results[1].value:null;
-    _nqData=json;_nqBars=json.bars;
-    nqDraw(json);
-    updateSnapshot(json,_nqLiveQuote);
+    var res=await fetch('/api/nq-chart?interval='+interval+'&range='+range);
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    var json=await res.json();
+    if(!json.bars||!json.bars.length)throw new Error('no data');
+    _nqLiveQuote=json.quote||null;
+    _nqData={bars:json.bars};_nqBars=json.bars;
+    nqDraw(_nqData);
+    updateSnapshot(_nqData,_nqLiveQuote);
     if(overlay)overlay.style.display='none';
   }catch(e){
     console.error('NQ fetch error:',e);
