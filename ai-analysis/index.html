@@ -1729,5 +1729,81 @@ window.addEventListener('resize',function(){if(_fsOpen){fsResize();fsDraw();}});
     <div style="position:absolute;right:0;top:0;bottom:0;width:33%;display:flex;align-items:center;justify-content:flex-end;padding-right:10px;cursor:e-resize;" id="fs-xa-right"><span style="font-size:9px;color:rgba(240,244,255,.18);pointer-events:none;">expand right ▶</span></div>
   </div>
 </div>
+
+<!-- ══ DEBUG PANEL ══════════════════════════════════════════════ -->
+<div id="__dbg" style="position:fixed;bottom:16px;right:16px;z-index:999999;background:#0a0f1e;border:1px solid rgba(139,92,246,.5);border-radius:12px;padding:14px 16px;font-family:monospace;font-size:11px;color:#c4b5fd;min-width:340px;max-width:420px;box-shadow:0 8px 32px rgba(0,0,0,.7);">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+    <b style="font-size:12px;color:#a78bfa;">🔍 Debug Panel</b>
+    <span onclick="document.getElementById('__dbg').style.display='none'" style="cursor:pointer;color:rgba(255,255,255,.4);font-size:14px;">✕</span>
+  </div>
+  <div id="__dbg_body" style="display:flex;flex-direction:column;gap:6px;"></div>
+  <button onclick="runDebug()" style="margin-top:10px;width:100%;padding:7px;border-radius:7px;background:linear-gradient(90deg,#8b5cf6,#6366f1);border:none;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:monospace;">↻ Re-run checks</button>
+</div>
+<script>
+function dbgRow(label, val, ok) {
+  var color = ok === true ? '#10b981' : ok === false ? '#ef4444' : '#f59e0b';
+  return '<div style="display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05);"><span style="color:rgba(240,244,255,.5);">'+label+'</span><span style="color:'+color+';text-align:right;max-width:220px;word-break:break-all;">'+val+'</span></div>';
+}
+async function runDebug() {
+  var body = document.getElementById('__dbg_body');
+  body.innerHTML = '<div style="color:rgba(240,244,255,.4);">Running checks…</div>';
+  var rows = '';
+
+  // 1. Hostname
+  var host = window.location.hostname;
+  rows += dbgRow('Hostname', host || '(empty — file://)', null);
+
+  // 2. Session
+  var session = null;
+  try { session = JSON.parse(localStorage.getItem('tren_session') || 'null'); } catch(e) {}
+  var hasSession = !!(session && session.user && session.user.email);
+  rows += dbgRow('Session', hasSession ? session.user.email : 'MISSING', hasSession);
+
+  // 3. Paywall overlay
+  var pw = document.getElementById('__pw');
+  var pwExists = !!pw;
+  var pwVisible = pw ? (pw.style.display !== 'none' && pw.offsetParent !== null) : false;
+  rows += dbgRow('Paywall overlay', pwExists ? (pwVisible ? '⚠ VISIBLE — blocking page' : 'present but hidden') : 'not injected', pwExists ? !pwVisible : true);
+
+  // 4. nq-overlay state
+  var ov = document.getElementById('nq-overlay');
+  if (ov) {
+    var ovDisplay = ov.style.display;
+    var ovPE = ov.style.pointerEvents;
+    rows += dbgRow('nq-overlay display', ovDisplay || '(not set)', ovDisplay === 'none');
+    rows += dbgRow('nq-overlay pointer-events', ovPE || '(not set)', ovPE === 'none' || ovDisplay === 'none');
+  } else {
+    rows += dbgRow('nq-overlay', 'ELEMENT NOT FOUND', false);
+  }
+
+  // 5. _nqData state
+  rows += dbgRow('_nqData loaded', typeof _nqData !== 'undefined' && _nqData && _nqData.bars ? _nqData.bars.length + ' bars' : 'null / empty', typeof _nqData !== 'undefined' && _nqData && _nqData.bars && _nqData.bars.length > 0);
+
+  // 6. Canvas
+  var canvas = document.getElementById('nq-canvas');
+  rows += dbgRow('nq-canvas', canvas ? canvas.offsetWidth + 'x' + canvas.offsetHeight : 'NOT FOUND', !!canvas);
+
+  // 7. API reachability
+  rows += dbgRow('API /api/nq-chart', 'testing…', null);
+  body.innerHTML = rows;
+  try {
+    var t0 = Date.now();
+    var r = await fetch('/api/nq-chart?interval=1d&range=1mo');
+    var ms = Date.now() - t0;
+    var statusOk = r.ok;
+    var txt = '';
+    try { var j = await r.json(); txt = j.bars ? j.bars.length + ' bars (' + ms + 'ms)' : JSON.stringify(j).slice(0,80); } catch(e) { txt = 'status '+r.status+' (not JSON)'; }
+    rows = rows.replace('testing…', txt);
+    rows = rows.replace('color:#f59e0b', 'color:'+(statusOk?'#10b981':'#ef4444'));
+    body.innerHTML = rows;
+  } catch(err) {
+    rows = rows.replace('testing…', 'FAILED: '+err.message);
+    rows = rows.replace('color:#f59e0b', 'color:#ef4444');
+    body.innerHTML = rows;
+  }
+}
+// auto-run after short delay so page state is settled
+setTimeout(runDebug, 800);
+</script>
 </body>
 </html>
