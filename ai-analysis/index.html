@@ -551,40 +551,10 @@ async function nqFetch(interval,range,isRefresh){
   }
   try{
     var data;
-    var onVercel=(window.location.hostname.indexOf('vercel.app')>=0||window.location.hostname.indexOf('trenai')>=0);
-    if(onVercel){
-      var res=await fetch('/api/nq-chart?interval='+interval+'&range='+range);
-      if(!res.ok)throw new Error('HTTP '+res.status);
-      data=await res.json();
-      if(data.error)throw new Error(data.error);
-    } else {
-      var yUrl='https://query1.finance.yahoo.com/v8/finance/chart/NQ%3DF?interval='+interval+'&range='+range+'&includePrePost=false';
-      var res=await fetch('https://corsproxy.io/?'+encodeURIComponent(yUrl));
-      if(!res.ok)throw new Error('HTTP '+res.status);
-      var raw=await res.json();
-      var result=raw&&raw.chart&&raw.chart.result&&raw.chart.result[0];
-      if(!result)throw new Error((raw&&raw.chart&&raw.chart.error&&raw.chart.error.description)||'No data');
-      var meta=result.meta||{};
-      var ts=result.timestamp||[];
-      var q=(result.indicators&&result.indicators.quote&&result.indicators.quote[0])||{};
-      var bars=[];
-      for(var i=0;i<ts.length;i++){
-        var cl=q.close&&q.close[i]!=null?q.close[i]:null;
-        if(cl==null)continue;
-        var d=new Date(ts[i]*1000);
-        var lbl;
-        if(interval==='1d'||interval==='1wk'){lbl=(d.getMonth()+1)+'/'+d.getDate();}
-        else if(interval==='1h'){lbl=(d.getMonth()+1)+'/'+d.getDate()+' '+d.getHours()+':00';}
-        else{lbl=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
-        bars.push({t:ts[i],label:lbl,
-          o:+((q.open&&q.open[i]!=null?q.open[i]:cl)).toFixed(2),
-          h:+((q.high&&q.high[i]!=null?q.high[i]:cl)).toFixed(2),
-          l:+((q.low&&q.low[i]!=null?q.low[i]:cl)).toFixed(2),
-          c:+(cl).toFixed(2),
-          v:(q.volume&&q.volume[i])||0});
-      }
-      data={bars:bars,regularMarketPrice:meta.regularMarketPrice,previousClose:meta.chartPreviousClose};
-    }
+    var res=await fetch('/api/nq-chart?interval='+interval+'&range='+range);
+    if(!res.ok)throw new Error('HTTP '+res.status);
+    data=await res.json();
+    if(data.error)throw new Error(data.error);
     var bars=data.bars;
     if(!bars||!bars.length)throw new Error('No bars returned');
     var livePrice=data.regularMarketPrice||bars[bars.length-1].c;
