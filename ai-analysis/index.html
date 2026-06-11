@@ -550,7 +550,8 @@ async function nqFetch(interval,range,isRefresh){
     overlay.innerHTML='<div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:nqspin .7s linear infinite;"></div><div style="font-size:12px;color:var(--sub);">Loading NQ futures...</div>';
   }
   try{
-    var res=await fetch('/api/nq-chart?interval='+interval+'&range='+range);
+    var _base=(window.location.protocol==='file:'||window.location.hostname==='localhost')?'https://trenai.vercel.app':window.location.origin;
+    var res=await fetch(_base+'/api/nq-chart?interval='+interval+'&range='+range);
     if(!res.ok)throw new Error('API error '+res.status);
     var data=await res.json();
     if(data.error)throw new Error(data.error);
@@ -1240,7 +1241,8 @@ async function fsLoadBars(interval,range){
   var ov=document.getElementById('fs-overlay');
   if(ov){ov.style.display='flex';}
   try{
-    var res=await fetch('/api/nq-chart?interval='+interval+'&range='+range);
+    var _base=(window.location.protocol==='file:'||window.location.hostname==='localhost')?'https://trenai.vercel.app':window.location.origin;
+    var res=await fetch(_base+'/api/nq-chart?interval='+interval+'&range='+range);
     if(!res.ok)throw new Error('API error '+res.status);
     var data=await res.json();
     if(data.error)throw new Error(data.error);
