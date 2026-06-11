@@ -561,8 +561,8 @@ async function nqFetch(interval,range,isRefresh){
     var prevClose=data.previousClose||(bars.length>1?bars[bars.length-2].c:bars[bars.length-1].c);
     _nqLiveQuote={
       regularMarketPrice:livePrice,
-      regularMarketChange:livePrice-prevClose,
-      regularMarketChangePercent:((livePrice-prevClose)/prevClose)*100
+      regularMarketChange:data.regularMarketChange!=null?data.regularMarketChange:(livePrice-prevClose),
+      regularMarketChangePercent:data.regularMarketChangePercent!=null?data.regularMarketChangePercent:((livePrice-prevClose)/prevClose)*100
     };
     _nqData={bars:bars};_nqBars=bars;
     _nqViewStart=0;_nqViewEnd=bars.length-1;_nqPriceMin=null;_nqPriceMax=null;
@@ -594,10 +594,10 @@ function updateSnapshot(data,liveQuote){
   if(!data||!data.bars||!data.bars.length)return;
   var bars=data.bars,last=bars[bars.length-1],first=bars[0];
   var G='#10b981',R='#ef4444';
-  var livePrice=liveQuote&&liveQuote.regularMarketPrice?liveQuote.regularMarketPrice:last.c;
-  var dayChg=liveQuote&&liveQuote.regularMarketChange!=null?liveQuote.regularMarketChange:null;
-  var dayChgPct=liveQuote&&liveQuote.regularMarketChangePercent!=null?liveQuote.regularMarketChangePercent:null;
-  var dayUp=dayChg!=null?dayChg>=0:livePrice>=last.c;
+  var livePrice=(liveQuote&&liveQuote.regularMarketPrice)?liveQuote.regularMarketPrice:last.c;
+  var dayChg=(liveQuote&&liveQuote.regularMarketChange!=null)?liveQuote.regularMarketChange:(livePrice-last.c);
+  var dayChgPct=(liveQuote&&liveQuote.regularMarketChangePercent!=null)?liveQuote.regularMarketChangePercent:null;
+  var dayUp=dayChg>=0;
   var periodChg=last.c-first.c,periodChgPct=(periodChg/first.c)*100,periodUp=periodChg>=0;
   var periodHigh=Math.max.apply(null,bars.map(function(b){return b.h;}));
   var periodLow=Math.min.apply(null,bars.map(function(b){return b.l;}));
