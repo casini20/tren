@@ -951,22 +951,49 @@ function clearAnnotations(){
   _currentAnnotations=[];_annotationMsgId=null;
   document.querySelectorAll('.show-chart-btn').forEach(function(b){b.classList.remove('on');});
   var cb=document.getElementById('nq-clear-ann');if(cb)cb.style.display='none';
+  if(_fsOpen)fsDraw();
 }
 function drawAnnotations(levels){
   var container=document.getElementById('nq-annotations');if(!container||!levels.length)return;
   var canvas=document.getElementById('nq-canvas');if(!canvas||!canvas._nq)return;
   var nq=canvas._nq,cb=document.getElementById('nq-clear-ann');
   if(cb)cb.style.display='';container.innerHTML='';_currentAnnotations=levels;
-  levels.forEach(function(lv){
+  // Determine visible price range from canvas data
+  var bars=nq.bars;
+  var highs=bars.map(function(b){return b.h;}),lows=bars.map(function(b){return b.l;});
+  var pad=(Math.max.apply(null,highs)-Math.min.apply(null,lows))*0.04;
+  var minP=Math.min.apply(null,lows)-pad,maxP=Math.max.apply(null,highs)+pad;
+  // Filter to only levels within the visible price range (with a little extra margin)
+  var margin=(maxP-minP)*0.15;
+  var visible=levels.filter(function(lv){return lv.price>=minP-margin&&lv.price<=maxP+margin;});
+  if(!visible.length)return;
+  // Sort by price descending so we can detect overlaps
+  var sorted=visible.slice().sort(function(a,b){return b.price-a.price;});
+  var canvasH=canvas.offsetHeight||220;
+  var minTagGap=16; // px gap between annotation tags to prevent overlap
+  var lastTagY=-9999;
+  sorted.forEach(function(lv){
     var y=nq.toY(lv.price);
+    // Clamp y to the actual chart drawing area
+    var yMin=nq.PAD_T,yMax=canvasH-24;
+    if(y<yMin||y>yMax)return;
     var line=document.createElement('div');line.className='chart-annotation-line '+lv.type;line.style.top=y+'px';container.appendChild(line);
-    var tag=document.createElement('div');tag.className='chart-annotation-tag '+lv.type;tag.textContent=lv.label+': '+lv.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});tag.style.top=y+'px';container.appendChild(tag);
+    // Nudge tag y to avoid overlap with previous tag
+    var tagY=y;
+    if(Math.abs(tagY-lastTagY)<minTagGap)tagY=lastTagY+minTagGap;
+    lastTagY=tagY;
+    var tag=document.createElement('div');tag.className='chart-annotation-tag '+lv.type;
+    tag.textContent=lv.label+': '+lv.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+    tag.style.top=tagY+'px';container.appendChild(tag);
   });
 }
 function toggleAnnotations(msgId,text,btn){
-  if(_annotationMsgId===msgId){clearAnnotations();return;}
+  if(_annotationMsgId===msgId){clearAnnotations();if(_fsOpen)fsDraw();return;}
   clearAnnotations();var levels=parseLevelsFromText(text);
-  if(levels.length){drawAnnotations(levels);_annotationMsgId=msgId;btn.classList.add('on');}
+  if(levels.length){
+    drawAnnotations(levels);_annotationMsgId=msgId;btn.classList.add('on');
+    if(_fsOpen)fsDraw();
+  }
 }
 function addShowChartButton(msgId,text){
   var actions=document.getElementById('actions-'+msgId);if(!actions)return;
@@ -1191,6 +1218,34 @@ function fsDraw(){
     if(ptag){ptag.style.display='block';ptag.textContent=nqFmt(lastClose);ptag.style.top=(lyc-9)+'px';ptag.style.background=isUp?GREEN:RED;}
   }
   canvas._fsv={bars:visible,startI:startI,endI:endI,toX:toX,toY:toY,chartW:chartW,chartH:chartH,W:W,H:H,minP:minP,maxP:maxP,pRange:pRange,PRICE_H:PRICE_H};
+  // Draw AI annotations on fullscreen canvas if active
+  if(_currentAnnotations.length&&_annotationMsgId){
+    var annMargin=(maxP-minP)*0.15;
+    var annColors={support:'rgba(16,185,129,',resist:'rgba(239,68,68,',entry:'rgba(59,130,246,',stop:'rgba(239,68,68,',target:'rgba(16,185,129,',ema:'rgba(245,158,11,'};
+    var annSorted=_currentAnnotations.slice().sort(function(a,b){return b.price-a.price;});
+    ctx.save();
+    ctx.font='bold 10px Plus Jakarta Sans,sans-serif';ctx.textBaseline='middle';
+    var lastAnnY=-9999;
+    annSorted.forEach(function(lv){
+      if(lv.price<minP-annMargin||lv.price>maxP+annMargin)return;
+      var ay=toY(lv.price);
+      if(ay<PAD_T_FS||ay>PRICE_H-PAD_B_FS)return;
+      var base=annColors[lv.type]||'rgba(255,255,255,';
+      ctx.strokeStyle=base+'0.55)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+      ctx.beginPath();ctx.moveTo(PAD_L_FS,ay);ctx.lineTo(W-PAD_R_FS,ay);ctx.stroke();ctx.setLineDash([]);
+      // Label
+      var labelY=ay;
+      if(Math.abs(labelY-lastAnnY)<14)labelY=lastAnnY+14;
+      lastAnnY=labelY;
+      var label=lv.label+': '+lv.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+      var tw=ctx.measureText(label).width;
+      ctx.fillStyle=base+'0.18)';
+      ctx.fillRect(PAD_L_FS+4,labelY-9,tw+12,18);
+      ctx.fillStyle=base+'1)';
+      ctx.fillText(label,PAD_L_FS+10,labelY);
+    });
+    ctx.restore();
+  }
 }
 function fsUpdateHeader(){
   if(!_fsBars||!_fsBars.length)return;
