@@ -554,6 +554,7 @@ async function nqFetch(interval,range,isRefresh){
     var res=await fetch('/api/nq-chart?interval='+interval+'&range='+range);
     if(!res.ok)throw new Error('HTTP '+res.status);
     data=await res.json();
+    console.log('nq raw data:', data);
     if(data.error)throw new Error(data.error);
     var bars=data.bars;
     if(!bars||!bars.length)throw new Error('No bars returned');
