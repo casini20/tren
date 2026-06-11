@@ -316,7 +316,13 @@ html,body{width:100%;height:100%;background:#04080f;}
       </div>
     </div>
     <div class="page">
-
+      
+          <div style="font-size:11px;color:var(--sub);">Enter your key to enable AI analysis. Stored locally only, never sent to our servers.</div>
+        </div>
+        <input type="password" id="apikey-input" placeholder="sk-ant-…" autocomplete="off">
+        <button onclick="saveApiKey()">Save Key</button>
+        <span id="apikey-status" style="font-size:11px;color:var(--green);display:none;">✓ Saved</span>
+      </div>
       <div class="ai-hero">
         <div class="ai-hero-left">
           <div class="ai-hero-icon">✦</div>
@@ -518,7 +524,6 @@ function toggleSidebar(){var sb=document.getElementById('sidebar'),ov=document.g
 function closeSidebar(){var sb=document.getElementById('sidebar'),ov=document.getElementById('sb-overlay');if(sb)sb.classList.remove('open');if(ov)ov.classList.remove('open');}
 
 
-
 // ── HELPERS ───────────────────────────────────────────────────────
 function nqFmt(n){return n==null?'—':n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
 function nqFmtK(n){if(n==null)return'—';if(n>=1e9)return(n/1e9).toFixed(1)+'B';if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(0)+'K';return String(n);}
@@ -533,60 +538,38 @@ var _nqData=null,_nqAutoTimer=null,_nqSnapshot=null,_nqBars=null,_nqLiveQuote=nu
 var _aiTF='1d',_aiMode='analysis';
 var _ctxSelected={price:true,levels:true,indicators:true};
 
-// ── FIX 1: FETCH VIA ALLORIGINS CORS PROXY → YAHOO FINANCE ───────
+// ── FETCH VIA VERCEL /api/nq-chart ────────────────────
 async function nqFetch(interval,range,isRefresh){
   var overlay=document.getElementById('nq-overlay');
   if(overlay){
     overlay.style.display='flex';
     overlay.style.pointerEvents='auto';
-    overlay.innerHTML='<div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:nqspin .7s linear infinite;"></div><div style="font-size:12px;color:var(--sub);">Loading NQ futures…</div>';
+    overlay.innerHTML='<div style="width:28px;height:28px;border-radius:50%;border:2px solid var(--accent);border-top-color:transparent;animation:nqspin .7s linear infinite;"></div><div style="font-size:12px;color:var(--sub);">Loading NQ futures...</div>';
   }
   try{
-    // Use allorigins CORS proxy to reach Yahoo Finance
-    var symbol=encodeURIComponent('NQ=F');
-    var yhUrl='https://query1.finance.yahoo.com/v8/finance/chart/'+symbol+'?interval='+interval+'&range='+range+'&includePrePost=false';
-    var proxyUrl='https://api.allorigins.win/get?url='+encodeURIComponent(yhUrl);
-    var res=await fetch(proxyUrl);
-    if(!res.ok)throw new Error('Proxy error '+res.status);
-    var raw=await res.json();
-    if(!raw.contents)throw new Error('No data from proxy');
-    var json=JSON.parse(raw.contents);
-    var result=json&&json.chart&&json.chart.result&&json.chart.result[0];
-    if(!result)throw new Error('No chart data');
-    // Parse Yahoo Finance response into our bar format
-    var timestamps=result.timestamp||[];
-    var quotes=result.indicators&&result.indicators.quote&&result.indicators.quote[0]||{};
-    var opens=quotes.open||[],highs=quotes.high||[],lows=quotes.low||[],closes=quotes.close||[],volumes=quotes.volume||[];
-    var meta=result.meta||{};
-    // Build bars array
-    var bars=[];
-    for(var i=0;i<timestamps.length;i++){
-      if(closes[i]==null)continue;
-      var d=new Date(timestamps[i]*1000);
-      var label=formatBarLabel(d,interval);
-      bars.push({t:timestamps[i],o:opens[i]||closes[i],h:highs[i]||closes[i],l:lows[i]||closes[i],c:closes[i],v:volumes[i]||0,label:label});
-    }
-    if(!bars.length)throw new Error('No bars parsed');
-    // Live quote from meta
+    var res=await fetch('/api/nq-chart?interval='+interval+'&range='+range);
+    if(!res.ok)throw new Error('API error '+res.status);
+    var data=await res.json();
+    if(data.error)throw new Error(data.error);
+    var bars=data.bars;
+    if(!bars||!bars.length)throw new Error('No bars returned');
+    bars=bars.map(function(b){return{t:b.t,o:b.o,h:b.h,l:b.l,c:b.c,v:b.v||0,label:b.label};});
+    var livePrice=data.regularMarketPrice||bars[bars.length-1].c;
+    var prevClose=data.previousClose||(bars.length>1?bars[bars.length-2].c:bars[bars.length-1].c);
     _nqLiveQuote={
-      regularMarketPrice:meta.regularMarketPrice||bars[bars.length-1].c,
-      regularMarketChange:(meta.regularMarketPrice&&bars.length>1)?(meta.regularMarketPrice-bars[bars.length-1].c):null,
-      regularMarketChangePercent:null
+      regularMarketPrice:livePrice,
+      regularMarketChange:livePrice-prevClose,
+      regularMarketChangePercent:((livePrice-prevClose)/prevClose)*100
     };
-    if(_nqLiveQuote.regularMarketChange!==null&&bars[bars.length-1].c){
-      _nqLiveQuote.regularMarketChangePercent=(_nqLiveQuote.regularMarketChange/bars[bars.length-1].c)*100;
-    }
     _nqData={bars:bars};_nqBars=bars;
     nqDraw(_nqData);
     updateSnapshot(_nqData,_nqLiveQuote);
-    // Hide overlay completely and remove pointer-events blocking
     if(overlay){overlay.style.display='none';overlay.style.pointerEvents='none';}
   }catch(e){
     console.error('NQ fetch error:',e);
     if(overlay){
-      // FIX 3: Remove pointer-events so rest of page stays clickable
       overlay.style.pointerEvents='none';
-      overlay.innerHTML='<span style="font-size:22px">📡</span><div style="font-size:12px;color:var(--sub);text-align:center;line-height:1.7;pointer-events:auto;">Could not load NQ data<br><small style="opacity:.6">'+escHtml(e.message)+'</small><br><span style="color:var(--al);cursor:pointer;font-weight:600;pointer-events:auto;" onclick="nqFetch(\''+interval+'\',\''+range+'\',false)">Retry</span></div>';
+      overlay.innerHTML='<span style="font-size:22px">&#128225;</span><div style="font-size:12px;color:var(--sub);text-align:center;line-height:1.7;pointer-events:auto;">Could not load NQ data<br><small style="opacity:.6">'+escHtml(e.message)+'</small><br><span style="color:var(--al);cursor:pointer;font-weight:600;pointer-events:auto;" onclick="nqFetch(\'' +interval+ '\',\'' +range+ '\',false)">Retry</span></div>';
     }
   }
 }
@@ -870,7 +853,7 @@ function setStreaming(on){
   if(status)status.textContent=on?'Analyzing market…':'Ready';
 }
 
-// ── CALL GROQ VIA VERCEL SERVERLESS FUNCTION ─────────────────────
+// ── CALL GROQ VIA VERCEL SERVERLESS FUNCTION ─────────────────
 async function callAI(messages){
   var res=await fetch('/api/ai-analysis',{
     method:'POST',
@@ -1064,35 +1047,26 @@ async function fsLoadBars(interval,range){
   var ov=document.getElementById('fs-overlay');
   if(ov){ov.style.display='flex';}
   try{
-    var symbol=encodeURIComponent('NQ=F');
-    var yhUrl='https://query1.finance.yahoo.com/v8/finance/chart/'+symbol+'?interval='+interval+'&range='+range+'&includePrePost=false';
-    var proxyUrl='https://api.allorigins.win/get?url='+encodeURIComponent(yhUrl);
-    var res=await fetch(proxyUrl);
-    if(!res.ok)throw new Error('Proxy error '+res.status);
-    var raw=await res.json();
-    var json=JSON.parse(raw.contents);
-    var result=json&&json.chart&&json.chart.result&&json.chart.result[0];
-    if(!result)throw new Error('No chart data');
-    var timestamps=result.timestamp||[];
-    var quotes=result.indicators&&result.indicators.quote&&result.indicators.quote[0]||{};
-    var opens=quotes.open||[],highs=quotes.high||[],lows=quotes.low||[],closes=quotes.close||[],volumes=quotes.volume||[];
-    var bars=[];
-    for(var i=0;i<timestamps.length;i++){
-      if(closes[i]==null)continue;
-      var d=new Date(timestamps[i]*1000);
-      bars.push({t:timestamps[i],o:opens[i]||closes[i],h:highs[i]||closes[i],l:lows[i]||closes[i],c:closes[i],v:volumes[i]||0,label:formatBarLabel(d,interval)});
-    }
-    if(!bars.length)throw new Error('No bars');
+    var res=await fetch('/api/nq-chart?interval='+interval+'&range='+range);
+    if(!res.ok)throw new Error('API error '+res.status);
+    var data=await res.json();
+    if(data.error)throw new Error(data.error);
+    var bars=data.bars;
+    if(!bars||!bars.length)throw new Error('No bars');
+    bars=bars.map(function(b){return{t:b.t,o:b.o,h:b.h,l:b.l,c:b.c,v:b.v||0,label:b.label};});
+    var livePrice=data.regularMarketPrice||bars[bars.length-1].c;
+    var prevClose=data.previousClose||(bars.length>1?bars[bars.length-2].c:bars[bars.length-1].c);
     _fsBars=bars;
-    _nqLiveQuote={regularMarketPrice:bars[bars.length-1].c,regularMarketChange:null,regularMarketChangePercent:null};
+    _nqLiveQuote={regularMarketPrice:livePrice,regularMarketChange:livePrice-prevClose,regularMarketChangePercent:((livePrice-prevClose)/prevClose)*100};
     _nqData={bars:bars};_nqBars=bars;
     nqDraw(_nqData);updateSnapshot(_nqData,_nqLiveQuote);
     fsResetView();fsDraw();fsUpdateHeader();
     if(ov)ov.style.display='none';
   }catch(e){
-    if(ov){ov.innerHTML='<span style="font-size:22px">📡</span><div style="color:rgba(240,244,255,.5);font-size:12px;margin-top:8px;">'+e.message+'</div><button onclick="fsLoadBars(\''+interval+'\',\''+range+'\')" style="margin-top:12px;padding:6px 16px;border-radius:8px;background:rgba(37,99,235,.2);border:1px solid rgba(59,130,246,.3);color:#60a5fa;cursor:pointer;font-size:12px;">Retry</button>';ov.style.display='flex';}
+    if(ov){ov.innerHTML='<span style="font-size:22px">&#128225;</span><div style="color:rgba(240,244,255,.5);font-size:12px;margin-top:8px;">'+e.message+'</div><button onclick="fsLoadBars(\'' +interval+ '\',\'' +range+ '\')" style="margin-top:12px;padding:6px 16px;border-radius:8px;background:rgba(37,99,235,.2);border:1px solid rgba(59,130,246,.3);color:#60a5fa;cursor:pointer;font-size:12px;">Retry</button>';ov.style.display='flex';}
   }
 }
+
 function fsResetView(){
   if(!_fsBars||!_fsBars.length)return;
   _fsViewStart=0;_fsViewEnd=_fsBars.length-1;
