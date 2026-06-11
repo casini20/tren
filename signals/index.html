@@ -139,6 +139,31 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .skel{background:rgba(255,255,255,.04);border-radius:8px;animation:sk 1.4s ease infinite;}
 @keyframes sk{0%,100%{opacity:.4}50%{opacity:.9}}
 
+/* ── STATS BAR ── */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.4rem;}
+.stat-card{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:.9rem 1.1rem;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px 2px 0 0;}
+.stat-card.sc-total::before{background:linear-gradient(90deg,var(--al),transparent);}
+.stat-card.sc-wr::before{background:linear-gradient(90deg,var(--green),transparent);}
+.stat-card.sc-pnl::before{background:linear-gradient(90deg,var(--gold),transparent);}
+.stat-card.sc-ticks::before{background:linear-gradient(90deg,#a78bfa,transparent);}
+.stat-label{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;}
+.stat-val{font-size:22px;font-weight:700;letter-spacing:-.3px;}
+.stat-sub{font-size:11px;color:var(--sub);margin-top:3px;}
+.flt-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:.8rem;flex-wrap:wrap;}
+.search-wrap{position:relative;flex:1;min-width:160px;max-width:260px;}
+.search-input{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:5px 10px 5px 30px;font-size:12px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;outline:none;transition:border-color .18s;}
+.search-input:focus{border-color:var(--border2);}
+.search-input::placeholder{color:var(--sub);}
+.search-ic{position:absolute;left:9px;top:50%;transform:translateY(-50%);font-size:13px;color:var(--sub);pointer-events:none;}
+.sort-sel{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:5px 10px;font-size:12px;color:var(--sub2);font-family:'Plus Jakarta Sans',sans-serif;outline:none;cursor:pointer;transition:border-color .18s;}
+.sort-sel:hover{border-color:var(--border2);}
+.empty-state{grid-column:1/-1;text-align:center;padding:3rem 1rem;}
+.empty-icon{font-size:36px;margin-bottom:.8rem;}
+.empty-title{font-size:14px;font-weight:600;color:var(--sub2);margin-bottom:4px;}
+.empty-sub{font-size:12px;color:var(--sub);}
+@media(max-width:850px){.stats-row{grid-template-columns:repeat(2,1fr);}}
+
 /* ── TOAST ── */
 .toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:linear-gradient(145deg,var(--bg3),var(--bg2));border:1px solid var(--border2);border-radius:14px;padding:1.1rem 1.4rem;box-shadow:0 12px 40px rgba(0,0,0,.4);display:flex;align-items:center;gap:12px;animation:toastIn .4s ease;max-width:380px;}
 @keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
@@ -287,20 +312,61 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 
     <!-- PAGE -->
     <div class="page">
-      <div class="flt">
-        <span style="font-size:12.5px;color:var(--sub)">Filter:</span>
-        <button class="fb on" onclick="flt('all',this)">All</button>
-        <button class="fb" onclick="flt('long',this)">Long</button>
-        <button class="fb" onclick="flt('short',this)">Short</button>
-        <button class="fb" onclick="flt('active',this)">Active</button>
-        <button class="fb" onclick="flt('win',this)">Wins</button>
-        <button class="fb" onclick="flt('loss',this)">Losses</button>
+
+      <!-- STATS STRIP -->
+      <div class="stats-row" id="stats-row">
+        <div class="stat-card sc-total">
+          <div class="stat-label">Total Trades</div>
+          <div class="stat-val" id="stat-total">—</div>
+          <div class="stat-sub" id="stat-active-sub">— active</div>
+        </div>
+        <div class="stat-card sc-wr">
+          <div class="stat-label">Win Rate</div>
+          <div class="stat-val" id="stat-wr" style="color:var(--green)">—</div>
+          <div class="stat-sub" id="stat-wr-sub">— wins / — losses</div>
+        </div>
+        <div class="stat-card sc-pnl">
+          <div class="stat-label">Total P&L</div>
+          <div class="stat-val" id="stat-pnl">—</div>
+          <div class="stat-sub" id="stat-pnl-sub">closed trades only</div>
+        </div>
+        <div class="stat-card sc-ticks">
+          <div class="stat-label">Avg Ticks</div>
+          <div class="stat-val" id="stat-ticks" style="color:#a78bfa">—</div>
+          <div class="stat-sub" id="stat-best-sub">best: —</div>
+        </div>
       </div>
+
+      <!-- FILTER + SEARCH + SORT -->
+      <div class="flt-top">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+          <span style="font-size:12px;color:var(--sub);font-weight:500;">Filter:</span>
+          <button class="fb on" onclick="flt('all',this)">All</button>
+          <button class="fb" onclick="flt('long',this)">Long</button>
+          <button class="fb" onclick="flt('short',this)">Short</button>
+          <button class="fb" onclick="flt('active',this)">Active</button>
+          <button class="fb" onclick="flt('win',this)">Wins</button>
+          <button class="fb" onclick="flt('loss',this)">Losses</button>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="search-wrap">
+            <span class="search-ic">🔍</span>
+            <input class="search-input" id="sig-search" type="text" placeholder="Search market…" oninput="renderAllSigs()">
+          </div>
+          <select class="sort-sel" id="sig-sort" onchange="renderAllSigs()">
+            <option value="date">Latest first</option>
+            <option value="pnl_desc">P&L high → low</option>
+            <option value="pnl_asc">P&L low → high</option>
+            <option value="ticks">Most ticks</option>
+          </select>
+        </div>
+      </div>
+
       <div class="sig-grid" id="all-sigs">
-        <div class="skel" style="height:110px;border-radius:13px;"></div>
-        <div class="skel" style="height:110px;border-radius:13px;"></div>
-        <div class="skel" style="height:110px;border-radius:13px;"></div>
-        <div class="skel" style="height:110px;border-radius:13px;"></div>
+        <div class="skel" style="height:120px;border-radius:13px;"></div>
+        <div class="skel" style="height:120px;border-radius:13px;"></div>
+        <div class="skel" style="height:120px;border-radius:13px;"></div>
+        <div class="skel" style="height:120px;border-radius:13px;"></div>
       </div>
     </div>
 
@@ -415,39 +481,91 @@ function closeSidebar(){document.getElementById('sidebar').classList.remove('ope
 // ── SIGNALS LOGIC ─────────────────────────────────────────────────
 let allSignalsData=[],currentFilter='all';
 
+function updateStats(data){
+  const closed=data.filter(t=>t.exit&&t.exit!==null);
+  const active=data.filter(t=>!t.exit||t.exit===null);
+  const wins=closed.filter(t=>parseFloat(t.pnl||0)>0);
+  const losses=closed.filter(t=>parseFloat(t.pnl||0)<0);
+  const totalPnl=closed.reduce((s,t)=>s+parseFloat(t.pnl||0),0);
+  const pnlUp=totalPnl>=0;
+  const wr=closed.length?Math.round((wins.length/closed.length)*100):0;
+  const ticks=closed.filter(t=>t.ticks).map(t=>parseFloat(t.ticks));
+  const avgTicks=ticks.length?Math.round(ticks.reduce((a,b)=>a+b,0)/ticks.length):0;
+  const bestTick=ticks.length?Math.max(...ticks):0;
+  const el=id=>document.getElementById(id);
+  el('stat-total').textContent=data.length;
+  el('stat-active-sub').textContent=`${active.length} active · ${closed.length} closed`;
+  el('stat-wr').textContent=closed.length?wr+'%':'—';
+  el('stat-wr').style.color=wr>=50?'var(--green)':'var(--red)';
+  el('stat-wr-sub').textContent=`${wins.length} wins / ${losses.length} losses`;
+  el('stat-pnl').textContent=closed.length?(pnlUp?'+':'')+totalPnl.toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:0,style:'currency',currency:'USD'}):'—';
+  el('stat-pnl').style.color=pnlUp?'var(--green)':'var(--red)';
+  el('stat-ticks').textContent=avgTicks||'—';
+  el('stat-best-sub').textContent=`best: ${bestTick||'—'} ticks`;
+}
+
 function buildSignalCard(t){
-  const isActive=!t.exit||t.exit===null;const win=parseFloat(t.pnl||0)>=0;const dir=(t.direction||'').toLowerCase();const isLong=dir==='long';
-  const pnlStr=isActive?'':`<span class="sig-pnl-badge ${win?'pos':'neg'}">${win?'+':'-'}$${Math.abs(parseFloat(t.pnl||0)).toLocaleString('en-US',{maximumFractionDigits:0})}</span>`;
-  const sc=isActive?'ac':win?'ht':'ls';const sl=isActive?'● Live':win?'✓ TP Hit':'✗ SL Hit';
-  return`<div class="sig-card ${win?'win-border':'loss-border'}">
-    <div class="sig-top"><div class="sig-pair">${escHtml(t.market||'—')}</div><div style="display:flex;align-items:center;gap:7px;">${pnlStr}<div class="sig-dir ${isLong?'lng':'sht'}">${dir.toUpperCase()}</div></div></div>
-    <div class="sig-meta"><div class="sig-f"><label>Entry</label><p>${t.entry?fmtNum(t.entry,2):'—'}</p></div><div class="sig-f"><label>Exit</label><p class="${win?'g':'r'}">${t.exit?fmtNum(t.exit,2):'—'}</p></div><div class="sig-f"><label>Ticks</label><p>${t.ticks||'—'}</p></div></div>
-    <div class="sig-bw"><div class="sig-b" style="width:${isActive?35:100}%;background:var(--green);"></div></div>
-    <div class="sig-ft"><div class="sig-tm">${fmtDate(t.executed_at)}</div><div class="sig-st ${sc}">${sl}</div></div>
+  const isActive=!t.exit||t.exit===null;
+  const pnl=parseFloat(t.pnl||0);const win=pnl>=0;
+  const dir=(t.direction||'').toLowerCase();const isLong=dir==='long';
+  const pnlStr=isActive
+    ?'<span class="sig-st ac">● Live</span>'
+    :`<span class="sig-pnl-badge ${win?'pos':'neg'}">${win?'+':'-'}$${Math.abs(pnl).toLocaleString('en-US',{maximumFractionDigits:0})}</span>`;
+  const statusLabel=isActive?'':win?'✓ TP Hit':'✗ SL Hit';
+  const statusCls=win?'ht':'ls';
+  return`<div class="sig-card ${isActive?'':win?'win-border':'loss-border'}">
+    <div class="sig-top">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="sig-pair">${escHtml(t.market||'—')}</div>
+        <div class="sig-dir ${isLong?'lng':'sht'}">${dir.toUpperCase()}</div>
+      </div>
+      ${pnlStr}
+    </div>
+    <div class="sig-meta">
+      <div class="sig-f"><label>Entry</label><p>${t.entry?fmtNum(t.entry,2):'—'}</p></div>
+      <div class="sig-f"><label>Exit</label><p class="${win&&!isActive?'g':!win&&!isActive?'r':''}">${t.exit?fmtNum(t.exit,2):'—'}</p></div>
+      <div class="sig-f"><label>Ticks</label><p style="color:${t.ticks&&parseFloat(t.ticks)>0?'var(--green)':t.ticks&&parseFloat(t.ticks)<0?'var(--red)':'inherit'}">${t.ticks||'—'}</p></div>
+    </div>
+    <div class="sig-bw"><div class="sig-b" style="width:${isActive?40:100}%;background:${isActive?'var(--al)':win?'var(--green)':'var(--red)'};"></div></div>
+    <div class="sig-ft">
+      <div class="sig-tm">${fmtDate(t.executed_at)}</div>
+      ${!isActive?`<div class="sig-st ${statusCls}">${statusLabel}</div>`:''}
+    </div>
   </div>`;
 }
 
 function renderAllSigs(f){
   if(f)currentFilter=f;
   const el=document.getElementById('all-sigs');
-  let filtered=allSignalsData;
-  if(currentFilter==='long')   filtered=allSignalsData.filter(t=>(t.direction||'').toLowerCase()==='long');
-  if(currentFilter==='short')  filtered=allSignalsData.filter(t=>(t.direction||'').toLowerCase()==='short');
-  if(currentFilter==='active') filtered=allSignalsData.filter(t=>!t.exit);
-  if(currentFilter==='win')    filtered=allSignalsData.filter(t=>parseFloat(t.pnl||0)>0);
-  if(currentFilter==='loss')   filtered=allSignalsData.filter(t=>parseFloat(t.pnl||0)<0);
-  if(!filtered.length){el.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:2rem;font-size:13px;color:var(--sub)">No signals match this filter.</div>`;return;}
+  const search=(document.getElementById('sig-search')?.value||'').toLowerCase().trim();
+  const sort=document.getElementById('sig-sort')?.value||'date';
+  let filtered=[...allSignalsData];
+  if(currentFilter==='long')   filtered=filtered.filter(t=>(t.direction||'').toLowerCase()==='long');
+  if(currentFilter==='short')  filtered=filtered.filter(t=>(t.direction||'').toLowerCase()==='short');
+  if(currentFilter==='active') filtered=filtered.filter(t=>!t.exit);
+  if(currentFilter==='win')    filtered=filtered.filter(t=>parseFloat(t.pnl||0)>0);
+  if(currentFilter==='loss')   filtered=filtered.filter(t=>parseFloat(t.pnl||0)<0);
+  if(search) filtered=filtered.filter(t=>(t.market||'').toLowerCase().includes(search));
+  if(sort==='pnl_desc') filtered.sort((a,b)=>parseFloat(b.pnl||0)-parseFloat(a.pnl||0));
+  else if(sort==='pnl_asc') filtered.sort((a,b)=>parseFloat(a.pnl||0)-parseFloat(b.pnl||0));
+  else if(sort==='ticks') filtered.sort((a,b)=>parseFloat(b.ticks||0)-parseFloat(a.ticks||0));
+  else filtered.sort((a,b)=>new Date(b.executed_at)-new Date(a.executed_at));
+  if(!filtered.length){
+    el.innerHTML=`<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No trades found</div><div class="empty-sub">${search?'Try a different search term.':'No signals match this filter.'}</div></div>`;
+    return;
+  }
   el.innerHTML=filtered.map(buildSignalCard).join('');
 }
 
 async function loadAllSignals(){
   const el=document.getElementById('all-sigs');
   try{
-    const data=await sbFetch('trades?order=executed_at.desc&limit=50');
+    const data=await sbFetch('trades?order=executed_at.desc&limit=100');
     allSignalsData=data;
+    updateStats(data);
     renderAllSigs(currentFilter);
   }catch(e){
-    el.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:2rem;font-size:13px;color:var(--sub)">Could not load signals. Retrying…</div>`;
+    el.innerHTML=`<div class="empty-state"><div class="empty-icon">⚠️</div><div class="empty-title">Could not load signals</div><div class="empty-sub">Retrying in 5 seconds…</div></div>`;
     setTimeout(loadAllSignals,5000);
   }
 }
