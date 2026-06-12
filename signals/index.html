@@ -350,8 +350,8 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
           <div class="search-wrap">
-            <span class="search-ic">🔍</span>
-            <input class="search-input" id="sig-search" type="text" placeholder="Search market…" oninput="renderAllSigs()">
+            <span class="search-ic">📅</span>
+            <input class="search-input" id="sig-search" type="date" oninput="renderAllSigs()" style="padding-left:30px;color-scheme:dark;">
           </div>
           <select class="sort-sel" id="sig-sort" onchange="renderAllSigs()">
             <option value="date">Latest first</option>
@@ -545,13 +545,13 @@ function renderAllSigs(f){
   if(currentFilter==='active') filtered=filtered.filter(t=>!t.exit);
   if(currentFilter==='win')    filtered=filtered.filter(t=>parseFloat(t.pnl||0)>0);
   if(currentFilter==='loss')   filtered=filtered.filter(t=>parseFloat(t.pnl||0)<0);
-  if(search) filtered=filtered.filter(t=>(t.market||'').toLowerCase().includes(search));
+  if(search) filtered=filtered.filter(t=>t.executed_at&&t.executed_at.slice(0,10)===search);
   if(sort==='pnl_desc') filtered.sort((a,b)=>parseFloat(b.pnl||0)-parseFloat(a.pnl||0));
   else if(sort==='pnl_asc') filtered.sort((a,b)=>parseFloat(a.pnl||0)-parseFloat(b.pnl||0));
   else if(sort==='ticks') filtered.sort((a,b)=>parseFloat(b.ticks||0)-parseFloat(a.ticks||0));
   else filtered.sort((a,b)=>new Date(b.executed_at)-new Date(a.executed_at));
   if(!filtered.length){
-    el.innerHTML=`<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No trades found</div><div class="empty-sub">${search?'Try a different search term.':'No signals match this filter.'}</div></div>`;
+    el.innerHTML=`<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No trades found</div><div class="empty-sub">${search?'No trades on this date.':'No signals match this filter.'}</div></div>`;
     return;
   }
   el.innerHTML=filtered.map(buildSignalCard).join('');
