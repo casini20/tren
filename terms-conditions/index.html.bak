@@ -8,24 +8,6 @@
 <title>Terms & Conditions — Tren</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-
-    /* Sign In button – injected by add_signin_button.sh */
-    a.nav-signin {
-      font-size: 13px;
-      font-weight: 500;
-      color: rgba(240,244,255,0.65) !important;
-      text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,0.14);
-      transition: color 0.2s, border-color 0.2s, background 0.2s;
-    }
-    a.nav-signin:hover {
-      color: #f0f4ff !important;
-      border-color: rgba(255,255,255,0.28);
-      background: rgba(255,255,255,0.04);
-    }
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -593,7 +575,6 @@ footer {
     <a href="https://trenai.vercel.app/pricing">Pricing</a>
     <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
     <a href="https://trenai.vercel.app/contact">Contact</a>
-    <a href="https://trenai.vercel.app/login-page" class="nav-signin">Sign In</a>
     <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -604,7 +585,6 @@ footer {
     <a href="https://trenai.vercel.app/pricing">Pricing</a>
     <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
     <a href="https://trenai.vercel.app/contact">Contact</a>
-    <a href="https://trenai.vercel.app/login-page" class="nav-signin">Sign In</a>
     <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
   </div>
 </nav>

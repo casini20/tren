@@ -3,27 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Checkout — Tren</title>
+<title>Checkout — Tren Indicator</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-
-    /* Sign In button – injected by add_signin_button.sh */
-    a.nav-signin {
-      font-size: 13px;
-      font-weight: 500;
-      color: rgba(240,244,255,0.65) !important;
-      text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,0.14);
-      transition: color 0.2s, border-color 0.2s, background 0.2s;
-    }
-    a.nav-signin:hover {
-      color: #f0f4ff !important;
-      border-color: rgba(255,255,255,0.28);
-      background: rgba(255,255,255,0.04);
-    }
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -720,6 +702,8 @@ footer {
 </style>
 
 
+
+
 </head>
 <body>
 
@@ -736,7 +720,6 @@ footer {
     <a href="https://trenai.vercel.app/pricing">Pricing</a>
     <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
     <a href="https://trenai.vercel.app/contact">Contact</a>
-    <a href="https://trenai.vercel.app/login-page" class="nav-signin">Sign In</a>
     <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -747,7 +730,6 @@ footer {
     <a href="https://trenai.vercel.app/pricing">Pricing</a>
     <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
     <a href="https://trenai.vercel.app/contact">Contact</a>
-    <a href="https://trenai.vercel.app/login-page" class="nav-signin">Sign In</a>
     <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
   </div>
 </nav>
@@ -756,23 +738,23 @@ footer {
 <div class="checkout-header">
   <div class="checkout-badge">
     <span class="badge-dot"></span>
-    7-Day Free Trial &mdash; No card charged today
+    One-Time Purchase &mdash; Lifetime Access
   </div>
-  <h1>Start trading smarter<br>with <span>Premium Signals</span></h1>
-  <p>Join hundreds of traders getting real-time alerts, structured risk management, and instant Discord community access.</p>
+  <h1>Get the Tren Indicator<br>for <span>TradingView</span></h1>
+  <p>Clear buy and sell signals with automatic take profit and stop loss levels. One-time purchase, lifetime access.</p>
   <div class="trust-row">
     <span class="trust-item">
       <svg class="trust-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M8 1.5L2 4v4c0 3.3 2.5 6.4 6 7 3.5-.6 6-3.7 6-7V4L8 1.5z"/>
       </svg>
-      Cancel anytime
+      Lifetime access
     </span>
     <span class="trust-item">
       <svg class="trust-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="8" cy="8" r="6.5"/>
         <path d="M5.5 8l1.8 1.8L10.5 6"/>
       </svg>
-      No charge for 7 days
+      Instant email delivery
     </span>
     <span class="trust-item">
       <svg class="trust-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -799,35 +781,29 @@ footer {
   <div class="plan-card">
     <div class="plan-header">
       <div class="plan-header-top">
-        <span class="plan-title">Premium Signals</span>
+        <span class="plan-title">Tren Indicator</span>
         <div class="plan-badges">
-          <span class="popular-badge">Most Popular</span>
+          <span class="popular-badge">TradingView</span>
         </div>
       </div>
-      <div class="billing-row">
-        <span class="billing-option" id="lblMonthly" onclick="setBilling('monthly')">Monthly</span>
-        <div class="toggle-track yearly" id="toggleTrack" onclick="toggleBilling()">
-          <div class="toggle-thumb"></div>
-        </div>
-        <span class="billing-option active" id="lblYearly" onclick="setBilling('yearly')">Yearly</span>
-        <span class="save-text" id="saveText">Save 15%</span>
-      </div>
+      <div style="font-size:12px;color:var(--tm);">One-time purchase &mdash; no subscription</div>
     </div>
     <div class="plan-body">
       <div class="price-row">
-        <span class="price-main" id="priceDisplay">$0</span>
-        <span class="price-period" id="pricePeriod">for 7 days</span>
+        <span class="price-main" id="priceDisplay">$99</span>
+        <span class="price-period" id="pricePeriod">one-time</span>
       </div>
-      <p class="price-note" id="priceNote">Then $25.49/mo ($305.88/yr), billed annually</p>
+      <p class="price-note" id="priceNote">Lifetime access, no recurring fees</p>
 
       <ul class="features">
-        <li><span class="check-icon">&#10003;</span> Real-time trade alerts</li>
-        <li><span class="check-icon">&#10003;</span> Clear entry, stop loss &amp; take profit levels</li>
-        <li><span class="check-icon">&#10003;</span> Structured risk management</li>
-        <li><span class="check-icon">&#10003;</span> Custom Premium Role &amp; community access</li>
+        <li><span class="check-icon">&#10003;</span> Clear buy and sell labels on chart</li>
+        <li><span class="check-icon">&#10003;</span> Automatic TP1, TP2, TP3 &amp; stop loss levels</li>
+        <li><span class="check-icon">&#10003;</span> Clean visual trade setups</li>
+        <li><span class="check-icon">&#10003;</span> Works on all timeframes</li>
+        <li><span class="check-icon">&#10003;</span> Lifetime updates included</li>
       </ul>
 
-      <p class="trial-hint">Cancel anytime during your trial — no charges until day 8</p>
+      <p class="trial-hint">Instant delivery via email after purchase</p>
     </div>
   </div>
 
@@ -867,7 +843,7 @@ footer {
         <button type="button" class="btn-secondary" id="applyBtn" onclick="applyDiscount()">Apply</button>
       </div>
       <p class="status-msg" id="discountStatus"></p>
-      <p class="form-hint">Creator codes give 10% off (applied after trial)</p>
+      <p class="form-hint">Creator codes give 10% off instantly</p>
     </div>
 
     <div class="divider"></div>
@@ -885,9 +861,9 @@ footer {
 
     <!-- CTA -->
     <button type="button" class="btn-primary" id="continueBtn" onclick="initiateCheckout()">
-      Start Free Trial &mdash; 7 Days Free
+      Purchase Indicator &mdash; $99
     </button>
-    <p class="trial-note">After 7 days, your subscription begins automatically. Cancel anytime.</p>
+    <p class="trial-note">One-time payment. You'll receive your indicator invite within minutes.</p>
 
     <div class="paypal-area" id="paypalContainer" style="display:none;"></div>
 
@@ -934,7 +910,7 @@ footer {
 
 </div><!-- end .page -->
 
-<script src="https://www.paypal.com/sdk/js?client-id=AeI5KFbaNtWynFSqiLckwUCkCmcYpAa5rne46nIubTFZfNy2NsFCRDtoli0ALH0sfE1VJ-AE1WomsW6d&vault=true&intent=subscription"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AeI5KFbaNtWynFSqiLckwUCkCmcYpAa5rne46nIubTFZfNy2NsFCRDtoli0ALH0sfE1VJ-AE1WomsW6d&intent=capture"></script>
 
 <script>
 function toggleMenu() {
@@ -945,7 +921,6 @@ function toggleMenu() {
 }
 
 // ─── State ───
-let currentBilling = 'yearly';
 let appliedCode = null;
 let paypalRendered = false;
 
@@ -958,12 +933,9 @@ const productID = 'premium';
 const SUPABASE_URL = 'https://sjntsmzbiqvtstvofcnx.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg';
 
-async function writeSubscriberToSupabase(emailVal, discordVal, subscriptionID) {
-  const trialEnd = new Date();
-  trialEnd.setDate(trialEnd.getDate() + 7);
-
+async function writePurchaseToSupabase(emailVal, discordVal, orderID) {
   try {
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/subscribers`, {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/purchases`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -973,13 +945,12 @@ async function writeSubscriberToSupabase(emailVal, discordVal, subscriptionID) {
       },
       body: JSON.stringify({
         email: emailVal.toLowerCase().trim(),
-        plan: 'premium',
-        billing: currentBilling,
-        paypal_subscription_id: subscriptionID,
+        product: 'indicator',
+        paypal_order_id: orderID,
         discord_username: discordVal || null,
         discount_code: appliedCode || null,
-        status: 'active',
-        trial_end: trialEnd.toISOString()
+        status: 'completed',
+        amount: appliedCode ? 89 : 99
       })
     });
     if (!res.ok) {
@@ -991,69 +962,32 @@ async function writeSubscriberToSupabase(emailVal, discordVal, subscriptionID) {
   }
 }
 
-// ─── Plan IDs ───
 const PLANS = {
-  monthly: {
-    normal:   'P-1TE49765UF4478324NHVCQWI',
-    discount: 'P-9WC47905VV0850427NHVDIDA'
-  },
-  yearly: {
-    normal:   'P-1W065668RR969374CNHVDUAY',
-    discount: 'P-5GD7768190663772ANHVDVPI'
-  }
+  normal:   'P-216499032T727480WNGZ3ZOY',
+  discount: 'P-0NL69043U6031300JNHB2NNQ'
 };
 
 const PRICES = {
-  monthly: { base: 29.99, discounted: 26.99 },
-  yearly:  { base: 25.49, discounted: 22.94 }
+  base: 99.00,
+  discounted: 89.00
 };
-
-// ─── Billing Toggle ───
-function setBilling(mode) {
-  currentBilling = mode;
-  const track = document.getElementById('toggleTrack');
-  const lblM = document.getElementById('lblMonthly');
-  const lblY = document.getElementById('lblYearly');
-  const saveText = document.getElementById('saveText');
-
-  if (mode === 'yearly') {
-    track.classList.add('yearly');
-    lblM.classList.remove('active');
-    lblY.classList.add('active');
-    saveText.style.opacity = '1';
-  } else {
-    track.classList.remove('yearly');
-    lblM.classList.add('active');
-    lblY.classList.remove('active');
-    saveText.style.opacity = '0';
-  }
-
-  updatePriceDisplay();
-  if (paypalRendered) resetPaypal();
-}
-
-function toggleBilling() {
-  setBilling(currentBilling === 'monthly' ? 'yearly' : 'monthly');
-}
 
 function updatePriceDisplay() {
   const priceEl = document.getElementById('priceDisplay');
   const noteEl = document.getElementById('priceNote');
+  const btn = document.getElementById('continueBtn');
 
-  const prices = PRICES[currentBilling];
   const hasDiscount = !!appliedCode;
-  const effectivePrice = hasDiscount ? prices.discounted : prices.base;
+  const effectivePrice = hasDiscount ? PRICES.discounted : PRICES.base;
 
-  priceEl.textContent = '$0';
+  priceEl.textContent = '$' + Math.round(effectivePrice);
 
-  if (currentBilling === 'yearly') {
-    noteEl.textContent = hasDiscount
-      ? `Then $${effectivePrice.toFixed(2)}/mo ($${(effectivePrice * 12).toFixed(2)}/yr) with code`
-      : `Then $${effectivePrice.toFixed(2)}/mo ($${(effectivePrice * 12).toFixed(2)}/yr), billed annually`;
+  if (hasDiscount) {
+    noteEl.innerHTML = '<span style="text-decoration:line-through;color:var(--tm);">$99</span> &mdash; $' + Math.round(effectivePrice) + ' with code';
+    btn.textContent = 'Purchase Indicator — $' + Math.round(effectivePrice);
   } else {
-    noteEl.textContent = hasDiscount
-      ? `Then $${effectivePrice.toFixed(2)}/mo with code`
-      : `Then $${effectivePrice.toFixed(2)}/mo, billed monthly`;
+    noteEl.textContent = 'Lifetime access, no recurring fees';
+    btn.textContent = 'Purchase Indicator — $99';
   }
 }
 
@@ -1074,7 +1008,7 @@ function applyDiscount() {
 
   if (discountCodes[code]) {
     appliedCode = code;
-    status.textContent = 'Code applied \u2014 10% off after trial';
+    status.textContent = 'Code applied \u2014 10% off';
     status.classList.add('success');
     input.disabled = true;
     btn.textContent = 'Applied';
@@ -1131,13 +1065,14 @@ function initiateCheckout() {
   if (paypalRendered) return;
 
   const planType = appliedCode ? 'discount' : 'normal';
-  const selectedPlan = PLANS[currentBilling][planType];
+  const selectedPlan = PLANS[planType];
+  const amount = appliedCode ? PRICES.discounted : PRICES.base;
 
   // Build custom_id with email + optional discord
   let customId = `Email: ${emailVal}`;
   if (discordVal) customId += ` | Discord: ${discordVal}`;
   if (appliedCode) customId += ` | CODE: ${appliedCode}`;
-  customId += ` | BILLING: ${currentBilling} | TRIAL: 7days`;
+  customId += ` | PRODUCT: indicator | PRICE: ${amount}`;
 
   document.getElementById('continueBtn').style.display = 'none';
   document.querySelector('.trial-note').style.display = 'none';
@@ -1146,24 +1081,28 @@ function initiateCheckout() {
 
   paypal.Buttons({
     style: { shape: 'pill', color: 'blue', layout: 'vertical', label: 'paypal' },
-    createSubscription: function(data, actions) {
-      return actions.subscription.create({
-        plan_id: selectedPlan,
-        custom_id: customId
+    createOrder: function(data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: { value: amount.toFixed(2), currency_code: 'USD' },
+          description: 'Tren Indicator - Lifetime Access',
+          custom_id: customId
+        }]
       });
     },
     onApprove: async function(data) {
-      // Meta Pixel Subscribe event
+      // Meta Pixel Purchase event
       if (typeof fbq !== 'undefined') {
-        fbq('track', 'Subscribe', {
-          value: currentBilling === 'yearly' ? 25.49 : 29.99,
+        fbq('track', 'Purchase', {
+          value: amount,
           currency: 'USD'
         });
       }
+	  
 
       let message = `\uD83C\uDF89 NEW_PURCHASE\n\nEmail: ${emailVal}`;
       if (discordVal) message += `\nDiscord: ${discordVal}`;
-      message += `\nProductID: ${productID}\nBilling: ${currentBilling}\nCode: ${appliedCode || 'None'}\nTrial: 7 days\nID: ${data.subscriptionID}`;
+      message += `\nProduct: Tren Indicator\nAmount: $${Math.round(amount)}\nCode: ${appliedCode || 'None'}\nOrder ID: ${data.orderID}`;
 
       // Send Discord webhook + write to Supabase in parallel
       await Promise.all([
@@ -1172,10 +1111,10 @@ function initiateCheckout() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ content: message })
         }),
-        writeSubscriberToSupabase(emailVal, discordVal, data.subscriptionID)
+        writePurchaseToSupabase(emailVal, discordVal, data.orderID)
       ]);
 
-      window.location.href = discordInvite;
+      window.location.href = 'https://trenai.vercel.app/thank-you-indicator?email=' + encodeURIComponent(emailVal) + '&order=' + encodeURIComponent(data.orderID);
     },
     onError: function(err) {
       console.error('PayPal error:', err);
@@ -1196,7 +1135,7 @@ function resetPaypal() {
 }
 
 // ─── Init ───
-setBilling('yearly');
+updatePriceDisplay();
 </script>
 
 <script>

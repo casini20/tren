@@ -5,27 +5,9 @@
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Terms & Conditions — Tren</title>
+<title>Privacy Policy — Tren</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-
-    /* Sign In button – injected by add_signin_button.sh */
-    a.nav-signin {
-      font-size: 13px;
-      font-weight: 500;
-      color: rgba(240,244,255,0.65) !important;
-      text-decoration: none;
-      padding: 8px 16px;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,0.14);
-      transition: color 0.2s, border-color 0.2s, background 0.2s;
-    }
-    a.nav-signin:hover {
-      color: #f0f4ff !important;
-      border-color: rgba(255,255,255,0.28);
-      background: rgba(255,255,255,0.04);
-    }
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
@@ -593,7 +575,6 @@ footer {
     <a href="https://trenai.vercel.app/pricing">Pricing</a>
     <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
     <a href="https://trenai.vercel.app/contact">Contact</a>
-    <a href="https://trenai.vercel.app/login-page" class="nav-signin">Sign In</a>
     <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
   </div>
   <button class="hamburger" id="hamburger" onclick="toggleMenu()" aria-label="Menu">
@@ -604,7 +585,6 @@ footer {
     <a href="https://trenai.vercel.app/pricing">Pricing</a>
     <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
     <a href="https://trenai.vercel.app/contact">Contact</a>
-    <a href="https://trenai.vercel.app/login-page" class="nav-signin">Sign In</a>
     <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
   </div>
 </nav>
@@ -612,9 +592,9 @@ footer {
 <!-- HERO -->
 <div class="policy-hero">
   <div class="tag">Legal</div>
-  <h1>Terms & <em>Conditions</em></h1>
+  <h1>Privacy <em>Policy</em></h1>
   <p style="font-size:15px;color:var(--ts);max-width:560px;line-height:1.7;margin-top:0.75rem;">
-    These terms govern your use of the Tren trading signal and automation service. Please read them carefully before subscribing or using our platform.
+    This policy explains how Tren collects, uses, and protects your personal data. We believe in transparency — you deserve to know exactly what we do with your information.
   </p>
   <div class="policy-meta">
     <div class="meta-pill">📅 Effective date: 24 April 2026</div>
@@ -628,22 +608,19 @@ footer {
   <div class="toc">
     <h3>Contents</h3>
     <ul class="toc-list">
-      <li><a href="#definitions">1. Definitions</a></li>
-      <li><a href="#service">2. The Service</a></li>
-      <li><a href="#eligibility">3. Eligibility</a></li>
-      <li><a href="#accounts">4. Accounts & Security</a></li>
-      <li><a href="#subscriptions">5. Subscriptions & Billing</a></li>
-      <li><a href="#signals">6. Signal Service</a></li>
-      <li><a href="#automation">7. Automated Trading</a></li>
-      <li><a href="#risk">8. Risk Disclosure</a></li>
-      <li><a href="#not-advice">9. Not Financial Advice</a></li>
-      <li><a href="#prohibited">10. Prohibited Use</a></li>
-      <li><a href="#ip">11. Intellectual Property</a></li>
-      <li><a href="#liability">12. Limitation of Liability</a></li>
-      <li><a href="#refund">13. Refund Policy</a></li>
-      <li><a href="#termination">14. Termination</a></li>
-      <li><a href="#changes">15. Changes to Terms</a></li>
-      <li><a href="#contact">16. Contact Us</a></li>
+      <li><a href="#who">1. Who We Are</a></li>
+      <li><a href="#collect">2. Information We Collect</a></li>
+      <li><a href="#use">3. How We Use Your Information</a></li>
+      <li><a href="#legal-basis">4. Legal Basis (GDPR)</a></li>
+      <li><a href="#sharing">5. Data Sharing</a></li>
+      <li><a href="#retention">6. Data Retention</a></li>
+      <li><a href="#security">7. Security</a></li>
+      <li><a href="#rights">8. Your Rights</a></li>
+      <li><a href="#cookies">9. Cookies</a></li>
+      <li><a href="#trading-risk">10. Trading Risk Disclosure</a></li>
+      <li><a href="#children">11. Children's Privacy</a></li>
+      <li><a href="#changes">12. Changes to This Policy</a></li>
+      <li><a href="#contact">13. Contact Us</a></li>
     </ul>
   </div>
 </div>
@@ -652,272 +629,258 @@ footer {
 <div class="policy-body">
 
   <!-- 1 -->
-  <div class="pol-section" id="definitions">
-    <h2><span class="sec-num">01</span> Definitions</h2>
-    <p>In these Terms, the following definitions apply:</p>
-    <ul>
-      <li><strong>"Tren" / "we" / "us" / "our"</strong> — The operator of the trading signal and automation service accessible at trenai.vercel.app.</li>
-      <li><strong>"You" / "User" / "Member"</strong> — Any individual or entity who accesses, registers for, or subscribes to the Service.</li>
-      <li><strong>"Service"</strong> — The trading signals, automated trade execution, dashboard access, Discord community, TradingView indicator, and any other features offered by Tren.</li>
-      <li><strong>"Signals"</strong> — Trade recommendations including entry points, direction (long/short), take-profit levels, and stop-loss levels delivered through the Service.</li>
-      <li><strong>"Broker"</strong> — Your chosen futures or CFD broker (e.g. NinjaTrader) through which trades are executed.</li>
-      <li><strong>"Subscription"</strong> — A paid or free plan granting access to specific features of the Service.</li>
-    </ul>
+  <div class="pol-section" id="who">
+    <h2><span class="sec-num">01</span> Who We Are</h2>
+    <p>Tren ("we", "us", or "our") operates the website at <strong>trenai.vercel.app</strong> and the associated trading automation service. We are the data controller responsible for your personal information collected through this service.</p>
+    <p>For any privacy-related questions, you can reach us at <a href="mailto:trenhelp@outlook.com" style="color:var(--accent-l);">trenhelp@outlook.com</a>.</p>
   </div>
 
   <!-- 2 -->
-  <div class="pol-section" id="service">
-    <h2><span class="sec-num">02</span> The Service</h2>
-    <p>Tren provides the following services:</p>
+  <div class="pol-section" id="collect">
+    <h2><span class="sec-num">02</span> Information We Collect</h2>
+
+    <h3>2.1 Information You Provide Directly</h3>
     <ul>
-      <li><strong>Trading signals</strong> — Real-time and delayed trade alerts with entry, exit, and risk parameters.</li>
-      <li><strong>Automated execution</strong> — Optional connection to NinjaTrader for hands-free trade execution.</li>
-      <li><strong>Dashboard</strong> — Web-based interface to view signal history, performance metrics, and account settings.</li>
-      <li><strong>Discord community</strong> — Channel for signal delivery, updates, and trader discussion.</li>
-      <li><strong>TradingView indicator</strong> — Optional visual indicator for manual chart analysis (sold separately).</li>
+      <li><strong>Account data:</strong> Name, email address, and password when you register.</li>
+      <li><strong>Payment data:</strong> Billing details (processed securely by our payment provider — we do not store raw card numbers).</li>
+      <li><strong>Communications:</strong> Messages you send us via email or support channels.</li>
+      <li><strong>Brokerage credentials:</strong> Connection details required to link your NinjaTrader account, stored encrypted.</li>
     </ul>
-    <div class="highlight-box">
-      <p>💡 Tren is a technology and information service. We do not hold client funds, act as a broker, or provide investment management services.</p>
-    </div>
+
+    <h3>2.2 Information Collected Automatically</h3>
+    <ul>
+      <li><strong>Usage data:</strong> Pages visited, features used, time spent on the platform.</li>
+      <li><strong>Device data:</strong> IP address, browser type, operating system, device identifiers.</li>
+      <li><strong>Trade logs:</strong> Records of signals generated and executed trades for performance tracking and display.</li>
+      <li><strong>Cookies and tracking technologies:</strong> See Section 9 for full details.</li>
+    </ul>
+
+    <h3>2.3 Information From Third Parties</h3>
+    <ul>
+      <li>Payment processors (e.g. Stripe) may share transaction confirmation data with us.</li>
+      <li>If you connect via Discord OAuth, we may receive your Discord username and ID.</li>
+    </ul>
   </div>
 
   <!-- 3 -->
-  <div class="pol-section" id="eligibility">
-    <h2><span class="sec-num">03</span> Eligibility</h2>
-    <p>By using the Service, you represent and warrant that:</p>
-    <ul>
-      <li>You are at least 18 years of age.</li>
-      <li>You have the legal capacity to enter into binding contracts in your jurisdiction.</li>
-      <li>You are not prohibited from trading financial instruments under any applicable law or regulatory order.</li>
-      <li>You understand that trading involves substantial risk of loss and you trade only with capital you can afford to lose entirely.</li>
-    </ul>
-    <p>We reserve the right to refuse service, terminate accounts, or cancel subscriptions at our discretion if we believe you do not meet these requirements.</p>
-  </div>
-
-  <!-- 4 -->
-  <div class="pol-section" id="accounts">
-    <h2><span class="sec-num">04</span> Accounts & Security</h2>
-    <p>When you create an account, you must provide accurate and complete information. You are solely responsible for:</p>
-    <ul>
-      <li>Maintaining the confidentiality of your account credentials.</li>
-      <li>All activities that occur under your account, whether authorized by you or not.</li>
-      <li>Notifying us immediately of any unauthorized access or security breach.</li>
-    </ul>
-    <p>We are not liable for any loss or damage arising from your failure to secure your account. You may not share, sell, or transfer your account to another person.</p>
-  </div>
-
-  <!-- 5 -->
-  <div class="pol-section" id="subscriptions">
-    <h2><span class="sec-num">05</span> Subscriptions & Billing</h2>
-    <p>We offer the following subscription tiers:</p>
-    <table class="data-table">
+  <div class="pol-section" id="use">
+    <h2><span class="sec-num">03</span> How We Use Your Information</h2>
+    <div class="table-wrap"><table class="data-table">
       <thead>
         <tr>
-          <th>Plan</th>
-          <th>Price</th>
-          <th>Billing</th>
-          <th>Key Features</th>
+          <th>Purpose</th>
+          <th>Details</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td><strong>Free Signals</strong></td>
-          <td>$0</td>
-          <td>No billing</td>
-          <td>Delayed signals (3 min), Discord access</td>
+          <td><strong>Service delivery</strong></td>
+          <td>Providing access to signals, executing automated trades on your behalf, maintaining your account.</td>
         </tr>
         <tr>
-          <td><strong>Premium Signals</strong></td>
-          <td>$29.99/mo</td>
-          <td>Monthly, auto-renew</td>
-          <td>Instant signals, best entries, priority Discord</td>
+          <td><strong>Billing &amp; subscriptions</strong></td>
+          <td>Processing payments, managing trials, sending receipts and renewal notifications.</td>
         </tr>
         <tr>
-          <td><strong>Automated Trading</strong></td>
-          <td>$49.99/mo</td>
-          <td>Monthly, auto-renew</td>
-          <td>Everything in Premium + NinjaTrader auto-execution</td>
+          <td><strong>Communication</strong></td>
+          <td>Sending service updates, signal alerts, important notices, and responding to support requests.</td>
         </tr>
         <tr>
-          <td><strong>TradingView Indicator</strong></td>
-          <td>$99 one-time</td>
-          <td>One-time purchase</td>
-          <td>Lifetime access to visual buy/sell indicator</td>
+          <td><strong>Safety &amp; fraud prevention</strong></td>
+          <td>Detecting and preventing abuse, unauthorized access, or fraudulent activity.</td>
+        </tr>
+        <tr>
+          <td><strong>Platform improvement</strong></td>
+          <td>Analysing usage patterns to improve features, fix bugs, and optimize signal performance.</td>
+        </tr>
+        <tr>
+          <td><strong>Legal compliance</strong></td>
+          <td>Meeting obligations under applicable law, responding to lawful requests from authorities.</td>
         </tr>
       </tbody>
-    </table>
+    </table></div>
+    <div class="highlight-box">
+      <p>💡 We do not use your data to build advertising profiles or sell insights to third parties. Our business model is subscriptions — not your data.</p>
+    </div>
+  </div>
 
-    <h3>5.1 Payment</h3>
-    <p>Payments are processed securely through Stripe. By subscribing, you authorize us to charge your payment method on a recurring basis until you cancel. All prices are in USD unless otherwise stated.</p>
+  <!-- 4 -->
+  <div class="pol-section" id="legal-basis">
+    <h2><span class="sec-num">04</span> Legal Basis for Processing (GDPR)</h2>
+    <p>If you are located in the European Economic Area (EEA) or United Kingdom, we process your personal data under the following legal bases:</p>
+    <ul>
+      <li><strong>Contract performance:</strong> Processing necessary to provide the services you've signed up for.</li>
+      <li><strong>Legitimate interests:</strong> Fraud prevention, security, and improving our service — balanced against your rights.</li>
+      <li><strong>Legal obligation:</strong> Complying with applicable law (e.g. financial record-keeping requirements).</li>
+      <li><strong>Consent:</strong> For optional communications such as marketing emails. You can withdraw consent at any time.</li>
+    </ul>
+  </div>
 
-    <h3>5.2 Free Trial</h3>
-    <p>Some plans may include a free trial period. If you do not cancel before the trial ends, your subscription will automatically convert to a paid plan and you will be charged.</p>
+  <!-- 5 -->
+  <div class="pol-section" id="sharing">
+    <h2><span class="sec-num">05</span> Data Sharing &amp; Disclosure</h2>
+    <p><strong>We do not sell your personal data.</strong> We may share data only in these limited circumstances:</p>
 
-    <h3>5.3 Cancellation</h3>
-    <p>You may cancel your subscription at any time through your account dashboard or by contacting us. Cancellation takes effect at the end of the current billing period. No partial refunds are issued for unused days unless required by law.</p>
+    <h3>5.1 Service Providers</h3>
+    <p>We engage trusted third-party processors to help operate our service. These include:</p>
+    <ul>
+      <li><strong>Payment processing:</strong> Stripe (or similar) for handling subscriptions securely.</li>
+      <li><strong>Database &amp; infrastructure:</strong> Supabase for storing trade logs and account data.</li>
+      <li><strong>Communication:</strong> Discord for signal delivery and community features.</li>
+      <li><strong>Analytics:</strong> Aggregated, anonymised usage analytics to improve the platform.</li>
+    </ul>
+    <p>All processors are contractually obligated to handle your data securely and only for the purposes we specify.</p>
+
+    <h3>5.2 Legal Requirements</h3>
+    <p>We may disclose your information if required by law, court order, or governmental authority — or if we believe disclosure is necessary to protect the rights, property, or safety of Tren, our users, or the public.</p>
+
+    <h3>5.3 Business Transfers</h3>
+    <p>If Tren is involved in a merger, acquisition, or sale of assets, your data may be transferred as part of that transaction. We will notify you before your data is subject to a different privacy policy.</p>
   </div>
 
   <!-- 6 -->
-  <div class="pol-section" id="signals">
-    <h2><span class="sec-num">06</span> Signal Service</h2>
-    <p>Signals are generated by our proprietary algorithmic analysis and delivered via Discord and/or the Tren Dashboard. By using the signal service, you acknowledge and agree that:</p>
+  <div class="pol-section" id="retention">
+    <h2><span class="sec-num">06</span> Data Retention</h2>
+    <p>We retain your personal data for as long as your account is active or as needed to provide services. Specifically:</p>
     <ul>
-      <li>Signals are <strong>informational only</strong> and do not constitute recommendations, instructions, or advice to trade.</li>
-      <li>Signal performance varies. Past results displayed on the platform do not guarantee future performance.</li>
-      <li>Market conditions, slippage, latency, and broker execution quality can cause actual results to differ from signal parameters.</li>
-      <li>Free signal tier includes a 3-minute delay. Premium tier delivers signals in real time.</li>
-      <li>We reserve the right to modify, pause, or discontinue signal delivery at any time without prior notice.</li>
+      <li><strong>Account data:</strong> Retained while your account is active, plus up to 90 days after deletion to enable recovery.</li>
+      <li><strong>Trade logs:</strong> Retained for up to 3 years for performance auditing and legal purposes.</li>
+      <li><strong>Payment records:</strong> Retained for 7 years as required by financial regulations.</li>
+      <li><strong>Support communications:</strong> Retained for 2 years after resolution.</li>
     </ul>
-    <div class="warning-box">
-      <p>⚠️ You are solely responsible for deciding whether to act on any signal. Tren does not monitor your account, adjust your positions, or manage your risk.</p>
-    </div>
+    <p>After applicable retention periods, data is securely deleted or anonymised.</p>
   </div>
 
   <!-- 7 -->
-  <div class="pol-section" id="automation">
-    <h2><span class="sec-num">07</span> Automated Trading</h2>
-    <p>The Automated Trading plan allows Tren to send trade instructions directly to your NinjaTrader platform. Important terms:</p>
+  <div class="pol-section" id="security">
+    <h2><span class="sec-num">07</span> Security</h2>
+    <p>We implement appropriate technical and organisational measures to protect your personal data, including:</p>
     <ul>
-      <li><strong>You control the connection.</strong> You must actively enable and maintain the NinjaTrader integration. Tren cannot execute trades without your setup.</li>
-      <li><strong>Risk settings are your responsibility.</strong> You configure position sizing, maximum daily loss, and other risk parameters in your NinjaTrader settings.</li>
-      <li><strong>No guarantee of execution.</strong> Internet outages, platform errors, broker rejections, or market halts may prevent trade execution.</li>
-      <li><strong>Monitor your account.</strong> Automated trading does not remove your obligation to supervise your account and trading activity.</li>
+      <li>Encryption of data at rest and in transit (TLS/SSL).</li>
+      <li>Encrypted storage of brokerage connection credentials.</li>
+      <li>Access controls limiting who can view personal data internally.</li>
+      <li>Regular security reviews of our infrastructure.</li>
     </ul>
-    <p>We strongly recommend using a simulated (paper) trading account to test the automation before deploying real capital.</p>
+    <div class="warning-box">
+      <p>⚠️ No system is completely secure. While we take security seriously, we cannot guarantee absolute security of data transmitted over the internet. You are responsible for keeping your account credentials confidential.</p>
+    </div>
+    <p>If you discover a security vulnerability, please report it immediately to <a href="mailto:trenhelp@outlook.com" style="color:var(--accent-l);">trenhelp@outlook.com</a>.</p>
   </div>
 
   <!-- 8 -->
-  <div class="pol-section" id="risk">
-    <h2><span class="sec-num">08</span> Risk Disclosure</h2>
-    <div class="warning-box">
-      <p>⚠️ <strong>Trading financial instruments involves substantial risk of loss, including the potential loss of all capital you allocate to trading.</strong> Leveraged products such as futures and CFDs amplify both gains and losses. You should not trade with money you cannot afford to lose.</p>
-    </div>
-    <p>Specific risks include but are not limited to:</p>
-    <ul>
-      <li><strong>Market risk</strong> — Prices can move rapidly and unpredictably against your position.</li>
-      <li><strong>Leverage risk</strong> — Margin trading can result in losses exceeding your initial deposit.</li>
-      <li><strong>Technology risk</strong> — Software bugs, connectivity issues, or platform downtime may affect execution.</li>
-      <li><strong>Liquidity risk</strong> — During volatile periods, orders may be filled at worse-than-expected prices.</li>
-      <li><strong>Counterparty risk</strong> — Your broker's financial stability affects the safety of your funds.</li>
-    </ul>
-    <p>By using Tren, you confirm that you understand these risks and accept them fully.</p>
+  <div class="pol-section" id="rights">
+    <h2><span class="sec-num">08</span> Your Rights</h2>
+    <p>Depending on your location, you may have the following rights regarding your personal data:</p>
+    <div class="table-wrap"><table class="data-table">
+      <thead>
+        <tr>
+          <th>Right</th>
+          <th>What it means</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Access</strong></td>
+          <td>Request a copy of the personal data we hold about you.</td>
+        </tr>
+        <tr>
+          <td><strong>Rectification</strong></td>
+          <td>Request correction of inaccurate or incomplete data.</td>
+        </tr>
+        <tr>
+          <td><strong>Erasure</strong></td>
+          <td>Request deletion of your personal data ("right to be forgotten"), subject to legal retention obligations.</td>
+        </tr>
+        <tr>
+          <td><strong>Restriction</strong></td>
+          <td>Request that we limit processing of your data in certain circumstances.</td>
+        </tr>
+        <tr>
+          <td><strong>Portability</strong></td>
+          <td>Receive your data in a structured, machine-readable format.</td>
+        </tr>
+        <tr>
+          <td><strong>Objection</strong></td>
+          <td>Object to processing based on legitimate interests or for direct marketing purposes.</td>
+        </tr>
+        <tr>
+          <td><strong>Withdraw consent</strong></td>
+          <td>Withdraw consent at any time where processing is consent-based.</td>
+        </tr>
+      </tbody>
+    </table></div>
+    <p>To exercise any of these rights, contact us at <a href="mailto:trenhelp@outlook.com" style="color:var(--accent-l);">trenhelp@outlook.com</a>. We will respond within 30 days. You also have the right to lodge a complaint with your local data protection authority (e.g. the Dutch Autoriteit Persoonsgegevens or the UK ICO).</p>
   </div>
 
   <!-- 9 -->
-  <div class="pol-section" id="not-advice">
-    <h2><span class="sec-num">09</span> Not Financial Advice</h2>
-    <p><strong>Nothing on the Tren platform constitutes financial, investment, tax, or trading advice.</strong> This includes but is not limited to:</p>
-    <ul>
-      <li>Trading signals and alerts</li>
-      <li>Performance statistics and trade history</li>
-      <li>Blog posts, Discord messages, or community discussions</li>
-      <li>Any verbal or written communication from Tren team members</li>
-    </ul>
-    <p>Tren is not a licensed financial advisor, broker-dealer, investment manager, or commodity trading advisor. We do not:</p>
-    <ul>
-      <li>Know your personal financial situation, goals, or risk tolerance</li>
-      <li>Recommend specific trades suited to your circumstances</li>
-      <li>Manage money on your behalf</li>
-      <li>Provide tax or legal advice</li>
-    </ul>
-    <div class="highlight-box">
-      <p>💡 Always conduct your own research and consider consulting a licensed financial professional before making trading decisions. You are solely responsible for your trading activity and outcomes.</p>
-    </div>
+  <div class="pol-section" id="cookies">
+    <h2><span class="sec-num">09</span> Cookies &amp; Tracking</h2>
+    <p>We use cookies and similar technologies to operate and improve our service. Here's what we use:</p>
+    <div class="table-wrap"><table class="data-table">
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Purpose</th>
+          <th>Deletable?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Strictly necessary</strong></td>
+          <td>Authentication, session management, security. Required for the service to function.</td>
+          <td>No — essential</td>
+        </tr>
+        <tr>
+          <td><strong>Functional</strong></td>
+          <td>Remembering your preferences (e.g. language, display settings).</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Analytics</strong></td>
+          <td>Aggregated usage data to understand how features are used and improve the platform.</td>
+          <td>Yes</td>
+        </tr>
+      </tbody>
+    </table></div>
+    <p>You can manage or delete cookies through your browser settings. Disabling cookies may affect the functionality of the service. We do not use third-party advertising cookies.</p>
   </div>
 
   <!-- 10 -->
-  <div class="pol-section" id="prohibited">
-    <h2><span class="sec-num">10</span> Prohibited Use</h2>
-    <p>You agree not to use the Service for any unlawful purpose or in any way that could damage, disable, or impair the Service. Specifically prohibited:</p>
-    <ul>
-      <li>Reverse engineering, decompiling, or attempting to extract the source code of our software or algorithms</li>
-      <li>Sharing your account credentials or allowing unauthorized access</li>
-      <li>Using bots, scrapers, or automated tools to extract data from the platform without permission</li>
-      <li>Reselling, redistributing, or commercially exploiting signals without written consent</li>
-      <li>Engaging in market manipulation, fraud, or any illegal trading activity</li>
-      <li>Harassing, threatening, or abusing other community members</li>
-      <li>Uploading malware, viruses, or harmful code</li>
-    </ul>
-    <p>Violation of these rules may result in immediate account termination without refund.</p>
+  <div class="pol-section" id="trading-risk">
+    <h2><span class="sec-num">10</span> Trading Risk Disclosure</h2>
+    <div class="warning-box">
+      <p>⚠️ <strong>Important:</strong> Trading financial instruments involves substantial risk of loss, including the potential loss of all invested capital. Past performance displayed on this platform is not indicative of future results. Tren is a technology and signal service — we are not a licensed financial advisor, broker, or investment firm. Nothing on this platform constitutes financial, investment, or trading advice. You are solely responsible for all trading decisions and outcomes. Only trade with capital you can afford to lose entirely.</p>
+    </div>
+    <p>By using Tren, you acknowledge that you understand and accept these risks.</p>
   </div>
 
   <!-- 11 -->
-  <div class="pol-section" id="ip">
-    <h2><span class="sec-num">11</span> Intellectual Property</h2>
-    <p>All content, software, designs, logos, trademarks, and materials on the Tren platform are the property of Tren or its licensors and are protected by copyright, trademark, and other intellectual property laws.</p>
-    <p>You are granted a limited, non-exclusive, non-transferable license to use the Service for personal trading purposes only. You may not:</p>
-    <ul>
-      <li>Copy, modify, or create derivative works of our software or content</li>
-      <li>Use our trademarks or branding without written permission</li>
-      <li>Remove or alter any copyright or proprietary notices</li>
-    </ul>
-    <p>The TradingView indicator is licensed for your personal use only. You may not share, resell, or distribute the indicator code or access.</p>
+  <div class="pol-section" id="children">
+    <h2><span class="sec-num">11</span> Children's Privacy</h2>
+    <p>Our service is not directed at individuals under the age of 18. We do not knowingly collect personal data from minors. If you believe a minor has provided us with personal data, please contact us immediately at <a href="mailto:trenhelp@outlook.com" style="color:var(--accent-l);">trenhelp@outlook.com</a> and we will delete that information promptly.</p>
   </div>
 
   <!-- 12 -->
-  <div class="pol-section" id="liability">
-    <h2><span class="sec-num">12</span> Limitation of Liability</h2>
-    <p>To the maximum extent permitted by applicable law:</p>
+  <div class="pol-section" id="changes">
+    <h2><span class="sec-num">12</span> Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. When we make significant changes, we will:</p>
     <ul>
-      <li>Tren and its team members shall not be liable for any direct, indirect, incidental, special, consequential, or punitive damages arising from your use of the Service.</li>
-      <li>This includes losses from trades, missed opportunities, platform downtime, data errors, or unauthorized account access.</li>
-      <li>Our total liability to you for any claim shall not exceed the amount you paid to Tren in the 12 months preceding the claim.</li>
+      <li>Update the "Last updated" date at the top of this page.</li>
+      <li>Notify active users via email or a prominent notice on the platform.</li>
     </ul>
-    <p>Some jurisdictions do not allow the exclusion of certain liabilities, so the above limitations may not fully apply to you.</p>
+    <p>Your continued use of the service after changes take effect constitutes acceptance of the revised policy. We encourage you to review this page periodically.</p>
   </div>
 
   <!-- 13 -->
-  <div class="pol-section" id="refund">
-    <h2><span class="sec-num">13</span> Refund Policy</h2>
-    <p>We handle refunds as follows:</p>
-    <ul>
-      <li><strong>Free trial cancellations</strong> — If you cancel during a free trial, you will not be charged. No refund is necessary.</li>
-      <li><strong>Subscription refunds</strong> — We do not offer refunds for partial months or unused subscription periods. You may cancel anytime and retain access until the end of your billing period.</li>
-      <li><strong>Indicator purchases</strong> — The TradingView indicator ($99 lifetime) is a digital product. Due to the nature of digital goods, all sales are final and non-refundable.</li>
-      <li><strong>Exceptional cases</strong> — If you believe you have a valid case for a refund (e.g. billing error, technical issue preventing service use), contact us at trenhelp@outlook.com within 14 days of the charge. We review requests on a case-by-case basis.</li>
-    </ul>
-  </div>
-
-  <!-- 14 -->
-  <div class="pol-section" id="termination">
-    <h2><span class="sec-num">14</span> Termination</h2>
-    <p>We may suspend or terminate your account and access to the Service immediately, without prior notice or liability, for any reason, including:</p>
-    <ul>
-      <li>Breach of these Terms</li>
-      <li>Fraudulent or abusive activity</li>
-      <li>Non-payment of subscription fees</li>
-      <li>Legal or regulatory requirements</li>
-    </ul>
-    <p>Upon termination:</p>
-    <ul>
-      <li>Your right to use the Service ceases immediately</li>
-      <li>All provisions of these Terms that by their nature should survive termination shall survive (including intellectual property, liability limitations, and dispute resolution)</li>
-      <li>We may retain certain data as required by law or for legitimate business purposes</li>
-    </ul>
-    <p>You may terminate your account at any time by contacting us or deleting your account through the dashboard.</p>
-  </div>
-
-  <!-- 15 -->
-  <div class="pol-section" id="changes">
-    <h2><span class="sec-num">15</span> Changes to These Terms</h2>
-    <p>We may update these Terms from time to time. When we make material changes, we will:</p>
-    <ul>
-      <li>Update the "Last updated" date at the top of this page</li>
-      <li>Notify active users via email or a prominent notice on the platform</li>
-    </ul>
-    <p>Your continued use of the Service after changes take effect constitutes acceptance of the revised Terms. We encourage you to review this page periodically.</p>
-  </div>
-
-  <!-- 16 -->
   <div class="pol-section" id="contact">
-    <h2><span class="sec-num">16</span> Contact Us</h2>
-    <p>If you have any questions about these Terms, please reach out:</p>
+    <h2><span class="sec-num">13</span> Contact Us</h2>
+    <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please reach out:</p>
     <div class="contact-card">
       <div class="contact-row">📧 Email: <a href="mailto:trenhelp@outlook.com">trenhelp@outlook.com</a></div>
       <div class="contact-row">🌐 Website: <a href="https://trenai.vercel.app">trenai.vercel.app</a></div>
       <div class="contact-row">💬 Discord: <a href="https://discord.gg/Ygwf8xfEXS" target="_blank">discord.gg/Ygwf8xfEXS</a></div>
     </div>
-    <p style="margin-top:1rem;">We aim to respond to all enquiries within <strong style="color:var(--text);">5 business days</strong>.</p>
+    <p style="margin-top:1rem;">We aim to respond to all privacy-related enquiries within <strong style="color:var(--text);">5 business days</strong>, and within 30 days for formal data rights requests.</p>
   </div>
 
 </div>
