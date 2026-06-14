@@ -269,28 +269,6 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .fs-tbtn{padding:4px 10px;border-radius:6px;font-size:11.5px;font-weight:600;color:rgba(240,244,255,.45);cursor:pointer;transition:all .15s;border:none;font-family:'Plus Jakarta Sans',sans-serif;background:none;}
 .fs-tbtn:hover{color:rgba(240,244,255,.8);}
 .fs-tbtn.active{background:rgba(255,255,255,.08);color:#f0f4ff;}
-
-/* ── HIDE CARD ── */
-.sc{position:relative;}
-.card-eye-btn{
-  position:absolute;top:9px;right:9px;
-  width:26px;height:26px;border-radius:7px;
-  background:rgba(8,14,26,.75);backdrop-filter:blur(8px);
-  border:1px solid rgba(255,255,255,.1);
-  color:rgba(240,244,255,.55);
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;
-  opacity:0;
-  transition:opacity .18s,background .18s,border-color .18s;
-  z-index:5;
-  flex-shrink:0;
-  pointer-events:none;
-}
-.sc:hover .card-eye-btn{opacity:1;pointer-events:auto;}
-.card-eye-btn:hover{background:rgba(37,99,235,.3);border-color:rgba(59,130,246,.4);color:#fff;}
-.sc.card-hidden .card-eye-btn{opacity:1 !important;pointer-events:auto;background:rgba(37,99,235,.2);border-color:rgba(59,130,246,.35);color:var(--al);}
-.card-inner{transition:filter .25s,opacity .25s;}
-.sc.card-hidden .card-inner{filter:blur(7px);opacity:.35;user-select:none;pointer-events:none;}
 </style>
 
 
@@ -434,10 +412,10 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 
       <!-- STAT CARDS -->
       <div class="sg">
-        <div class="sc"><button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button><div class="card-inner"><div class="sc-lbl">Total P&amp;L <span class="sc-lbl-sub" id="lbl-pnl">14 days</span></div><div class="sc-val g" id="ov-pnl">—</div><div class="sc-ch" id="ov-pc">Loading…</div></div></div>
-        <div class="sc"><button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button><div class="card-inner"><div class="sc-lbl">Win Rate <span class="sc-lbl-sub" id="lbl-wr">14 days</span></div><div class="sc-val" id="ov-wr">—</div><div class="sc-ch" id="ov-wc">Loading…</div></div></div>
-        <div class="sc"><button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button><div class="card-inner"><div class="sc-lbl">Best Day <span class="sc-lbl-sub" id="lbl-bd">14 days</span></div><div class="sc-val g" id="ov-bd">—</div><div class="sc-ch">Single day</div></div></div>
-        <div class="sc"><button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button><div class="card-inner"><div class="sc-lbl">Live Signals</div><div class="sc-val" id="ov-live-count">—</div><div class="sc-ch u" id="ov-live-sub">Loading…</div></div></div>
+        <div class="sc"><div class="sc-lbl">Total P&amp;L <span class="sc-lbl-sub" id="lbl-pnl">14 days</span></div><div class="sc-val g" id="ov-pnl">—</div><div class="sc-ch" id="ov-pc">Loading…</div></div>
+        <div class="sc"><div class="sc-lbl">Win Rate <span class="sc-lbl-sub" id="lbl-wr">14 days</span></div><div class="sc-val" id="ov-wr">—</div><div class="sc-ch" id="ov-wc">Loading…</div></div>
+        <div class="sc"><div class="sc-lbl">Best Day <span class="sc-lbl-sub" id="lbl-bd">14 days</span></div><div class="sc-val g" id="ov-bd">—</div><div class="sc-ch">Single day</div></div>
+        <div class="sc"><div class="sc-lbl">Live Signals</div><div class="sc-val" id="ov-live-count">—</div><div class="sc-ch u" id="ov-live-sub">Loading…</div></div>
       </div>
 
       <!-- P&L CHART -->
@@ -447,7 +425,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
       </div>
 
       <!-- ── NASDAQ FUTURES CHART ── -->
-      <div class="sh" style="margin-bottom:.7rem;">
+      <div id="nq-header-row" class="sh" style="margin-bottom:.7rem;">
         <div style="display:flex;align-items:center;gap:10px;">
           <div class="st">NASDAQ Futures</div>
           <span style="font-size:10px;color:var(--sub);background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:5px;padding:2px 7px;">NQ=F · E-mini</span>
@@ -521,38 +499,44 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
       </div>
 
       <!-- ── DAY OF WEEK ── -->
-      <div class="sh"><div class="st">Day-of-Week Performance</div></div>
-      <div class="ca" style="padding:1.1rem 1.3rem;margin-bottom:1.6rem;">
-        <div class="dow-grid" id="ov-dow">
-          <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
-          <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
-          <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
-          <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
-          <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
-          <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
-          <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
+      <div id="ov-dow-section">
+        <div class="sh"><div class="st">Day-of-Week Performance</div></div>
+        <div class="ca" style="padding:1.1rem 1.3rem;margin-bottom:1.6rem;">
+          <div class="dow-grid" id="ov-dow">
+            <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
+            <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
+            <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
+            <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
+            <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
+            <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
+            <div class="skel" style="flex:1;height:80px;border-radius:10px;"></div>
+          </div>
         </div>
       </div>
 
       <!-- ── EDGE METRICS ── -->
-      <div class="sh"><div class="st">Edge Metrics</div></div>
-      <div class="edge-grid" id="ov-edge">
-        <div class="sc skel" style="height:120px;"></div>
-        <div class="sc skel" style="height:120px;"></div>
-        <div class="sc skel" style="height:120px;"></div>
-        <div class="sc skel" style="height:120px;"></div>
+      <div id="ov-edge-section">
+        <div class="sh"><div class="st">Edge Metrics</div></div>
+        <div class="edge-grid" id="ov-edge">
+          <div class="sc skel" style="height:120px;"></div>
+          <div class="sc skel" style="height:120px;"></div>
+          <div class="sc skel" style="height:120px;"></div>
+          <div class="sc skel" style="height:120px;"></div>
+        </div>
       </div>
 
       <!-- ── TRADE INTELLIGENCE ── -->
-      <div class="sh"><div class="st">Trade Intelligence</div></div>
-      <div class="intel-grid" id="ov-intel">
-        <div class="sc skel" style="height:130px;"></div>
-        <div class="sc skel" style="height:130px;"></div>
-        <div class="sc skel" style="height:130px;"></div>
+      <div id="ov-intel-section">
+        <div class="sh"><div class="st">Trade Intelligence</div></div>
+        <div class="intel-grid" id="ov-intel">
+          <div class="sc skel" style="height:130px;"></div>
+          <div class="sc skel" style="height:130px;"></div>
+          <div class="sc skel" style="height:130px;"></div>
+        </div>
       </div>
 
       <!-- LATEST SIGNALS -->
-      <div class="sh">
+      <div id="ov-sigs-header" class="sh">
         <div class="st">Latest Signals <span style="font-size:11px;color:var(--sub);font-weight:400;" id="sigs-range-label">(last 14 days)</span></div>
         <a class="sa" onclick="navTo('https://trenai.vercel.app/signals')">View all →</a>
       </div>
@@ -1256,8 +1240,6 @@ function renderEdge(data){
   document.getElementById('ov-edge').innerHTML=`
 
     <div class="sc">
-      <button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
-      <div class="card-inner">
       <div class="sc-lbl">Win / Loss Split</div>
       <div class="donut-wrap" style="margin-top:4px;">
         <svg width="${SIZE}" height="${SIZE}" viewBox="0 0 ${SIZE} ${SIZE}" style="flex-shrink:0;">
@@ -1274,12 +1256,9 @@ function renderEdge(data){
           <div class="legend-row"><div class="legend-dot" style="background:rgba(255,255,255,.12)"></div>${closed.length} closed</div>
         </div>
       </div>
-      </div>
     </div>
 
     <div class="sc">
-      <button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
-      <div class="card-inner">
       <div class="sc-lbl">Risk / Reward</div>
       <div class="sc-val ${parseFloat(rrRatio)>=1?'g':'r'}" style="margin-top:4px;">${rrRatio}</div>
       <div class="rr-track">
@@ -1287,12 +1266,9 @@ function renderEdge(data){
         <div class="rr-l" style="width:${(avgLoss/(avgWin+avgLoss||1)*100).toFixed(1)}%"></div>
       </div>
       <div class="rr-labels"><span>Avg win $${Math.round(avgWin)}</span><span>Avg loss $${Math.round(avgLoss)}</span></div>
-      </div>
     </div>
 
     <div class="sc">
-      <button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
-      <div class="card-inner">
       <div class="sc-lbl">Profit Factor</div>
       <div class="sc-val ${pf>=1.5?'g':pf>=1?'':''}" style="color:${pf>=1.5?'var(--green)':pf>=1?'var(--gold)':'var(--red)'};margin-top:4px;">${pf>=99?'∞':pf.toFixed(2)}</div>
       <div class="pf-track" style="margin-top:8px;">
@@ -1302,18 +1278,14 @@ function renderEdge(data){
       </div>
       <div class="pf-scale"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5+</span></div>
       <div class="sc-ch" style="margin-top:4px;">Gross win ÷ gross loss</div>
-      </div>
     </div>
 
     <div class="sc streak-card">
-      <button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
-      <div class="card-inner">
       <div class="sc-lbl">Current Streak</div>
       <div class="sc-val" style="color:var(--gold);margin-top:4px;">${streak} day${streak!==1?'s':''}</div>
       <div class="sc-ch">Best: ${maxStreak} days</div>
       <div class="streak-flames">
         ${Array.from({length:7},(_,i)=>`<div class="s-flame${i<streak&&streak>=5?' hot':i<streak?' on':''}"></div>`).join('')}
-      </div>
       </div>
     </div>
   `;
@@ -1362,8 +1334,6 @@ function renderIntel(data){
   document.getElementById('ov-intel').innerHTML=`
 
     <div class="sc">
-      <button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
-      <div class="card-inner">
       <div class="sc-lbl">Avg Hold Time</div>
       ${wDur===null&&lDur===null ? `<div class="sc-val" style="margin-top:6px;">—</div><div class="sc-ch" style="margin-top:6px;">No duration data found.<br>Add <code style="font-size:10px;background:rgba(255,255,255,.06);padding:1px 5px;border-radius:4px;">closed_at</code> to your trades table.</div>` : `
       <div style="margin-top:8px;">
@@ -1387,12 +1357,9 @@ function renderIntel(data){
         </div>
       </div>
       <div class="sc-ch" style="margin-top:8px;">${wDur!==null&&lDur!==null?(wDur>lDur?'✓ Winners held longer':'Cut losers faster than winners'):'Partial duration data'}</div>`}
-      </div>
     </div>
 
     <div class="sc">
-      <button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
-      <div class="card-inner">
       <div class="sc-lbl">Best &amp; Worst Trade</div>
       ${bigWin?`<div class="bw-row" style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.15);">
         <div><div style="font-size:12px;font-weight:600;">${escHtml(bigWin.market||'—')}</div><div style="font-size:10px;color:var(--sub);">${bigWin.executed_at.slice(5,10)}</div></div>
@@ -1402,12 +1369,9 @@ function renderIntel(data){
         <div><div style="font-size:12px;font-weight:600;">${escHtml(bigLoss.market||'—')}</div><div style="font-size:10px;color:var(--sub);">${bigLoss.executed_at.slice(5,10)}</div></div>
         <div style="font-size:15px;font-weight:700;color:var(--red);">-$${Math.round(Math.abs(parseFloat(bigLoss.pnl||0))).toLocaleString()}</div>
       </div>`:''}
-      </div>
     </div>
 
     <div class="sc">
-      <button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
-      <div class="card-inner">
       <div class="sc-lbl">Consistency</div>
       <div class="sc-val" style="color:${consistScore>=70?'var(--green)':consistScore>=50?'var(--gold)':'var(--red)'};margin-top:4px;">${consistScore}%</div>
       <div class="sc-ch">${profDays} of ${allDays.length} days green</div>
@@ -1415,7 +1379,6 @@ function renderIntel(data){
         ${last14.map(d=>`<div class="cd" style="background:${byDay[d]>0?'rgba(16,185,129,.4)':'rgba(239,68,68,.3)'};border:1px solid ${byDay[d]>0?'rgba(16,185,129,.2)':'rgba(239,68,68,.2)'};"></div>`).join('')}
       </div>
       <div class="sc-ch" style="margin-top:5px;">Last 14 days</div>
-      </div>
     </div>
   `;
 }
@@ -1549,22 +1512,80 @@ function renderFromData(data){
 // ── PREFS ─────────────────────────────────────────────────────────
 function applyPrefs(){
   const p=JSON.parse(localStorage.getItem('tren_prefs')||'{}');
+
+  // Theme
   const T={dark:{bg:'#04080f',bg2:'#080e1a',bg3:'#0c1525'},deep:{bg:'#020810',bg2:'#050c1a',bg3:'#091020'},slate:{bg:'#0d1117',bg2:'#161b22',bg3:'#21262d'}};
   if(p.theme&&T[p.theme]){const t=T[p.theme];document.documentElement.style.setProperty('--bg',t.bg);document.documentElement.style.setProperty('--bg2',t.bg2);document.documentElement.style.setProperty('--bg3',t.bg3);}
   if(p.accent)document.documentElement.style.setProperty('--accent',p.accent);
   if(p.accent_light)document.documentElement.style.setProperty('--al',p.accent_light);
+
+  // Font size
+  if(p.font_size) document.documentElement.style.setProperty('--ui-font-size', p.font_size+'px');
+
+  // Border radius
+  const R={sharp:'2px',default:'13px',pill:'20px'};
+  if(p.radius) document.documentElement.style.setProperty('--card-radius', R[p.radius]||R.default);
+
+  // Sidebar width
+  const W={slim:'180px',normal:'220px',wide:'260px'};
+  if(p.sidebar_width) document.documentElement.style.setProperty('--sw', W[p.sidebar_width]||W.normal);
+
+  // Reduce motion
+  if(p.reduce_motion){
+    let s=document.getElementById('_reduce-motion-style');
+    if(!s){s=document.createElement('style');s.id='_reduce-motion-style';document.head.appendChild(s);}
+    s.textContent='*{animation-duration:0.001ms!important;transition-duration:0.001ms!important;}';
+  }
+
+  // Card layout
   const sg=document.querySelector('.sg');
   if(sg){sg.classList.remove('layout-equal4','layout-grid2x2','layout-wide1');if(p.card_layout&&p.card_layout!=='equal4')sg.classList.add('layout-'+p.card_layout);}
+
+  // Density
   const page=document.querySelector('.page');
   if(page){page.classList.remove('density-compact','density-relaxed');if(p.density&&p.density!=='default')page.classList.add('density-'+p.density);}
+
+  // Animate cards
   if(p.animate_cards!==false){document.querySelector('.sg')?.classList.add('animate-cards');}
+
+  // ── Show / hide sections ──
+  // P&L chart
   const chartSection=document.querySelector('.ca');
   if(chartSection)chartSection.style.display=p.show_chart===false?'none':'';
-  const sigsHeader=document.querySelector('.sh:last-of-type');
+
+  // NQ Futures chart
+  const nqWrap=document.querySelector('.nq-chart-wrap');
+  const nqHeader=document.getElementById('nq-header-row');
+  if(nqWrap)nqWrap.style.display=p.show_nq===false?'none':'';
+  if(nqHeader)nqHeader.style.display=p.show_nq===false?'none':'';
+
+  // Day-of-week
+  const dowSection=document.getElementById('ov-dow-section');
+  if(dowSection)dowSection.style.display=p.show_dow===false?'none':'';
+
+  // Edge metrics
+  const edgeSection=document.getElementById('ov-edge-section');
+  if(edgeSection)edgeSection.style.display=p.show_edge===false?'none':'';
+
+  // Trade intelligence
+  const intelSection=document.getElementById('ov-intel-section');
+  if(intelSection)intelSection.style.display=p.show_intel===false?'none':'';
+
+  // Latest signals
+  const sigsHeader=document.getElementById('ov-sigs-header');
   const sigsGrid=document.getElementById('ov-sigs');
   const showSigs=p.show_signals!==false;
   if(sigsHeader)sigsHeader.style.display=showSigs?'':'none';
   if(sigsGrid)sigsGrid.style.display=showSigs?'':'none';
+
+  // Streamer mode — blur all .sc-val elements until hovered
+  if(p.streamer_mode){
+    let sm=document.getElementById('_streamer-style');
+    if(!sm){sm=document.createElement('style');sm.id='_streamer-style';document.head.appendChild(sm);}
+    sm.textContent='.sc-val,.sig-pnl-badge{filter:blur(6px);transition:filter .2s;}.sc-val:hover,.sig-pnl-badge:hover{filter:none;}';
+  } else {
+    const sm=document.getElementById('_streamer-style');if(sm)sm.remove();
+  }
 }
 
 async function renderOvStats(){
@@ -1714,25 +1735,6 @@ function fsSyncButtons(){document.getElementById('fs-type-line').className='fs-t
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire);else wire();
 })();
 window.addEventListener('resize',function(){if(_fsOpen){fsResize();fsDraw();}});
-</script>
-
-<script>
-// ── HIDE CARD TOGGLE ──────────────────────────────────────────────
-function toggleCardHide(btn) {
-  var card = btn.closest('.sc');
-  var isHidden = card.classList.toggle('card-hidden');
-  var eyeOn  = btn.querySelector('.eye-icon');
-  var eyeOff = btn.querySelector('.eye-off-icon');
-  if (isHidden) {
-    eyeOn.style.display  = 'none';
-    eyeOff.style.display = '';
-    btn.title = 'Show card';
-  } else {
-    eyeOn.style.display  = '';
-    eyeOff.style.display = 'none';
-    btn.title = 'Hide card';
-  }
-}
 </script>
 
 <!-- FULLSCREEN CHART MODAL -->
