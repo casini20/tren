@@ -269,6 +269,28 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .fs-tbtn{padding:4px 10px;border-radius:6px;font-size:11.5px;font-weight:600;color:rgba(240,244,255,.45);cursor:pointer;transition:all .15s;border:none;font-family:'Plus Jakarta Sans',sans-serif;background:none;}
 .fs-tbtn:hover{color:rgba(240,244,255,.8);}
 .fs-tbtn.active{background:rgba(255,255,255,.08);color:#f0f4ff;}
+
+/* ── HIDE CARD ── */
+.sc{position:relative;}
+.card-eye-btn{
+  position:absolute;top:9px;right:9px;
+  width:26px;height:26px;border-radius:7px;
+  background:rgba(8,14,26,.75);backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,.1);
+  color:rgba(240,244,255,.55);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;
+  opacity:0;
+  transition:opacity .18s,background .18s,border-color .18s;
+  z-index:5;
+  flex-shrink:0;
+  pointer-events:none;
+}
+.sc:hover .card-eye-btn{opacity:1;pointer-events:auto;}
+.card-eye-btn:hover{background:rgba(37,99,235,.3);border-color:rgba(59,130,246,.4);color:#fff;}
+.sc.card-hidden .card-eye-btn{opacity:1 !important;pointer-events:auto;background:rgba(37,99,235,.2);border-color:rgba(59,130,246,.35);color:var(--al);}
+.card-inner{transition:filter .25s,opacity .25s;}
+.sc.card-hidden .card-inner{filter:blur(7px);opacity:.35;user-select:none;pointer-events:none;}
 </style>
 
 
@@ -412,10 +434,10 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 
       <!-- STAT CARDS -->
       <div class="sg">
-        <div class="sc"><div class="sc-lbl">Total P&amp;L <span class="sc-lbl-sub" id="lbl-pnl">14 days</span></div><div class="sc-val g" id="ov-pnl">—</div><div class="sc-ch" id="ov-pc">Loading…</div></div>
-        <div class="sc"><div class="sc-lbl">Win Rate <span class="sc-lbl-sub" id="lbl-wr">14 days</span></div><div class="sc-val" id="ov-wr">—</div><div class="sc-ch" id="ov-wc">Loading…</div></div>
-        <div class="sc"><div class="sc-lbl">Best Day <span class="sc-lbl-sub" id="lbl-bd">14 days</span></div><div class="sc-val g" id="ov-bd">—</div><div class="sc-ch">Single day</div></div>
-        <div class="sc"><div class="sc-lbl">Live Signals</div><div class="sc-val" id="ov-live-count">—</div><div class="sc-ch u" id="ov-live-sub">Loading…</div></div>
+        <div class="sc"><button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button><div class="card-inner"><div class="sc-lbl">Total P&amp;L <span class="sc-lbl-sub" id="lbl-pnl">14 days</span></div><div class="sc-val g" id="ov-pnl">—</div><div class="sc-ch" id="ov-pc">Loading…</div></div></div>
+        <div class="sc"><button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button><div class="card-inner"><div class="sc-lbl">Win Rate <span class="sc-lbl-sub" id="lbl-wr">14 days</span></div><div class="sc-val" id="ov-wr">—</div><div class="sc-ch" id="ov-wc">Loading…</div></div></div>
+        <div class="sc"><button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button><div class="card-inner"><div class="sc-lbl">Best Day <span class="sc-lbl-sub" id="lbl-bd">14 days</span></div><div class="sc-val g" id="ov-bd">—</div><div class="sc-ch">Single day</div></div></div>
+        <div class="sc"><button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button><div class="card-inner"><div class="sc-lbl">Live Signals</div><div class="sc-val" id="ov-live-count">—</div><div class="sc-ch u" id="ov-live-sub">Loading…</div></div></div>
       </div>
 
       <!-- P&L CHART -->
@@ -1234,6 +1256,8 @@ function renderEdge(data){
   document.getElementById('ov-edge').innerHTML=`
 
     <div class="sc">
+      <button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+      <div class="card-inner">
       <div class="sc-lbl">Win / Loss Split</div>
       <div class="donut-wrap" style="margin-top:4px;">
         <svg width="${SIZE}" height="${SIZE}" viewBox="0 0 ${SIZE} ${SIZE}" style="flex-shrink:0;">
@@ -1250,9 +1274,12 @@ function renderEdge(data){
           <div class="legend-row"><div class="legend-dot" style="background:rgba(255,255,255,.12)"></div>${closed.length} closed</div>
         </div>
       </div>
+      </div>
     </div>
 
     <div class="sc">
+      <button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+      <div class="card-inner">
       <div class="sc-lbl">Risk / Reward</div>
       <div class="sc-val ${parseFloat(rrRatio)>=1?'g':'r'}" style="margin-top:4px;">${rrRatio}</div>
       <div class="rr-track">
@@ -1260,9 +1287,12 @@ function renderEdge(data){
         <div class="rr-l" style="width:${(avgLoss/(avgWin+avgLoss||1)*100).toFixed(1)}%"></div>
       </div>
       <div class="rr-labels"><span>Avg win $${Math.round(avgWin)}</span><span>Avg loss $${Math.round(avgLoss)}</span></div>
+      </div>
     </div>
 
     <div class="sc">
+      <button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+      <div class="card-inner">
       <div class="sc-lbl">Profit Factor</div>
       <div class="sc-val ${pf>=1.5?'g':pf>=1?'':''}" style="color:${pf>=1.5?'var(--green)':pf>=1?'var(--gold)':'var(--red)'};margin-top:4px;">${pf>=99?'∞':pf.toFixed(2)}</div>
       <div class="pf-track" style="margin-top:8px;">
@@ -1272,14 +1302,18 @@ function renderEdge(data){
       </div>
       <div class="pf-scale"><span>0</span><span>1</span><span>2</span><span>3</span><span>4</span><span>5+</span></div>
       <div class="sc-ch" style="margin-top:4px;">Gross win ÷ gross loss</div>
+      </div>
     </div>
 
     <div class="sc streak-card">
+      <button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+      <div class="card-inner">
       <div class="sc-lbl">Current Streak</div>
       <div class="sc-val" style="color:var(--gold);margin-top:4px;">${streak} day${streak!==1?'s':''}</div>
       <div class="sc-ch">Best: ${maxStreak} days</div>
       <div class="streak-flames">
         ${Array.from({length:7},(_,i)=>`<div class="s-flame${i<streak&&streak>=5?' hot':i<streak?' on':''}"></div>`).join('')}
+      </div>
       </div>
     </div>
   `;
@@ -1328,6 +1362,8 @@ function renderIntel(data){
   document.getElementById('ov-intel').innerHTML=`
 
     <div class="sc">
+      <button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+      <div class="card-inner">
       <div class="sc-lbl">Avg Hold Time</div>
       ${wDur===null&&lDur===null ? `<div class="sc-val" style="margin-top:6px;">—</div><div class="sc-ch" style="margin-top:6px;">No duration data found.<br>Add <code style="font-size:10px;background:rgba(255,255,255,.06);padding:1px 5px;border-radius:4px;">closed_at</code> to your trades table.</div>` : `
       <div style="margin-top:8px;">
@@ -1351,9 +1387,12 @@ function renderIntel(data){
         </div>
       </div>
       <div class="sc-ch" style="margin-top:8px;">${wDur!==null&&lDur!==null?(wDur>lDur?'✓ Winners held longer':'Cut losers faster than winners'):'Partial duration data'}</div>`}
+      </div>
     </div>
 
     <div class="sc">
+      <button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+      <div class="card-inner">
       <div class="sc-lbl">Best &amp; Worst Trade</div>
       ${bigWin?`<div class="bw-row" style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.15);">
         <div><div style="font-size:12px;font-weight:600;">${escHtml(bigWin.market||'—')}</div><div style="font-size:10px;color:var(--sub);">${bigWin.executed_at.slice(5,10)}</div></div>
@@ -1363,9 +1402,12 @@ function renderIntel(data){
         <div><div style="font-size:12px;font-weight:600;">${escHtml(bigLoss.market||'—')}</div><div style="font-size:10px;color:var(--sub);">${bigLoss.executed_at.slice(5,10)}</div></div>
         <div style="font-size:15px;font-weight:700;color:var(--red);">-$${Math.round(Math.abs(parseFloat(bigLoss.pnl||0))).toLocaleString()}</div>
       </div>`:''}
+      </div>
     </div>
 
     <div class="sc">
+      <button class="card-eye-btn" onclick="toggleCardHide(this)" title="Hide card"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-icon"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="eye-off-icon" style="display:none"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg></button>
+      <div class="card-inner">
       <div class="sc-lbl">Consistency</div>
       <div class="sc-val" style="color:${consistScore>=70?'var(--green)':consistScore>=50?'var(--gold)':'var(--red)'};margin-top:4px;">${consistScore}%</div>
       <div class="sc-ch">${profDays} of ${allDays.length} days green</div>
@@ -1373,6 +1415,7 @@ function renderIntel(data){
         ${last14.map(d=>`<div class="cd" style="background:${byDay[d]>0?'rgba(16,185,129,.4)':'rgba(239,68,68,.3)'};border:1px solid ${byDay[d]>0?'rgba(16,185,129,.2)':'rgba(239,68,68,.2)'};"></div>`).join('')}
       </div>
       <div class="sc-ch" style="margin-top:5px;">Last 14 days</div>
+      </div>
     </div>
   `;
 }
@@ -1671,6 +1714,25 @@ function fsSyncButtons(){document.getElementById('fs-type-line').className='fs-t
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',wire);else wire();
 })();
 window.addEventListener('resize',function(){if(_fsOpen){fsResize();fsDraw();}});
+</script>
+
+<script>
+// ── HIDE CARD TOGGLE ──────────────────────────────────────────────
+function toggleCardHide(btn) {
+  var card = btn.closest('.sc');
+  var isHidden = card.classList.toggle('card-hidden');
+  var eyeOn  = btn.querySelector('.eye-icon');
+  var eyeOff = btn.querySelector('.eye-off-icon');
+  if (isHidden) {
+    eyeOn.style.display  = 'none';
+    eyeOff.style.display = '';
+    btn.title = 'Show card';
+  } else {
+    eyeOn.style.display  = '';
+    eyeOff.style.display = 'none';
+    btn.title = 'Hide card';
+  }
+}
 </script>
 
 <!-- FULLSCREEN CHART MODAL -->
