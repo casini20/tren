@@ -196,6 +196,42 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 @keyframes flashSave{0%{opacity:0;transform:scale(.92)}60%{opacity:1;transform:scale(1.04)}100%{opacity:1;transform:scale(1)}}
 .saved-flash{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:var(--green);animation:flashSave .3s ease both;}
 
+/* ── FONT SIZE SLIDER ── */
+.font-slider-wrap{display:flex;align-items:center;gap:12px;flex:1;min-width:180px;}
+.font-slider{-webkit-appearance:none;appearance:none;width:100%;height:5px;border-radius:3px;background:rgba(255,255,255,.08);outline:none;cursor:pointer;}
+.font-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--al));cursor:pointer;box-shadow:0 0 8px rgba(37,99,235,.5);}
+.font-slider::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--al));cursor:pointer;border:none;}
+.font-size-preview{font-size:12px;color:var(--sub);min-width:32px;text-align:right;}
+
+/* ── RADIUS CHIPS ── */
+.radius-row{display:flex;gap:8px;}
+.radius-chip{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 14px;border-radius:9px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:12px;font-weight:500;color:var(--sub2);transition:all .18s;font-family:'Plus Jakarta Sans',sans-serif;}
+.radius-chip:hover{border-color:var(--border2);color:var(--text);}
+.radius-chip.on{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.28);color:var(--al);}
+.radius-preview{width:28px;height:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);}
+
+/* ── SIDEBAR WIDTH ── */
+.sw-row{display:flex;gap:8px;}
+.sw-chip{padding:7px 16px;border-radius:9px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:12px;font-weight:500;color:var(--sub2);transition:all .18s;font-family:'Plus Jakarta Sans',sans-serif;}
+.sw-chip:hover{border-color:var(--border2);color:var(--text);}
+.sw-chip.on{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.28);color:var(--al);}
+
+/* ── SESSION / TRADING CHIPS ── */
+.sess-row{display:flex;gap:8px;flex-wrap:wrap;}
+.sess-chip{padding:7px 14px;border-radius:9px;border:1px solid var(--border);background:transparent;cursor:pointer;font-size:12px;font-weight:500;color:var(--sub2);transition:all .18s;font-family:'Plus Jakarta Sans',sans-serif;display:flex;align-items:center;gap:5px;}
+.sess-chip:hover{border-color:var(--border2);color:var(--text);}
+.sess-chip.on{background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.28);color:var(--al);}
+
+/* ── STREAMER MODE BADGE ── */
+.streamer-badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.25);color:var(--red);margin-left:8px;vertical-align:middle;}
+
+/* ── COLOR SWATCH SMALL ── */
+.color-row{display:flex;gap:6px;flex-wrap:wrap;}
+.color-sw{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .18s;position:relative;flex-shrink:0;}
+.color-sw:hover{transform:scale(1.2);}
+.color-sw.on{border-color:#fff;box-shadow:0 0 8px rgba(255,255,255,.3);}
+.color-sw.on::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;font-weight:800;}
+
 /* ── TOAST ── */
 .toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:linear-gradient(145deg,var(--bg3),var(--bg2));border:1px solid var(--border2);border-radius:14px;padding:1.1rem 1.4rem;box-shadow:0 12px 40px rgba(0,0,0,.4);display:flex;align-items:center;gap:12px;animation:toastIn .4s ease;max-width:380px;}
 @keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
@@ -328,7 +364,9 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <button class="set-tab-btn"     onclick="setTab('appearance',this)">🎨 Appearance</button>
         <button class="set-tab-btn"     onclick="setTab('dashboard',this)">🖥 Dashboard</button>
         <button class="set-tab-btn"     onclick="setTab('notifications',this)">🔔 Notifications</button>
-        <button class="set-tab-btn"     onclick="setTab('journal',this)">📈 Journal</button>
+        <button class="set-tab-btn"     onclick="setTab('trading',this)">📈 Trading</button>
+        <button class="set-tab-btn"     onclick="setTab('privacy',this)">🔒 Privacy</button>
+        <button class="set-tab-btn"     onclick="setTab('journal',this)">📓 Journal</button>
         <button class="set-tab-btn"     onclick="setTab('data',this)">💾 Data</button>
       </div>
 
@@ -399,6 +437,49 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
               <div class="accent-sw" data-color="#d97706" style="background:#d97706;" onclick="setAccent('#d97706','#f59e0b',this)"></div>
               <div class="accent-sw" data-color="#0891b2" style="background:#0891b2;" onclick="setAccent('#0891b2','#06b6d4',this)"></div>
             </div>
+          </div>
+        </div>
+
+        <div class="set-section">
+          <div class="set-sh">Typography</div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Interface Font Size</strong><span>Base text size across the dashboard</span></div>
+            <div class="font-slider-wrap">
+              <span style="font-size:10px;color:var(--sub);">A</span>
+              <input type="range" class="font-slider" id="font-size-slider" min="12" max="17" step="1" value="14" oninput="setFontSize(this.value)">
+              <span style="font-size:15px;color:var(--sub);">A</span>
+              <span class="font-size-preview" id="font-size-preview">14px</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="set-section">
+          <div class="set-sh">Shape &amp; Layout</div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Border Radius</strong><span>Corner style for cards and buttons</span></div>
+            <div class="radius-row" id="radius-row">
+              <button class="radius-chip" data-radius="sharp" onclick="setRadius('sharp',this)">
+                <div class="radius-preview" style="border-radius:2px;"></div>Sharp
+              </button>
+              <button class="radius-chip on" data-radius="default" onclick="setRadius('default',this)">
+                <div class="radius-preview" style="border-radius:8px;"></div>Default
+              </button>
+              <button class="radius-chip" data-radius="pill" onclick="setRadius('pill',this)">
+                <div class="radius-preview" style="border-radius:14px;"></div>Rounded
+              </button>
+            </div>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Sidebar Width</strong><span>How wide the left navigation panel is</span></div>
+            <div class="sw-row" id="sw-row">
+              <button class="sw-chip" data-sw="slim" onclick="setSidebarWidth('slim',this)">Slim</button>
+              <button class="sw-chip on" data-sw="normal" onclick="setSidebarWidth('normal',this)">Normal</button>
+              <button class="sw-chip" data-sw="wide" onclick="setSidebarWidth('wide',this)">Wide</button>
+            </div>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Reduce Motion</strong><span>Disable card animations and transitions</span></div>
+            <label class="tog"><input type="checkbox" id="tog-reduce-motion" onchange="savePref('reduce_motion',this.checked);applyReduceMotion(this.checked)"><div class="tog-track"></div></label>
           </div>
         </div>
       </div>
@@ -522,6 +603,22 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
             <label class="tog"><input type="checkbox" id="tog-show-chart" checked onchange="savePref('show_chart',this.checked)"><div class="tog-track"></div></label>
           </div>
           <div class="set-row">
+            <div class="set-lbl"><strong>Show NQ Futures Chart</strong><span>Display the NASDAQ futures live chart</span></div>
+            <label class="tog"><input type="checkbox" id="tog-show-nq" checked onchange="savePref('show_nq',this.checked)"><div class="tog-track"></div></label>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Show Day-of-Week Performance</strong><span>Display which days of the week you trade best</span></div>
+            <label class="tog"><input type="checkbox" id="tog-show-dow" checked onchange="savePref('show_dow',this.checked)"><div class="tog-track"></div></label>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Show Edge Metrics</strong><span>Win/Loss split, R:R, Profit Factor, Streak cards</span></div>
+            <label class="tog"><input type="checkbox" id="tog-show-edge" checked onchange="savePref('show_edge',this.checked)"><div class="tog-track"></div></label>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Show Trade Intelligence</strong><span>Hold time, Best/Worst trade, Consistency cards</span></div>
+            <label class="tog"><input type="checkbox" id="tog-show-intel" checked onchange="savePref('show_intel',this.checked)"><div class="tog-track"></div></label>
+          </div>
+          <div class="set-row">
             <div class="set-lbl"><strong>Show Latest Signals</strong><span>Display the recent signal cards below the chart</span></div>
             <label class="tog"><input type="checkbox" id="tog-show-sigs" checked onchange="savePref('show_signals',this.checked)"><div class="tog-track"></div></label>
           </div>
@@ -532,6 +629,45 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
           <div class="set-row">
             <div class="set-lbl"><strong>Show Weekend Bars</strong><span>Include Sat &amp; Sun as dimmed bars in the P&amp;L chart</span></div>
             <label class="tog"><input type="checkbox" id="tog-wknd-chart" onchange="savePref('chart_weekends',this.checked)"><div class="tog-track"></div></label>
+          </div>
+        </div>
+
+        <!-- Default Timeframe -->
+        <div class="set-section">
+          <div class="set-sh">Default Timeframe</div>
+          <div class="set-row" style="flex-wrap:wrap;gap:12px;">
+            <div class="set-lbl"><strong>Overview Timeframe</strong><span>Which period is selected when the overview first loads</span></div>
+            <div class="sess-row" id="default-tf-row">
+              <button class="sess-chip" data-tf="7"   onclick="setDefaultTF('7',this)">7D</button>
+              <button class="sess-chip on" data-tf="14"  onclick="setDefaultTF('14',this)">14D</button>
+              <button class="sess-chip" data-tf="30"  onclick="setDefaultTF('30',this)">30D</button>
+              <button class="sess-chip" data-tf="90"  onclick="setDefaultTF('90',this)">90D</button>
+              <button class="sess-chip" data-tf="365" onclick="setDefaultTF('365',this)">1Y</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Number Format -->
+        <div class="set-section">
+          <div class="set-sh">Number Display</div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>P&amp;L Display Format</strong><span>How profit and loss figures are shown</span></div>
+            <select class="set-sel" id="pnl-format-sel" onchange="savePref('pnl_format',this.value);showToast('💰','Format Updated','P&amp;L will display in the selected format.')">
+              <option value="dollar">$ Dollar (e.g. +$1,250)</option>
+              <option value="points">Points (e.g. +12.5 pts)</option>
+              <option value="percent">Percent (e.g. +2.4%)</option>
+            </select>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Currency Symbol</strong><span>Symbol displayed alongside P&amp;L values</span></div>
+            <select class="set-sel" id="currency-sel" onchange="savePref('currency',this.value)">
+              <option value="USD">$ USD</option>
+              <option value="EUR">€ EUR</option>
+              <option value="GBP">£ GBP</option>
+              <option value="JPY">¥ JPY</option>
+              <option value="AUD">A$ AUD</option>
+              <option value="CAD">C$ CAD</option>
+            </select>
           </div>
         </div>
 
@@ -549,6 +685,144 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
           <div class="set-row">
             <div class="set-lbl"><strong>Enable Notifications</strong><span>Get alerted when new live trades are entered</span></div>
             <label class="tog"><input type="checkbox" id="tog-notif-main" onchange="handleNotifToggle(this.checked)"><div class="tog-track"></div></label>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Sound Alerts</strong><span>Play a chime when a new signal fires</span></div>
+            <label class="tog"><input type="checkbox" id="tog-sound" onchange="savePref('sound_alerts',this.checked)"><div class="tog-track"></div></label>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Notify on Win Only</strong><span>Only notify when a trade closes in profit</span></div>
+            <label class="tog"><input type="checkbox" id="tog-notif-win" onchange="savePref('notif_wins_only',this.checked)"><div class="tog-track"></div></label>
+          </div>
+        </div>
+        <div class="set-section">
+          <div class="set-sh">Quiet Hours</div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Enable Quiet Hours</strong><span>Suppress notifications during set hours</span></div>
+            <label class="tog"><input type="checkbox" id="tog-quiet" onchange="toggleQuietHours(this.checked)"><div class="tog-track"></div></label>
+          </div>
+          <div id="quiet-hours-wrap" style="display:none;">
+            <div class="set-row">
+              <div class="set-lbl"><strong>From</strong><span>Start of quiet period</span></div>
+              <input type="time" class="set-inp" id="quiet-from" value="22:00" onchange="savePref('quiet_from',this.value)" style="min-width:110px;">
+            </div>
+            <div class="set-row">
+              <div class="set-lbl"><strong>Until</strong><span>End of quiet period</span></div>
+              <input type="time" class="set-inp" id="quiet-until" value="08:00" onchange="savePref('quiet_until',this.value)" style="min-width:110px;">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TRADING -->
+      <div class="set-panel" id="sp-trading">
+        <div class="set-section">
+          <div class="set-sh">Session Preference</div>
+          <div class="set-row" style="flex-wrap:wrap;gap:12px;">
+            <div class="set-lbl"><strong>Preferred Session</strong><span>Highlights your primary trading window on charts</span></div>
+            <div class="sess-row" id="session-row">
+              <button class="sess-chip" data-sess="none"   onclick="setSession('none',this)">None</button>
+              <button class="sess-chip on" data-sess="asia"   onclick="setSession('asia',this)">🌏 Asia</button>
+              <button class="sess-chip" data-sess="london" onclick="setSession('london',this)">🇬🇧 London</button>
+              <button class="sess-chip" data-sess="ny"     onclick="setSession('ny',this)">🇺🇸 New York</button>
+              <button class="sess-chip" data-sess="overlap" onclick="setSession('overlap',this)">⚡ NY/London Overlap</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="set-section">
+          <div class="set-sh">Risk Settings</div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Account Size</strong><span>Used to calculate risk % on signals (optional)</span></div>
+            <input class="set-inp" type="number" id="account-size-inp" placeholder="e.g. 25000" min="0" onchange="savePref('account_size',this.value)" style="min-width:130px;">
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Max Risk Per Trade</strong><span>Alert when a signal exceeds this % of your account</span></div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <input class="set-inp" type="number" id="max-risk-inp" placeholder="e.g. 2" min="0" max="100" step="0.5" onchange="savePref('max_risk_pct',this.value)" style="min-width:80px;">
+              <span style="font-size:13px;color:var(--sub);">%</span>
+            </div>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Instrument</strong><span>Your primary trading instrument</span></div>
+            <select class="set-sel" id="instrument-sel" onchange="savePref('instrument',this.value)">
+              <option value="NQ">NQ Futures (E-mini NASDAQ)</option>
+              <option value="ES">ES Futures (E-mini S&P 500)</option>
+              <option value="MNQ">MNQ (Micro NASDAQ)</option>
+              <option value="MES">MES (Micro S&P 500)</option>
+              <option value="CL">CL (Crude Oil)</option>
+              <option value="GC">GC (Gold)</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="set-section">
+          <div class="set-sh">Performance Goals</div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Daily P&amp;L Target</strong><span>Your goal profit for a trading day</span></div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:13px;color:var(--sub);">$</span>
+              <input class="set-inp" type="number" id="daily-target-inp" placeholder="e.g. 500" min="0" onchange="savePref('daily_target',this.value)" style="min-width:110px;">
+            </div>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Daily Drawdown Limit</strong><span>Stop trading if losses hit this amount</span></div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:13px;color:var(--sub);">$</span>
+              <input class="set-inp" type="number" id="daily-loss-inp" placeholder="e.g. 200" min="0" onchange="savePref('daily_loss_limit',this.value)" style="min-width:110px;">
+            </div>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Win Rate Target</strong><span>Your goal win rate % to display on the overview</span></div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <input class="set-inp" type="number" id="wr-target-inp" placeholder="e.g. 60" min="0" max="100" onchange="savePref('wr_target',this.value)" style="min-width:80px;">
+              <span style="font-size:13px;color:var(--sub);">%</span>
+            </div>
+          </div>
+          <div class="set-row">
+            <div></div>
+            <button class="set-save" onclick="saveTradingSettings()">Save Trading Settings</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- PRIVACY -->
+      <div class="set-panel" id="sp-privacy">
+        <div class="set-section">
+          <div class="set-sh">Streamer Mode</div>
+          <div class="set-row">
+            <div class="set-lbl">
+              <strong>Blur P&amp;L on Load <span class="streamer-badge">🎙 STREAMER</span></strong>
+              <span>Numbers are blurred until you hover — great for screen-sharing</span>
+            </div>
+            <label class="tog"><input type="checkbox" id="tog-streamer" onchange="savePref('streamer_mode',this.checked);showToast('🎙','Streamer Mode '+(this.checked?'On':'Off'),'')"><div class="tog-track"></div></label>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Hide Email in UI</strong><span>Mask your email address on the dashboard</span></div>
+            <label class="tog"><input type="checkbox" id="tog-hide-email" onchange="savePref('hide_email',this.checked)"><div class="tog-track"></div></label>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Hide Account Size</strong><span>Don't display account size on overview cards</span></div>
+            <label class="tog"><input type="checkbox" id="tog-hide-account" onchange="savePref('hide_account_size',this.checked)"><div class="tog-track"></div></label>
+          </div>
+        </div>
+
+        <div class="set-section">
+          <div class="set-sh">Session Security</div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Auto-Lock After Inactivity</strong><span>Require re-authentication after you've been idle</span></div>
+            <select class="set-sel" id="auto-lock-sel" onchange="savePref('auto_lock',this.value)">
+              <option value="never">Never</option>
+              <option value="15">15 minutes</option>
+              <option value="30">30 minutes</option>
+              <option value="60">1 hour</option>
+              <option value="240">4 hours</option>
+            </select>
+          </div>
+          <div class="set-row">
+            <div class="set-lbl"><strong>Remember Login</strong><span>Stay signed in across browser sessions</span></div>
+            <label class="tog"><input type="checkbox" id="tog-remember" checked onchange="savePref('remember_login',this.checked)"><div class="tog-track"></div></label>
           </div>
         </div>
       </div>
@@ -702,6 +976,12 @@ function initToggles(){
   const an=document.getElementById('tog-animate');if(an)an.checked=p.animate_cards!==false;
   const wc=document.getElementById('tog-wknd-chart');if(wc)wc.checked=!!p.chart_weekends;
 
+  // New dashboard toggles
+  const snq=document.getElementById('tog-show-nq');if(snq)snq.checked=p.show_nq!==false;
+  const sdow=document.getElementById('tog-show-dow');if(sdow)sdow.checked=p.show_dow!==false;
+  const sedge=document.getElementById('tog-show-edge');if(sedge)sedge.checked=p.show_edge!==false;
+  const sintel=document.getElementById('tog-show-intel');if(sintel)sintel.checked=p.show_intel!==false;
+
   // Layout
   if(p.card_layout){
     document.querySelectorAll('.layout-card').forEach(c=>c.classList.toggle('on',c.dataset.layout===p.card_layout));
@@ -718,6 +998,55 @@ function initToggles(){
   if(p.default_page){
     document.querySelectorAll('.page-chip').forEach(c=>c.classList.toggle('on',c.dataset.page===p.default_page));
   }
+
+  // ── NEW: Appearance ──
+  if(p.font_size){
+    const sl=document.getElementById('font-size-slider');
+    if(sl){sl.value=p.font_size;document.getElementById('font-size-preview').textContent=p.font_size+'px';}
+    document.documentElement.style.setProperty('--ui-font-size',p.font_size+'px');
+  }
+  if(p.radius){
+    document.querySelectorAll('.radius-chip').forEach(c=>c.classList.toggle('on',c.dataset.radius===p.radius));
+    const R={sharp:'2px',default:'13px',pill:'20px'};
+    document.documentElement.style.setProperty('--card-radius',R[p.radius]||R.default);
+  }
+  if(p.sidebar_width){
+    document.querySelectorAll('.sw-chip').forEach(c=>c.classList.toggle('on',c.dataset.sw===p.sidebar_width));
+    const W={slim:'180px',normal:'220px',wide:'260px'};
+    document.documentElement.style.setProperty('--sw',W[p.sidebar_width]||W.normal);
+  }
+  const rm=document.getElementById('tog-reduce-motion');if(rm){rm.checked=!!p.reduce_motion;if(p.reduce_motion)applyReduceMotion(true);}
+
+  // ── NEW: Notifications ──
+  const ts=document.getElementById('tog-sound');if(ts)ts.checked=!!p.sound_alerts;
+  const tnw=document.getElementById('tog-notif-win');if(tnw)tnw.checked=!!p.notif_wins_only;
+  const tq=document.getElementById('tog-quiet');if(tq)tq.checked=!!p.quiet_hours;
+  if(p.quiet_hours){const w=document.getElementById('quiet-hours-wrap');if(w)w.style.display='block';}
+  if(p.quiet_from){const el=document.getElementById('quiet-from');if(el)el.value=p.quiet_from;}
+  if(p.quiet_until){const el=document.getElementById('quiet-until');if(el)el.value=p.quiet_until;}
+
+  // ── NEW: Trading ──
+  if(p.preferred_session){
+    document.querySelectorAll('#session-row .sess-chip').forEach(c=>c.classList.toggle('on',c.dataset.sess===p.preferred_session));
+  }
+  if(p.default_timeframe){
+    document.querySelectorAll('#default-tf-row .sess-chip').forEach(c=>c.classList.toggle('on',c.dataset.tf===p.default_timeframe));
+  }
+  if(p.account_size){const el=document.getElementById('account-size-inp');if(el)el.value=p.account_size;}
+  if(p.max_risk_pct){const el=document.getElementById('max-risk-inp');if(el)el.value=p.max_risk_pct;}
+  if(p.daily_target){const el=document.getElementById('daily-target-inp');if(el)el.value=p.daily_target;}
+  if(p.daily_loss_limit){const el=document.getElementById('daily-loss-inp');if(el)el.value=p.daily_loss_limit;}
+  if(p.wr_target){const el=document.getElementById('wr-target-inp');if(el)el.value=p.wr_target;}
+  if(p.instrument){const el=document.getElementById('instrument-sel');if(el)el.value=p.instrument;}
+  if(p.pnl_format){const el=document.getElementById('pnl-format-sel');if(el)el.value=p.pnl_format;}
+  if(p.currency){const el=document.getElementById('currency-sel');if(el)el.value=p.currency;}
+
+  // ── NEW: Privacy ──
+  const tstr=document.getElementById('tog-streamer');if(tstr)tstr.checked=!!p.streamer_mode;
+  const the=document.getElementById('tog-hide-email');if(the)the.checked=!!p.hide_email;
+  const tha=document.getElementById('tog-hide-account');if(tha)tha.checked=!!p.hide_account_size;
+  const tal=document.getElementById('auto-lock-sel');if(tal&&p.auto_lock)tal.value=p.auto_lock;
+  const trm=document.getElementById('tog-remember');if(trm)trm.checked=p.remember_login!==false;
 }
 
 function toggleProfileMenu(){
@@ -756,6 +1085,81 @@ function setAccent(main,light,el){
   document.documentElement.style.setProperty('--al',light);
   savePref('accent',main);savePref('accent_light',light);
   showToast('🎨','Accent Updated','');
+}
+
+// ── FONT SIZE ─────────────────────────────────────────────────────
+function setFontSize(val){
+  document.documentElement.style.setProperty('--ui-font-size', val+'px');
+  const prev = document.getElementById('font-size-preview');
+  if(prev) prev.textContent = val+'px';
+  savePref('font_size', parseInt(val));
+}
+
+// ── BORDER RADIUS ─────────────────────────────────────────────────
+function setRadius(mode, el){
+  document.querySelectorAll('.radius-chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  const R={sharp:'2px', default:'13px', pill:'20px'};
+  document.documentElement.style.setProperty('--card-radius', R[mode]||R.default);
+  savePref('radius', mode);
+  showToast('✦','Corner Style Updated', '');
+}
+
+// ── SIDEBAR WIDTH ─────────────────────────────────────────────────
+function setSidebarWidth(mode, el){
+  document.querySelectorAll('.sw-chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  const W={slim:'180px', normal:'220px', wide:'260px'};
+  document.documentElement.style.setProperty('--sw', W[mode]||W.normal);
+  savePref('sidebar_width', mode);
+}
+
+// ── REDUCE MOTION ─────────────────────────────────────────────────
+function applyReduceMotion(on){
+  if(on){
+    let s = document.getElementById('_reduce-motion-style');
+    if(!s){ s=document.createElement('style'); s.id='_reduce-motion-style'; document.head.appendChild(s); }
+    s.textContent='*{animation-duration:0.001ms!important;transition-duration:0.001ms!important;}';
+  } else {
+    const s=document.getElementById('_reduce-motion-style');
+    if(s) s.remove();
+  }
+}
+
+// ── SESSION / TRADING ─────────────────────────────────────────────
+function setSession(sess, el){
+  document.querySelectorAll('.sess-chip[data-sess]').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  savePref('preferred_session', sess);
+  showToast('📈','Session Updated', sess==='none'?'No session highlight set.':'Preferred session saved.');
+}
+
+function setDefaultTF(tf, el){
+  document.querySelectorAll('#default-tf-row .sess-chip').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  savePref('default_timeframe', tf);
+}
+
+function saveTradingSettings(){
+  const fields=[
+    ['account-size-inp','account_size'],
+    ['max-risk-inp','max_risk_pct'],
+    ['daily-target-inp','daily_target'],
+    ['daily-loss-inp','daily_loss_limit'],
+    ['wr-target-inp','wr_target'],
+  ];
+  fields.forEach(([id,key])=>{
+    const el=document.getElementById(id);
+    if(el&&el.value) savePref(key, el.value);
+  });
+  showToast('✅','Trading Settings Saved','Your goals and risk settings have been updated.');
+}
+
+// ── QUIET HOURS ───────────────────────────────────────────────────
+function toggleQuietHours(on){
+  savePref('quiet_hours', on);
+  const w=document.getElementById('quiet-hours-wrap');
+  if(w) w.style.display = on ? 'block' : 'none';
 }
 
 function setTheme(name,el){
