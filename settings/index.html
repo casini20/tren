@@ -647,29 +647,6 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
           </div>
         </div>
 
-        <!-- Number Format -->
-        <div class="set-section">
-          <div class="set-sh">Number Display</div>
-          <div class="set-row">
-            <div class="set-lbl"><strong>P&amp;L Display Format</strong><span>How profit and loss figures are shown</span></div>
-            <select class="set-sel" id="pnl-format-sel" onchange="savePref('pnl_format',this.value);showToast('💰','Format Updated','P&amp;L will display in the selected format.')">
-              <option value="dollar">$ Dollar (e.g. +$1,250)</option>
-              <option value="points">Points (e.g. +12.5 pts)</option>
-              <option value="percent">Percent (e.g. +2.4%)</option>
-            </select>
-          </div>
-          <div class="set-row">
-            <div class="set-lbl"><strong>Currency Symbol</strong><span>Symbol displayed alongside P&amp;L values</span></div>
-            <select class="set-sel" id="currency-sel" onchange="savePref('currency',this.value)">
-              <option value="USD">$ USD</option>
-              <option value="EUR">€ EUR</option>
-              <option value="GBP">£ GBP</option>
-              <option value="JPY">¥ JPY</option>
-              <option value="AUD">A$ AUD</option>
-              <option value="CAD">C$ CAD</option>
-            </select>
-          </div>
-        </div>
 
         <!-- Save button -->
         <div style="display:flex;align-items:center;gap:14px;justify-content:flex-end;margin-top:4px;">
@@ -986,12 +963,18 @@ function initToggles(){
   if(p.quiet_until){const el=document.getElementById('quiet-until');if(el)el.value=p.quiet_until;}
 
   // ── NEW: Trading ──
+  if(p.preferred_session){
+    document.querySelectorAll('#session-row .sess-chip').forEach(c=>c.classList.toggle('on',c.dataset.sess===p.preferred_session));
+  }
   if(p.default_timeframe){
     document.querySelectorAll('#default-tf-row .sess-chip').forEach(c=>c.classList.toggle('on',c.dataset.tf===p.default_timeframe));
   }
+  if(p.account_size){const el=document.getElementById('account-size-inp');if(el)el.value=p.account_size;}
+  if(p.max_risk_pct){const el=document.getElementById('max-risk-inp');if(el)el.value=p.max_risk_pct;}
   if(p.daily_target){const el=document.getElementById('daily-target-inp');if(el)el.value=p.daily_target;}
   if(p.daily_loss_limit){const el=document.getElementById('daily-loss-inp');if(el)el.value=p.daily_loss_limit;}
   if(p.wr_target){const el=document.getElementById('wr-target-inp');if(el)el.value=p.wr_target;}
+  if(p.instrument){const el=document.getElementById('instrument-sel');if(el)el.value=p.instrument;}
   if(p.pnl_format){const el=document.getElementById('pnl-format-sel');if(el)el.value=p.pnl_format;}
   if(p.currency){const el=document.getElementById('currency-sel');if(el)el.value=p.currency;}
 
@@ -1081,6 +1064,12 @@ function applyReduceMotion(on){
 }
 
 // ── SESSION / TRADING ─────────────────────────────────────────────
+function setSession(sess, el){
+  document.querySelectorAll('.sess-chip[data-sess]').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  savePref('preferred_session', sess);
+  showToast('📈','Session Updated', sess==='none'?'No session highlight set.':'Preferred session saved.');
+}
 
 function setDefaultTF(tf, el){
   document.querySelectorAll('#default-tf-row .sess-chip').forEach(c=>c.classList.remove('on'));
@@ -1090,6 +1079,8 @@ function setDefaultTF(tf, el){
 
 function saveTradingSettings(){
   const fields=[
+    ['account-size-inp','account_size'],
+    ['max-risk-inp','max_risk_pct'],
     ['daily-target-inp','daily_target'],
     ['daily-loss-inp','daily_loss_limit'],
     ['wr-target-inp','wr_target'],
