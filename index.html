@@ -83,6 +83,8 @@ nav {
 .nav-links { display: flex; gap: 2rem; align-items: center; }
 .nav-links a { font-size: 13px; font-weight: 500; color: var(--ts); text-decoration: none; transition: color 0.2s; }
 .nav-links a:hover { color: var(--text); }
+.nav-affiliate-wrap { position: relative; display: inline-block; }
+.nav-earn-badge { position: absolute; top: -9px; right: -28px; font-size: 8px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #34d399; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.35); border-radius: 4px; padding: 2px 6px; line-height: 1.5; transform: rotate(12deg); pointer-events: none; white-space: nowrap; }
 a.nav-cta { background: var(--accent); color: rgb(255,255,255) !important; font-size: 13px; font-weight: 500; padding: 8px 18px; border-radius: 6px; text-decoration: none; border: 1px solid var(--accent); transition: box-shadow 0.3s, transform 0.15s; }
 a.nav-cta:hover { box-shadow: 0 0 20px rgba(37,99,235,0.5), 0 0 40px rgba(37,99,235,0.3); transform: translateY(-1px); }
 
@@ -516,8 +518,6 @@ footer { padding: 2rem 2.5rem; margin: 2rem auto; }
   .footer-top { grid-template-columns: 1fr; }
   .pcard-price-num { font-size: 38px; }
 }
-.nav-affiliate-wrap { position: relative; display: inline-block; }
-.nav-earn-badge { position: absolute; top: -9px; right: -28px; font-size: 8px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #34d399; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.35); border-radius: 4px; padding: 2px 6px; line-height: 1.5; transform: rotate(12deg); pointer-events: none; white-space: nowrap; }
 </style>
 
 
@@ -535,7 +535,7 @@ footer { padding: 2rem 2.5rem; margin: 2rem auto; }
   <div class="nav-links">
     <a href="#" onclick="goToDashboard(event)">Dashboard</a>
     <a href="#pricing">Pricing</a>
-    <a href="https://trenai.vercel.app/affiliate">Affiliate</a>
+    <a href="https://trenai.vercel.app/affiliate" class="nav-affiliate-wrap"><span class="nav-earn-badge">Earn 10%</span>Affiliate</a>
     <a href="https://trenai.vercel.app/contact">Contact</a>
     <a href="https://trenai.vercel.app/login-page" class="nav-signin">Sign In</a>
     <a href="https://trenai.vercel.app/checkout-premium" class="nav-cta">Start free trial</a>
