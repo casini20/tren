@@ -568,10 +568,9 @@ function calcRisk(t){
   if(!entry||!sl||isNaN(entry)||isNaN(sl))return{riskPts:null,riskDollar:null,rr1:null,rr2:null};
   const riskPts=Math.abs(entry-sl);
   const riskDollar=riskPts*20*qty;
-  const tp1=parseFloat(t.tp1),tp2=parseFloat(t.tp2);
-  const rr1=tp1&&!isNaN(tp1)?(Math.abs(tp1-entry)/riskPts).toFixed(1):null;
-  const rr2=tp2&&!isNaN(tp2)?(Math.abs(tp2-entry)/riskPts).toFixed(1):null;
-  return{riskPts:riskPts.toFixed(1),riskDollar:Math.round(riskDollar),rr1,rr2};
+  const tp3=parseFloat(t.tp3);
+  const rr1=tp3&&!isNaN(tp3)?(Math.abs(tp3-entry)/riskPts).toFixed(1):null;
+  return{riskPts:riskPts.toFixed(1),riskDollar:Math.round(riskDollar),rr1};
 }
 
 function getSession(ts){
@@ -680,7 +679,7 @@ function buildLiveCard(t){
     riskChipsH=`<div class="lc-risk-row">
       ${risk.riskDollar?`<div class="lc-risk-chip"><span class="rchip-lbl">Risk /trade</span><span class="rchip-val risk">$${risk.riskDollar.toLocaleString()}</span></div>`:''}
       ${risk.riskPts?`<div class="lc-risk-chip"><span class="rchip-lbl">Risk pts</span><span class="rchip-val neutral">${risk.riskPts} pts</span></div>`:''}
-      ${risk.rr1?`<div class="lc-risk-chip"><span class="rchip-lbl">R:R (TP1)</span><span class="rchip-val reward">1:${risk.rr1}</span></div>`:''}
+      ${risk.rr1?`<div class="lc-risk-chip"><span class="rchip-lbl">R:R (TP3)</span><span class="rchip-val reward">1:${risk.rr1}</span></div>`:''}
     </div>`;
   }
   const sessH=sess?`<span class="lc-session" style="background:${sess.bg};color:${sess.color}">${sess.label}</span>`:'';
@@ -712,6 +711,7 @@ function buildLiveCard(t){
         <div class="lc-level right">
           <div class="lc-level-lbl">Stop Loss</div>
           <div class="lc-level-val stop">${fmtNum(t.stop_loss,2)}</div>
+          <div style="font-size:9px;color:var(--sub);margin-top:2px;line-height:1.3;">on candle close beyond level</div>
         </div>
       </div>
       ${riskChipsH}
