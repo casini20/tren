@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Tren – AutoSignals</title>
+<title>Tren – TrenBot</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -20,46 +18,45 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .shell{position:fixed;inset:0;display:flex;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--bg);}
 
 /* ── SIDEBAR ── */
-.sidebar{width:var(--sw);min-width:var(--sw);height:100vh;border-right:1px solid var(--border);background:#060b14;display:flex;flex-direction:column;padding:0;position:relative;z-index:20;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;}
+.sidebar{width:var(--sw);min-width:var(--sw);height:100vh;border-right:1px solid var(--border);background:linear-gradient(180deg,#080e1a,#04080f);display:flex;flex-direction:column;padding:1.6rem .9rem 0;position:relative;z-index:20;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;}
 .sidebar::-webkit-scrollbar{display:none;}
-.s-logo{font-size:17px;font-weight:600;padding:22px 18px 18px;display:flex;align-items:center;gap:9px;text-decoration:none;color:inherit;letter-spacing:-0.4px;}
-.s-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,0.2);flex-shrink:0;}
+.s-logo{font-size:20px;font-weight:800;padding:0 .6rem;margin-bottom:2rem;display:flex;align-items:center;gap:6px;}
 .s-logo span{color:var(--al);}
-.s-section-label{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,244,255,0.18);padding:12px 18px 4px;}
-.s-nav{flex:1;display:flex;flex-direction:column;padding:0 10px;gap:1px;}
-.s-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:13px;font-weight:500;color:rgba(240,244,255,0.42);cursor:pointer;transition:background .12s,color .12s;text-decoration:none;position:relative;}
-.s-item:hover{background:rgba(255,255,255,.04);color:rgba(240,244,255,0.8);}
-.s-item.on{background:rgba(37,99,235,.14);color:#e0eaff;}
-.s-item.on::before{content:'';position:absolute;left:-6px;top:50%;transform:translateY(-50%);width:3px;height:16px;border-radius:0 3px 3px 0;background:var(--accent);}
+.s-logo::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 12px var(--accent);}
+.s-nav{flex:1;display:flex;flex-direction:column;gap:2px;}
+.s-item{display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:500;color:var(--sub2);cursor:pointer;transition:all .2s;margin-bottom:1px;border:1px solid transparent;position:relative;text-decoration:none;}
+.s-item::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%) scaleY(0);width:3px;height:20px;background:var(--accent);border-radius:0 3px 3px 0;transition:transform .2s;}
+.s-item:hover{background:rgba(255,255,255,.04);color:var(--text);}
+.s-item:hover::before{transform:translateY(-50%) scaleY(.6);}
+.s-item.on{background:rgba(37,99,235,.1);border-color:rgba(37,99,235,.15);color:var(--al);}
+.s-item.on::before{transform:translateY(-50%) scaleY(1);box-shadow:0 0 8px var(--accent);}
 .s-item.gold{color:var(--gold);}
-.s-item.gold:hover{background:rgba(245,158,11,.06);}
-.s-item.ai-item{color:#a78bfa;}
-.s-item.ai-item:hover{background:rgba(167,139,250,.07);color:#c4b5fd;}
-.s-ic{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;}
-.s-item.on .s-ic{background:rgba(37,99,235,.18);}
-.s-item.gold .s-ic{background:rgba(245,158,11,.08);}
-.s-item.ai-item .s-ic{background:rgba(167,139,250,.1);}
-.s-badge{margin-left:auto;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;background:var(--gold);color:#000;letter-spacing:.03em;}
-.s-beta{margin-left:auto;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:rgba(167,139,250,.15);border:0.5px solid rgba(167,139,250,.3);color:#a78bfa;letter-spacing:.03em;}
-.s-divider{height:0.5px;background:rgba(255,255,255,.05);margin:4px 10px;}
-.s-bot{padding:10px 10px 14px;flex-shrink:0;border-top:0.5px solid rgba(255,255,255,.05);margin-top:auto;}
-.trial-card{display:none;}
-.up-mini{width:100%;padding:8px;border:none;border-radius:7px;background:linear-gradient(90deg,var(--accent),var(--al));color:#fff;font-size:11.5px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:opacity .15s;}
-.up-mini:hover{opacity:.88;}
-.u-row{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;cursor:pointer;transition:background .12s;text-decoration:none;border:0.5px solid transparent;}
-.u-row:hover{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.07);}
-.u-av{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;color:#fff;}
+.s-item.gold:hover{background:rgba(245,158,11,.06);border-color:rgba(245,158,11,.35);}
+.s-item.gold.on{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.25);}
+.s-item.gold.on::before{background:var(--gold);}
+.s-ic{font-size:16px;width:22px;text-align:center;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.s-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;padding:3px 8px;border-radius:20px;font-weight:700;min-width:22px;text-align:center;}
+.s-badge.gd{background:var(--gold);color:#000;}
+.s-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);margin:1.2rem .5rem .8rem;}
+.s-bot{position:sticky;bottom:0;width:100%;background:rgba(4,8,15,.95);backdrop-filter:blur(20px);padding:14px .6rem 16px;border-top:1px solid var(--border);z-index:20;margin-top:auto;flex-shrink:0;}
+.trial-card{background:linear-gradient(135deg,rgba(37,99,235,.15),rgba(59,130,246,.06));border:1px solid rgba(37,99,235,.2);border-radius:12px;padding:14px;margin-bottom:12px;}
+.trial-card h4{font-size:12px;font-weight:700;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.trial-card p{font-size:11px;color:var(--sub);margin-bottom:12px;line-height:1.5;}
+.up-mini{width:100%;padding:9px;border:none;border-radius:9px;background:linear-gradient(90deg,var(--accent),var(--al));color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+.u-row{display:flex;align-items:center;gap:10px;padding:8px;border-radius:10px;cursor:pointer;transition:background .2s;text-decoration:none;}
+.u-row:hover{background:rgba(255,255,255,.04);}
+.u-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;color:#fff;}
 .u-info{min-width:0;flex:1;display:flex;flex-direction:column;gap:1px;}
-.u-name{font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.u-name{font-size:13px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .u-email{font-size:10px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sub-status-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;margin-top:3px;letter-spacing:.03em;}
-.sub-status-badge.trial{background:rgba(245,158,11,.1);border:0.5px solid rgba(245,158,11,.22);color:var(--gold);}
-.sub-status-badge.premium{background:rgba(37,99,235,.12);border:0.5px solid rgba(37,99,235,.28);color:var(--al);}
-.sub-status-badge.automated{background:rgba(245,158,11,.1);border:0.5px solid rgba(245,158,11,.22);color:var(--gold);}
-.sub-status-badge.autosignals{background:rgba(16,185,129,.12);border:0.5px solid rgba(16,185,129,.28);color:var(--green);}
-.s-logout{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:7px;font-size:11.5px;font-weight:500;color:rgba(239,68,68,.45);cursor:pointer;transition:all .12s;margin-top:2px;}
-.s-logout:hover{background:rgba(239,68,68,.07);color:var(--red);}
-.live-dot-nav{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);animation:flicker 3.5s infinite;box-shadow:0 0 5px var(--green);}
+.sub-status-badge{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;padding:2px 8px;border-radius:20px;margin-top:2px;letter-spacing:.3px;}
+.sub-status-badge.trial{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:var(--gold);}
+.sub-status-badge.premium{background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.3);color:var(--al);}
+.sub-status-badge.automated{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:var(--gold);}
+.sub-status-badge.autosignals{background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:var(--green);}
+.s-logout{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;font-size:12px;font-weight:500;color:rgba(239,68,68,.7);cursor:pointer;transition:all .2s;margin-top:6px;border:1px solid transparent;}
+.s-logout:hover{background:rgba(239,68,68,.08);border-color:rgba(239,68,68,.18);color:var(--red);}
+.live-dot-nav{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);animation:flicker 3.5s infinite;box-shadow:0 0 6px var(--green);}
 @keyframes flicker{0%,100%{opacity:1;transform:scale(1);}15%{opacity:.88;transform:scale(.95);}30%{opacity:1;transform:scale(1.03);}45%{opacity:.92;transform:scale(.97);}60%{opacity:1;transform:scale(1.06);}75%{opacity:.9;transform:scale(.94);}90%{opacity:1;transform:scale(1.02);}}
 
 /* ── MAIN ── */
@@ -110,9 +107,9 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .check-dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;}
 .check-item span{font-size:12px;}
 .success-bar{display:flex;align-items:center;gap:8px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:10px;padding:10px 14px;}
-.warn-bar{display:flex;align-items:center;gap:8px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.18);border-radius:10px;padding:10px 14px;}
+.warn-bar{display:flex;align-items:center;gap:8px;background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.18);border-radius:10px;padding:10px 14px;margin-top:1rem;}
 .dl-btn{display:inline-flex;align-items:center;gap:6px;background:linear-gradient(90deg,var(--accent),var(--al));color:#fff;font-size:13px;font-weight:600;padding:10px 18px;border-radius:10px;text-decoration:none;}
-.must-set{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--sub2);margin-bottom:4px;}
+.must-set{display:flex;align-items:center;gap:6px;font-size:12.5px;color:var(--sub2);}
 .must-set .req{color:var(--red);font-weight:700;}
 
 /* ── BLUR OVERLAY ── */
@@ -120,17 +117,17 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .blur-content{transition:filter .4s ease,opacity .4s ease;}
 .blur-wrap.locked .blur-content{filter:blur(20px) brightness(0.25);pointer-events:none;user-select:none;}
 .blur-overlay{position:fixed;top:0;left:var(--sw);right:0;bottom:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:2rem;pointer-events:auto;}
-.blur-box{background:linear-gradient(145deg,#0d1628,#080e1a);border:1px solid rgba(16,185,129,.35);border-radius:22px;padding:2.4rem 2.2rem;max-width:420px;width:92%;box-shadow:0 0 80px rgba(16,185,129,.15),0 20px 60px rgba(0,0,0,.5);position:relative;overflow:hidden;}
-.blur-box::before{content:'';position:absolute;top:-70px;left:50%;transform:translateX(-50%);width:220px;height:220px;background:radial-gradient(circle,rgba(16,185,129,.18),transparent 70%);pointer-events:none;}
-.blur-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(16,185,129,.13);border:1px solid rgba(16,185,129,.3);color:var(--green);font-size:11px;font-weight:700;padding:4px 13px;border-radius:20px;margin-bottom:1.3rem;letter-spacing:.6px;text-transform:uppercase;}
+.blur-box{background:linear-gradient(145deg,#0d1628,#080e1a);border:1px solid rgba(245,158,11,.35);border-radius:22px;padding:2.4rem 2.2rem;max-width:420px;width:92%;box-shadow:0 0 80px rgba(245,158,11,.15),0 20px 60px rgba(0,0,0,.5);position:relative;overflow:hidden;}
+.blur-box::before{content:'';position:absolute;top:-70px;left:50%;transform:translateX(-50%);width:220px;height:220px;background:radial-gradient(circle,rgba(245,158,11,.18),transparent 70%);pointer-events:none;}
+.blur-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(245,158,11,.13);border:1px solid rgba(245,158,11,.3);color:var(--gold);font-size:11px;font-weight:700;padding:4px 13px;border-radius:20px;margin-bottom:1.3rem;letter-spacing:.6px;text-transform:uppercase;}
 .blur-box h2{font-size:1.9rem;font-weight:800;margin-bottom:.65rem;line-height:1.2;}
-.blur-box h2 span{color:var(--green);}
+.blur-box h2 span{color:var(--gold);}
 .blur-box p{color:var(--sub2);font-size:13px;line-height:1.75;margin-bottom:1.6rem;}
 .blur-feats{display:flex;flex-direction:column;gap:8px;margin-bottom:1.6rem;text-align:left;}
 .blur-feat{display:flex;align-items:center;gap:9px;font-size:13px;color:var(--sub2);}
 .blur-feat .ic{width:22px;height:22px;border-radius:6px;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.25);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
-.blur-btn{width:100%;padding:14px;border:none;border-radius:11px;background:linear-gradient(90deg,#10b981,#059669);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:14.5px;font-weight:700;cursor:pointer;box-shadow:0 0 30px rgba(16,185,129,.3);transition:box-shadow .2s,transform .15s;text-decoration:none;display:inline-block;}
-.blur-btn:hover{box-shadow:0 0 45px rgba(16,185,129,.5);transform:translateY(-1px);}
+.blur-btn{width:100%;padding:14px;border:none;border-radius:11px;background:linear-gradient(90deg,var(--gold),#f97316);color:#000;font-family:'Plus Jakarta Sans',sans-serif;font-size:14.5px;font-weight:700;cursor:pointer;box-shadow:0 0 30px rgba(245,158,11,.3);transition:box-shadow .2s,transform .15s;text-decoration:none;display:inline-block;}
+.blur-btn:hover{box-shadow:0 0 45px rgba(245,158,11,.5);transform:translateY(-1px);}
 .blur-terms{font-size:11px;color:var(--sub);margin-top:10px;}
 
 /* ── TOAST ── */
@@ -155,7 +152,6 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .nav-affiliate-wrap { position: relative; display: inline-block; }
 .nav-earn-badge { position: absolute; top: -9px; right: -28px; font-size: 8px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #34d399; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.35); border-radius: 4px; padding: 2px 6px; line-height: 1.5; transform: rotate(12deg); pointer-events: none; white-space: nowrap; }
 </style>
-
 
 
 </head>
@@ -195,7 +191,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 <div class="shell">
   <div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
 
-      <!-- SIDEBAR -->
+    <!-- SIDEBAR -->
   <nav class="sidebar" id="sidebar">
     <a class="s-logo" href="https://trenai.vercel.app" style="text-decoration:none;color:inherit;">
       <span class="s-logo-dot"></span>
@@ -210,7 +206,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
       <a class="s-item" onclick="navTo('https://trenai.vercel.app/overview')">
         <span class="s-ic">📊</span><span>Overview</span>
       </a>
-      <a class="s-item on" onclick="navTo('https://trenai.vercel.app/signals')">
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/signals')">
         <span class="s-ic">⚡</span><span>Recent Trades</span>
       </a>
       <a class="s-item" onclick="navTo('https://trenai.vercel.app/journal')">
@@ -223,7 +219,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <span class="s-ic">✨</span><span>AI Analysis</span>
         <span class="s-beta">BETA</span>
       </a>
-      <a class="s-item" onclick="navTo('https://trenai.vercel.app/trenbot')">
+      <a class="s-item on" onclick="navTo('https://trenai.vercel.app/trenbot')">
         <span class="s-ic">🤖</span><span>TrenBot</span>
       </a>
       <a class="s-item" onclick="navTo('https://trenai.vercel.app/autosignals')">
@@ -266,8 +262,8 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
       <div style="display:flex;align-items:center;gap:12px;">
         <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
         <div>
-          <div class="tb-title">AutoSignals</div>
-          <div style="font-size:12px;color:var(--sub);margin-top:2px;">Get AutoSignals running on NinjaTrader in under 5 minutes</div>
+          <div class="tb-title">TrenBot</div>
+          <div style="font-size:12px;color:var(--sub);margin-top:2px;">Get Tren running on NinjaTrader in under 5 minutes</div>
         </div>
       </div>
       <div class="tb-right">
@@ -293,18 +289,18 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <div class="blur-content">
 
           <!-- STEP 1 -->
-          <div class="jp" style="background:linear-gradient(145deg,var(--bg3),rgba(16,185,129,.04));">
+          <div class="jp" style="background:linear-gradient(145deg,var(--bg3),rgba(37,99,235,.04));">
             <div class="jp-bar" style="background:linear-gradient(90deg,var(--green),var(--al));"></div>
             <div style="display:flex;align-items:flex-start;gap:16px;">
               <div class="jp-icon" style="background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.25);">1️⃣</div>
               <div style="flex:1;min-width:0;">
-                <h3>Download the AutoSignals File</h3>
-                <p>Download the latest <strong>AutoSignals</strong> NinjaScript add-on directly. This is the file you'll import into NinjaTrader to enable automated signal copying.</p>
+                <h3>Download the Bot File</h3>
+                <p>Download the latest <strong>TrenBot</strong> NinjaScript add-on directly. This is the file you'll import into NinjaTrader to power automated execution.</p>
                 <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:1rem;">
-                  <a href="https://sjntsmzbiqvtstvofcnx.supabase.co/storage/v1/object/public/downloads%20dashboard/Autosignals.zip" download class="dl-btn">⬇️ Download AutoSignals.zip</a>
+                  <a href="https://sjntsmzbiqvtstvofcnx.supabase.co/storage/v1/object/public/downloads%20dashboard/TrenBotv3.zip" download class="dl-btn">⬇️ Download TrenBotv3.zip</a>
                   <span style="font-size:11px;color:var(--sub);">~ 163 KB · NinjaScript Add-On</span>
                 </div>
-                <div class="warn-bar">
+                <div class="warn-bar" style="margin-top:0;">
                   <span style="font-size:16px;">💡</span>
                   <span style="font-size:12px;color:var(--sub2);">Make sure you have <a href="https://account.ninjatrader.com/welcome" target="_blank" style="color:var(--al);text-decoration:none;font-weight:600;">NinjaTrader Desktop</a> installed before proceeding.</span>
                 </div>
@@ -324,7 +320,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
                   <div class="menu-path-title">Menu Path</div>
                   <div class="step-row"><span class="step-num">1</span> Control Center → Tools</div>
                   <div class="step-row"><span class="step-num">2</span> Import → NinjaScript Add-On</div>
-                  <div class="step-row"><span class="step-num">3</span> Select <strong>AutoSignals.zip</strong> from your Downloads</div>
+                  <div class="step-row"><span class="step-num">3</span> Select <strong>trenbotv3.zip</strong> from your Downloads</div>
                 </div>
                 <div class="success-bar"><span style="font-size:18px">✅</span><span style="font-size:12.5px;color:var(--sub2);">Wait for: <strong style="color:var(--green)">Import Successful</strong></span></div>
               </div>
@@ -338,7 +334,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
               <div class="jp-icon" style="background:rgba(245,158,11,.15);border:1px solid rgba(245,158,11,.25);">3️⃣</div>
               <div style="flex:1;min-width:0;">
                 <h3>Connect Your Account</h3>
-                <p>Link your broker or data feed so AutoSignals can execute trades. You must see a green connection icon for copying to work.</p>
+                <p>Link your broker or data feed so Tren can execute trades. You must see a green connection icon for the bot to trade.</p>
                 <div class="broker-grid">
                   <div class="broker-card"><div class="bi">📊</div><div class="bn">Simulated Data</div><div class="bs">Practice only</div></div>
                   <div class="broker-card"><div class="bi">🏦</div><div class="bn">Tradovate</div><div class="bs">Futures broker</div></div>
@@ -358,7 +354,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
               <div class="jp-icon" style="background:rgba(139,92,246,.15);border:1px solid rgba(139,92,246,.25);">4️⃣</div>
               <div style="flex:1;min-width:0;">
                 <h3>Open Your Chart</h3>
-                <p>Create a new chart with the <strong style="color:var(--red)">exact</strong> settings below. These are <strong style="color:var(--red)">required</strong> — AutoSignals will not copy correctly without them.</p>
+                <p>Create a new chart with the <strong style="color:var(--red)">exact</strong> settings below. These are <strong style="color:var(--red)">required</strong> — Tren will not trade correctly without them.</p>
                 <div class="broker-grid" style="grid-template-columns:1fr 1fr;">
                   <div class="broker-card"><div class="bi">📈</div><div class="bn">Instrument</div><div class="bs"><strong style="color:var(--red)">Required:</strong> NQ or MNQ futures</div></div>
                   <div class="broker-card"><div class="bi">⏱️</div><div class="bn">Timeframe</div><div class="bs"><strong style="color:var(--red)">5 minute</strong> (required)</div></div>
@@ -374,21 +370,20 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
             <div style="display:flex;align-items:flex-start;gap:16px;">
               <div class="jp-icon" style="background:rgba(37,99,235,.15);border:1px solid rgba(37,99,235,.25);">5️⃣</div>
               <div style="flex:1;min-width:0;">
-                <h3>Enable AutoSignals on Chart</h3>
+                <h3>Add Tren to Chart</h3>
                 <p>Attach the strategy to your chart and configure the essential settings.</p>
                 <div class="menu-path">
                   <div class="menu-path-title">On the Chart</div>
                   <div class="step-row"><span class="step-num">1</span> Right click → Strategies</div>
-                  <div class="step-row"><span class="step-num">2</span> Find <strong>AutoSignals</strong> → Double click</div>
+                  <div class="step-row"><span class="step-num">2</span> Find <strong>trenbotv3</strong> → Double click</div>
                   <div style="margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);">
                     <div class="menu-path-title">Strategy Panel — Must Set</div>
-                    <div class="must-set"><span class="req">*</span> Account → Select your account</div>
-                    <div class="must-set"><span class="req">*</span> Enabled → Set to <strong style="color:var(--green)">TRUE</strong></div>
-                    <div class="must-set"><span class="req">*</span> Auto-Copy → Set to <strong style="color:var(--green)">TRUE</strong></div>
-                    <div class="must-set"><span style="color:var(--sub);font-weight:700;">○</span> Contract Size → Lots per trade</div>
+                    <div class="must-set" style="margin-bottom:4px;"><span class="req">*</span> Account → Select your account</div>
+                    <div class="must-set" style="margin-bottom:4px;"><span class="req">*</span> Enabled → Set to <strong style="color:var(--green)">TRUE</strong></div>
+                    <div class="must-set"><span style="color:var(--sub);font-weight:700;">○</span> Parameters → Current Misc settings are optimal</div>
                   </div>
                 </div>
-                <div class="success-bar"><span style="font-size:18px">✅</span><span style="font-size:12.5px;color:var(--sub2);">Click <strong style="color:var(--green)">Apply</strong> to activate — every signal will now auto-copy</span></div>
+                <div class="success-bar"><span style="font-size:18px">✅</span><span style="font-size:12.5px;color:var(--sub2);">Click <strong style="color:var(--green)">Apply</strong> to activate</span></div>
               </div>
             </div>
           </div>
@@ -399,15 +394,15 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
             <div style="display:flex;align-items:flex-start;gap:16px;">
               <div class="jp-icon" style="background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.25);">🚨</div>
               <div style="flex:1;min-width:0;">
-                <h3 style="color:var(--red);">Not Copying? Check This List</h3>
+                <h3 style="color:var(--red);">Bot Not Trading? Check This List</h3>
                 <p>Every item below must be correct. Go through each one carefully.</p>
                 <div class="check-grid">
                   <div class="check-item"><div class="check-dot"></div><span>Connected = <strong style="color:var(--green)">YES</strong></span></div>
                   <div class="check-item"><div class="check-dot"></div><span>Strategy Enabled = <strong style="color:var(--green)">TRUE</strong></span></div>
-                  <div class="check-item"><div class="check-dot"></div><span>Auto-Copy = <strong style="color:var(--green)">TRUE</strong></span></div>
                   <div class="check-item"><div class="check-dot"></div><span>No errors in <strong>Log</strong> tab</span></div>
-                  <div class="check-item"><div class="check-dot"></div><span>Correct instrument &amp; 5m timeframe</span></div>
-                  <div class="check-item"><div class="check-dot"></div><span>Contract size &gt; <strong>0</strong></span></div>
+                  <div class="check-item"><div class="check-dot"></div><span>Correct instrument</span></div>
+                  <div class="check-item"><div class="check-dot"></div><span>Correct timeframe (5m)</span></div>
+                  <div class="check-item"><div class="check-dot"></div><span>Session time active</span></div>
                 </div>
                 <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
                   <span style="font-size:13px;color:var(--sub2);">📩 Still not working?</span>
@@ -422,16 +417,16 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <!-- UPGRADE OVERLAY -->
         <div class="blur-overlay" id="blur-overlay">
           <div class="blur-box">
-            <div class="blur-badge">🔒 AutoSignals Only</div>
-            <h2>Upgrade to <span>AutoSignals</span></h2>
-            <p>Auto-copy every premium signal to your broker in under 1 second. No manual execution required.</p>
+            <div class="blur-badge">🔒 TRENBOT ONLY</div>
+            <h2>Upgrade to <span>TrenBot</span></h2>
+            <p>Connect Tren directly to NinjaTrader for hands-free execution. Full bot control with higher trade frequency and multi-contract scaling.</p>
             <div class="blur-feats">
-              <div class="blur-feat"><div class="ic">✓</div>Instant trade copying to your broker</div>
-              <div class="blur-feat"><div class="ic">✓</div>Works with NinjaTrader &amp; major brokers</div>
+              <div class="blur-feat"><div class="ic">✓</div>Instant trade execution on NinjaTrader</div>
+              <div class="blur-feat"><div class="ic">✓</div>Emotion-free automated trading</div>
               <div class="blur-feat"><div class="ic">✓</div>Everything in Premium Signals included</div>
-              <div class="blur-feat"><div class="ic">✓</div>Set position size once, trade forever</div>
+              <div class="blur-feat"><div class="ic">✓</div>Advanced customization options</div>
             </div>
-            <a href="https://trenai.vercel.app/checkout-autosignals" target="_blank" class="blur-btn">Upgrade to AutoSignals — $42.49/mo</a>
+            <a href="https://trenai.vercel.app/checkout-trenbot" target="_blank" class="blur-btn">Upgrade to TrenBot — $67.99/mo</a>
             <div class="blur-terms">Cancel anytime</div>
           </div>
         </div>
@@ -442,6 +437,15 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 </div><!-- end .shell -->
 
 <script>
+
+function navTo(url){
+  try{
+    const s=localStorage.getItem('tren_session');
+    if(s){const encoded=encodeURIComponent(btoa(s));url+=(url.includes('?')?'&':'?')+'_t='+encoded;}
+  }catch(e){}
+  window.location.href=url;
+}
+
 // ── CORE ──────────────────────────────────────────────────────────
 const SUPABASE_AUTH_URL='https://sjntsmzbiqvtstvofcnx.supabase.co';
 const SUPABASE_AUTH_KEY='sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg';
@@ -451,6 +455,7 @@ let _session=window.__trenSession||(()=>{try{const r=localStorage.getItem(SESSIO
 if(!(_session&&_session.access_token)){window.location.href='https://trenai.vercel.app/login-page';}
 
 let _subData=null,_autoSubData=null,_autoSignalsSubData=null;
+// Load from cache first for instant render
 try{_subData=JSON.parse(localStorage.getItem('tren_sub')||'null');}catch(e){}
 try{_autoSubData=JSON.parse(localStorage.getItem('tren_trenbot_sub')||'null');}catch(e){}
 try{_autoSignalsSubData=JSON.parse(localStorage.getItem('tren_autosignals_sub')||'null');}catch(e){}
@@ -471,26 +476,9 @@ async function doLogout(){
 }
 
 // ── LIVE SUPABASE ACCESS CHECKS ───────────────────────────────────
-async function checkAutoSignalsAccess(){
-  const email=getSessionEmail();if(!email||email==='—')return false;
-  if(_autoSignalsSubData?.status==='active'&&_autoSignalsSubData?.plan==='auto')return true;
-  try{
-    const res=await fetch(
-      `${SUPABASE_AUTH_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&plan=eq.auto&status=eq.active&select=*`,
-      {headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}}
-    );
-    const rows=await res.json();
-    if(rows&&rows.length>0&&rows[0].status==='active'){
-      _autoSignalsSubData=rows[0];
-      localStorage.setItem('tren_autosignals_sub',JSON.stringify(_autoSignalsSubData));
-      return true;
-    }
-  }catch(e){console.error('AutoSignals check failed:',e);}
-  return false;
-}
-
 async function checkTrenBotAccess(){
   const email=getSessionEmail();if(!email||email==='—')return false;
+  // Return from cache if already confirmed active
   if(_autoSubData?.status==='active'&&_autoSubData?.plan==='trenbot')return true;
   try{
     const res=await fetch(
@@ -498,7 +486,7 @@ async function checkTrenBotAccess(){
       {headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}}
     );
     const rows=await res.json();
-    if(rows&&rows.length>0&&rows[0].status==='active'){
+    if(rows&&rows.length>0&&rows[0].status==='active'&&rows[0].plan==='trenbot'){
       _autoSubData=rows[0];
       localStorage.setItem('tren_trenbot_sub',JSON.stringify(_autoSubData));
       return true;
@@ -525,6 +513,24 @@ async function checkPremiumAccess(){
   return false;
 }
 
+async function checkAutoSignalsAccess(){
+  const email=getSessionEmail();if(!email||email==='—')return false;
+  if(_autoSignalsSubData?.status==='active'&&_autoSignalsSubData?.plan==='auto')return true;
+  try{
+    const res=await fetch(
+      `${SUPABASE_AUTH_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&plan=eq.auto&status=eq.active&select=*`,
+      {headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}}
+    );
+    const rows=await res.json();
+    if(rows&&rows.length>0&&rows[0].status==='active'){
+      _autoSignalsSubData=rows[0];
+      localStorage.setItem('tren_autosignals_sub',JSON.stringify(_autoSignalsSubData));
+      return true;
+    }
+  }catch(e){console.error('AutoSignals check failed:',e);}
+  return false;
+}
+
 function initUserInfo(){
   const name=getUserDisplayName(),email=getSessionEmail(),init=name.charAt(0).toUpperCase();
   ['s-nm','prof-menu-name'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=name;});
@@ -544,8 +550,8 @@ function applyAccessUI(hasTB,hasAS,hasP){
     if(tp){tp.textContent=lbl+' Active';tp.className='t-pill '+cls;}
     if(sb){sb.textContent=lbl;sb.className='sub-status-badge '+cls;}
   }
-  // AutoSignals OR TrenBot (superset) both unlock this page
-  if(hasAS||hasTB){
+  // Only TrenBot unlocks this page
+  if(hasTB){
     wrap.classList.remove('locked');
     overlay.style.display='none';
   }else{
@@ -570,27 +576,17 @@ function closeSidebar(){document.getElementById('sidebar').classList.remove('ope
 // ── INIT ──────────────────────────────────────────────────────────
 initUserInfo();
 
-// Step 1: apply cache instantly
+// Step 1: apply cached state instantly so UI doesn't flash
 const cachedTB=_autoSubData?.status==='active'&&_autoSubData?.plan==='trenbot';
 const cachedAS=_autoSignalsSubData?.status==='active'&&_autoSignalsSubData?.plan==='auto';
 const cachedP=_subData?.status&&_subData.status!=='inactive'&&_subData.status!=='cancelled';
 applyAccessUI(cachedTB,cachedAS,cachedP);
 
-// Step 2: verify live from Supabase
+// Step 2: verify live from Supabase and re-apply (catches new subs and cancellations)
 (async()=>{
   const [hasTB,hasAS,hasP]=await Promise.all([checkTrenBotAccess(),checkAutoSignalsAccess(),checkPremiumAccess()]);
   applyAccessUI(hasTB,hasAS,hasP);
 })();
-</script>
-<script>
-  function goToDashboard(e) {
-    e.preventDefault();
-    if (localStorage.getItem('tren_session')) {
-      window.location.href = '/overview';
-    } else {
-      window.location.href = '/login-page';
-    }
-  }
 </script>
 </body>
 </html>
