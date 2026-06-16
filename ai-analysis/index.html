@@ -1789,7 +1789,7 @@ window.addEventListener('resize',function(){if(_fsOpen){fsResize();fsDraw();}});
 </div>
 
 
-let _navLock = false;
+<script>let _navLock = false;
 function navTo(url){
   if(_navLock)return;
   _navLock=true;
@@ -1799,6 +1799,6 @@ function navTo(url){
     if(s){ const encoded=encodeURIComponent(btoa(s)); url+=(url.includes('?')?'&':'?')+'_t='+encoded; }
   }catch(e){}
   window.location.href=url;
-}
+}</script>
 </body>
 </html>
