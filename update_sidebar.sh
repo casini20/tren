@@ -2,20 +2,18 @@
 # =============================================================
 #  update_sidebar.sh
 #  Finds every Tren HTML page and replaces the sidebar
-#  CSS + HTML with the v3 redesign.
+#  CSS + HTML with the v3 redesign. Also injects navTo()
+#  into any page missing it.
 #
 #  Usage:
 #    chmod +x update_sidebar.sh
 #    ./update_sidebar.sh
-#
-#  A .bak backup is created next to each file before editing.
 # =============================================================
 
 set -euo pipefail
 
 GREEN='\033[0;32m'; YELLOW='\033[1;33m'; RED='\033[0;31m'; NC='\033[0m'
 
-# ── Write the Python worker to a temp file (avoids heredoc unicode issues) ──
 PYWORKER=$(mktemp /tmp/sidebar_worker_XXXX.py)
 trap "rm -f $PYWORKER" EXIT
 
@@ -47,22 +45,22 @@ def nav_item(label, icon, url, page_key, extra_class='', badge=''):
 live_icon = '<span class="live-dot-nav"></span>'
 
 nav_html = '\n'.join([
-    nav_item('Live Signals',  live_icon, 'https://trenai.vercel.app/live-signals', 'live-signals'),
-    nav_item('Overview',      '\U0001f4ca', 'https://trenai.vercel.app/overview',     'overview'),
-    nav_item('Recent Trades', '\u26a1',     'https://trenai.vercel.app/signals',      'signals'),
-    nav_item('Journal',       '\U0001f4d3', 'https://trenai.vercel.app/journal',      'journal'),
+    nav_item('Live Signals',  live_icon,       'https://trenai.vercel.app/live-signals', 'live-signals'),
+    nav_item('Overview',      '\U0001f4ca',    'https://trenai.vercel.app/overview',     'overview'),
+    nav_item('Recent Trades', '\u26a1',        'https://trenai.vercel.app/signals',      'signals'),
+    nav_item('Journal',       '\U0001f4d3',    'https://trenai.vercel.app/journal',      'journal'),
 ])
 
 tools_html = '\n'.join([
-    nav_item('AI Analysis',  '\u2728',      'https://trenai.vercel.app/ai-analysis',  'ai-analysis', ' ai-item', ('s-beta', 'BETA')),
-    nav_item('TrenBot',      '\U0001f916',  'https://trenai.vercel.app/trenbot',      'trenbot'),
-    nav_item('AutoSignals',  '\u26a1',      'https://trenai.vercel.app/autosignals',  'autosignals'),
-    nav_item('Indicator',    '\U0001f4c8',  'https://trenai.vercel.app/indicator',    'indicator'),
+    nav_item('AI Analysis',  '\u2728',         'https://trenai.vercel.app/ai-analysis',  'ai-analysis', ' ai-item', ('s-beta', 'BETA')),
+    nav_item('TrenBot',      '\U0001f916',     'https://trenai.vercel.app/trenbot',      'trenbot'),
+    nav_item('AutoSignals',  '\u26a1',         'https://trenai.vercel.app/autosignals',  'autosignals'),
+    nav_item('Indicator',    '\U0001f4c8',     'https://trenai.vercel.app/indicator',    'indicator'),
 ])
 
 misc_html = '\n'.join([
-    nav_item('Upgrade',  '\U0001f451', 'https://trenai.vercel.app/upgrade',  'upgrade',  ' gold', ('s-badge', 'PRO')),
-    nav_item('Settings', '\u2699\ufe0f','https://trenai.vercel.app/settings', 'settings'),
+    nav_item('Upgrade',  '\U0001f451',         'https://trenai.vercel.app/upgrade',      'upgrade',  ' gold', ('s-badge', 'PRO')),
+    nav_item('Settings', '\u2699\ufe0f',       'https://trenai.vercel.app/settings',     'settings'),
 ])
 
 NEW_CSS = """\
@@ -145,7 +143,21 @@ NEW_NAV = f"""  <!-- SIDEBAR -->
     </div>
   </nav>"""
 
-# Replace CSS — try patterns from most to least specific
+# ── navTo snippet to inject if missing ──
+NAVTO_SNIPPET = """
+let _navLock = false;
+function navTo(url){
+  if(_navLock)return;
+  _navLock=true;
+  setTimeout(()=>{_navLock=false;},800);
+  try{
+    const s=localStorage.getItem('tren_session');
+    if(s){ const encoded=encodeURIComponent(btoa(s)); url+=(url.includes('?')?'&':'?')+'_t='+encoded; }
+  }catch(e){}
+  window.location.href=url;
+}"""
+
+# ── Replace CSS ──
 css_patterns = [
     re.compile(r'/\* \u2500\u2500 SIDEBAR \u2500\u2500 \*/.+?(?=/\* \u2500\u2500 MAIN)', re.DOTALL),
     re.compile(r'/\*[^\*]*SIDEBAR[^\*]*\*/.+?(?=/\*[^\*]*MAIN[^\*]*\*/)', re.DOTALL),
@@ -160,12 +172,17 @@ for pat in css_patterns:
 if not replaced_css:
     print(f"  \u26a0  CSS block not found \u2014 skipping CSS replacement")
 
-# Replace sidebar HTML
+# ── Replace sidebar HTML ──
 nav_pattern = re.compile(r'<!--\s*SIDEBAR\s*-->.*?</nav>', re.DOTALL)
 if nav_pattern.search(content):
     content = nav_pattern.sub(NEW_NAV, content)
 else:
     print(f"  \u26a0  Sidebar HTML not found \u2014 skipping HTML replacement")
+
+# ── Inject navTo if missing ──
+if 'function navTo' not in content:
+    content = content.replace('</body>', NAVTO_SNIPPET + '\n</body>', 1)
+    print("  + Injected navTo()")
 
 if content != original:
     with open(filepath, 'w', encoding='utf-8') as fh:
