@@ -313,7 +313,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 
   <div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
 
-        <!-- SIDEBAR -->
+          <!-- SIDEBAR -->
   <nav class="sidebar" id="sidebar">
     <a class="s-logo" href="https://trenai.vercel.app" style="text-decoration:none;color:inherit;">
       <span class="s-logo-dot"></span>

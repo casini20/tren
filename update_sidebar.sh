@@ -30,7 +30,7 @@ original = content
 # ── Detect active page from file path ──
 page = 'overview'
 path_lower = filepath.lower()
-for p in ['live-signals','signals','journal','ai-analysis','trenbot','autosignals','indicator','upgrade','settings']:
+for p in ['live-signals','autosignals','signals','journal','ai-analysis','trenbot','autosignals','indicator','upgrade','settings']:
     if p in path_lower:
         page = p
         break
