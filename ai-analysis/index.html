@@ -179,12 +179,12 @@ html,body{width:100%;height:100%;background:#04080f;}
 @keyframes sk{0%,100%{opacity:.4}50%{opacity:.9}}
 @keyframes nqspin{to{transform:rotate(360deg)}}
 .mobile-toggle{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;}
-.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:19;}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:19;}
 
 @media(max-width:850px){
   .shell{position:relative;}
   .mobile-toggle{display:flex;}
-  .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .3s ease;z-index:20;height:100vh;}
+  .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:20;box-shadow:4px 0 30px rgba(0,0,0,.5);}
   .sidebar.open{transform:translateX(0);}
   .sidebar-overlay.open{display:block;}
   .topbar{padding:1rem 1.2rem;}
@@ -576,11 +576,11 @@ function toggleProfileMenu(){var m=document.getElementById('prof-menu');if(m)m.c
 document.addEventListener('click',function(e){
   var pw=document.querySelector('.prof-wrap');
   if(pw&&!pw.contains(e.target)){var m=document.getElementById('prof-menu');if(m)m.classList.remove('open');}
-  var sb=document.getElementById('sidebar'),tog=document.querySelector('.mobile-toggle');
-  if(window.innerWidth<=850&&sb&&sb.classList.contains('open')&&!sb.contains(e.target)&&e.target!==tog)closeSidebar();
+  const sb=document.getElementById('sidebar'),ov=document.getElementById('sb-overlay');
+  if(window.innerWidth<=850&&sb.classList.contains('open')&&!sb.contains(e.target)&&!document.querySelector('.mobile-toggle').contains(e.target)){closeSidebar();}
 });
-function toggleSidebar(){var sb=document.getElementById('sidebar'),ov=document.getElementById('sb-overlay');sb.classList.toggle('open');ov.classList.toggle('open');}
-function closeSidebar(){var sb=document.getElementById('sidebar'),ov=document.getElementById('sb-overlay');if(sb)sb.classList.remove('open');if(ov)ov.classList.remove('open');}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sb-overlay').classList.toggle('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sb-overlay').classList.remove('open');}
 
 // ── HELPERS ───────────────────────────────────────────────────────
 function nqFmt(n){return n==null?'—':n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
