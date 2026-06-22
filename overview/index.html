@@ -111,6 +111,12 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .tf-btn{padding:4px 10px;border-radius:6px;font-size:11.5px;font-weight:600;color:var(--sub);cursor:pointer;transition:all .15s;border:none;font-family:'Plus Jakarta Sans',sans-serif;background:none;letter-spacing:.2px;}
 .tf-btn:hover{color:var(--sub2);}
 .tf-btn.active{background:rgba(255,255,255,.08);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.3);}
+.src-seg{display:inline-flex;align-items:center;gap:1px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:9px;padding:2px;}
+.src-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:7px;font-size:12px;font-weight:600;color:var(--sub);cursor:pointer;transition:all .15s;border:none;font-family:'Plus Jakarta Sans',sans-serif;background:none;letter-spacing:.1px;white-space:nowrap;}
+.src-btn:hover{color:var(--sub2);}
+.src-btn .src-ico{font-size:12px;}
+.src-btn.active{background:rgba(37,99,235,.16);color:#e0eaff;box-shadow:0 1px 3px rgba(0,0,0,.3);}
+.src-btn.active[data-src="personal"]{background:rgba(16,185,129,.16);color:#bdf5dd;}
 
 /* ── OVERVIEW COMPONENTS ── */
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:1.8rem;}
@@ -411,10 +417,17 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
     <div class="page">
 
       <!-- PAGE HEADER ROW -->
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.4rem;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.4rem;flex-wrap:wrap;gap:14px;">
         <div>
-          <div style="font-size:13px;font-weight:600;color:var(--text);">Performance</div>
-          <div style="font-size:11px;color:var(--sub);margin-top:2px;" id="tf-sublabel">Last 14 days</div>
+          <div class="src-seg" role="group" aria-label="Performance source" id="perf-src-seg">
+            <button class="src-btn active" data-src="tren" onclick="setPerfSource('tren')"><span class="src-ico">⚡</span>Tren's Performance</button>
+            <button class="src-btn" data-src="personal" onclick="setPerfSource('personal')"><span class="src-ico">👤</span>Personal Performance</button>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:7px;">
+            <div style="font-size:11px;color:var(--sub);" id="tf-sublabel">Last 14 days</div>
+            <div style="font-size:11px;color:var(--sub);">·</div>
+            <div style="font-size:11px;color:var(--sub);" id="perf-src-desc">AI signal track record</div>
+          </div>
         </div>
         <div class="tf-seg" role="group" aria-label="Timeframe">
           <button class="tf-btn" onclick="setTimeframe(7)">7D</button>
@@ -430,7 +443,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <div class="sc"><div class="sc-lbl">Total P&amp;L <span class="sc-lbl-sub" id="lbl-pnl">14 days</span></div><div class="sc-val g" id="ov-pnl">—</div><div class="sc-ch" id="ov-pc">Loading…</div></div>
         <div class="sc"><div class="sc-lbl">Win Rate <span class="sc-lbl-sub" id="lbl-wr">14 days</span></div><div class="sc-val" id="ov-wr">—</div><div class="sc-ch" id="ov-wc">Loading…</div></div>
         <div class="sc"><div class="sc-lbl">Best Day <span class="sc-lbl-sub" id="lbl-bd">14 days</span></div><div class="sc-val g" id="ov-bd">—</div><div class="sc-ch">Single day</div></div>
-        <div class="sc"><div class="sc-lbl">Live Signals</div><div class="sc-val" id="ov-live-count">—</div><div class="sc-ch u" id="ov-live-sub">Loading…</div></div>
+        <div class="sc"><div class="sc-lbl" id="lbl-live">Live Signals</div><div class="sc-val" id="ov-live-count">—</div><div class="sc-ch u" id="ov-live-sub">Loading…</div></div>
       </div>
 
       <!-- P&L CHART -->
