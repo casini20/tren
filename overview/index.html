@@ -185,13 +185,13 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .sig-pnl-badge{font-size:14px;font-weight:700;}
 .sig-pnl-badge.pos{color:var(--green);}
 .sig-pnl-badge.neg{color:var(--red);}
-.sig-bk{width:23px;height:23px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;line-height:1;cursor:pointer;border:1px solid rgba(59,130,246,.3);background:rgba(37,99,235,.12);color:var(--al);transition:all .15s;flex-shrink:0;}
-.sig-bk:hover{background:rgba(37,99,235,.28);border-color:rgba(59,130,246,.55);transform:scale(1.1);}
-.sig-bk.added{background:rgba(16,185,129,.16);border-color:rgba(16,185,129,.4);color:var(--green);}
-.sig-bk.added:hover{background:rgba(239,68,68,.16);border-color:rgba(239,68,68,.4);color:var(--red);}
-.sig-bk .bk-i2{display:none;}
-.sig-bk.added:hover .bk-i1{display:none;}
-.sig-bk.added:hover .bk-i2{display:inline;}
+.sig-take{display:block;width:100%;margin-top:9px;padding:8px 0;border-radius:8px;border:1px solid rgba(59,130,246,.3);background:rgba(37,99,235,.12);color:var(--al);font-size:11.5px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;letter-spacing:.2px;}
+.sig-take:hover{background:rgba(37,99,235,.25);border-color:rgba(59,130,246,.5);}
+.sig-take.added{background:rgba(16,185,129,.13);border-color:rgba(16,185,129,.35);color:var(--green);}
+.sig-take.added:hover{background:rgba(239,68,68,.13);border-color:rgba(239,68,68,.35);color:var(--red);}
+.sig-take .tk-i2{display:none;}
+.sig-take.added:hover .tk-i1{display:none;}
+.sig-take.added:hover .tk-i2{display:inline;}
 .skel{background:rgba(255,255,255,.04);border-radius:8px;animation:sk 1.4s ease infinite;}
 @keyframes sk{0%,100%{opacity:.4}50%{opacity:.9}}
 .stats-loading{opacity:.5;pointer-events:none;transition:opacity .2s;}
@@ -1301,15 +1301,15 @@ window.toggleSignalJournal=function(i,btn){
   if(isAdded){
     removeSignalFromJournal(t);
     btn.classList.remove('added');
-    btn.title='Add to Journal';
-    btn.innerHTML='+';
+    btn.title='Log this trade to your Journal';
+    btn.innerHTML='📥 Log Trade';
     showToast('🗑️','Removed','Removed from your Personal Performance journal.');
   } else {
     addSignalToJournal(t);
     btn.classList.add('added');
     btn.title='Click to remove from Journal';
-    btn.innerHTML='<span class="bk-i1">✓</span><span class="bk-i2">✕</span>';
-    showToast('✅','Added to Journal','This trade now appears in your Personal Performance.');
+    btn.innerHTML='<span class="tk-i1">✓ Logged</span><span class="tk-i2">✕ Remove from Journal</span>';
+    showToast('✅','Trade Logged','This trade now appears in your Personal Performance.');
   }
 };
 
@@ -1321,13 +1321,14 @@ function buildSignalCard(t,idx){
   // own personal-journal cards, and not still-open/live signals with no pnl yet).
   const offerAdd=_perfSource==='tren'&&!isActive&&idx!=null;
   const already=offerAdd&&isSignalInJournal(t);
-  const bkIcon=already?'<span class="bk-i1">✓</span><span class="bk-i2">✕</span>':'+';
-  const bkBtn=offerAdd?`<button class="sig-bk${already?' added':''}" title="${already?'Click to remove from Journal':'Add to Journal'}" onclick="event.stopPropagation();toggleSignalJournal(${idx},this)">${bkIcon}</button>`:'';
+  const takeLabel=already?'<span class="tk-i1">✓ Logged</span><span class="tk-i2">✕ Remove from Journal</span>':'📥 Log Trade';
+  const takeBtn=offerAdd?`<button class="sig-take${already?' added':''}" title="${already?'Click to remove from Journal':'Log this trade to your Journal'}" onclick="event.stopPropagation();toggleSignalJournal(${idx},this)">${takeLabel}</button>`:'';
   return`<div class="sig-card ${win?'win-border':'loss-border'}">
-    <div class="sig-top"><div class="sig-pair">${escHtml(t.market||'—')}</div><div style="display:flex;align-items:center;gap:7px;">${pnlStr}<div class="sig-dir ${isLong?'lng':'sht'}">${dir.toUpperCase()}</div>${bkBtn}</div></div>
+    <div class="sig-top"><div class="sig-pair">${escHtml(t.market||'—')}</div><div style="display:flex;align-items:center;gap:7px;">${pnlStr}<div class="sig-dir ${isLong?'lng':'sht'}">${dir.toUpperCase()}</div></div></div>
     <div class="sig-meta"><div class="sig-f"><label>Entry</label><p>${t.entry?fmtNum(t.entry,2):'—'}</p></div><div class="sig-f"><label>Exit</label><p class="${win?'g':'r'}">${t.exit?fmtNum(t.exit,2):'—'}</p></div><div class="sig-f"><label>Ticks</label><p>${t.ticks||'—'}</p></div></div>
     <div class="sig-bw"><div class="sig-b" style="width:${isActive?35:100}%;background:var(--green);"></div></div>
     <div class="sig-ft"><div class="sig-tm">${fmtDate(t.executed_at)}</div><div class="sig-st ${sc}">${sl}</div></div>
+    ${takeBtn}
   </div>`;
 }
 
