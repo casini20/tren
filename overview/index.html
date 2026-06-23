@@ -619,7 +619,12 @@ function getJournalAsTrades(){
     exit:t.exit,
     pnl:t.pnl||0,
     ticks:t.ticks,
-    executed_at:t.date?(t.date+'T'+(t.time||'00:00:00')):''
+    executed_at:t.date?(t.date+'T'+(t.time||'00:00:00')):'',
+    // Journal entries are logged after the trade is done, so they're always
+    // "closed" even if the user didn't fill in an exit price. Stats below
+    // check (t.exit||t.closed) so win rate / edge metrics / etc. still count
+    // these trades instead of treating them as still-open.
+    closed:true
   })).filter(t=>t.executed_at).sort((a,b)=>b.executed_at.localeCompare(a.executed_at));
 }
 
@@ -630,7 +635,7 @@ function setPerfSource(src){
   const descEl=document.getElementById('perf-src-desc');
   if(descEl) descEl.textContent=src==='personal'?'Your personal trade journal':'AI signal track record';
   const liveLbl=document.getElementById('lbl-live');
-  if(liveLbl) liveLbl.textContent=src==='personal'?'Open Trades':'Live Signals';
+  if(liveLbl) liveLbl.textContent=src==='personal'?'Total Trades':'Live Signals';
   renderOvStats();
 }
 
@@ -1231,7 +1236,7 @@ function closeSidebar(){
 
 // ── SIGNAL CARD ───────────────────────────────────────────────────
 function buildSignalCard(t){
-  const isActive=!t.exit||t.exit===null;const win=parseFloat(t.pnl||0)>=0;const dir=(t.direction||'').toLowerCase();const isLong=dir==='long';
+  const isActive=!(t.exit||t.closed);const win=parseFloat(t.pnl||0)>=0;const dir=(t.direction||'').toLowerCase();const isLong=dir==='long';
   const pnlStr=isActive?'':`<span class="sig-pnl-badge ${win?'pos':'neg'}">${win?'+':'-'}$${Math.abs(parseFloat(t.pnl||0)).toLocaleString('en-US',{maximumFractionDigits:0})}</span>`;
   const sc=isActive?'ac':win?'ht':'ls';const sl=isActive?'● Live':win?'✓ TP Hit':'✗ SL Hit';
   return`<div class="sig-card ${win?'win-border':'loss-border'}">
@@ -1268,7 +1273,7 @@ function renderDOW(data){
 
 // ── RENDER EDGE METRICS ───────────────────────────────────────────
 function renderEdge(data){
-  const closed=data.filter(t=>t.exit);
+  const closed=data.filter(t=>t.exit||t.closed);
   const wins=closed.filter(t=>parseFloat(t.pnl||0)>0);
   const losses=closed.filter(t=>parseFloat(t.pnl||0)<=0);
   const wr=closed.length?Math.round(wins.length/closed.length*100):0;
@@ -1349,7 +1354,7 @@ function renderEdge(data){
 
 // ── RENDER TRADE INTELLIGENCE ─────────────────────────────────────
 function renderIntel(data){
-  const closed=data.filter(t=>t.exit);
+  const closed=data.filter(t=>t.exit||t.closed);
   const wins=closed.filter(t=>parseFloat(t.pnl||0)>0);
   const losses=closed.filter(t=>parseFloat(t.pnl||0)<=0);
 
@@ -1455,7 +1460,7 @@ function renderFromData(data){
   pe.className='sc-val '+(totalPnl>=0?'g':'r');
   document.getElementById('ov-pc').textContent=`${filtered.length} trades last ${TF_LABELS[days]||days+' days'}`;
 
-  const closed=filtered.filter(t=>t.exit);
+  const closed=filtered.filter(t=>t.exit||t.closed);
   const wins=closed.filter(t=>parseFloat(t.pnl||0)>0).length;
   const wr=closed.length?Math.round(wins/closed.length*100):0;
   const we=document.getElementById('ov-wr');
@@ -1466,7 +1471,7 @@ function renderFromData(data){
   const bd=Object.values(dm).length?Math.max(...Object.values(dm)):0;
   document.getElementById('ov-bd').textContent='+$'+bd.toLocaleString('en-US',{maximumFractionDigits:0});
 
-  const lc=data.filter(t=>!t.exit).length;
+  const lc=_perfSource==='personal'?filtered.length:data.filter(t=>!(t.exit||t.closed)).length;
   const today=getTodayLocal();const tc=data.filter(t=>t.executed_at&&t.executed_at.startsWith(today)).length;
   document.getElementById('ov-live-count').textContent=lc;
   document.getElementById('ov-live-sub').textContent=`↑ ${tc} new today`;
