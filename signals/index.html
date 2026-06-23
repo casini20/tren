@@ -131,6 +131,13 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .sig-bw{height:3px;background:rgba(255,255,255,.06);border-radius:2px;margin-bottom:7px;}
 .sig-b{height:100%;border-radius:2px;}
 .sig-ft{display:flex;align-items:center;justify-content:space-between;}
+.sig-take{display:block;width:100%;margin-top:9px;padding:8px 0;border-radius:8px;border:1px solid rgba(59,130,246,.3);background:rgba(37,99,235,.12);color:var(--al);font-size:11.5px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;letter-spacing:.2px;}
+.sig-take:hover{background:rgba(37,99,235,.25);border-color:rgba(59,130,246,.5);}
+.sig-take.added{background:rgba(16,185,129,.13);border-color:rgba(16,185,129,.35);color:var(--green);}
+.sig-take.added:hover{background:rgba(239,68,68,.13);border-color:rgba(239,68,68,.35);color:var(--red);}
+.sig-take .tk-i2{display:none;}
+.sig-take.added:hover .tk-i1{display:none;}
+.sig-take.added:hover .tk-i2{display:inline;}
 .sig-tm{font-size:11px;color:var(--sub);}
 .sig-st{font-size:11px;padding:2px 8px;border-radius:5px;font-weight:600;}
 .sig-st.ac{background:rgba(37,99,235,.15);color:var(--al);}
@@ -502,7 +509,73 @@ function toggleSidebar(){document.getElementById('sidebar').classList.toggle('op
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sb-overlay').classList.remove('open');}
 
 // ── SIGNALS LOGIC ─────────────────────────────────────────────────
-let allSignalsData=[],currentFilter='all';
+let allSignalsData=[],currentFilter='all',_sigsCardData=[];
+
+function getJournalTrades(){
+  try{ return JSON.parse(localStorage.getItem('tren_journal')||'[]'); }catch(e){ return []; }
+}
+// Finds the index of a journal entry matching this signal (pair+entry+exit+date).
+function findJournalIndex(trades,t){
+  const sigDate=(t.executed_at||'').slice(0,10);
+  return trades.findIndex(j=>
+    (j.pair||'').toUpperCase()===(t.market||'').toUpperCase() &&
+    String(j.entry)===String(t.entry) &&
+    String(j.exit)===String(t.exit) &&
+    j.date===sigDate
+  );
+}
+function isSignalInJournal(t){
+  return findJournalIndex(getJournalTrades(),t)>-1;
+}
+// Logs a closed Tren signal into the personal trade journal (localStorage
+// 'tren_journal'), in the same shape the Journal page's saveTrade() writes.
+function addSignalToJournal(t){
+  const trades=getJournalTrades();
+  const dir=(t.direction||'').toLowerCase()==='long'?'long':'short';
+  const today=new Date();
+  const todayStr=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+  const dateStr=(t.executed_at||'').slice(0,10)||todayStr;
+  trades.push({
+    pair:t.market||'',
+    dir,
+    entry:t.entry!=null?t.entry:'',
+    exit:t.exit!=null?t.exit:'',
+    size:'1',
+    pnl:t.pnl!=null?String(t.pnl):'0',
+    date:dateStr,
+    session:'',
+    notes:'Added from Tren AI signal',
+    setup:'',
+    emotion:'',
+    rating:'',
+    id:Date.now(),
+    time:t.executed_at||(dateStr+'T12:00:00')
+  });
+  localStorage.setItem('tren_journal',JSON.stringify(trades));
+}
+function removeSignalFromJournal(t){
+  const trades=getJournalTrades();
+  const idx=findJournalIndex(trades,t);
+  if(idx>-1){ trades.splice(idx,1); localStorage.setItem('tren_journal',JSON.stringify(trades)); }
+}
+window.toggleSignalJournal=function(i,btn){
+  const t=_sigsCardData[i];
+  if(!t||!btn) return;
+  const isAdded=btn.classList.contains('added');
+  if(isAdded){
+    removeSignalFromJournal(t);
+    btn.classList.remove('added');
+    btn.title='Log this trade to your Journal';
+    btn.innerHTML='📥 Log Trade';
+    showToast('🗑️','Removed','Removed from your Personal Performance journal.');
+  } else {
+    addSignalToJournal(t);
+    btn.classList.add('added');
+    btn.title='Click to remove from Journal';
+    btn.innerHTML='<span class="tk-i1">✓ Logged</span><span class="tk-i2">✕ Remove from Journal</span>';
+    showToast('✅','Trade Logged','This trade now appears in your Personal Performance.');
+  }
+};
 
 function updateStats(data){
   const closed=data.filter(t=>t.exit&&t.exit!==null);
@@ -527,7 +600,7 @@ function updateStats(data){
   el('stat-best-sub').textContent=`best: ${bestTick||'—'} ticks`;
 }
 
-function buildSignalCard(t){
+function buildSignalCard(t,idx){
   const isActive=!t.exit||t.exit===null;
   const pnl=parseFloat(t.pnl||0);const win=pnl>=0;
   const dir=(t.direction||'').toLowerCase();const isLong=dir==='long';
@@ -536,6 +609,10 @@ function buildSignalCard(t){
     :`<span class="sig-pnl-badge ${win?'pos':'neg'}">${win?'+':'-'}$${Math.abs(pnl).toLocaleString('en-US',{maximumFractionDigits:0})}</span>`;
   const statusLabel=isActive?'':win?'✓ TP Hit':'✗ SL Hit';
   const statusCls=win?'ht':'ls';
+  const offerLog=!isActive&&idx!=null;
+  const already=offerLog&&isSignalInJournal(t);
+  const takeLabel=already?'<span class="tk-i1">✓ Logged</span><span class="tk-i2">✕ Remove from Journal</span>':'📥 Log Trade';
+  const takeBtn=offerLog?`<button class="sig-take${already?' added':''}" title="${already?'Click to remove from Journal':'Log this trade to your Journal'}" onclick="event.stopPropagation();toggleSignalJournal(${idx},this)">${takeLabel}</button>`:'';
   return`<div class="sig-card ${isActive?'':win?'win-border':'loss-border'}">
     <div class="sig-top">
       <div style="display:flex;align-items:center;gap:8px;">
@@ -554,6 +631,7 @@ function buildSignalCard(t){
       <div class="sig-tm">${fmtDate(t.executed_at)}</div>
       ${!isActive?`<div class="sig-st ${statusCls}">${statusLabel}</div>`:''}
     </div>
+    ${takeBtn}
   </div>`;
 }
 
@@ -577,7 +655,8 @@ function renderAllSigs(f){
     el.innerHTML=`<div class="empty-state"><div class="empty-icon">📭</div><div class="empty-title">No trades found</div><div class="empty-sub">${search?'No trades on this date.':'No signals match this filter.'}</div></div>`;
     return;
   }
-  el.innerHTML=filtered.map(buildSignalCard).join('');
+  _sigsCardData=filtered;
+  el.innerHTML=filtered.map((t,i)=>buildSignalCard(t,i)).join('');
 }
 
 async function loadAllSignals(){
