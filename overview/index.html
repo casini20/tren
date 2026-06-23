@@ -185,6 +185,9 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .sig-pnl-badge{font-size:14px;font-weight:700;}
 .sig-pnl-badge.pos{color:var(--green);}
 .sig-pnl-badge.neg{color:var(--red);}
+.sig-add{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:5px;border:1px solid rgba(59,130,246,.3);background:rgba(37,99,235,.12);color:var(--al);cursor:pointer;white-space:nowrap;transition:all .15s;}
+.sig-add:hover{background:rgba(37,99,235,.25);border-color:rgba(59,130,246,.5);}
+.sig-add.added{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.3);color:var(--green);cursor:default;}
 .skel{background:rgba(255,255,255,.04);border-radius:8px;animation:sk 1.4s ease infinite;}
 @keyframes sk{0%,100%{opacity:.4}50%{opacity:.9}}
 .stats-loading{opacity:.5;pointer-events:none;transition:opacity .2s;}
@@ -606,6 +609,7 @@ const SESSION_KEY='tren_session';
 let _activeDays = 14;
 let _allTradesCache = null;
 let _perfSource = 'tren';
+let _sigsCardData = [];
 
 // Personal journal entries are saved client-side (Journal page uses localStorage 'tren_journal').
 // Map them into the same shape renderFromData/buildSignalCard expect from the Supabase `trades` rows.
@@ -619,7 +623,10 @@ function getJournalAsTrades(){
     exit:t.exit,
     pnl:t.pnl||0,
     ticks:t.ticks,
-    executed_at:t.date?(t.date+'T'+(t.time||'00:00:00')):'',
+    // t.time (set by the Journal page) is already a full ISO timestamp, not
+    // a bare "HH:MM:SS" clock time — use it directly. Fall back to the plain
+    // date (noon, to dodge timezone edge cases) for older entries without it.
+    executed_at:t.time||(t.date?t.date+'T12:00:00':''),
     // Journal entries are logged after the trade is done, so they're always
     // "closed" even if the user didn't fill in an exit price. Stats below
     // check (t.exit||t.closed) so win rate / edge metrics / etc. still count
@@ -1235,15 +1242,71 @@ function closeSidebar(){
 }
 
 // ── SIGNAL CARD ───────────────────────────────────────────────────
-function buildSignalCard(t){
+function getJournalTrades(){
+  try{ return JSON.parse(localStorage.getItem('tren_journal')||'[]'); }catch(e){ return []; }
+}
+
+// Dedup check: has this exact signal already been copied into the journal?
+function isSignalInJournal(t){
+  const trades=getJournalTrades();
+  const sigDate=(t.executed_at||'').slice(0,10);
+  return trades.some(j=>
+    (j.pair||'').toUpperCase()===(t.market||'').toUpperCase() &&
+    String(j.entry)===String(t.entry) &&
+    String(j.exit)===String(t.exit) &&
+    j.date===sigDate
+  );
+}
+
+// Copies a closed Tren signal into the personal trade journal (localStorage
+// 'tren_journal'), in the same shape the Journal page's saveTrade() writes.
+function addSignalToJournal(t){
+  const trades=getJournalTrades();
+  const dir=(t.direction||'').toLowerCase()==='long'?'long':'short';
+  const dateStr=(t.executed_at||'').slice(0,10)||getTodayLocal();
+  trades.push({
+    pair:t.market||'',
+    dir,
+    entry:t.entry!=null?t.entry:'',
+    exit:t.exit!=null?t.exit:'',
+    size:'1',
+    pnl:t.pnl!=null?String(t.pnl):'0',
+    date:dateStr,
+    session:'',
+    notes:'Added from Tren AI signal',
+    setup:'',
+    emotion:'',
+    rating:'',
+    id:Date.now(),
+    time:t.executed_at||(dateStr+'T12:00:00')
+  });
+  localStorage.setItem('tren_journal',JSON.stringify(trades));
+}
+
+window.takeTradeFromSignal=function(i,btn){
+  const t=_sigsCardData[i];
+  if(!t||!btn||btn.classList.contains('added')) return;
+  addSignalToJournal(t);
+  btn.textContent='✓ Added';
+  btn.classList.add('added');
+  btn.onclick=null;
+  showToast('✅','Added to Journal','This trade now appears in your Personal Performance.');
+};
+
+function buildSignalCard(t,idx){
   const isActive=!(t.exit||t.closed);const win=parseFloat(t.pnl||0)>=0;const dir=(t.direction||'').toLowerCase();const isLong=dir==='long';
   const pnlStr=isActive?'':`<span class="sig-pnl-badge ${win?'pos':'neg'}">${win?'+':'-'}$${Math.abs(parseFloat(t.pnl||0)).toLocaleString('en-US',{maximumFractionDigits:0})}</span>`;
   const sc=isActive?'ac':win?'ht':'ls';const sl=isActive?'● Live':win?'✓ TP Hit':'✗ SL Hit';
+  // Only offer "Add to Journal" for closed Tren signals (not the user's own
+  // personal-journal cards, and not still-open/live signals with no pnl yet).
+  const offerAdd=_perfSource==='tren'&&!isActive&&idx!=null;
+  const already=offerAdd&&isSignalInJournal(t);
+  const addBtn=offerAdd?`<button class="sig-add${already?' added':''}" ${already?'':`onclick="event.stopPropagation();takeTradeFromSignal(${idx},this)"`}>${already?'✓ Added':'+ Journal'}</button>`:'';
   return`<div class="sig-card ${win?'win-border':'loss-border'}">
     <div class="sig-top"><div class="sig-pair">${escHtml(t.market||'—')}</div><div style="display:flex;align-items:center;gap:7px;">${pnlStr}<div class="sig-dir ${isLong?'lng':'sht'}">${dir.toUpperCase()}</div></div></div>
     <div class="sig-meta"><div class="sig-f"><label>Entry</label><p>${t.entry?fmtNum(t.entry,2):'—'}</p></div><div class="sig-f"><label>Exit</label><p class="${win?'g':'r'}">${t.exit?fmtNum(t.exit,2):'—'}</p></div><div class="sig-f"><label>Ticks</label><p>${t.ticks||'—'}</p></div></div>
     <div class="sig-bw"><div class="sig-b" style="width:${isActive?35:100}%;background:var(--green);"></div></div>
-    <div class="sig-ft"><div class="sig-tm">${fmtDate(t.executed_at)}</div><div class="sig-st ${sc}">${sl}</div></div>
+    <div class="sig-ft"><div class="sig-tm">${fmtDate(t.executed_at)}</div><div style="display:flex;align-items:center;gap:6px;">${addBtn}<div class="sig-st ${sc}">${sl}</div></div></div>
   </div>`;
 }
 
@@ -1567,7 +1630,8 @@ function renderFromData(data){
   renderEdge(filtered);
   renderIntel(filtered);
 
-  document.getElementById('ov-sigs').innerHTML=(filtered||[]).slice(0,8).map(buildSignalCard).join('');
+  _sigsCardData=(filtered||[]).slice(0,8);
+  document.getElementById('ov-sigs').innerHTML=_sigsCardData.map((t,i)=>buildSignalCard(t,i)).join('');
 }
 
 // ── PREFS ─────────────────────────────────────────────────────────
