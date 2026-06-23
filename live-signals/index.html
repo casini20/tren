@@ -223,6 +223,13 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .lc-pnl.neg{color:var(--red);}
 .lc-copy-btn{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--sub);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;font-family:'Plus Jakarta Sans',sans-serif;}
 .lc-copy-btn:hover{background:rgba(255,255,255,.1);border-color:var(--border2);color:var(--text);}
+.lc-take{display:block;width:100%;padding:8px 0;border-radius:8px;border:1px solid rgba(59,130,246,.3);background:rgba(37,99,235,.12);color:var(--al);font-size:11.5px;font-weight:700;cursor:pointer;transition:all .15s;text-align:center;letter-spacing:.2px;margin-top:10px;}
+.lc-take:hover{background:rgba(37,99,235,.25);border-color:rgba(59,130,246,.5);}
+.lc-take.added{background:rgba(16,185,129,.13);border-color:rgba(16,185,129,.35);color:var(--green);}
+.lc-take.added:hover{background:rgba(239,68,68,.13);border-color:rgba(239,68,68,.35);color:var(--red);}
+.lc-take .tk-i2{display:none;}
+.lc-take.added:hover .tk-i1{display:none;}
+.lc-take.added:hover .tk-i2{display:inline;}
 
 /* Expiry */
 .lc-expiry{display:flex;align-items:center;gap:6px;background:rgba(239,68,68,.05);border:1px solid rgba(239,68,68,.12);border-radius:8px;padding:7px 10px;}
@@ -659,6 +666,73 @@ function updateStats(){
     }else{pnlEl.textContent='—';pnlEl.className='stat-value';}
   }
 }
+
+// ── LIVE CARD JOURNAL INTEGRATION ──────────────────────────────────
+let _liveCardsData=new Map(); // Map of { id -> signal data for logging }
+
+function getJournalTrades(){
+  try{ return JSON.parse(localStorage.getItem('tren_journal')||'[]'); }catch(e){ return []; }
+}
+function findJournalIndex(trades,t){
+  const sigDate=(t.executed_at||t.timestamp||'').slice(0,10);
+  return trades.findIndex(j=>
+    (j.pair||'').toUpperCase()===(t.pair||t.market||'').toUpperCase() &&
+    String(j.entry)===String(t.entry) &&
+    String(j.exit)===String(t.exit) &&
+    j.date===sigDate
+  );
+}
+function isSignalInJournal(t){
+  return findJournalIndex(getJournalTrades(),t)>-1;
+}
+function addLiveSignalToJournal(t){
+  const trades=getJournalTrades();
+  const dir=(t.direction||'').toLowerCase()==='long'?'long':'short';
+  const today=new Date();
+  const todayStr=today.getFullYear()+'-'+String(today.getMonth()+1).padStart(2,'0')+'-'+String(today.getDate()).padStart(2,'0');
+  const dateStr=(t.timestamp||'').slice(0,10)||todayStr;
+  trades.push({
+    pair:t.pair||t.market||'',
+    dir,
+    entry:t.entry!=null?t.entry:'',
+    exit:t.exit!=null?t.exit:'',
+    size:t.quantity?String(t.quantity):'1',
+    pnl:t.pnl_live!=null?String(t.pnl_live):'0',
+    date:dateStr,
+    session:'',
+    notes:'Added from Tren AI live signal',
+    setup:'',
+    emotion:'',
+    rating:'',
+    id:Date.now(),
+    time:t.timestamp||(dateStr+'T12:00:00'),
+    executed_at:t.timestamp||(dateStr+'T12:00:00')
+  });
+  localStorage.setItem('tren_journal',JSON.stringify(trades));
+}
+function removeLiveSignalFromJournal(t){
+  const trades=getJournalTrades();
+  const idx=findJournalIndex(trades,t);
+  if(idx>-1){ trades.splice(idx,1); localStorage.setItem('tren_journal',JSON.stringify(trades)); }
+}
+window.toggleLiveSignalJournal=function(signalId,btn){
+  const t=_liveCardsData.get(signalId);
+  if(!t||!btn) return;
+  const isAdded=btn.classList.contains('added');
+  if(isAdded){
+    removeLiveSignalFromJournal(t);
+    btn.classList.remove('added');
+    btn.title='Log this trade to your Journal';
+    btn.innerHTML='📥 Log Trade';
+    showToast('🗑️','Removed','Removed from your Personal Performance journal.');
+  } else {
+    addLiveSignalToJournal(t);
+    btn.classList.add('added');
+    btn.title='Click to remove from Journal';
+    btn.innerHTML='<span class="tk-i1">✓ Logged</span><span class="tk-i2">✕ Remove from Journal</span>';
+    showToast('✅','Trade Logged','This trade now appears in your Personal Performance.');
+  }
+};
 
 function buildLiveCard(t){
   const isS=(t.direction||'').toLowerCase()==='short';
