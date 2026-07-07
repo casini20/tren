@@ -905,8 +905,7 @@ setInterval(loadAllSignals,30000);
     const { data: { session } } = await gcClient.auth.getSession();
 
     if (!session){
-      messagesEl.innerHTML = `<div class="gc-locked">🔒 Log in to your dashboard to use Global Chat.</div>`;
-      inputRow.style.display = 'none';
+      fab.style.display = 'none';
       return;
     }
 
@@ -918,8 +917,8 @@ setInterval(loadAllSignals,30000);
     gcClient.auth.onAuthStateChange((_event, newSession) => {
       currentUser = newSession ? newSession.user : null;
       if (!currentUser){
-        inputRow.style.display = 'none';
-        messagesEl.innerHTML = `<div class="gc-locked">🔒 Log in to your dashboard to use Global Chat.</div>`;
+        fab.style.display = 'none';
+        panel.classList.remove('open');
         if (gcChannel) gcClient.removeChannel(gcChannel);
       }
     });
