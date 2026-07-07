@@ -1,9 +1,8 @@
-<!-- GC_WIDGET_MARKER: TREN GLOBAL CHAT WIDGET
-  Wired to the same Supabase auth project each page already uses
-  (SUPABASE_AUTH_URL / SUPABASE_AUTH_KEY, must be defined earlier
-  in this file — same as overview.html).
-  Requires the "chat_messages" table + RLS policies from
-  supabase_chat_setup.sql to be run once in that project.
+<!-- GC_WIDGET_MARKER: TREN GLOBAL CHAT WIDGET (v3 — redesigned + plan badges)
+  Uses 'tren_session' directly for auth (access_token + user info).
+  Looks up each sender's subscription plan (trenbot/premium/auto)
+  from the subscribers table the same way the rest of this app
+  already does, and shows it as a small badge next to their name.
 ========================================================= -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -26,62 +25,95 @@
 }
 .gc-panel{
   position:fixed;bottom:84px;right:20px;z-index:900;
-  width:340px;max-width:calc(100vw - 40px);height:460px;
+  width:360px;max-width:calc(100vw - 40px);height:480px;
   background:var(--bg2);border:1px solid var(--border2);
-  border-radius:14px;display:none;flex-direction:column;overflow:hidden;
-  box-shadow:0 12px 40px rgba(0,0,0,.5);
+  border-radius:16px;display:none;flex-direction:column;overflow:hidden;
+  box-shadow:0 16px 48px rgba(0,0,0,.55);
   font-family:'Plus Jakarta Sans',sans-serif;
 }
 .gc-panel.open{display:flex;}
 .gc-header{
-  padding:12px 14px;border-bottom:1px solid var(--border);
+  padding:14px 16px;border-bottom:1px solid var(--border);
   display:flex;align-items:center;justify-content:space-between;
   background:var(--bg3);flex-shrink:0;
 }
-.gc-title{font-size:13px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:7px;}
-.gc-live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 2px rgba(16,185,129,.2);}
-.gc-close{background:none;border:none;color:var(--sub);cursor:pointer;font-size:16px;line-height:1;padding:4px;}
-.gc-close:hover{color:var(--text);}
+.gc-title{font-size:13.5px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:8px;letter-spacing:.2px;}
+.gc-live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 0 3px rgba(16,185,129,.18);}
+.gc-close{background:none;border:none;color:var(--sub);cursor:pointer;font-size:16px;line-height:1;padding:4px;border-radius:6px;}
+.gc-close:hover{color:var(--text);background:rgba(255,255,255,.05);}
+
 .gc-messages{
-  flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px;
+  flex:1;overflow-y:auto;padding:14px 14px 6px;
+  display:flex;flex-direction:column;align-items:flex-start;gap:12px;
   scrollbar-width:thin;
 }
 .gc-messages::-webkit-scrollbar{width:5px;}
-.gc-messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px;}
-.gc-msg{display:flex;flex-direction:column;gap:2px;max-width:88%;}
-.gc-msg.mine{align-self:flex-end;align-items:flex-end;}
-.gc-msg-meta{font-size:10px;color:var(--sub);display:flex;gap:6px;align-items:baseline;}
-.gc-msg-name{font-weight:700;color:var(--al);}
-.gc-msg.mine .gc-msg-name{color:var(--green);}
-.gc-msg-bubble{
-  font-size:12.5px;line-height:1.4;color:var(--sub2);
-  background:rgba(255,255,255,.04);border:1px solid var(--border);
-  border-radius:10px;padding:7px 10px;word-break:break-word;
+.gc-messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px;}
+
+.gc-row{
+  display:flex;align-items:flex-end;gap:8px;
+  max-width:86%;width:fit-content;
 }
-.gc-msg.mine .gc-msg-bubble{
-  background:rgba(37,99,235,.14);border-color:rgba(37,99,235,.28);color:var(--text);
+.gc-row.mine{align-self:flex-end;flex-direction:row-reverse;}
+
+.gc-avatar{
+  width:26px;height:26px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;
+  text-transform:uppercase;
 }
-.gc-empty{margin:auto;text-align:center;color:var(--sub);font-size:12px;padding:20px;}
+
+.gc-body{display:flex;flex-direction:column;gap:3px;min-width:0;}
+.gc-row.mine .gc-body{align-items:flex-end;}
+
+.gc-meta{
+  display:flex;align-items:center;gap:6px;font-size:10.5px;color:var(--sub);
+  padding:0 2px;
+}
+.gc-name{font-weight:700;}
+.gc-badge{
+  font-size:9px;font-weight:700;letter-spacing:.3px;text-transform:uppercase;
+  padding:1.5px 6px;border-radius:6px;line-height:1.4;
+}
+.gc-badge.plan-trenbot{background:rgba(234,179,8,.16);color:#facc15;}
+.gc-badge.plan-premium{background:rgba(37,99,235,.16);color:#60a5fa;}
+.gc-badge.plan-auto{background:rgba(34,197,94,.16);color:#4ade80;}
+.gc-time{opacity:.7;}
+
+.gc-bubble{
+  font-size:13px;line-height:1.45;color:var(--sub2);
+  background:rgba(255,255,255,.045);border:1px solid var(--border);
+  border-radius:14px;padding:8px 12px;word-break:break-word;
+  width:fit-content;max-width:100%;
+}
+.gc-row.mine .gc-bubble{
+  background:linear-gradient(135deg,rgba(37,99,235,.22),rgba(37,99,235,.12));
+  border-color:rgba(37,99,235,.32);color:var(--text);
+}
+
+.gc-empty{margin:auto;text-align:center;color:var(--sub);font-size:12px;padding:24px;}
+.gc-empty.gc-error{color:var(--red);}
+
 .gc-input-row{
-  border-top:1px solid var(--border);padding:10px;display:flex;gap:8px;
+  border-top:1px solid var(--border);padding:10px 12px;display:flex;gap:8px;
   background:var(--bg3);flex-shrink:0;
 }
 .gc-input{
-  flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);
-  border-radius:8px;padding:8px 10px;color:var(--text);font-size:12.5px;
-  font-family:inherit;resize:none;outline:none;
+  flex:1;background:rgba(255,255,255,.045);border:1px solid var(--border);
+  border-radius:10px;padding:9px 12px;color:var(--text);font-size:13px;
+  font-family:inherit;resize:none;outline:none;transition:border-color .15s;
 }
-.gc-input:focus{border-color:rgba(37,99,235,.4);}
+.gc-input:focus{border-color:rgba(37,99,235,.45);}
 .gc-send{
-  width:36px;height:36px;flex-shrink:0;border:none;border-radius:8px;
-  background:linear-gradient(90deg,var(--accent),var(--al));color:#fff;
+  width:38px;height:38px;flex-shrink:0;border:none;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent),var(--al));color:#fff;
   cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:opacity .15s;
+  transition:opacity .15s,transform .1s;
 }
-.gc-send:hover{opacity:.88;}
+.gc-send:hover{opacity:.9;}
+.gc-send:active{transform:scale(.94);}
 .gc-send:disabled{opacity:.4;cursor:not-allowed;}
 .gc-send svg{width:15px;height:15px;fill:#fff;}
-.gc-locked{margin:auto;text-align:center;color:var(--sub);font-size:12px;padding:24px;}
 </style>
 
 <button class="gc-fab" id="gc-fab" title="Global Chat">
@@ -97,7 +129,7 @@
   <div class="gc-messages" id="gc-messages">
     <div class="gc-empty">Loading messages…</div>
   </div>
-  <div class="gc-input-row" id="gc-input-row" style="display:none;">
+  <div class="gc-input-row" id="gc-input-row">
     <textarea class="gc-input" id="gc-input" rows="1" maxlength="1000" placeholder="Message everyone…"></textarea>
     <button class="gc-send" id="gc-send">
       <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
@@ -107,65 +139,153 @@
 
 <script>
 (function(){
+  function getTrenSession(){
+    try {
+      const raw = localStorage.getItem('tren_session');
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (!parsed?.access_token || !parsed?.user?.id) return null;
+      return parsed;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  const trenSession = getTrenSession();
+  const accessToken = trenSession?.access_token || null;
+  const currentUser = trenSession?.user || null;
+
+  const REST_URL = `${SUPABASE_AUTH_URL}/rest/v1/chat_messages`;
+  const SUBSCRIBERS_URL = `${SUPABASE_AUTH_URL}/rest/v1/subscribers`;
+
   const gcClient = window.supabase.createClient(SUPABASE_AUTH_URL, SUPABASE_AUTH_KEY);
 
   const fab = document.getElementById('gc-fab');
   const panel = document.getElementById('gc-panel');
   const closeBtn = document.getElementById('gc-close');
   const messagesEl = document.getElementById('gc-messages');
-  const inputRow = document.getElementById('gc-input-row');
   const input = document.getElementById('gc-input');
   const sendBtn = document.getElementById('gc-send');
   const unreadBadge = document.getElementById('gc-unread');
 
-  let currentUser = null;
   let unread = 0;
-  let gcChannel = null;
   let isOpen = false;
+  let myPlan = null; // cached lookup, filled in before first send
+
+  // ---------- helpers ----------
+  const AVATAR_PALETTE = ['#2563eb','#16a34a','#f59e0b','#ec4899','#8b5cf6','#06b6d4','#ef4444','#84cc16'];
+
+  function hashToIndex(str, mod){
+    let h = 0;
+    for (let i = 0; i < str.length; i++){
+      h = (h * 31 + str.charCodeAt(i)) >>> 0;
+    }
+    return h % mod;
+  }
+
+  function avatarColor(userId){
+    return AVATAR_PALETTE[hashToIndex(userId || 'x', AVATAR_PALETTE.length)];
+  }
+
+  function initials(name){
+    if (!name) return '?';
+    const parts = name.trim().split(/\s+/);
+    if (parts.length === 1) return parts[0].slice(0,2);
+    return (parts[0][0] + parts[1][0]);
+  }
 
   function fmtTime(ts){
     const d = new Date(ts);
     return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
   }
+
   function escapeHtml(str){
     const d = document.createElement('div');
     d.textContent = str;
     return d.innerHTML;
   }
+
+  function planBadgeHtml(plan){
+    if (!plan) return '';
+    const labels = { trenbot: 'TrenBot', premium: 'Premium', auto: 'AutoSignals' };
+    const label = labels[plan] || plan;
+    return `<span class="gc-badge plan-${plan}">${escapeHtml(label)}</span>`;
+  }
+
+  async function lookupPlan(email){
+    if (!email) return null;
+    const priority = ['trenbot', 'premium', 'auto'];
+    for (const plan of priority){
+      try {
+        const res = await fetch(
+          `${SUBSCRIBERS_URL}?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&plan=eq.${plan}&status=eq.active&select=plan`,
+          { headers: { apikey: SUPABASE_AUTH_KEY, Authorization: `Bearer ${SUPABASE_AUTH_KEY}` } }
+        );
+        if (!res.ok) continue;
+        const rows = await res.json();
+        if (rows && rows.length > 0) return plan;
+      } catch (e) { /* ignore, try next */ }
+    }
+    return null;
+  }
+
+  // ---------- rendering ----------
   function renderMessage(msg){
     const mine = currentUser && msg.user_id === currentUser.id;
-    const wrap = document.createElement('div');
-    wrap.className = 'gc-msg' + (mine ? ' mine' : '');
-    wrap.innerHTML = `
-      <div class="gc-msg-meta"><span class="gc-msg-name">${escapeHtml(msg.username)}</span><span>${fmtTime(msg.created_at)}</span></div>
-      <div class="gc-msg-bubble">${escapeHtml(msg.content)}</div>
+    const row = document.createElement('div');
+    row.className = 'gc-row' + (mine ? ' mine' : '');
+
+    const color = avatarColor(msg.user_id);
+    row.innerHTML = `
+      <div class="gc-avatar" style="background:${color}">${escapeHtml(initials(msg.username))}</div>
+      <div class="gc-body">
+        <div class="gc-meta">
+          <span class="gc-name" style="color:${color}">${escapeHtml(msg.username)}</span>
+          ${planBadgeHtml(msg.plan)}
+          <span class="gc-time">${fmtTime(msg.created_at)}</span>
+        </div>
+        <div class="gc-bubble">${escapeHtml(msg.content)}</div>
+      </div>
     `;
-    messagesEl.appendChild(wrap);
+    messagesEl.appendChild(row);
   }
+
   function scrollToBottom(){ messagesEl.scrollTop = messagesEl.scrollHeight; }
 
   async function loadHistory(){
-    const { data, error } = await gcClient
-      .from('chat_messages')
-      .select('*')
-      .order('created_at', { ascending: true })
-      .limit(100);
-
-    messagesEl.innerHTML = '';
-    if (error){
-      messagesEl.innerHTML = `<div class="gc-empty">Couldn't load chat: ${escapeHtml(error.message)}</div>`;
+    if (!accessToken){
+      messagesEl.innerHTML = `<div class="gc-empty gc-error">Couldn't verify your session. Try logging out and back in.</div>`;
       return;
     }
-    if (!data || data.length === 0){
-      messagesEl.innerHTML = `<div class="gc-empty">No messages yet. Say hi 👋</div>`;
-      return;
+    try {
+      const res = await fetch(`${REST_URL}?select=*&order=created_at.asc&limit=100`, {
+        headers: { apikey: SUPABASE_AUTH_KEY, Authorization: `Bearer ${accessToken}` }
+      });
+      if (!res.ok){
+        const errText = await res.text();
+        messagesEl.innerHTML = `<div class="gc-empty gc-error">Couldn't load chat (${res.status}).</div>`;
+        console.error('Global Chat load error:', errText);
+        return;
+      }
+      const data = await res.json();
+      messagesEl.innerHTML = '';
+      if (!data || data.length === 0){
+        messagesEl.innerHTML = `<div class="gc-empty">No messages yet. Say hi 👋</div>`;
+        return;
+      }
+      data.forEach(renderMessage);
+      scrollToBottom();
+    } catch (e) {
+      messagesEl.innerHTML = `<div class="gc-empty gc-error">Network error loading chat.</div>`;
+      console.error('Global Chat load exception:', e);
     }
-    data.forEach(renderMessage);
-    scrollToBottom();
   }
 
   function subscribeRealtime(){
-    gcChannel = gcClient
+    if (!accessToken) return;
+    gcClient.realtime.setAuth(accessToken);
+
+    gcClient
       .channel('public:chat_messages')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages' }, payload => {
         const empty = messagesEl.querySelector('.gc-empty');
@@ -183,50 +303,54 @@
 
   async function sendMessage(){
     const content = input.value.trim();
-    if (!content || !currentUser) return;
+    if (!content) return;
+
+    if (!accessToken || !currentUser){
+      alert("Couldn't verify your session. Try logging out and back in.");
+      return;
+    }
+
     sendBtn.disabled = true;
     const username = currentUser.user_metadata?.username
       || currentUser.user_metadata?.full_name
       || currentUser.email?.split('@')[0]
       || 'User';
 
-    const { error } = await gcClient.from('chat_messages').insert({
-      user_id: currentUser.id,
-      username,
-      content
-    });
-
-    if (error){
-      alert('Message failed: ' + error.message);
-    } else {
-      input.value = '';
+    if (myPlan === null){
+      myPlan = await lookupPlan(currentUser.email) || '';
     }
+
+    try {
+      const res = await fetch(REST_URL, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_AUTH_KEY,
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal'
+        },
+        body: JSON.stringify({
+          user_id: currentUser.id,
+          username,
+          content,
+          plan: myPlan || null
+        })
+      });
+
+      if (!res.ok){
+        const errText = await res.text();
+        alert('Message failed to send.');
+        console.error('Global Chat send error:', errText);
+      } else {
+        input.value = '';
+      }
+    } catch (e) {
+      alert('Message failed to send (network error).');
+      console.error('Global Chat send exception:', e);
+    }
+
     sendBtn.disabled = false;
     input.focus();
-  }
-
-  async function init(){
-    const { data: { session } } = await gcClient.auth.getSession();
-
-    if (!session){
-      messagesEl.innerHTML = `<div class="gc-locked">🔒 Log in to your dashboard to use Global Chat.</div>`;
-      inputRow.style.display = 'none';
-      return;
-    }
-
-    currentUser = session.user;
-    inputRow.style.display = 'flex';
-    await loadHistory();
-    subscribeRealtime();
-
-    gcClient.auth.onAuthStateChange((_event, newSession) => {
-      currentUser = newSession ? newSession.user : null;
-      if (!currentUser){
-        inputRow.style.display = 'none';
-        messagesEl.innerHTML = `<div class="gc-locked">🔒 Log in to your dashboard to use Global Chat.</div>`;
-        if (gcChannel) gcClient.removeChannel(gcChannel);
-      }
-    });
   }
 
   fab.addEventListener('click', () => {
@@ -251,6 +375,6 @@
     }
   });
 
-  init();
+  loadHistory().then(subscribeRealtime);
 })();
 </script>
