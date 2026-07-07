@@ -595,6 +595,8 @@ async function doReset() {
 function showDashboard(session) {
   const sessionPayload = {
     access_token: session.access_token,
+    refresh_token: session.refresh_token,
+    expires_at: session.expires_at, // unix seconds when access_token expires
     user: {
       email: session.user?.email || '',
       id: session.user?.id || '',

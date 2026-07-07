@@ -979,5 +979,72 @@ setInterval(loadAllSignals,30000);
   loadHistory().then(subscribeRealtime);
 })();
 </script>
+<!-- GC_REFRESH_MARKER: TREN SESSION AUTO-REFRESH
+  Keeps 'tren_session' alive by refreshing the access_token
+  before it expires, using the refresh_token saved at login.
+  Requires: login page updated to also store refresh_token
+  and expires_at in tren_session (see updated login page).
+========================================================= -->
+<script>
+(function(){
+  const REFRESH_MARGIN_SECONDS = 120; // refresh when < 2 min left
+  const CHECK_INTERVAL_MS = 30000;    // check every 30s
+
+  function getSession(){
+    try {
+      const raw = localStorage.getItem('tren_session');
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveSession(updated){
+    localStorage.setItem('tren_session', JSON.stringify(updated));
+  }
+
+  async function refreshIfNeeded(){
+    const session = getSession();
+    if (!session?.refresh_token || !session?.expires_at) return;
+
+    const now = Math.floor(Date.now() / 1000);
+    const secondsLeft = session.expires_at - now;
+
+    if (secondsLeft > REFRESH_MARGIN_SECONDS) return; // still fresh
+
+    try {
+      const res = await fetch(`${SUPABASE_AUTH_URL}/auth/v1/token?grant_type=refresh_token`, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_AUTH_KEY,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ refresh_token: session.refresh_token })
+      });
+
+      if (!res.ok){
+        console.warn('Tren session refresh failed:', res.status, await res.text());
+        return;
+      }
+
+      const data = await res.json();
+      if (!data.access_token) return;
+
+      saveSession({
+        access_token: data.access_token,
+        refresh_token: data.refresh_token || session.refresh_token,
+        expires_at: data.expires_at || (now + (data.expires_in || 3600)),
+        user: session.user
+      });
+    } catch (e) {
+      console.warn('Tren session refresh error:', e);
+    }
+  }
+
+  // Check immediately on page load, then on an interval
+  refreshIfNeeded();
+  setInterval(refreshIfNeeded, CHECK_INTERVAL_MS);
+})();
+</script>
 </body>
 </html>
