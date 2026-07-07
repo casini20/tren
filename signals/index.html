@@ -694,12 +694,12 @@ setInterval(loadAllSignals,30000);
   }
 </script>
 <script defer src="/_vercel/insights/script.js"></script>
-<!-- GC_WIDGET_MARKER: TREN GLOBAL CHAT WIDGET
-  Wired to the same Supabase auth project each page already uses
-  (SUPABASE_AUTH_URL / SUPABASE_AUTH_KEY, must be defined earlier
-  in this file — same as overview.html).
-  Requires the "chat_messages" table + RLS policies from
-  supabase_chat_setup.sql to be run once in that project.
+<!-- GC_WIDGET_MARKER: TREN GLOBAL CHAT WIDGET (v2 — uses tren_session directly)
+  This version does NOT rely on supabase-js session persistence.
+  Instead it reads the same 'tren_session' localStorage item your
+  login page already writes (access_token + user info), and uses
+  that access_token directly for REST + Realtime auth — matching
+  how the rest of this dashboard already talks to Supabase.
 ========================================================= -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -777,7 +777,7 @@ setInterval(loadAllSignals,30000);
 .gc-send:hover{opacity:.88;}
 .gc-send:disabled{opacity:.4;cursor:not-allowed;}
 .gc-send svg{width:15px;height:15px;fill:#fff;}
-.gc-locked{margin:auto;text-align:center;color:var(--sub);font-size:12px;padding:24px;}
+.gc-empty.gc-error{color:var(--red);}
 </style>
 
 <button class="gc-fab" id="gc-fab" title="Global Chat">
@@ -793,7 +793,7 @@ setInterval(loadAllSignals,30000);
   <div class="gc-messages" id="gc-messages">
     <div class="gc-empty">Loading messages…</div>
   </div>
-  <div class="gc-input-row" id="gc-input-row" style="display:none;">
+  <div class="gc-input-row" id="gc-input-row">
     <textarea class="gc-input" id="gc-input" rows="1" maxlength="1000" placeholder="Message everyone…"></textarea>
     <button class="gc-send" id="gc-send">
       <svg viewBox="0 0 24 24"><path d="M2 21l21-9L2 3v7l15 2-15 2z"/></svg>
@@ -803,20 +803,35 @@ setInterval(loadAllSignals,30000);
 
 <script>
 (function(){
+  function getTrenSession(){
+    try {
+      const raw = localStorage.getItem('tren_session');
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      if (!parsed?.access_token || !parsed?.user?.id) return null;
+      return parsed;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  const trenSession = getTrenSession();
+  const accessToken = trenSession?.access_token || null;
+  const currentUser = trenSession?.user || null;
+
+  const REST_URL = `${SUPABASE_AUTH_URL}/rest/v1/chat_messages`;
+
   const gcClient = window.supabase.createClient(SUPABASE_AUTH_URL, SUPABASE_AUTH_KEY);
 
   const fab = document.getElementById('gc-fab');
   const panel = document.getElementById('gc-panel');
   const closeBtn = document.getElementById('gc-close');
   const messagesEl = document.getElementById('gc-messages');
-  const inputRow = document.getElementById('gc-input-row');
   const input = document.getElementById('gc-input');
   const sendBtn = document.getElementById('gc-send');
   const unreadBadge = document.getElementById('gc-unread');
 
-  let currentUser = null;
   let unread = 0;
-  let gcChannel = null;
   let isOpen = false;
 
   function fmtTime(ts){
@@ -841,27 +856,42 @@ setInterval(loadAllSignals,30000);
   function scrollToBottom(){ messagesEl.scrollTop = messagesEl.scrollHeight; }
 
   async function loadHistory(){
-    const { data, error } = await gcClient
-      .from('chat_messages')
-      .select('*')
-      .order('created_at', { ascending: true })
-      .limit(100);
-
-    messagesEl.innerHTML = '';
-    if (error){
-      messagesEl.innerHTML = `<div class="gc-empty">Couldn't load chat: ${escapeHtml(error.message)}</div>`;
+    if (!accessToken){
+      messagesEl.innerHTML = `<div class="gc-empty gc-error">Couldn't verify your session. Try logging out and back in.</div>`;
       return;
     }
-    if (!data || data.length === 0){
-      messagesEl.innerHTML = `<div class="gc-empty">No messages yet. Say hi 👋</div>`;
-      return;
+    try {
+      const res = await fetch(`${REST_URL}?select=*&order=created_at.asc&limit=100`, {
+        headers: {
+          apikey: SUPABASE_AUTH_KEY,
+          Authorization: `Bearer ${accessToken}`
+        }
+      });
+      if (!res.ok){
+        const errText = await res.text();
+        messagesEl.innerHTML = `<div class="gc-empty gc-error">Couldn't load chat (${res.status}).</div>`;
+        console.error('Global Chat load error:', errText);
+        return;
+      }
+      const data = await res.json();
+      messagesEl.innerHTML = '';
+      if (!data || data.length === 0){
+        messagesEl.innerHTML = `<div class="gc-empty">No messages yet. Say hi 👋</div>`;
+        return;
+      }
+      data.forEach(renderMessage);
+      scrollToBottom();
+    } catch (e) {
+      messagesEl.innerHTML = `<div class="gc-empty gc-error">Network error loading chat.</div>`;
+      console.error('Global Chat load exception:', e);
     }
-    data.forEach(renderMessage);
-    scrollToBottom();
   }
 
   function subscribeRealtime(){
-    gcChannel = gcClient
+    if (!accessToken) return;
+    gcClient.realtime.setAuth(accessToken);
+
+    gcClient
       .channel('public:chat_messages')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'chat_messages' }, payload => {
         const empty = messagesEl.querySelector('.gc-empty');
@@ -879,39 +909,49 @@ setInterval(loadAllSignals,30000);
 
   async function sendMessage(){
     const content = input.value.trim();
-    if (!content || !currentUser) return;
+    if (!content) return;
+
+    if (!accessToken || !currentUser){
+      alert("Couldn't verify your session. Try logging out and back in.");
+      return;
+    }
+
     sendBtn.disabled = true;
     const username = currentUser.user_metadata?.username
       || currentUser.user_metadata?.full_name
       || currentUser.email?.split('@')[0]
       || 'User';
 
-    const { error } = await gcClient.from('chat_messages').insert({
-      user_id: currentUser.id,
-      username,
-      content
-    });
+    try {
+      const res = await fetch(REST_URL, {
+        method: 'POST',
+        headers: {
+          apikey: SUPABASE_AUTH_KEY,
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+          Prefer: 'return=minimal'
+        },
+        body: JSON.stringify({
+          user_id: currentUser.id,
+          username,
+          content
+        })
+      });
 
-    if (error){
-      alert('Message failed: ' + error.message);
-    } else {
-      input.value = '';
+      if (!res.ok){
+        const errText = await res.text();
+        alert('Message failed to send.');
+        console.error('Global Chat send error:', errText);
+      } else {
+        input.value = '';
+      }
+    } catch (e) {
+      alert('Message failed to send (network error).');
+      console.error('Global Chat send exception:', e);
     }
+
     sendBtn.disabled = false;
     input.focus();
-  }
-
-  async function init(){
-    const { data: { session } } = await gcClient.auth.getSession();
-    currentUser = session ? session.user : null;
-
-    inputRow.style.display = 'flex';
-    await loadHistory();
-    subscribeRealtime();
-
-    gcClient.auth.onAuthStateChange((_event, newSession) => {
-      currentUser = newSession ? newSession.user : null;
-    });
   }
 
   fab.addEventListener('click', () => {
@@ -936,7 +976,7 @@ setInterval(loadAllSignals,30000);
     }
   });
 
-  init();
+  loadHistory().then(subscribeRealtime);
 })();
 </script>
 </body>
