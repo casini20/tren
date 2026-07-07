@@ -336,11 +336,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
       tren<span>.</span>
     </a>
 
-    <div class="s-nav">
-<!-- GC_NAV_MARKER -->
-      <a class="s-item" onclick="document.getElementById('gc-fab').click();return false;">
-        <span class="s-ic">💬</span><span>Global Chat</span>
-      </a><div class="s-section-label">Trading</div>
+    <div class="s-nav"><div class="s-section-label">Trading</div>
       <a class="s-item" onclick="navTo('https://trenai.vercel.app/live-signals')">
         <span class="s-ic"><span class="live-dot-nav"></span></span><span>Live Signals</span>
       </a>
@@ -2154,24 +2150,14 @@ window.addEventListener('resize',function(){if(_fsOpen){fsResize();fsDraw();}});
 
   async function init(){
     const { data: { session } } = await gcClient.auth.getSession();
+    currentUser = session ? session.user : null;
 
-    if (!session){
-      fab.style.display = 'none';
-      return;
-    }
-
-    currentUser = session.user;
     inputRow.style.display = 'flex';
     await loadHistory();
     subscribeRealtime();
 
     gcClient.auth.onAuthStateChange((_event, newSession) => {
       currentUser = newSession ? newSession.user : null;
-      if (!currentUser){
-        fab.style.display = 'none';
-        panel.classList.remove('open');
-        if (gcChannel) gcClient.removeChannel(gcChannel);
-      }
     });
   }
 

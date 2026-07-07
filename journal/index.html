@@ -1116,24 +1116,14 @@ function navTo(url){
 
   async function init(){
     const { data: { session } } = await gcClient.auth.getSession();
+    currentUser = session ? session.user : null;
 
-    if (!session){
-      fab.style.display = 'none';
-      return;
-    }
-
-    currentUser = session.user;
     inputRow.style.display = 'flex';
     await loadHistory();
     subscribeRealtime();
 
     gcClient.auth.onAuthStateChange((_event, newSession) => {
       currentUser = newSession ? newSession.user : null;
-      if (!currentUser){
-        fab.style.display = 'none';
-        panel.classList.remove('open');
-        if (gcChannel) gcClient.removeChannel(gcChannel);
-      }
     });
   }
 
