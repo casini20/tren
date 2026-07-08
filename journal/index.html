@@ -1319,14 +1319,31 @@ function navTo(url){
       const parsed = JSON.parse(raw);
       if (!parsed?.access_token || !parsed?.user?.id) return null;
       return parsed;
-    } catch (e) {
-      return null;
-    }
+    } catch (e) { return null; }
   }
 
-  const trenSession = getTrenSession();
-  const accessToken = trenSession?.access_token || null;
-  const currentUser = trenSession?.user || null;
+  async function refreshTrenSession(){
+    try {
+      const s = getTrenSession();
+      if (!s?.refresh_token) return null;
+      const res = await fetch(`${SUPABASE_AUTH_URL}/auth/v1/token?grant_type=refresh_token`, {
+        method: 'POST',
+        headers: { apikey: SUPABASE_AUTH_KEY, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refresh_token: s.refresh_token })
+      });
+      if (!res.ok) return null;
+      const data = await res.json();
+      if (!data?.access_token) return null;
+      const updated = { ...s, access_token: data.access_token, refresh_token: data.refresh_token || s.refresh_token };
+      localStorage.setItem('tren_session', JSON.stringify(updated));
+      accessToken = updated.access_token;
+      return updated;
+    } catch (e) { return null; }
+  }
+
+  let trenSession = getTrenSession();
+  let accessToken = trenSession?.access_token || null;
+  let currentUser = trenSession?.user || null;
 
   const REST_URL = `${SUPABASE_AUTH_URL}/rest/v1/chat_messages`;
   const SUBSCRIBERS_URL = `${SUPABASE_AUTH_URL}/rest/v1/subscribers`;
@@ -1584,13 +1601,28 @@ function navTo(url){
 
   async function loadHistory(){
     if (!accessToken){
-      messagesEl.innerHTML = `<div class="gc-empty gc-error">Session not recognized — log out and back in to use chat.</div>`;
-      return;
+      // Try to refresh the token first before giving up
+      const refreshed = await refreshTrenSession();
+      if (!refreshed) {
+        messagesEl.innerHTML = `<div class="gc-empty gc-error">Session not recognized — log out and back in to use chat.</div>`;
+        return;
+      }
     }
     try {
-      const res = await fetch(`${REST_URL}?select=*&order=created_at.asc&limit=100`, {
+      let res = await fetch(`${REST_URL}?select=*&order=created_at.asc&limit=100`, {
         headers: { apikey: SUPABASE_AUTH_KEY, Authorization: `Bearer ${accessToken}` }
       });
+      // Token expired — refresh and retry once
+      if (res.status === 401) {
+        const refreshed = await refreshTrenSession();
+        if (!refreshed) {
+          messagesEl.innerHTML = `<div class="gc-empty gc-error">Session expired — please log out and back in.</div>`;
+          return;
+        }
+        res = await fetch(`${REST_URL}?select=*&order=created_at.asc&limit=100`, {
+          headers: { apikey: SUPABASE_AUTH_KEY, Authorization: `Bearer ${accessToken}` }
+        });
+      }
       if (!res.ok){
         const errText = await res.text();
         messagesEl.innerHTML = `<div class="gc-empty gc-error">Chat unavailable (${res.status}). Refresh to reconnect.</div>`;
@@ -1852,9 +1884,9 @@ KEY LINKS: Homepage: https://tren.framer.ai | Pricing: https://tren.framer.ai/pr
 
       // Render links as clickable anchors
       function renderAIText(text){
-        const urlRe = /(https?:\/\/[^\s<>"']+)/g;
+        const urlRe = /(https?:\/\/[^\s<>"']+?)([.,!?:;)'"]*(?=\s|$))/g;
         return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-          .replace(urlRe, u => '<a href="'+u+'" target="_blank" rel="noopener">'+u+'</a>');
+          .replace(urlRe, (_,u,trail) => '<a href="'+u+'" target="_blank" rel="noopener">'+u+'</a>'+(trail||''));
       }
       // Remove typing indicator, word-by-word stream
       typingBubble.innerHTML = '';
