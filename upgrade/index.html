@@ -802,24 +802,32 @@ function navTo(url){
 
 /* ---- tabs ---- */
 .gc-header{
-  padding:0 12px 0 0;border-bottom:1px solid var(--border);
+  padding:10px 10px 0;border-bottom:1px solid var(--border);
   display:flex;align-items:center;justify-content:space-between;
   background:var(--bg3);flex-shrink:0;gap:6px;
 }
-.gc-tabs{display:flex;gap:2px;flex:1;padding:8px 0 0 10px;}
+.gc-tabs{display:flex;gap:3px;flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:8px;padding:3px;}
 .gc-tab{
-  display:flex;align-items:center;gap:6px;
-  padding:7px 13px;border:none;cursor:pointer;font-family:inherit;
-  font-size:12px;font-weight:600;color:var(--sub);background:none;
-  border-bottom:2px solid transparent;margin-bottom:-1px;border-radius:6px 6px 0 0;
-  transition:color .15s,border-color .15s,background .15s;white-space:nowrap;
+  display:flex;align-items:center;justify-content:center;gap:5px;flex:1;
+  padding:6px 10px;border:none;cursor:pointer;font-family:inherit;
+  font-size:11.5px;font-weight:600;color:var(--sub);background:none;
+  border-radius:6px;transition:color .15s,background .15s;white-space:nowrap;
 }
-.gc-tab:hover{color:var(--text);background:rgba(255,255,255,.04);}
-.gc-tab.active{color:var(--text);border-bottom-color:var(--accent);}
+.gc-tab:hover{color:var(--sub2);}
+.gc-tab.active{color:var(--text);background:rgba(255,255,255,.09);box-shadow:0 1px 4px rgba(0,0,0,.25);}
+.gc-tab.active svg{opacity:1;}
+.gc-tab svg{opacity:.5;transition:opacity .15s;}
 .gc-tab-count{
-  font-size:10px;font-weight:700;color:var(--sub);
-  font-variant-numeric:tabular-nums;
+  font-size:9.5px;font-weight:700;color:rgba(240,244,255,.35);
+  font-variant-numeric:tabular-nums;background:rgba(255,255,255,.07);
+  border-radius:4px;padding:1px 5px;
 }
+.gc-close{
+  background:none;border:none;color:var(--sub);cursor:pointer;
+  font-size:13px;line-height:1;padding:5px 6px;border-radius:6px;
+  flex-shrink:0;margin-bottom:2px;transition:color .12s,background .12s;
+}
+.gc-close:hover{color:var(--text);background:rgba(255,255,255,.06);}
 
 /* ---- panes ---- */
 .gc-pane{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden;}
@@ -848,6 +856,11 @@ function navTo(url){
   background:linear-gradient(180deg,rgba(167,139,250,.1),rgba(167,139,250,.05));
   border:1px solid rgba(167,139,250,.22);color:var(--sub2);
 }
+.gc-ai-bubble a{
+  color:#a78bfa;text-decoration:none;border-bottom:1px solid rgba(167,139,250,.35);
+  transition:color .12s,border-color .12s;word-break:break-all;
+}
+.gc-ai-bubble a:hover{color:#c4b5fd;border-bottom-color:rgba(196,181,253,.6);}
 .gc-ai-typing{display:flex;gap:4px;align-items:center;padding:10px 14px;}
 .gc-ai-typing span{
   width:6px;height:6px;border-radius:50%;background:#a78bfa;opacity:.5;
@@ -876,16 +889,18 @@ function navTo(url){
   <div class="gc-header">
     <div class="gc-tabs">
       <button class="gc-tab active" id="gc-tab-global">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M4 6.5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9.5L5 20v-3.5H6a2 2 0 0 1-2-2v-8z"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M4 6.5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H9.5L5 20v-3.5H6a2 2 0 0 1-2-2v-8z"/></svg>
         Global
         <span class="gc-tab-count" id="gc-count"></span>
       </button>
       <button class="gc-tab" id="gc-tab-ai">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="13" height="13"><path d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96-.44L5.5 12a2.5 2.5 0 0 1 2.5-2.5H12"/><path d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96-.44L18.5 12a2.5 2.5 0 0 0-2.5-2.5H12"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg>
         AI Chat
       </button>
     </div>
-    <button class="gc-close" id="gc-close" aria-label="Close chat">✕</button>
+    <button class="gc-close" id="gc-close" aria-label="Close chat">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" width="14" height="14"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
   </div>
 
   <!-- Global Chat pane -->
@@ -1455,13 +1470,19 @@ KEY LINKS: Homepage: https://tren.framer.ai | Pricing: https://tren.framer.ai/pr
       const data = await res.json();
       const reply = data.text || '';
 
+      // Render links as clickable anchors
+      function renderAIText(text){
+        const urlRe = /(https?:\/\/[^\s<>"']+)/g;
+        return text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+          .replace(urlRe, u => '<a href="'+u+'" target="_blank" rel="noopener">'+u+'</a>');
+      }
       // Remove typing indicator, word-by-word stream
       typingBubble.innerHTML = '';
       const words = reply.split(' ');
       let displayed = '';
       for(let i = 0; i < words.length; i++){
         displayed += (i === 0 ? '' : ' ') + words[i];
-        typingBubble.textContent = displayed;
+        typingBubble.innerHTML = renderAIText(displayed);
         aiMessages.scrollTop = aiMessages.scrollHeight;
         await new Promise(r => setTimeout(r, 16));
       }
