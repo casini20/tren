@@ -761,13 +761,14 @@ setInterval(loadAllSignals,30000);
   setInterval(refreshIfNeeded, CHECK_INTERVAL_MS);
 })();
 </script>
-<!-- GC_WIDGET_MARKER: TREN GLOBAL CHAT WIDGET (v9 — chat bubble icon FAB)
+<!-- GC_WIDGET_MARKER: TREN GLOBAL CHAT WIDGET (v10 — fab label vertical-align fix)
   Uses 'tren_session' directly for auth. Hover a message you sent
   to reveal a ⋯ menu (Discord-style) with a Delete option.
   Timestamps show "Today at ..." / "Yesterday at ..." / a full
   date for anything older. Trigger button is a solid circular
-  button with a chat-bubble icon (rounded, with typing-style dots)
-  that expands to reveal a "Global Chat" label on hover.
+  button with a chat-bubble icon that expands to reveal a
+  "Global Chat" label on hover, vertically centered to match
+  the icon.
 ========================================================= -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -808,8 +809,9 @@ setInterval(loadAllSignals,30000);
 @media (prefers-reduced-motion: reduce){ .gc-fab-icon::after{ animation:none; } }
 
 .gc-fab-label{
+  display:flex;align-items:center;height:54px;
   max-width:0;overflow:hidden;white-space:nowrap;
-  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;line-height:1;
   transition:max-width .28s cubic-bezier(.4,0,.2,1);
 }
 .gc-fab:hover .gc-fab-label,.gc-fab:focus-visible .gc-fab-label{
