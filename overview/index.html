@@ -2293,6 +2293,19 @@ window.addEventListener('resize',function(){if(_fsOpen){fsResize();fsDraw();}});
 .gc-ai-typing span:nth-child(3){animation-delay:.3s;}
 @keyframes gc-typing{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-5px);opacity:1;}}
 
+.gc-ai-beta-bar{
+  display:flex;align-items:center;gap:7px;
+  padding:6px 14px;font-size:10.5px;color:var(--sub);
+  background:rgba(167,139,250,.04);border-bottom:1px solid rgba(167,139,250,.1);
+  flex-shrink:0;
+}
+.gc-ai-beta-badge{
+  font-size:9px;font-weight:700;letter-spacing:.08em;
+  padding:2px 6px;border-radius:4px;
+  background:rgba(167,139,250,.15);border:1px solid rgba(167,139,250,.3);
+  color:#a78bfa;flex-shrink:0;
+}
+
 </style>
 
 <button class="gc-fab" id="gc-fab" aria-label="Open global chat">
@@ -2319,6 +2332,7 @@ window.addEventListener('resize',function(){if(_fsOpen){fsResize();fsDraw();}});
       <button class="gc-tab" id="gc-tab-ai">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20z"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></svg>
         AI Chat
+        <span style="font-size:8px;font-weight:700;padding:1px 4px;border-radius:3px;background:rgba(167,139,250,.18);color:#a78bfa;letter-spacing:.05em;line-height:1.4;">BETA</span>
       </button>
     </div>
     <button class="gc-close" id="gc-close" aria-label="Close chat">
@@ -2341,6 +2355,10 @@ window.addEventListener('resize',function(){if(_fsOpen){fsResize();fsDraw();}});
 
   <!-- AI Chat pane -->
   <div class="gc-pane" id="gc-pane-ai" style="display:none;">
+    <div class="gc-ai-beta-bar">
+      <span class="gc-ai-beta-badge">BETA</span>
+      Tren AI can make mistakes. Always double-check responses.
+    </div>
     <div class="gc-messages gc-ai-messages" id="gc-ai-messages">
       <div class="gc-empty">Ask me anything — trading, signals, or the platform.</div>
     </div>
