@@ -974,12 +974,10 @@ function navTo(url){
   setInterval(refreshIfNeeded, CHECK_INTERVAL_MS);
 })();
 </script>
-<!-- GC_WIDGET_MARKER: TREN GLOBAL CHAT WIDGET (v4 — terminal-styled redesign)
-  Uses 'tren_session' directly for auth (access_token + user info).
-  Visual language: ticker-style sender tags, monospace timestamps,
-  grouped consecutive messages — matches the trading-terminal
-  aesthetic of the rest of the dashboard instead of a generic
-  messenger look.
+<!-- GC_WIDGET_MARKER: TREN GLOBAL CHAT WIDGET (v5 — delete own messages + refined bubbles)
+  Uses 'tren_session' directly for auth. Adds hover-to-reveal
+  delete on your own messages (uses the DELETE RLS policy from
+  the original supabase_chat_setup.sql — no new SQL needed).
 ========================================================= -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -1039,7 +1037,6 @@ function navTo(url){
 .gc-messages::-webkit-scrollbar{width:5px;}
 .gc-messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px;}
 
-/* ---- message group: tag + meta + one or more stacked bubbles ---- */
 .gc-group{
   display:flex;gap:9px;max-width:88%;width:fit-content;
   padding:4px 6px;margin:-4px -6px;border-radius:10px;
@@ -1056,10 +1053,10 @@ function navTo(url){
   border-width:1.5px;border-style:solid;margin-top:1px;
 }
 
-.gc-col{display:flex;flex-direction:column;gap:4px;min-width:0;}
+.gc-col{display:flex;flex-direction:column;gap:3px;min-width:0;}
 .gc-group.mine .gc-col{align-items:flex-end;}
 
-.gc-meta{display:flex;align-items:baseline;gap:7px;padding:0 1px;}
+.gc-meta{display:flex;align-items:baseline;gap:7px;padding:0 1px;margin-bottom:1px;}
 .gc-name{font-size:11.5px;font-weight:700;}
 .gc-plan{
   font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
@@ -1075,18 +1072,46 @@ function navTo(url){
   font-size:9.5px;color:var(--sub);font-variant-numeric:tabular-nums;opacity:.75;
 }
 
+/* ---- bubble ---- */
+.gc-bwrap{position:relative;max-width:100%;}
+.gc-bwrap + .gc-bwrap{margin-top:3px;}
+
 .gc-bubble{
-  font-size:12.5px;line-height:1.48;color:var(--sub2);
-  background:rgba(255,255,255,.045);border:1px solid var(--border);
-  border-radius:9px;padding:7px 10px;word-break:break-word;
+  font-size:12.5px;line-height:1.5;color:var(--sub2);
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.03));
+  border:1px solid var(--border);
+  border-radius:10px;padding:7.5px 11px;word-break:break-word;
   width:fit-content;max-width:100%;
+  transition:border-color .12s,background-color .12s;
 }
 .gc-group.mine .gc-bubble{
-  background:linear-gradient(135deg,rgba(37,99,235,.20),rgba(37,99,235,.10));
-  border-color:rgba(37,99,235,.30);color:var(--text);
+  background:linear-gradient(180deg,rgba(37,99,235,.22),rgba(37,99,235,.13));
+  border-color:rgba(37,99,235,.32);color:var(--text);
 }
-.gc-bubble + .gc-bubble{margin-top:2px;}
-.gc-bubble[title]{cursor:default;}
+.gc-bwrap:hover .gc-bubble{border-color:rgba(255,255,255,.16);}
+.gc-group.mine .gc-bwrap:hover .gc-bubble{border-color:rgba(37,99,235,.5);}
+
+/* consecutive-bubble corner treatment: soften the seam between stacked bubbles */
+.gc-bwrap:not(:first-child) .gc-bubble{border-top-left-radius:5px;border-top-right-radius:5px;}
+.gc-bwrap:not(:last-child) .gc-bubble{border-bottom-left-radius:5px;border-bottom-right-radius:5px;}
+
+.gc-del{
+  position:absolute;top:-7px;
+  width:19px;height:19px;border-radius:50%;
+  background:var(--bg2);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;opacity:0;pointer-events:none;
+  transition:opacity .12s,background-color .12s,border-color .12s;
+}
+.gc-group:not(.mine) .gc-del{right:-7px;}
+.gc-group.mine .gc-del{left:-7px;}
+.gc-bwrap:hover .gc-del{opacity:1;pointer-events:auto;}
+.gc-del:hover{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.4);}
+.gc-del:focus-visible{opacity:1;pointer-events:auto;outline:2px solid var(--accent);}
+.gc-del svg{width:10px;height:10px;fill:var(--sub);}
+.gc-del:hover svg{fill:#f87171;}
+
+.gc-bubble.gc-deleting{opacity:.35;pointer-events:none;}
 
 .gc-empty{margin:auto;text-align:center;color:var(--sub);font-size:12px;padding:26px 20px;line-height:1.5;}
 .gc-empty.gc-error{color:var(--red);}
@@ -1115,7 +1140,7 @@ function navTo(url){
 .gc-send svg{width:14px;height:14px;fill:#fff;}
 
 @media (prefers-reduced-motion: reduce){
-  .gc-fab, .gc-send, .gc-group, .gc-input { transition:none !important; }
+  .gc-fab, .gc-send, .gc-group, .gc-input, .gc-bubble, .gc-del { transition:none !important; }
 }
 </style>
 
@@ -1180,13 +1205,11 @@ function navTo(url){
   let myPlan = null;
   let messageCount = 0;
 
-  // grouping state: track the last rendered sender + group element
   let lastGroupUserId = null;
   let lastGroupTimeMs = 0;
   let lastGroupEl = null;
-  const GROUP_WINDOW_MS = 3 * 60 * 1000; // 3 minutes
+  const GROUP_WINDOW_MS = 3 * 60 * 1000;
 
-  // ---------- helpers ----------
   const TAG_PALETTE = [
     '#2563eb', '#16a34a', '#f59e0b', '#ec4899',
     '#8b5cf6', '#06b6d4', '#ef4444', '#84cc16'
@@ -1199,36 +1222,28 @@ function navTo(url){
     }
     return h % mod;
   }
-
-  function tagColor(userId){
-    return TAG_PALETTE[hashToIndex(userId || 'x', TAG_PALETTE.length)];
-  }
-
+  function tagColor(userId){ return TAG_PALETTE[hashToIndex(userId || 'x', TAG_PALETTE.length)]; }
   function tagCode(name){
     if (!name) return '??';
     const parts = name.trim().split(/\s+/);
     if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
     return (parts[0][0] + parts[1][0]).toUpperCase();
   }
-
   function fmtTime(ts){
     const d = new Date(ts);
     return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
   }
-
   function escapeHtml(str){
     const d = document.createElement('div');
     d.textContent = str;
     return d.innerHTML;
   }
-
   function planBadgeHtml(plan){
     if (!plan) return '';
     const labels = { trenbot: 'TrenBot', premium: 'Premium', auto: 'AutoSignals' };
     const label = labels[plan] || plan;
     return `<span class="gc-plan plan-${plan}">${escapeHtml(label)}</span>`;
   }
-
   function updateCount(){
     countEl.textContent = messageCount === 1 ? '1 message' : `${messageCount} messages`;
   }
@@ -1250,7 +1265,30 @@ function navTo(url){
     return null;
   }
 
-  // ---------- rendering ----------
+  const TRASH_ICON = `<svg viewBox="0 0 24 24"><path d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12z" stroke-width="1.6" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  function makeBubble(msg, mine){
+    const wrap = document.createElement('div');
+    wrap.className = 'gc-bwrap';
+
+    const bubble = document.createElement('div');
+    bubble.className = 'gc-bubble';
+    bubble.textContent = msg.content;
+    bubble.dataset.id = msg.id;
+    if (!mine) bubble.title = fmtTime(msg.created_at);
+    wrap.appendChild(bubble);
+
+    if (mine){
+      const del = document.createElement('button');
+      del.className = 'gc-del';
+      del.setAttribute('aria-label', 'Delete message');
+      del.innerHTML = TRASH_ICON;
+      del.addEventListener('click', () => deleteMessage(msg.id, bubble));
+      wrap.appendChild(del);
+    }
+    return wrap;
+  }
+
   function renderMessage(msg){
     const mine = currentUser && msg.user_id === currentUser.id;
     const msgTimeMs = new Date(msg.created_at).getTime();
@@ -1259,11 +1297,7 @@ function navTo(url){
     const withinWindow = (msgTimeMs - lastGroupTimeMs) < GROUP_WINDOW_MS;
 
     if (sameSender && withinWindow && lastGroupEl){
-      const bubble = document.createElement('div');
-      bubble.className = 'gc-bubble';
-      bubble.title = fmtTime(msg.created_at);
-      bubble.textContent = msg.content;
-      lastGroupEl.querySelector('.gc-col').appendChild(bubble);
+      lastGroupEl.querySelector('.gc-col').appendChild(makeBubble(msg, mine));
     } else {
       const color = tagColor(msg.user_id);
       const group = document.createElement('div');
@@ -1278,10 +1312,7 @@ function navTo(url){
           </div>
         </div>
       `;
-      const bubble = document.createElement('div');
-      bubble.className = 'gc-bubble';
-      bubble.textContent = msg.content;
-      group.querySelector('.gc-col').appendChild(bubble);
+      group.querySelector('.gc-col').appendChild(makeBubble(msg, mine));
       messagesEl.appendChild(group);
 
       lastGroupEl = group;
@@ -1290,6 +1321,55 @@ function navTo(url){
 
     lastGroupTimeMs = msgTimeMs;
     messageCount++;
+  }
+
+  function removeMessageFromDom(id){
+    const bubble = messagesEl.querySelector(`.gc-bubble[data-id="${id}"]`);
+    if (!bubble) return;
+    const wrap = bubble.closest('.gc-bwrap');
+    const group = bubble.closest('.gc-group');
+    wrap.remove();
+    messageCount = Math.max(0, messageCount - 1);
+    updateCount();
+    // if that was the last bubble in the group, remove the whole group
+    if (group && !group.querySelector('.gc-bubble')){
+      group.remove();
+      if (lastGroupEl === group){
+        lastGroupEl = null;
+        lastGroupUserId = null;
+      }
+    }
+    if (messageCount === 0){
+      messagesEl.innerHTML = `<div class="gc-empty">No messages yet — start the conversation.</div>`;
+    }
+  }
+
+  async function deleteMessage(id, bubbleEl){
+    if (!confirm('Delete this message?')) return;
+    bubbleEl.classList.add('gc-deleting');
+
+    try {
+      const res = await fetch(`${REST_URL}?id=eq.${id}`, {
+        method: 'DELETE',
+        headers: {
+          apikey: SUPABASE_AUTH_KEY,
+          Authorization: `Bearer ${accessToken}`,
+          Prefer: 'return=minimal'
+        }
+      });
+      if (!res.ok){
+        const errText = await res.text();
+        alert('Could not delete message.');
+        console.error('Global Chat delete error:', errText);
+        bubbleEl.classList.remove('gc-deleting');
+        return;
+      }
+      removeMessageFromDom(id);
+    } catch (e) {
+      alert('Could not delete message — check your connection.');
+      console.error('Global Chat delete exception:', e);
+      bubbleEl.classList.remove('gc-deleting');
+    }
   }
 
   function scrollToBottom(){ messagesEl.scrollTop = messagesEl.scrollHeight; }
@@ -1349,6 +1429,11 @@ function navTo(url){
           unread++;
           unreadBadge.textContent = unread;
           unreadBadge.style.display = 'flex';
+        }
+      })
+      .on('postgres_changes', { event: 'DELETE', schema: 'public', table: 'chat_messages' }, payload => {
+        if (payload.old && payload.old.id != null){
+          removeMessageFromDom(payload.old.id);
         }
       })
       .subscribe();
