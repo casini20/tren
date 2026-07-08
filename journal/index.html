@@ -1823,16 +1823,62 @@ WHAT IS TREN:
 Tren is an advanced trading signal and automation platform for NinjaTrader (futures trading). Delivers signals in under 1 second via Discord and dashboard. Built by traders, verified by real results. 100+ active traders, 4.8 star rating.
 
 PLANS & PRICING:
-1. Free Signals — $0 forever. Delayed signals (3 min delay), Discord community access. Join: https://discord.gg/Ygwf8xfEXS
-2. Premium Signals — Free 7-day trial, then $25.49/mo (annual) or $29.99/mo. Instant signals, live dashboard, trading journal. Start: https://trenai.vercel.app/checkout-premium
-3. Automated Trading — $42.49/mo (annual) or $49.99/mo. Auto-execution via NinjaTrader, no trial. Get access: https://trenai.vercel.app/checkout-automated
-4. TradingView Indicator — $99 one-time lifetime. Buy/sell signals on TradingView chart, TP1/TP2/TP3 and stop loss levels. Purchase: https://trenai.vercel.app/checkout-indicator
+1. Free Signals — $0 forever. Delayed signals (3 min delay), Discord community access, basic dashboard access. Join: https://discord.gg/fStfMCMTa2
 
-CHECKOUT & PAYMENT: All plans paid via PayPal. Premium has 7-day free trial. Automated starts immediately.
+2. Premium Signals — Most Popular. $25.49/mo billed annually or $29.99/mo monthly. Instant signals (zero delay), best entry prices, full signal access, priority Discord role, trading journal & analytics. Subscribe: https://trenai.vercel.app/checkout-premium
 
-HOW IT WORKS: Algorithm detects pattern → instant alert via Discord & dashboard (<1s) → you enter trade or bot executes automatically via NinjaTrader.
+3. AutoSignals — $42.49/mo billed annually or $49.99/mo monthly. Everything in Premium plus auto-copies every signal directly to your broker via NinjaTrader Desktop. Emotion-free execution, works with major brokers, set position size once. Get access: https://trenai.vercel.app/checkout-autosignals
 
-AUTOMATED SETUP: Download trenautotraderv3.zip from dashboard. Import into NinjaTrader: Tools → Import → NinjaScript Add-On. Connect broker (Tradovate, Rithmic, etc.). Open NQ/MNQ 5-min chart, add strategy, set Enabled=TRUE.
+4. TrenBot — Best Value. $67.99/mo billed annually or $79.99/mo monthly. Everything in AutoSignals plus full NinjaTrader integration, higher trade frequency, multi-contract scaling, custom risk rules per trade. Get access: https://trenai.vercel.app/checkout-trenbot
+
+5. TradingView Indicator — $99 one-time lifetime. Clear buy/sell labels on TradingView chart, automatic TP1/TP2/TP3 and stop loss levels, lifetime access. Purchase: https://trenai.vercel.app/checkout-indicator
+
+CHECKOUT & PAYMENT: All plans paid via PayPal. No free trial on any plan — subscriptions start immediately. Cancel anytime, no lock-in.
+
+HOW IT WORKS:
+- **Premium Signals**: Algorithm detects pattern → instant alert via Discord & dashboard (<1s) → you manually enter the trade.
+- **AutoSignals**: Same signals auto-copied to your broker via NinjaTrader Desktop. Set contract size once, every signal executes automatically.
+- **TrenBot**: Fully automated — Tren connects directly to NinjaTrader with higher trade frequency, multi-contract scaling, and custom risk rules per trade.
+
+AUTOSIGNALS SETUP (5 steps):
+1. Download AutoSignals.zip from the AutoSignals setup page: https://trenai.vercel.app/autosignals
+2. Import into NinjaTrader: Control Center → Tools → Import → NinjaScript Add-On → select AutoSignals.zip → wait for "Import Successful"
+3. Connect your broker: Connections → your broker (Tradovate, Rithmic, Simulated, or any supported broker). Must show green icon.
+4. Open a new chart: instrument must be NQ or MNQ futures, timeframe must be 5 minute (required — will not work otherwise)
+5. Right-click chart → Strategies → find AutoSignals → double-click → set Account, Enabled=TRUE, Auto-Copy=TRUE, Contract Size (lots per trade) → click Apply
+
+AUTOSIGNALS TROUBLESHOOT (not copying?): Check — Connected=YES, Strategy Enabled=TRUE, Auto-Copy=TRUE, no errors in Log tab, correct instrument (NQ/MNQ), 5m timeframe, Contract Size > 0. Still stuck? https://trenai.vercel.app/contact
+
+TRENBOT SETUP (5 steps):
+1. Download TrenBotv3.zip from the TrenBot setup page: https://trenai.vercel.app/trenbot
+2. Import into NinjaTrader: Control Center → Tools → Import → NinjaScript Add-On → select trenbotv3.zip → wait for "Import Successful"
+3. Connect your broker: Connections → your broker (Tradovate, Rithmic, Simulated, or any supported broker). Must show green icon.
+4. Open a new chart: instrument must be NQ or MNQ futures, timeframe must be 5 minute (required)
+5. Right-click chart → Strategies → find trenbotv3 → double-click → set Account, Enabled=TRUE (default Misc parameters are already optimal) → click Apply
+
+TRENBOT TROUBLESHOOT (bot not trading?): Check — Connected=YES, Strategy Enabled=TRUE, no errors in Log tab, correct instrument (NQ/MNQ), 5m timeframe, session time active. Still stuck? https://trenai.vercel.app/contact
+
+SUPPORTED BROKERS (both plans): Tradovate, Rithmic, Simulated Data (practice), and most major NinjaTrader-supported futures brokers.
+NinjaTrader Desktop download: https://account.ninjatrader.com/welcome
+
+COMMON Q&A:
+Q: Do I need NinjaTrader?
+A: For AutoSignals and TrenBot yes — NinjaTrader Desktop (free to download) is required. For Premium Signals you place trades manually, no NinjaTrader needed.
+
+Q: Is there a free trial?
+A: No free trial currently. All plans start immediately upon subscribing. Cancel anytime, no lock-in.
+
+Q: What's the difference between monthly and yearly billing?
+A: Yearly saves 15%. Premium: $25.49/mo yearly vs $29.99/mo. AutoSignals: $42.49/mo yearly vs $49.99/mo. TrenBot: $67.99/mo yearly vs $79.99/mo.
+
+Q: What file do I download for AutoSignals?
+A: AutoSignals.zip — go to the AutoSignals setup page in the dashboard: https://trenai.vercel.app/autosignals
+
+Q: What file do I download for TrenBot?
+A: TrenBotv3.zip — go to the TrenBot setup page in the dashboard: https://trenai.vercel.app/trenbot
+
+Q: What instrument and timeframe do I need?
+A: NQ or MNQ futures on a 5-minute timeframe — both are required. The bot will not work correctly on any other timeframe or instrument.
 
 INSTRUMENTS: NQ and MNQ (Nasdaq futures), 5-minute timeframe.
 
@@ -1844,7 +1890,7 @@ AFFILIATE: Earn 10% recurring commission. Audience gets 10% off. Apply: https://
 
 DISCOUNT CODES: PROFFITORY and WELCOME10 give 10% off at checkout.
 
-COMMUNITY: Discord: https://discord.gg/Ygwf8xfEXS | TikTok: https://www.tiktok.com/@trentrades0 | Instagram: https://www.instagram.com/trenai.vercel.app/
+COMMUNITY: Discord: https://discord.gg/fStfMCMTa2 | TikTok: https://www.tiktok.com/@trentrades0 | Instagram: https://www.instagram.com/trenai.vercel.app/
 
 CONTACT: trenhelp@outlook.com | https://trenai.vercel.app/contact | Discord usually within hours.
 
