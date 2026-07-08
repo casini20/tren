@@ -33,15 +33,19 @@
 }
 .gc-fab-icon svg{width:22px;height:22px;}
 .gc-fab-icon::after{
-  content:'';position:absolute;top:11px;right:11px;
-  width:8px;height:8px;border-radius:50%;background:var(--green);
-  box-shadow:0 0 0 2px rgba(15,23,42,.9);
-  animation:gc-pulse 2.2s infinite;
+  content:'';position:absolute;top:10px;right:10px;
+  width:9px;height:9px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#34d399,#10b981);
+  box-shadow:0 0 0 2px rgba(10,18,36,.95),0 0 6px 1px rgba(16,185,129,.7);
+  animation:gc-dot-flicker 2.8s ease-in-out infinite;
 }
-@keyframes gc-pulse{
-  0%{box-shadow:0 0 0 2px rgba(15,23,42,.9),0 0 0 2px rgba(16,185,129,.45);}
-  70%{box-shadow:0 0 0 2px rgba(15,23,42,.9),0 0 0 8px rgba(16,185,129,0);}
-  100%{box-shadow:0 0 0 2px rgba(15,23,42,.9),0 0 0 8px rgba(16,185,129,0);}
+@keyframes gc-dot-flicker{
+  0%  {opacity:1;  box-shadow:0 0 0 2px rgba(10,18,36,.95),0 0 6px 2px rgba(16,185,129,.75),0 0 0 4px rgba(16,185,129,0);}
+  18% {opacity:.8; box-shadow:0 0 0 2px rgba(10,18,36,.95),0 0 3px 1px rgba(16,185,129,.3), 0 0 0 4px rgba(16,185,129,0);}
+  38% {opacity:1;  box-shadow:0 0 0 2px rgba(10,18,36,.95),0 0 9px 3px rgba(16,185,129,.8),0 0 0 4px rgba(16,185,129,0);}
+  58% {opacity:.85;box-shadow:0 0 0 2px rgba(10,18,36,.95),0 0 4px 1px rgba(16,185,129,.4), 0 0 0 4px rgba(16,185,129,0);}
+  74% {opacity:1;  box-shadow:0 0 0 2px rgba(10,18,36,.95),0 0 11px 4px rgba(16,185,129,.6),0 0 16px 7px rgba(16,185,129,0);}
+  100%{opacity:1;  box-shadow:0 0 0 2px rgba(10,18,36,.95),0 0 6px 2px rgba(16,185,129,.75),0 0 0 4px rgba(16,185,129,0);}
 }
 @media (prefers-reduced-motion: reduce){ .gc-fab-icon::after{ animation:none; } }
 
@@ -260,6 +264,8 @@
   background:linear-gradient(180deg,rgba(167,139,250,.1),rgba(167,139,250,.05));
   border:1px solid rgba(167,139,250,.22);color:var(--sub2);
 }
+.gc-error a{color:inherit;text-decoration:underline;opacity:.85;}
+.gc-error a:hover{opacity:1;}
 .gc-ai-bubble a{
   color:#a78bfa;text-decoration:none;border-bottom:1px solid rgba(167,139,250,.35);
   transition:color .12s,border-color .12s;word-break:break-all;
@@ -628,7 +634,7 @@
       // Try to refresh the token first before giving up
       const refreshed = await refreshTrenSession();
       if (!refreshed) {
-        messagesEl.innerHTML = `<div class="gc-empty gc-error">Session not recognized — log out and back in to use chat.</div>`;
+        messagesEl.innerHTML = `<div class="gc-empty gc-error">Session not recognized. <a href="https://trenai.vercel.app/login-page" style="color:inherit;text-decoration:underline;">Log out &amp; back in</a> to use chat.</div>`;
         return;
       }
     }
@@ -640,7 +646,7 @@
       if (res.status === 401) {
         const refreshed = await refreshTrenSession();
         if (!refreshed) {
-          messagesEl.innerHTML = `<div class="gc-empty gc-error">Session expired — please log out and back in.</div>`;
+          messagesEl.innerHTML = `<div class="gc-empty gc-error">Session expired. <a href="https://trenai.vercel.app/login-page" style="color:inherit;text-decoration:underline;">Log out &amp; sign in again</a> to reconnect.</div>`;
           return;
         }
         res = await fetch(`${REST_URL}?select=*&order=created_at.asc&limit=100`, {
