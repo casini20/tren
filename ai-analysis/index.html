@@ -1873,35 +1873,58 @@ function navTo(url){
   setInterval(refreshIfNeeded, CHECK_INTERVAL_MS);
 })();
 </script>
-<!-- GC_WIDGET_MARKER: TREN GLOBAL CHAT WIDGET (v6 — kebab menu + day-aware timestamps)
+<!-- GC_WIDGET_MARKER: TREN GLOBAL CHAT WIDGET (v7 — pill-style live badge trigger)
   Uses 'tren_session' directly for auth. Hover a message you sent
   to reveal a ⋯ menu (Discord-style) with a Delete option.
   Timestamps show "Today at ..." / "Yesterday at ..." / a full
-  date for anything older.
+  date for anything older. Trigger button is a pill-shaped live
+  badge (matches the dashboard's own tag language) instead of a
+  circular chat-bubble icon.
 ========================================================= -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 .gc-fab{
   position:fixed;bottom:20px;right:20px;z-index:900;
-  width:52px;height:52px;border-radius:50%;
-  background:linear-gradient(135deg,var(--accent),var(--al));
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;box-shadow:0 4px 18px rgba(37,99,235,.35);
-  transition:transform .15s;border:none;
+  display:flex;align-items:center;gap:9px;
+  height:42px;max-width:calc(100vw - 40px);
+  padding:0 15px 0 12px;border-radius:999px;
+  background:linear-gradient(135deg,rgba(37,99,235,.18),rgba(37,99,235,.09));
+  border:1px solid rgba(37,99,235,.38);
+  cursor:pointer;box-shadow:0 6px 22px rgba(0,0,0,.4);
+  transition:transform .15s,box-shadow .15s,border-color .15s;
+  color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;
 }
-.gc-fab:hover{transform:scale(1.06);}
+.gc-fab:hover{transform:translateY(-2px);border-color:rgba(37,99,235,.6);box-shadow:0 10px 28px rgba(0,0,0,.5);}
 .gc-fab:focus-visible{outline:2px solid var(--accent);outline-offset:3px;}
-.gc-fab svg{width:21px;height:21px;fill:#fff;}
+
+.gc-fab-dot{
+  width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;
+  animation:gc-pulse 2.2s infinite;
+}
+@keyframes gc-pulse{
+  0%{box-shadow:0 0 0 0 rgba(16,185,129,.45);}
+  70%{box-shadow:0 0 0 6px rgba(16,185,129,0);}
+  100%{box-shadow:0 0 0 0 rgba(16,185,129,0);}
+}
+@media (prefers-reduced-motion: reduce){ .gc-fab-dot{ animation:none; } }
+
+.gc-fab-text{display:flex;flex-direction:column;line-height:1.15;min-width:0;}
+.gc-fab-label{font-size:12px;font-weight:700;letter-spacing:.1px;white-space:nowrap;}
+.gc-fab-preview{
+  font-size:10px;color:var(--sub);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis;max-width:150px;
+}
+
 .gc-unread{
-  position:absolute;top:-4px;right:-4px;background:var(--red);
-  color:#fff;font-size:10px;font-weight:700;min-width:18px;height:18px;
-  border-radius:9px;display:flex;align-items:center;justify-content:center;
-  padding:0 4px;font-variant-numeric:tabular-nums;
+  background:var(--red);color:#fff;font-size:10px;font-weight:700;
+  min-width:18px;height:18px;border-radius:9px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  padding:0 5px;font-variant-numeric:tabular-nums;
 }
 
 .gc-panel{
-  position:fixed;bottom:84px;right:20px;z-index:900;
+  position:fixed;bottom:72px;right:20px;z-index:900;
   width:368px;max-width:calc(100vw - 40px);height:492px;
   background:var(--bg2);border:1px solid var(--border2);
   border-radius:16px;display:none;flex-direction:column;overflow:hidden;
@@ -2059,8 +2082,12 @@ function navTo(url){
 }
 </style>
 
-<button class="gc-fab" id="gc-fab" title="Global Chat" aria-label="Open global chat">
-  <svg viewBox="0 0 24 24"><path d="M20 2H4a2 2 0 0 0-2 2v18l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/></svg>
+<button class="gc-fab" id="gc-fab" aria-label="Open global chat">
+  <span class="gc-fab-dot"></span>
+  <span class="gc-fab-text">
+    <span class="gc-fab-label">Global Chat</span>
+    <span class="gc-fab-preview" id="gc-fab-preview">No messages yet</span>
+  </span>
   <span class="gc-unread" id="gc-unread" style="display:none;">0</span>
 </button>
 
@@ -2107,6 +2134,7 @@ function navTo(url){
   const gcClient = window.supabase.createClient(SUPABASE_AUTH_URL, SUPABASE_AUTH_KEY);
 
   const fab = document.getElementById('gc-fab');
+  const fabPreview = document.getElementById('gc-fab-preview');
   const panel = document.getElementById('gc-panel');
   const closeBtn = document.getElementById('gc-close');
   const messagesEl = document.getElementById('gc-messages');
@@ -2181,6 +2209,13 @@ function navTo(url){
   }
   function updateCount(){
     countEl.textContent = messageCount === 1 ? '1 message' : `${messageCount} messages`;
+  }
+  function updateFabPreview(msg){
+    if (!msg){ fabPreview.textContent = 'No messages yet'; return; }
+    const name = msg.username || 'Someone';
+    let text = `${name}: ${msg.content}`;
+    if (text.length > 30) text = text.slice(0, 30) + '…';
+    fabPreview.textContent = text;
   }
 
   async function lookupPlan(email){
@@ -2380,6 +2415,7 @@ function navTo(url){
       }
       data.forEach(renderMessage);
       updateCount();
+      updateFabPreview(data[data.length - 1]);
       scrollToBottom();
     } catch (e) {
       messagesEl.innerHTML = `<div class="gc-empty gc-error">Network error. Refresh to reconnect.</div>`;
@@ -2398,6 +2434,7 @@ function navTo(url){
         if (empty) empty.remove();
         renderMessage(payload.new);
         updateCount();
+        updateFabPreview(payload.new);
         scrollToBottom();
         if (!isOpen && !(currentUser && payload.new.user_id === currentUser.id)){
           unread++;
