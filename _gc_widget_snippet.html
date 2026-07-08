@@ -1,7 +1,8 @@
-<!-- GC_WIDGET_MARKER: TREN GLOBAL CHAT WIDGET (v5 — delete own messages + refined bubbles)
-  Uses 'tren_session' directly for auth. Adds hover-to-reveal
-  delete on your own messages (uses the DELETE RLS policy from
-  the original supabase_chat_setup.sql — no new SQL needed).
+<!-- GC_WIDGET_MARKER: TREN GLOBAL CHAT WIDGET (v6 — kebab menu + day-aware timestamps)
+  Uses 'tren_session' directly for auth. Hover a message you sent
+  to reveal a ⋯ menu (Discord-style) with a Delete option.
+  Timestamps show "Today at ..." / "Yesterday at ..." / a full
+  date for anything older.
 ========================================================= -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -80,7 +81,7 @@
 .gc-col{display:flex;flex-direction:column;gap:3px;min-width:0;}
 .gc-group.mine .gc-col{align-items:flex-end;}
 
-.gc-meta{display:flex;align-items:baseline;gap:7px;padding:0 1px;margin-bottom:1px;}
+.gc-meta{display:flex;align-items:baseline;gap:7px;padding:0 1px;margin-bottom:1px;flex-wrap:wrap;}
 .gc-name{font-size:11.5px;font-weight:700;}
 .gc-plan{
   font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
@@ -94,6 +95,7 @@
 .gc-time{
   font-family:ui-monospace,'SF Mono',Menlo,Consolas,monospace;
   font-size:9.5px;color:var(--sub);font-variant-numeric:tabular-nums;opacity:.75;
+  white-space:nowrap;
 }
 
 /* ---- bubble ---- */
@@ -115,25 +117,39 @@
 .gc-bwrap:hover .gc-bubble{border-color:rgba(255,255,255,.16);}
 .gc-group.mine .gc-bwrap:hover .gc-bubble{border-color:rgba(37,99,235,.5);}
 
-/* consecutive-bubble corner treatment: soften the seam between stacked bubbles */
 .gc-bwrap:not(:first-child) .gc-bubble{border-top-left-radius:5px;border-top-right-radius:5px;}
 .gc-bwrap:not(:last-child) .gc-bubble{border-bottom-left-radius:5px;border-bottom-right-radius:5px;}
 
-.gc-del{
-  position:absolute;top:-7px;
-  width:19px;height:19px;border-radius:50%;
+/* ---- kebab (⋯) + dropdown menu, Discord-style ---- */
+.gc-kebab{
+  position:absolute;top:-8px;right:-6px;
+  width:20px;height:20px;border-radius:6px;
   background:var(--bg2);border:1px solid var(--border2);
   display:flex;align-items:center;justify-content:center;
   cursor:pointer;opacity:0;pointer-events:none;
   transition:opacity .12s,background-color .12s,border-color .12s;
+  color:var(--sub);
 }
-.gc-group:not(.mine) .gc-del{right:-7px;}
-.gc-group.mine .gc-del{left:-7px;}
-.gc-bwrap:hover .gc-del{opacity:1;pointer-events:auto;}
-.gc-del:hover{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.4);}
-.gc-del:focus-visible{opacity:1;pointer-events:auto;outline:2px solid var(--accent);}
-.gc-del svg{width:10px;height:10px;fill:var(--sub);}
-.gc-del:hover svg{fill:#f87171;}
+.gc-bwrap:hover .gc-kebab{opacity:1;pointer-events:auto;}
+.gc-kebab:hover,.gc-kebab.active{background:rgba(255,255,255,.08);color:var(--text);}
+.gc-kebab:focus-visible{opacity:1;pointer-events:auto;outline:2px solid var(--accent);}
+.gc-kebab svg{width:13px;height:13px;}
+
+.gc-menu{
+  position:absolute;top:16px;right:-6px;z-index:10;
+  min-width:132px;background:var(--bg3);border:1px solid var(--border2);
+  border-radius:8px;box-shadow:0 8px 24px rgba(0,0,0,.45);
+  padding:4px;display:none;
+}
+.gc-menu.open{display:block;}
+.gc-menu-item{
+  display:flex;align-items:center;gap:7px;width:100%;
+  padding:6px 8px;border-radius:5px;border:none;background:none;
+  color:#f87171;font-size:12px;font-weight:600;cursor:pointer;text-align:left;
+  font-family:inherit;
+}
+.gc-menu-item:hover{background:rgba(239,68,68,.12);}
+.gc-menu-item svg{width:13px;height:13px;flex-shrink:0;}
 
 .gc-bubble.gc-deleting{opacity:.35;pointer-events:none;}
 
@@ -164,7 +180,7 @@
 .gc-send svg{width:14px;height:14px;fill:#fff;}
 
 @media (prefers-reduced-motion: reduce){
-  .gc-fab, .gc-send, .gc-group, .gc-input, .gc-bubble, .gc-del { transition:none !important; }
+  .gc-fab, .gc-send, .gc-group, .gc-input, .gc-bubble, .gc-kebab { transition:none !important; }
 }
 </style>
 
@@ -228,6 +244,7 @@
   let isOpen = false;
   let myPlan = null;
   let messageCount = 0;
+  let openMenuEl = null;
 
   let lastGroupUserId = null;
   let lastGroupTimeMs = 0;
@@ -253,10 +270,29 @@
     if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
     return (parts[0][0] + parts[1][0]).toUpperCase();
   }
-  function fmtTime(ts){
-    const d = new Date(ts);
-    return d.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+
+  // ---- day-aware timestamp formatting (Discord-style) ----
+  function isSameDay(a, b){
+    return a.getFullYear() === b.getFullYear()
+      && a.getMonth() === b.getMonth()
+      && a.getDate() === b.getDate();
   }
+
+  function fmtDateTime(ts){
+    const d = new Date(ts);
+    const now = new Date();
+    const time = d.toLocaleTimeString([], {hour:'numeric', minute:'2-digit'});
+
+    if (isSameDay(d, now)) return `Today at ${time}`;
+
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+    if (isSameDay(d, yesterday)) return `Yesterday at ${time}`;
+
+    const dateStr = d.toLocaleDateString([], {month:'short', day:'numeric', year:(d.getFullYear() !== now.getFullYear() ? 'numeric' : undefined)});
+    return `${dateStr} at ${time}`;
+  }
+
   function escapeHtml(str){
     const d = document.createElement('div');
     d.textContent = str;
@@ -289,7 +325,25 @@
     return null;
   }
 
+  const KEBAB_ICON = `<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg>`;
   const TRASH_ICON = `<svg viewBox="0 0 24 24"><path d="M6 7h12M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12z" stroke-width="1.6" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+
+  function closeOpenMenu(){
+    if (openMenuEl){
+      openMenuEl.classList.remove('open');
+      const kebab = openMenuEl.parentElement.querySelector('.gc-kebab');
+      if (kebab) kebab.classList.remove('active');
+      openMenuEl = null;
+    }
+  }
+  document.addEventListener('click', (e) => {
+    if (openMenuEl && !openMenuEl.parentElement.contains(e.target)){
+      closeOpenMenu();
+    }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeOpenMenu();
+  });
 
   function makeBubble(msg, mine){
     const wrap = document.createElement('div');
@@ -299,16 +353,38 @@
     bubble.className = 'gc-bubble';
     bubble.textContent = msg.content;
     bubble.dataset.id = msg.id;
-    if (!mine) bubble.title = fmtTime(msg.created_at);
+    bubble.title = fmtDateTime(msg.created_at);
     wrap.appendChild(bubble);
 
     if (mine){
-      const del = document.createElement('button');
-      del.className = 'gc-del';
-      del.setAttribute('aria-label', 'Delete message');
-      del.innerHTML = TRASH_ICON;
-      del.addEventListener('click', () => deleteMessage(msg.id, bubble));
-      wrap.appendChild(del);
+      const kebab = document.createElement('button');
+      kebab.className = 'gc-kebab';
+      kebab.setAttribute('aria-label', 'Message actions');
+      kebab.innerHTML = KEBAB_ICON;
+
+      const menu = document.createElement('div');
+      menu.className = 'gc-menu';
+      menu.innerHTML = `<button class="gc-menu-item" type="button">${TRASH_ICON}Delete Message</button>`;
+
+      kebab.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpenAlready = menu.classList.contains('open');
+        closeOpenMenu();
+        if (!isOpenAlready){
+          menu.classList.add('open');
+          kebab.classList.add('active');
+          openMenuEl = menu;
+        }
+      });
+
+      menu.querySelector('.gc-menu-item').addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeOpenMenu();
+        deleteMessage(msg.id, bubble);
+      });
+
+      wrap.appendChild(kebab);
+      wrap.appendChild(menu);
     }
     return wrap;
   }
@@ -332,7 +408,7 @@
           <div class="gc-meta">
             <span class="gc-name" style="color:${color}">${escapeHtml(msg.username)}</span>
             ${planBadgeHtml(msg.plan)}
-            <span class="gc-time">${fmtTime(msg.created_at)}</span>
+            <span class="gc-time">${fmtDateTime(msg.created_at)}</span>
           </div>
         </div>
       `;
@@ -355,7 +431,6 @@
     wrap.remove();
     messageCount = Math.max(0, messageCount - 1);
     updateCount();
-    // if that was the last bubble in the group, remove the whole group
     if (group && !group.querySelector('.gc-bubble')){
       group.remove();
       if (lastGroupEl === group){
@@ -369,7 +444,7 @@
   }
 
   async function deleteMessage(id, bubbleEl){
-    if (!confirm('Delete this message?')) return;
+    if (!confirm('Delete this message? This cannot be undone.')) return;
     bubbleEl.classList.add('gc-deleting');
 
     try {
