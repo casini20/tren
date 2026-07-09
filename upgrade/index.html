@@ -631,28 +631,27 @@ function navTo(url){
 .gc-fab-icon::after{
   content:'';position:absolute;top:10px;right:10px;
   width:9px;height:9px;border-radius:50%;
-  background:radial-gradient(circle at 35% 35%,#34d399,#10b981);
-  box-shadow:0 0 0 2px rgba(10,18,36,.95),0 0 6px 1px rgba(16,185,129,.7);
+  background:radial-gradient(circle at 35% 35%,#6effd4,#10b981);
   animation:gc-dot-flicker 2.8s ease-in-out infinite;
 }
 @keyframes gc-dot-flicker{
-  0%  {opacity:1;  box-shadow:0 0 0 2px rgba(10,18,36,.95),0 0 6px 2px rgba(16,185,129,.75),0 0 0 4px rgba(16,185,129,0);}
-  18% {opacity:.8; box-shadow:0 0 0 2px rgba(10,18,36,.95),0 0 3px 1px rgba(16,185,129,.3), 0 0 0 4px rgba(16,185,129,0);}
-  38% {opacity:1;  box-shadow:0 0 0 2px rgba(10,18,36,.95),0 0 9px 3px rgba(16,185,129,.8),0 0 0 4px rgba(16,185,129,0);}
-  58% {opacity:.85;box-shadow:0 0 0 2px rgba(10,18,36,.95),0 0 4px 1px rgba(16,185,129,.4), 0 0 0 4px rgba(16,185,129,0);}
-  74% {opacity:1;  box-shadow:0 0 0 2px rgba(10,18,36,.95),0 0 11px 4px rgba(16,185,129,.6),0 0 16px 7px rgba(16,185,129,0);}
-  100%{opacity:1;  box-shadow:0 0 0 2px rgba(10,18,36,.95),0 0 6px 2px rgba(16,185,129,.75),0 0 0 4px rgba(16,185,129,0);}
+  0%  {opacity:1;  box-shadow:0 0 5px 2px rgba(16,185,129,.8),0 0 0 2px rgba(255,255,255,.25);}
+  18% {opacity:.75;box-shadow:0 0 2px 1px rgba(16,185,129,.3),0 0 0 2px rgba(255,255,255,.1);}
+  38% {opacity:1;  box-shadow:0 0 9px 4px rgba(16,185,129,.9),0 0 0 2px rgba(255,255,255,.3);}
+  58% {opacity:.8; box-shadow:0 0 3px 1px rgba(16,185,129,.4),0 0 0 2px rgba(255,255,255,.15);}
+  74% {opacity:1;  box-shadow:0 0 12px 5px rgba(16,185,129,.7),0 0 20px 8px rgba(16,185,129,0),0 0 0 2px rgba(255,255,255,.2);}
+  100%{opacity:1;  box-shadow:0 0 5px 2px rgba(16,185,129,.8),0 0 0 2px rgba(255,255,255,.25);}
 }
 @media (prefers-reduced-motion: reduce){ .gc-fab-icon::after{ animation:none; } }
 
 .gc-fab-label{
   display:flex;align-items:center;justify-content:center;height:54px;
-  max-width:0;overflow:hidden;white-space:nowrap;
-  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;line-height:54px;
-  transition:max-width .28s cubic-bezier(.4,0,.2,1);
+  max-width:0;overflow:hidden;white-space:nowrap;padding:0;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;line-height:1;
+  transition:max-width .28s cubic-bezier(.4,0,.2,1),padding .28s cubic-bezier(.4,0,.2,1);
 }
 .gc-fab:hover .gc-fab-label,.gc-fab:focus-visible .gc-fab-label{
-  max-width:150px;padding-right:18px;
+  max-width:150px;padding:0 20px 0 4px;
 }
 
 .gc-unread{
