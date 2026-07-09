@@ -988,24 +988,24 @@ function navTo(url){
 <style>
 .gc-fab{
   position:fixed;bottom:20px;right:20px;z-index:900;
-  display:flex;align-items:center;
-  height:54px;min-width:54px;max-width:calc(100vw - 40px);
+  display:flex;align-items:center;justify-content:center;
+  height:54px;width:54px;
   border-radius:999px;padding:0;overflow:hidden;
   background:linear-gradient(135deg,var(--accent),var(--al));
   border:none;cursor:pointer;color:#fff;
   box-shadow:0 8px 24px rgba(37,99,235,.4);
-  transition:min-width .28s cubic-bezier(.4,0,.2,1),transform .15s,box-shadow .15s;
+  transition:width .28s cubic-bezier(.4,0,.2,1),transform .15s,box-shadow .15s;
 }
 .gc-fab:hover,.gc-fab:focus-visible{
-  min-width:196px;transform:translateY(-2px);
+  width:186px;transform:translateY(-2px);
   box-shadow:0 12px 32px rgba(37,99,235,.5);
 }
 .gc-fab:focus-visible{outline:2px solid #fff;outline-offset:3px;}
 
 .gc-fab-icon{
+  position:absolute;left:0;top:0;
   width:54px;height:54px;flex-shrink:0;
   display:flex;align-items:center;justify-content:center;
-  position:relative;
 }
 .gc-fab-icon svg{width:22px;height:22px;}
 .gc-fab-icon::after{
@@ -1025,13 +1025,14 @@ function navTo(url){
 @media (prefers-reduced-motion: reduce){ .gc-fab-icon::after{ animation:none; } }
 
 .gc-fab-label{
-  display:flex;align-items:center;justify-content:center;height:54px;
-  max-width:0;overflow:hidden;white-space:nowrap;padding:0;
-  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;line-height:1;
-  transition:max-width .28s cubic-bezier(.4,0,.2,1),padding .28s cubic-bezier(.4,0,.2,1);
+  position:absolute;inset:0;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
+  white-space:nowrap;opacity:0;pointer-events:none;
+  transition:opacity .15s .1s;
 }
 .gc-fab:hover .gc-fab-label,.gc-fab:focus-visible .gc-fab-label{
-  max-width:160px;padding:0 44px 0 44px;
+  opacity:1;pointer-events:auto;
 }
 
 .gc-unread{
