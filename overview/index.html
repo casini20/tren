@@ -478,7 +478,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <div class="sc"><div class="sc-lbl">Total P&amp;L <span class="sc-lbl-sub" id="lbl-pnl">14 days</span></div><div class="sc-val g" id="ov-pnl">—</div><div class="sc-ch" id="ov-pc">Loading…</div></div>
         <div class="sc"><div class="sc-lbl">Win Rate <span class="sc-lbl-sub" id="lbl-wr">14 days</span></div><div class="sc-val" id="ov-wr">—</div><div class="sc-ch" id="ov-wc">Loading…</div></div>
         <div class="sc"><div class="sc-lbl">Best Day <span class="sc-lbl-sub" id="lbl-bd">14 days</span></div><div class="sc-val g" id="ov-bd">—</div><div class="sc-ch">Single day</div></div>
-        <div class="sc"><div class="sc-lbl" id="lbl-live">Live Signals</div><div class="sc-val" id="ov-live-count">—</div><div class="sc-ch u" id="ov-live-sub">Loading…</div></div>
+        <div class="sc"><div class="sc-lbl" id="lbl-live">Total Trades</div><div class="sc-val" id="ov-live-count">—</div><div class="sc-ch u" id="ov-live-sub">Loading…</div></div>
       </div>
 
       <!-- P&L CHART -->
@@ -729,8 +729,6 @@ function setPerfSource(src){
   document.querySelectorAll('#perf-src-seg .src-btn').forEach(b=>b.classList.toggle('active', b.dataset.src===src));
   const descEl=document.getElementById('perf-src-desc');
   if(descEl) descEl.textContent=src==='personal'?'Your personal trade journal':'AI signal track record';
-  const liveLbl=document.getElementById('lbl-live');
-  if(liveLbl) liveLbl.textContent=src==='personal'?'Total Trades':'Live Signals';
   renderOvStats();
 }
 
@@ -1655,7 +1653,7 @@ function renderFromData(data){
   const bd=Object.values(dm).length?Math.max(...Object.values(dm)):0;
   document.getElementById('ov-bd').textContent='+'+fmtUnitAbs(bd);
 
-  const lc=_perfSource==='personal'?filtered.length:data.filter(t=>!(t.exit||t.closed)).length;
+  const lc=filtered.length;
   const today=getTodayLocal();const tc=data.filter(t=>t.executed_at&&t.executed_at.startsWith(today)).length;
   document.getElementById('ov-live-count').textContent=lc;
   document.getElementById('ov-live-sub').textContent=`↑ ${tc} new today`;
