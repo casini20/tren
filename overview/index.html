@@ -660,7 +660,15 @@ const CURRENCY_META = {
 function convVal(dollarVal){ return (parseFloat(dollarVal||0)||0) * (CURRENCY_META[_currency]?.rate||1); }
 // The number to actually display for a trade, in whichever unit is active.
 function tval(t){
-  if(_unitMode==='ticks'){ const tk=parseFloat(t.ticks); return isNaN(tk)?0:tk; }
+  if(_unitMode==='ticks'){
+    const raw=parseFloat(t.ticks);
+    if(!isNaN(raw)) return raw;
+    const entry=parseFloat(t.entry), exit=parseFloat(t.exit);
+    if(isNaN(entry)||isNaN(exit)) return 0;
+    const dir=(t.direction||'').toLowerCase();
+    const diff=dir==='short'?(entry-exit):(exit-entry);
+    return diff/0.25;
+  }
   return convVal(t.pnl);
 }
 function unitSymbol(){ return _unitMode==='ticks' ? '' : (CURRENCY_META[_currency]?.symbol||'$'); }
@@ -1389,6 +1397,19 @@ window.toggleSignalJournal=function(i,btn){
   }
 };
 
+// Ticks value for the dedicated "Ticks" field on trade cards — uses the raw
+// stored value when present, otherwise derives it from entry/exit (see tval()).
+function displayTicks(t){
+  const raw=parseFloat(t.ticks);
+  if(!isNaN(raw)) return Math.round(raw);
+  if(!(t.exit||t.closed)) return null; // still-open trade, nothing to derive yet
+  const entry=parseFloat(t.entry), exit=parseFloat(t.exit);
+  if(isNaN(entry)||isNaN(exit)) return null;
+  const dir=(t.direction||'').toLowerCase();
+  const diff=dir==='short'?(entry-exit):(exit-entry);
+  return Math.round(diff/0.25);
+}
+
 function buildSignalCard(t,idx){
   const isActive=!(t.exit||t.closed);const win=parseFloat(t.pnl||0)>=0;const dir=(t.direction||'').toLowerCase();const isLong=dir==='long';
   const pnlStr=isActive?'':`<span class="sig-pnl-badge ${win?'pos':'neg'}">${fmtUnit(tval(t))}</span>`;
@@ -1401,7 +1422,7 @@ function buildSignalCard(t,idx){
   const takeBtn=offerAdd?`<button class="sig-take${already?' added':''}" title="${already?'Click to remove from Journal':'Log this trade to your Journal'}" onclick="event.stopPropagation();toggleSignalJournal(${idx},this)">${takeLabel}</button>`:'';
   return`<div class="sig-card ${win?'win-border':'loss-border'}">
     <div class="sig-top"><div class="sig-pair">${escHtml(t.market||'—')}</div><div style="display:flex;align-items:center;gap:7px;">${pnlStr}<div class="sig-dir ${isLong?'lng':'sht'}">${dir.toUpperCase()}</div></div></div>
-    <div class="sig-meta"><div class="sig-f"><label>Entry</label><p>${t.entry?fmtNum(t.entry,2):'—'}</p></div><div class="sig-f"><label>Exit</label><p class="${win?'g':'r'}">${t.exit?fmtNum(t.exit,2):'—'}</p></div><div class="sig-f"><label>Ticks</label><p>${t.ticks||'—'}</p></div></div>
+    <div class="sig-meta"><div class="sig-f"><label>Entry</label><p>${t.entry?fmtNum(t.entry,2):'—'}</p></div><div class="sig-f"><label>Exit</label><p class="${win?'g':'r'}">${t.exit?fmtNum(t.exit,2):'—'}</p></div><div class="sig-f"><label>Ticks</label><p>${(()=>{const dt=displayTicks(t);return dt===null?'—':dt;})()}</p></div></div>
     <div class="sig-bw"><div class="sig-b" style="width:${isActive?35:100}%;background:var(--green);"></div></div>
     <div class="sig-ft"><div class="sig-tm">${fmtDate(t.executed_at)}</div><div class="sig-st ${sc}">${sl}</div></div>
     ${takeBtn}
