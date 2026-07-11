@@ -117,6 +117,15 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .src-btn .src-ico{font-size:12px;}
 .src-btn.active{background:rgba(37,99,235,.16);color:#e0eaff;box-shadow:0 1px 3px rgba(0,0,0,.3);}
 .src-btn.active[data-src="personal"]{background:rgba(16,185,129,.16);color:#bdf5dd;}
+.unit-seg{display:flex;align-items:center;gap:1px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:2px;}
+.unit-btn{padding:4px 11px;border-radius:6px;font-size:11.5px;font-weight:600;color:var(--sub);cursor:pointer;transition:all .15s;border:none;font-family:'Plus Jakarta Sans',sans-serif;background:none;letter-spacing:.2px;}
+.unit-btn:hover{color:var(--sub2);}
+.unit-btn.active{background:rgba(255,255,255,.08);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.3);}
+.currency-select{appearance:none;-webkit-appearance:none;background:rgba(255,255,255,.03) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="rgba(240,244,255,0.45)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>') no-repeat right 8px center;background-size:10px;border:1px solid rgba(255,255,255,.06);border-radius:8px;padding:5px 22px 5px 10px;font-size:11.5px;font-weight:600;color:var(--text);cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:border-color .15s;}
+.currency-select:hover{border-color:rgba(255,255,255,.13);}
+.currency-select:disabled{opacity:.35;cursor:not-allowed;}
+.currency-select option{background:#0c1525;color:var(--text);}
+.unit-cur-wrap{display:flex;align-items:center;gap:8px;}
 
 /* ── OVERVIEW COMPONENTS ── */
 .sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:1.8rem;}
@@ -438,12 +447,29 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
             <div style="font-size:11px;color:var(--sub);" id="perf-src-desc">AI signal track record</div>
           </div>
         </div>
-        <div class="tf-seg" role="group" aria-label="Timeframe">
-          <button class="tf-btn" onclick="setTimeframe(7)">7D</button>
-          <button class="tf-btn active" onclick="setTimeframe(14)">14D</button>
-          <button class="tf-btn" onclick="setTimeframe(30)">30D</button>
-          <button class="tf-btn" onclick="setTimeframe(90)">90D</button>
-          <button class="tf-btn" onclick="setTimeframe(365)">1Y</button>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <div class="unit-cur-wrap">
+            <div class="unit-seg" role="group" aria-label="Display unit">
+              <button class="unit-btn active" data-unit="dollars" onclick="setUnitMode('dollars')">$</button>
+              <button class="unit-btn" data-unit="ticks" onclick="setUnitMode('ticks')">Ticks</button>
+            </div>
+            <select class="currency-select" id="currency-select" onchange="setCurrency(this.value)" aria-label="Currency">
+              <option value="USD">USD</option>
+              <option value="EUR">EUR</option>
+              <option value="GBP">GBP</option>
+              <option value="JPY">JPY</option>
+              <option value="CAD">CAD</option>
+              <option value="AUD">AUD</option>
+              <option value="CHF">CHF</option>
+            </select>
+          </div>
+          <div class="tf-seg" role="group" aria-label="Timeframe">
+            <button class="tf-btn" onclick="setTimeframe(7)">7D</button>
+            <button class="tf-btn active" onclick="setTimeframe(14)">14D</button>
+            <button class="tf-btn" onclick="setTimeframe(30)">30D</button>
+            <button class="tf-btn" onclick="setTimeframe(90)">90D</button>
+            <button class="tf-btn" onclick="setTimeframe(365)">1Y</button>
+          </div>
         </div>
       </div>
 
@@ -616,6 +642,54 @@ let _activeDays = 14;
 let _allTradesCache = null;
 let _perfSource = 'tren';
 let _sigsCardData = [];
+
+// ── DISPLAY UNIT / CURRENCY ─────────────────────────────────────────
+// 'dollars' shows converted P&L in the chosen currency; 'ticks' shows raw tick counts.
+let _unitMode = localStorage.getItem('tren_unit_mode') || 'dollars';
+let _currency = localStorage.getItem('tren_currency') || 'USD';
+const CURRENCY_META = {
+  USD:{symbol:'$',rate:1},
+  EUR:{symbol:'€',rate:0.92},
+  GBP:{symbol:'£',rate:0.79},
+  JPY:{symbol:'¥',rate:157},
+  CAD:{symbol:'C$',rate:1.36},
+  AUD:{symbol:'A$',rate:1.52},
+  CHF:{symbol:'Fr',rate:0.88},
+};
+// Raw dollar P&L for a trade, converted to the active currency (unaffected by unit mode).
+function convVal(dollarVal){ return (parseFloat(dollarVal||0)||0) * (CURRENCY_META[_currency]?.rate||1); }
+// The number to actually display for a trade, in whichever unit is active.
+function tval(t){
+  if(_unitMode==='ticks'){ const tk=parseFloat(t.ticks); return isNaN(tk)?0:tk; }
+  return convVal(t.pnl);
+}
+function unitSymbol(){ return _unitMode==='ticks' ? '' : (CURRENCY_META[_currency]?.symbol||'$'); }
+function unitSuffix(){ return _unitMode==='ticks' ? ' ticks' : ''; }
+// Signed formatted string, e.g. "+$1,234" or "-320 ticks".
+function fmtUnit(v){
+  const sym=unitSymbol(), suf=unitSuffix();
+  return (v>=0?'+':'-')+sym+Math.abs(Math.round(v)).toLocaleString('en-US')+suf;
+}
+// Unsigned formatted string (magnitude only), e.g. "$1,234" or "320 ticks".
+function fmtUnitAbs(v){
+  const sym=unitSymbol(), suf=unitSuffix();
+  return sym+Math.abs(Math.round(v)).toLocaleString('en-US')+suf;
+}
+function setUnitMode(mode){
+  if(mode===_unitMode) return;
+  _unitMode=mode;
+  localStorage.setItem('tren_unit_mode',mode);
+  document.querySelectorAll('.unit-btn').forEach(b=>b.classList.toggle('active',b.dataset.unit===mode));
+  const curSel=document.getElementById('currency-select');
+  if(curSel) curSel.disabled = (mode==='ticks');
+  if(_allTradesCache){ renderFromData(_allTradesCache); } else { renderOvStats(); }
+}
+function setCurrency(cur){
+  if(!CURRENCY_META[cur] || cur===_currency) return;
+  _currency=cur;
+  localStorage.setItem('tren_currency',cur);
+  if(_allTradesCache){ renderFromData(_allTradesCache); } else { renderOvStats(); }
+}
 
 // Personal journal entries are saved client-side (Journal page uses localStorage 'tren_journal').
 // Map them into the same shape renderFromData/buildSignalCard expect from the Supabase `trades` rows.
@@ -1317,7 +1391,7 @@ window.toggleSignalJournal=function(i,btn){
 
 function buildSignalCard(t,idx){
   const isActive=!(t.exit||t.closed);const win=parseFloat(t.pnl||0)>=0;const dir=(t.direction||'').toLowerCase();const isLong=dir==='long';
-  const pnlStr=isActive?'':`<span class="sig-pnl-badge ${win?'pos':'neg'}">${win?'+':'-'}$${Math.abs(parseFloat(t.pnl||0)).toLocaleString('en-US',{maximumFractionDigits:0})}</span>`;
+  const pnlStr=isActive?'':`<span class="sig-pnl-badge ${win?'pos':'neg'}">${fmtUnit(tval(t))}</span>`;
   const sc=isActive?'ac':win?'ht':'ls';const sl=isActive?'● Live':win?'✓ TP Hit':'✗ SL Hit';
   // Only offer the journal toggle for closed Tren signals (not the user's
   // own personal-journal cards, and not still-open/live signals with no pnl yet).
@@ -1339,7 +1413,7 @@ function renderDOW(data){
   const dowMap={}, dowCount={};
   data.forEach(t=>{
     const d=new Date(t.executed_at).getDay();
-    dowMap[d]=(dowMap[d]||0)+parseFloat(t.pnl||0);
+    dowMap[d]=(dowMap[d]||0)+tval(t);
     dowCount[d]=(dowCount[d]||0)+1;
   });
   const maxDow=Math.max(...Object.values(dowMap).map(Math.abs),1);
@@ -1351,7 +1425,7 @@ function renderDOW(data){
     const col=v>=0?'var(--green)':'var(--red)';
     return`<div class="dow-card ${cls}">
       <div class="dow-day">${lbl}</div>
-      <div class="dow-pnl" style="color:${has?col:'var(--sub)'}">${has?(v>=0?'+':'-')+'$'+Math.round(Math.abs(v)).toLocaleString():'—'}</div>
+      <div class="dow-pnl" style="color:${has?col:'var(--sub)'}">${has?fmtUnit(v):'—'}</div>
       <div class="dow-cnt">${has?cnt+' trade'+(cnt!==1?'s':''):''}</div>
       ${has?`<div class="dow-bar" style="width:${barW}%;background:${col};"></div>`:''}
     </div>`;
@@ -1364,6 +1438,8 @@ function renderEdge(data){
   const wins=closed.filter(t=>parseFloat(t.pnl||0)>0);
   const losses=closed.filter(t=>parseFloat(t.pnl||0)<=0);
   const wr=closed.length?Math.round(wins.length/closed.length*100):0;
+  const avgWinU=wins.length?wins.reduce((a,t)=>a+tval(t),0)/wins.length:0;
+  const avgLossU=losses.length?Math.abs(losses.reduce((a,t)=>a+tval(t),0)/losses.length):0;
   const avgWin=wins.length?wins.reduce((a,t)=>a+parseFloat(t.pnl||0),0)/wins.length:0;
   const avgLoss=losses.length?Math.abs(losses.reduce((a,t)=>a+parseFloat(t.pnl||0),0)/losses.length):0;
   const rrRatio=avgLoss>0?(avgWin/avgLoss).toFixed(2):'∞';
@@ -1413,7 +1489,7 @@ function renderEdge(data){
         <div class="rr-w" style="width:${(avgWin/(avgWin+avgLoss||1)*100).toFixed(1)}%"></div>
         <div class="rr-l" style="width:${(avgLoss/(avgWin+avgLoss||1)*100).toFixed(1)}%"></div>
       </div>
-      <div class="rr-labels"><span>Avg win $${Math.round(avgWin)}</span><span>Avg loss $${Math.round(avgLoss)}</span></div>
+      <div class="rr-labels"><span>Avg win ${fmtUnitAbs(avgWinU)}</span><span>Avg loss ${fmtUnitAbs(avgLossU)}</span></div>
     </div>
 
     <div class="sc">
@@ -1511,11 +1587,11 @@ function renderIntel(data){
       <div class="sc-lbl">Best &amp; Worst Trade</div>
       ${bigWin?`<div class="bw-row" style="background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.15);">
         <div><div style="font-size:12px;font-weight:600;">${escHtml(bigWin.market||'—')}</div><div style="font-size:10px;color:var(--sub);">${bigWin.executed_at.slice(5,10)}</div></div>
-        <div style="font-size:15px;font-weight:700;color:var(--green);">+$${Math.round(parseFloat(bigWin.pnl||0)).toLocaleString()}</div>
+        <div style="font-size:15px;font-weight:700;color:var(--green);">${fmtUnit(Math.abs(tval(bigWin)))}</div>
       </div>`:''}
       ${bigLoss?`<div class="bw-row" style="background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.15);">
         <div><div style="font-size:12px;font-weight:600;">${escHtml(bigLoss.market||'—')}</div><div style="font-size:10px;color:var(--sub);">${bigLoss.executed_at.slice(5,10)}</div></div>
-        <div style="font-size:15px;font-weight:700;color:var(--red);">-$${Math.round(Math.abs(parseFloat(bigLoss.pnl||0))).toLocaleString()}</div>
+        <div style="font-size:15px;font-weight:700;color:var(--red);">-${fmtUnitAbs(tval(bigLoss))}</div>
       </div>`:''}
     </div>
 
@@ -1541,9 +1617,9 @@ function renderFromData(data){
   const cutoffStr = cutoffDate.toISOString().slice(0, 10); // e.g. "2025-05-28"
   const filtered = data.filter(t => t.executed_at && t.executed_at.slice(0, 10) >= cutoffStr);
 
-  const totalPnl=filtered.reduce((a,t)=>a+parseFloat(t.pnl||0),0);
+  const totalPnl=filtered.reduce((a,t)=>a+tval(t),0);
   const pe=document.getElementById('ov-pnl');
-  pe.textContent=(totalPnl>=0?'+':'')+'$'+Math.abs(totalPnl).toLocaleString('en-US',{maximumFractionDigits:0});
+  pe.textContent=fmtUnit(totalPnl);
   pe.className='sc-val '+(totalPnl>=0?'g':'r');
   document.getElementById('ov-pc').textContent=`${filtered.length} trades last ${TF_LABELS[days]||days+' days'}`;
 
@@ -1554,9 +1630,9 @@ function renderFromData(data){
   we.textContent=wr+'%';we.className='sc-val '+(wr>=50?'g':'r');
   document.getElementById('ov-wc').textContent=`${closed.length} closed (${TF_LABELS[days]||days+' days'})`;
 
-  const dm={};filtered.forEach(t=>{if(!t.executed_at)return;const k=t.executed_at.slice(0,10);dm[k]=(dm[k]||0)+parseFloat(t.pnl||0);});
+  const dm={};filtered.forEach(t=>{if(!t.executed_at)return;const k=t.executed_at.slice(0,10);dm[k]=(dm[k]||0)+tval(t);});
   const bd=Object.values(dm).length?Math.max(...Object.values(dm)):0;
-  document.getElementById('ov-bd').textContent='+$'+bd.toLocaleString('en-US',{maximumFractionDigits:0});
+  document.getElementById('ov-bd').textContent='+'+fmtUnitAbs(bd);
 
   const lc=_perfSource==='personal'?filtered.length:data.filter(t=>!(t.exit||t.closed)).length;
   const today=getTodayLocal();const tc=data.filter(t=>t.executed_at&&t.executed_at.startsWith(today)).length;
@@ -1573,13 +1649,13 @@ function renderFromData(data){
     const DL=['SU','MO','TU','WE','TH','FR','SA'];
     const labelEvery=days<=14?1:3;
     bars=chartDays.map((k,i)=>{
-      const v=filtered.filter(t=>t.executed_at&&t.executed_at.startsWith(k)).reduce((a,t)=>a+parseFloat(t.pnl||0),0);
+      const v=filtered.filter(t=>t.executed_at&&t.executed_at.startsWith(k)).reduce((a,t)=>a+tval(t),0);
       const d=new Date(k+'T12:00:00');
       const ds=d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'});
       const dw=d.getDay();const iw=(dw===0||dw===6);
       const hideLabel=(i%labelEvery!==0)?' hide-label':'';
       let bc,pd;
-      if(iw){bc='wknd';pd='Weekend';}else{bc=v>=0?'g':'r';pd=(v>=0?'+':'')+'$'+v.toFixed(0);}
+      if(iw){bc='wknd';pd='Weekend';}else{bc=v>=0?'g':'r';pd=fmtUnit(v);}
       return{v,bc,pd,label:ds+' '+DL[dw],hideLabel};
     });
   } else {
@@ -1590,7 +1666,7 @@ function renderFromData(data){
       const d=new Date(t.executed_at);
       const dow=d.getDay();const diff=(dow===0?-6:1-dow);
       const mon=new Date(d);mon.setDate(d.getDate()+diff);mon.setHours(0,0,0,0);
-      weekMap.set(toLocalISO(mon),(weekMap.get(toLocalISO(mon))||0)+parseFloat(t.pnl||0));
+      weekMap.set(toLocalISO(mon),(weekMap.get(toLocalISO(mon))||0)+tval(t));
     });
     const weeks=[];
     const cursor=new Date(cutoffW);
@@ -1602,7 +1678,7 @@ function renderFromData(data){
       const labelEvery=days>=365?4:2;
       const hideLabel=(i%labelEvery!==0)?' hide-label':'';
       const ds=d.toLocaleDateString('en-US',{month:'numeric',day:'numeric'});
-      return{v,bc:v>=0?'g':'r',pd:(v>=0?'+':'')+'$'+v.toFixed(0),label:ds+' WK',hideLabel};
+      return{v,bc:v>=0?'g':'r',pd:fmtUnit(v),label:ds+' WK',hideLabel};
     });
   }
 
@@ -1628,7 +1704,7 @@ function renderFromData(data){
     const firstX=toX(0).toFixed(1),lastX=toX(points.length-1).toFixed(1);
     const fillPts=`${firstX},${H} ${ptStr} ${lastX},${H}`;
     const color=chartStyle==='cumulative'?'#3b82f6':'#10b981';
-    const tooltips=points.map((v,i)=>chartStyle==='cumulative'?(v>=0?'+':'')+`$${v.toFixed(0)} total`:bars[i].pd);
+    const tooltips=points.map((v,i)=>chartStyle==='cumulative'?fmtUnit(v)+' total':bars[i].pd);
     const labelEvery=bars.length<=14?1:bars.length<=30?3:bars.length<=90?7:14;
     const hoverElId='lc-hover-'+Date.now();
     document.getElementById('ov-chart').innerHTML=`
@@ -1781,6 +1857,12 @@ function lcDotLeave(dot){
   });
   const setTxt=(id,val)=>{const el=document.getElementById(id);if(el)el.textContent=val;};
   setTxt('tf-sublabel','Last '+lbl);setTxt('lbl-pnl',lbl);setTxt('lbl-wr',lbl);setTxt('lbl-bd',lbl);setTxt('chart-range-label','Last '+lbl);setTxt('sigs-range-label','(last '+lbl+')');
+})();
+
+(function initUnitCurrency(){
+  document.querySelectorAll('.unit-btn').forEach(b=>b.classList.toggle('active',b.dataset.unit===_unitMode));
+  const curSel=document.getElementById('currency-select');
+  if(curSel){ curSel.value=_currency; curSel.disabled=(_unitMode==='ticks'); }
 })();
 
 initUserInfo();
