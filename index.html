@@ -309,13 +309,75 @@ h1 em { font-style: normal; color: var(--accent-l); }
 .billing-label.active { color: var(--text); }
 .billing-save-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 9px; border-radius: 100px; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #34d399; }
 
+.pricing-stage { position: relative; }
+.pricing-stage::before {
+  content: '';
+  position: absolute;
+  top: 30%; left: 50%;
+  width: 780px; height: 460px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, rgba(16,185,129,0.08), transparent 65%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Automation path — the three tiers are a real sequence (manual → auto-copy →
+   full bot), so a connected track carries information a plain 3-up grid can't. */
+.automation-track {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 14px;
+  max-width: 1000px;
+  margin: 0 auto 3rem;
+  position: relative;
+}
+.automation-track::before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: calc(100% / 6);
+  right: calc(100% / 6);
+  height: 2px;
+  background: linear-gradient(90deg, #3b82f6, #10b981, #f59e0b);
+  opacity: 0.32;
+}
+.at-pulse {
+  position: absolute;
+  top: 0; left: calc(100% / 6);
+  width: 10px; height: 10px;
+  margin-left: -5px;
+  border-radius: 50%;
+  background: #60a5fa;
+  box-shadow: 0 0 14px 3px rgba(96,165,250,0.65);
+  animation: railPulse 5s ease-in-out infinite alternate;
+}
+@keyframes railPulse {
+  0%   { left: calc(100% / 6);       background: #60a5fa; box-shadow: 0 0 14px 3px rgba(96,165,250,0.65); }
+  50%  { left: 50%;                  background: #34d399; box-shadow: 0 0 14px 3px rgba(52,211,153,0.65); }
+  100% { left: calc(100% - 100%/6);  background: #fbbf24; box-shadow: 0 0 14px 3px rgba(251,191,36,0.65); }
+}
+.at-stop { display: flex; flex-direction: column; align-items: center; gap: 9px; text-align: center; }
+.at-node { width: 12px; height: 12px; border-radius: 50%; box-shadow: 0 0 0 3px var(--bg), 0 0 0 4px currentColor; }
+.at-node.n1 { color: #3b82f6; background: #3b82f6; }
+.at-node.n2 { color: #10b981; background: #10b981; }
+.at-node.n3 { color: #f59e0b; background: #f59e0b; }
+.at-label { font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: rgba(240,244,255,0.4); }
+@media (prefers-reduced-motion: reduce) { .at-pulse { animation: none; left: 50%; } }
+@media (max-width: 1024px) { .automation-track { display: none; } }
+
 .pricing-layout {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 14px;
   max-width: 1000px;
   margin: 0 auto;
+  position: relative;
 }
+
+/* The middle tier is the recommended path through the automation
+   spectrum — raised physically, not just badged, to read as the default. */
+.pcard-elevated { margin-top: -18px; z-index: 2; }
+@media (max-width: 1024px) { .pcard-elevated { margin-top: 0; } }
 
 .pcard {
   border-radius: 20px;
@@ -325,9 +387,22 @@ h1 em { font-style: normal; color: var(--accent-l); }
   display: flex;
   flex-direction: column;
   gap: 0;
-  transition: transform 0.2s;
+  transition: transform 0.15s ease-out, box-shadow 0.35s ease, opacity 0.6s ease;
+  opacity: 0;
+  transform: translateY(28px);
 }
+.pcard.in-view { opacity: 1; transform: translateY(0); }
 .pcard:hover { transform: translateY(-3px); }
+
+/* Mouse-tracking spotlight layer */
+.pcard-spotlight {
+  position: absolute; inset: 0; border-radius: inherit;
+  opacity: 0; transition: opacity 0.35s ease;
+  pointer-events: none; z-index: 0;
+}
+.pcard:hover .pcard-spotlight { opacity: 1; }
+
+.pcard > *:not(.pcard-spotlight) { position: relative; z-index: 1; }
 
 .pcard-blue {
   background: linear-gradient(155deg, #0d1d3a 0%, #070c18 100%);
@@ -339,6 +414,8 @@ h1 em { font-style: normal; color: var(--accent-l); }
   height: 1px;
   background: linear-gradient(90deg, transparent 5%, rgba(59,130,246,0.7) 50%, transparent 95%);
 }
+.pcard-blue:hover { box-shadow: 0 24px 60px -24px rgba(59,130,246,0.45), 0 0 0 1px rgba(59,130,246,0.15); }
+.pcard-blue .pcard-spotlight { background: radial-gradient(480px circle at var(--mx,50%) var(--my,50%), rgba(96,165,250,0.16), transparent 45%); }
 
 .pcard-green {
   background: linear-gradient(155deg, #071a12 0%, #040e09 100%);
@@ -351,6 +428,8 @@ h1 em { font-style: normal; color: var(--accent-l); }
   height: 1px;
   background: linear-gradient(90deg, transparent 5%, rgba(16,185,129,0.85) 50%, transparent 95%);
 }
+.pcard-green:hover { box-shadow: 0 24px 70px -22px rgba(16,185,129,0.5), 0 0 0 1px rgba(16,185,129,0.25); }
+.pcard-green .pcard-spotlight { background: radial-gradient(480px circle at var(--mx,50%) var(--my,50%), rgba(52,211,153,0.18), transparent 45%); }
 
 .pcard-gold {
   background: linear-gradient(155deg, #1c1404 0%, #0e0b06 100%);
@@ -362,6 +441,13 @@ h1 em { font-style: normal; color: var(--accent-l); }
   height: 1px;
   background: linear-gradient(90deg, transparent 5%, rgba(245,158,11,0.75) 50%, transparent 95%);
 }
+.pcard-gold:hover { box-shadow: 0 24px 60px -24px rgba(245,158,11,0.4), 0 0 0 1px rgba(245,158,11,0.15); }
+.pcard-gold .pcard-spotlight { background: radial-gradient(480px circle at var(--mx,50%) var(--my,50%), rgba(251,191,36,0.16), transparent 45%); }
+
+@media (prefers-reduced-motion: reduce) {
+  .pcard { transition: opacity 0.3s ease; transform: none !important; }
+  .pcard.in-view { transform: none !important; }
+}
 
 .pcard-header {
   display: flex; align-items: flex-start;
@@ -370,13 +456,18 @@ h1 em { font-style: normal; color: var(--accent-l); }
 .pcard-name { font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; color: rgba(240,244,255,0.45); }
 .pcard-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
 .pcard-badge.blue  { background: #2563eb; color: #fff; }
-.pcard-badge.green { background: #059669; color: #fff; }
+.pcard-badge.green { background: #059669; color: #fff; animation: badgePulse 2.4s ease-in-out infinite; }
 .pcard-badge.gold  { background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; }
+
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.55); }
+  50%      { box-shadow: 0 0 0 7px rgba(16,185,129,0); }
+}
 
 .pcard-price-block { margin-bottom: 1.25rem; min-height: 80px; }
 .pcard-strike { font-size: 12px; color: rgba(240,244,255,0.28); text-decoration: line-through; margin-bottom: 2px; min-height: 16px; }
 .pcard-price-row { display: flex; align-items: baseline; gap: 5px; margin-bottom: 3px; }
-.pcard-price-num { font-size: 46px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: #f0f4ff; }
+.pcard-price-num { font-size: 46px; font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: #f0f4ff; font-variant-numeric: tabular-nums; }
 .pcard-price-period { font-size: 13px; font-weight: 400; color: rgba(240,244,255,0.4); }
 .pcard-billing { font-size: 11px; color: rgba(240,244,255,0.3); min-height: 14px; }
 
@@ -384,7 +475,23 @@ h1 em { font-style: normal; color: var(--accent-l); }
 .pcard-desc { font-size: 12px; color: rgba(240,244,255,0.5); line-height: 1.65; margin-bottom: 1rem; }
 
 .pcard-features { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-bottom: 1.5rem; flex: 1; }
-.pcard-features li { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: rgba(240,244,255,0.62); line-height: 1.45; }
+.pcard-features li {
+  display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: rgba(240,244,255,0.62); line-height: 1.45;
+  opacity: 0; transform: translateX(-8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.pcard.in-view .pcard-features li { opacity: 1; transform: translateX(0); }
+.pcard.in-view .pcard-features li:nth-child(1) { transition-delay: 0.05s; }
+.pcard.in-view .pcard-features li:nth-child(2) { transition-delay: 0.10s; }
+.pcard.in-view .pcard-features li:nth-child(3) { transition-delay: 0.15s; }
+.pcard.in-view .pcard-features li:nth-child(4) { transition-delay: 0.20s; }
+.pcard.in-view .pcard-features li:nth-child(5) { transition-delay: 0.25s; }
+.pcard.in-view .pcard-features li:nth-child(6) { transition-delay: 0.30s; }
+.pcard.in-view .pcard-features li:nth-child(7) { transition-delay: 0.35s; }
+.pcard.in-view .pcard-features li:nth-child(8) { transition-delay: 0.40s; }
+@media (prefers-reduced-motion: reduce) {
+  .pcard-features li { opacity: 1; transform: none; transition: none; }
+}
 .pf-icon { width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 8px; flex-shrink: 0; margin-top: 1px; }
 .pf-icon.check  { background: rgba(37,99,235,0.18); color: #60a5fa; }
 .pf-icon.mirror { background: rgba(16,185,129,0.14); color: #10b981; }
@@ -398,8 +505,19 @@ li.pf-inherit { color: rgba(240,244,255,0.88) !important; font-weight: 700; }
   border-radius: 12px; text-decoration: none; cursor: pointer;
   border: none; transition: transform 0.15s, box-shadow 0.2s;
   letter-spacing: 0.01em;
+  position: relative; overflow: hidden;
 }
 .pcard-cta:hover { transform: translateY(-2px); }
+.pcard-cta::after {
+  content: ''; position: absolute; top: 0; left: -60%; width: 40%; height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255,255,255,0.4), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.55s ease;
+}
+.pcard-cta:hover::after { left: 130%; }
+@media (prefers-reduced-motion: reduce) {
+  .pcard-cta::after { display: none; }
+}
 .pcard-cta.blue  { background: #2563eb; color: #fff; }
 .pcard-cta.blue:hover  { box-shadow: 0 8px 28px rgba(37,99,235,0.42); }
 .pcard-cta.green { background: linear-gradient(135deg, #10b981, #059669); color: #fff; }
@@ -419,6 +537,138 @@ li.pf-inherit { color: rgba(240,244,255,0.88) !important; font-weight: 700; }
 
 .plan-compare { max-width: 1000px; margin: 1.5rem auto 0; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
 .plan-compare-cell { text-align: center; font-size: 11px; color: var(--tm); padding: 0 0.5rem; line-height: 1.5; }
+
+/* ─── COMPARE TABLE ─── */
+.compare-wrap {
+  max-width: 1000px;
+  margin: 2rem auto 0;
+  padding: 0 2.5rem;
+}
+.compare-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--border-b);
+  border-radius: 10px;
+  color: var(--ts);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+.compare-toggle-btn:hover {
+  color: var(--text);
+  border-color: rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.02);
+}
+.compare-toggle-btn .ct-chevron {
+  width: 15px; height: 15px;
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+}
+.compare-toggle-btn.open .ct-chevron { transform: rotate(180deg); }
+
+.compare-body {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1), opacity 0.3s ease, margin-top 0.3s ease;
+  margin-top: 0;
+}
+.compare-body.open {
+  max-height: 1600px;
+  opacity: 1;
+  margin-top: 1rem;
+}
+
+.compare-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.compare-table thead th {
+  padding: 16px 18px 14px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg3);
+}
+.compare-table thead th:first-child {
+  text-align: left;
+  color: var(--tm);
+  font-size: 9px;
+}
+.compare-table thead th.col-free    { color: var(--ts); }
+.compare-table thead th.col-premium { color: #60a5fa; }
+.compare-table thead th.col-auto    { color: #34d399; }
+.compare-table thead th.col-trenbot { color: #fbbf24; }
+.compare-table thead th.col-indicator { color: #a78bfa; }
+
+.compare-table .ct-section-row td {
+  padding: 9px 18px 5px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--tm);
+  background: rgba(255,255,255,0.012);
+  border-top: 1px solid var(--border);
+}
+.compare-table tbody tr.ct-row td {
+  padding: 12px 18px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--ts);
+  vertical-align: middle;
+  transition: background 0.18s;
+}
+.compare-table tbody tr.ct-row:hover td { background: rgba(255,255,255,0.018); }
+.compare-table tbody tr.ct-row td:first-child {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 12.5px;
+}
+.compare-table tbody tr.ct-row td:not(:first-child) { text-align: center; }
+
+.ct-check {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(16,185,129,0.12);
+  color: #10b981;
+}
+.ct-check svg { width: 10px; height: 10px; }
+.ct-dash {
+  display: inline-block;
+  width: 12px; height: 2px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 2px;
+  vertical-align: middle;
+}
+.ct-pill {
+  display: inline-block;
+  font-size: 10px; font-weight: 700;
+  padding: 2px 9px; border-radius: 100px;
+}
+.ct-pill.amber { background: rgba(245,158,11,0.1); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
+.ct-pill.green  { background: rgba(16,185,129,0.1); color: #34d399; border: 1px solid rgba(16,185,129,0.2); }
+.ct-pill.blue  { background: rgba(37,99,235,0.1); color: #60a5fa; border: 1px solid rgba(59,130,246,0.2); font-size: 9px; }
+
+@media (max-width: 640px) {
+  .compare-wrap { padding: 0 1.5rem; }
+  .compare-table thead th, .compare-table tbody tr.ct-row td { padding-left: 10px; padding-right: 6px; font-size: 11px; }
+}
 
 /* ─── INDICATOR ─── */
 .indicator-section { max-width: 1160px; margin: 0 auto; padding: 5rem 2.5rem; }
@@ -968,10 +1218,21 @@ footer { padding: 2rem 2.5rem; margin: 2rem auto; }
     <span class="billing-save-badge">Save up to 15%</span>
   </div>
 
+  <div class="pricing-stage">
+
+  <!-- Automation path — the same signal, three levels of hands-off execution -->
+  <div class="automation-track" aria-hidden="true">
+    <div class="at-pulse"></div>
+    <div class="at-stop"><span class="at-node n1"></span><span class="at-label">Manual entry</span></div>
+    <div class="at-stop"><span class="at-node n2"></span><span class="at-label">Auto-copy</span></div>
+    <div class="at-stop"><span class="at-node n3"></span><span class="at-label">Full automation</span></div>
+  </div>
+
   <div class="pricing-layout">
 
     <!-- 1. Premium Signals -->
     <div class="pcard pcard-blue">
+      <div class="pcard-spotlight"></div>
       <div class="pcard-header">
         <span class="pcard-name">Premium Signals</span>
         <span class="pcard-badge blue">Free trial</span>
@@ -1001,7 +1262,8 @@ footer { padding: 2rem 2.5rem; margin: 2rem auto; }
     </div>
 
     <!-- 2. AutoSignals -->
-    <div class="pcard pcard-green">
+    <div class="pcard pcard-green pcard-elevated">
+      <div class="pcard-spotlight"></div>
       <div class="pcard-header">
         <span class="pcard-name">AutoSignals</span>
         <span class="pcard-badge green">Most Popular</span>
@@ -1031,6 +1293,7 @@ footer { padding: 2rem 2.5rem; margin: 2rem auto; }
 
     <!-- 3. TrenBot -->
     <div class="pcard pcard-gold">
+      <div class="pcard-spotlight"></div>
       <div class="pcard-header">
         <span class="pcard-name">TrenBot</span>
         <span class="pcard-badge gold">Pro</span>
@@ -1060,6 +1323,8 @@ footer { padding: 2rem 2.5rem; margin: 2rem auto; }
 
   </div>
 
+  </div><!-- /pricing-stage -->
+
   <div class="plan-compare">
     <div class="plan-compare-cell">Best for traders who want to stay in control of every entry.</div>
     <div class="plan-compare-cell">Best for traders who want automation without the technical setup.</div>
@@ -1069,6 +1334,170 @@ footer { padding: 2rem 2.5rem; margin: 2rem auto; }
   <div class="free-signals-link">
     <a href="https://discord.gg/Ygwf8xfEXS" target="_blank">or start with free signals on Discord →</a>
   </div>
+
+  <!-- COMPARE TABLE -->
+  <div class="compare-wrap">
+    <button class="compare-toggle-btn" id="compareBtn" onclick="toggleCompare()" aria-expanded="false">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg>
+      Compare all features
+      <svg class="ct-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+
+    <div class="compare-body" id="compareBody">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width:30%"></th>
+            <th class="col-free">Free</th>
+            <th class="col-premium">Premium</th>
+            <th class="col-auto">AutoSignals</th>
+            <th class="col-trenbot">TrenBot</th>
+            <th class="col-indicator">TV Indicator<br><span style="font-size:8px;font-weight:500;color:rgba(240,244,255,0.3);text-transform:none;letter-spacing:0;">$99 one-time</span></th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <tr class="ct-section-row"><td colspan="6">Signals</td></tr>
+          <tr class="ct-row">
+            <td>Signal delay</td>
+            <td><span class="ct-pill amber">3 min</span></td>
+            <td><span class="ct-pill green">Instant</span></td>
+            <td><span class="ct-pill green">Instant</span></td>
+            <td><span class="ct-pill green">Instant</span></td>
+            <td><span class="ct-dash"></span></td>
+          </tr>
+          <tr class="ct-row">
+            <td>Full signal access</td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-dash"></span></td>
+          </tr>
+          <tr class="ct-row">
+            <td>Best entry prices</td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-dash"></span></td>
+          </tr>
+
+          <tr class="ct-section-row"><td colspan="6">Automation</td></tr>
+          <tr class="ct-row">
+            <td>Auto-execute to broker</td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-dash"></span></td>
+          </tr>
+          <tr class="ct-row">
+            <td>NinjaTrader bridge</td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-dash"></span></td>
+          </tr>
+          <tr class="ct-row">
+            <td>Multi-contract scaling</td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-dash"></span></td>
+          </tr>
+          <tr class="ct-row">
+            <td>Full NinjaTrader integration</td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-dash"></span></td>
+          </tr>
+          <tr class="ct-row">
+            <td>Custom risk rules</td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-dash"></span></td>
+          </tr>
+
+          <tr class="ct-section-row"><td colspan="6">Platform</td></tr>
+          <tr class="ct-row">
+            <td>Discord community</td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-dash"></span></td>
+          </tr>
+          <tr class="ct-row">
+            <td>Priority Discord role</td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-dash"></span></td>
+          </tr>
+          <tr class="ct-row">
+            <td>Trading journal</td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+            <td><span class="ct-dash"></span></td>
+          </tr>
+          <tr class="ct-row">
+            <td>Analytics dashboard</td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-pill green">Full</span></td>
+            <td><span class="ct-pill green">Full</span></td>
+            <td><span class="ct-pill green">Full</span></td>
+            <td><span class="ct-dash"></span></td>
+          </tr>
+
+          <tr class="ct-section-row"><td colspan="6">TradingView Indicator</td></tr>
+          <tr class="ct-row">
+            <td>Buy / sell signals on chart</td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+          </tr>
+          <tr class="ct-row">
+            <td>Auto TP1, TP2, TP3 levels</td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+          </tr>
+          <tr class="ct-row">
+            <td>Stop loss levels</td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+          </tr>
+          <tr class="ct-row">
+            <td>Lifetime access</td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-dash"></span></td>
+            <td><span class="ct-check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span></td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
 </div>
 
 <!-- INDICATOR -->
@@ -1139,6 +1568,45 @@ function toggleMenu() {
   document.getElementById('mobileMenu').classList.toggle('open');
 }
 
+/* ── Pricing card interactions: 3D tilt, spotlight, scroll reveal ── */
+(function () {
+  const cards = Array.from(document.querySelectorAll('.pcard'));
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const canHoverPrecisely = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  if (!reduceMotion && canHoverPrecisely) {
+    cards.forEach(card => {
+      card.addEventListener('pointermove', (e) => {
+        if (e.pointerType !== 'mouse') return;
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const cx = rect.width / 2, cy = rect.height / 2;
+        const rotateX = ((y - cy) / cy) * -5;
+        const rotateY = ((x - cx) / cx) * 5;
+        card.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+        card.style.setProperty('--mx', x + 'px');
+        card.style.setProperty('--my', y + 'px');
+      });
+      card.addEventListener('pointerleave', () => {
+        card.style.transform = '';
+      });
+    });
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const idx = cards.indexOf(entry.target);
+        entry.target.style.transitionDelay = (idx * 0.1) + 's';
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+  cards.forEach(c => io.observe(c));
+})();
+
 /* ── PAYPAL PLAN IDs ── */
 const PLANS = {
   premium: {
@@ -1169,6 +1637,28 @@ function ppLink(planId) {
   return 'https://www.paypal.com/webapps/billing/plans/subscribe?plan_id=' + planId;
 }
 
+/* Animate a price element from its current numeric value to a new one */
+function animatePrice(el, newText) {
+  const newVal = parseFloat(newText.replace(/[^0-9.]/g, ''));
+  const oldVal = parseFloat(el.textContent.replace(/[^0-9.]/g, '')) || 0;
+  if (isNaN(newVal) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    el.textContent = newText;
+    return;
+  }
+  const duration = 380;
+  const start = performance.now();
+  const decimals = newText.includes('.') ? 2 : 0;
+  function tick(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    const val = oldVal + (newVal - oldVal) * eased;
+    el.textContent = '$' + val.toFixed(decimals);
+    if (p < 1) requestAnimationFrame(tick);
+    else el.textContent = newText;
+  }
+  requestAnimationFrame(tick);
+}
+
 /* Premium Signals free-trial stays as direct checkout link;
    after trial it converts to the chosen billing cycle */
 const PS_TRIAL_URL = 'https://trenai.vercel.app/checkout-premium';
@@ -1185,15 +1675,15 @@ function toggleBilling() {
 function updatePricing() {
   /* ── Premium Signals ── */
   if (isAnnual) {
-    document.getElementById('ps-strike').textContent  = '$29.99/mo';
-    document.getElementById('ps-price').textContent   = '$25.49';
-    document.getElementById('ps-period').textContent  = '/mo';
-    document.getElementById('ps-billing').textContent = '$305.88 billed annually · save $54/yr';
+    document.getElementById('ps-strike').innerHTML    = '&nbsp;';
+    animatePrice(document.getElementById('ps-price'), '$0');
+    document.getElementById('ps-period').textContent  = '/ 7 days';
+    document.getElementById('ps-billing').textContent = 'then $25.49/mo billed annually · save $54/yr';
     document.getElementById('ps-cta').href            = PS_TRIAL_URL;
     document.getElementById('ps-cta').textContent     = 'Start free trial';
   } else {
     document.getElementById('ps-strike').innerHTML    = '&nbsp;';
-    document.getElementById('ps-price').textContent   = '$0';
+    animatePrice(document.getElementById('ps-price'), '$0');
     document.getElementById('ps-period').textContent  = '/ 7 days';
     document.getElementById('ps-billing').textContent = 'then $29.99/mo billed monthly';
     document.getElementById('ps-cta').href            = PS_TRIAL_URL;
@@ -1203,12 +1693,12 @@ function updatePricing() {
   /* ── AutoSignals ── */
   if (isAnnual) {
     document.getElementById('as-strike').textContent  = '$49.99/mo';
-    document.getElementById('as-price').textContent   = '$42.49';
+    animatePrice(document.getElementById('as-price'), '$42.49');
     document.getElementById('as-billing').textContent = '$509.88 billed annually · save $90/yr';
     document.getElementById('as-cta').href            = ppLink(PLANS.autosignals.annual);
   } else {
     document.getElementById('as-strike').textContent  = '$49.99/mo';
-    document.getElementById('as-price').textContent   = '$49.99';
+    animatePrice(document.getElementById('as-price'), '$49.99');
     document.getElementById('as-billing').textContent = 'billed monthly';
     document.getElementById('as-cta').href            = ppLink(PLANS.autosignals.monthly);
   }
@@ -1216,12 +1706,12 @@ function updatePricing() {
   /* ── TrenBot ── */
   if (isAnnual) {
     document.getElementById('tb-strike').textContent  = '$79.99/mo';
-    document.getElementById('tb-price').textContent   = '$67.99';
+    animatePrice(document.getElementById('tb-price'), '$67.99');
     document.getElementById('tb-billing').textContent = '$815.88 billed annually · save $144/yr';
     document.getElementById('tb-cta').href            = ppLink(PLANS.trenbot.annual);
   } else {
     document.getElementById('tb-strike').textContent  = '$79.99/mo';
-    document.getElementById('tb-price').textContent   = '$79.99';
+    animatePrice(document.getElementById('tb-price'), '$79.99');
     document.getElementById('tb-billing').textContent = 'billed monthly';
     document.getElementById('tb-cta').href            = ppLink(PLANS.trenbot.monthly);
   }
@@ -1391,6 +1881,15 @@ fetchBentoTrades();
 setInterval(fetchHeroFeed, 30000);
 setInterval(fetchLiveStats, 60000);
 setInterval(fetchBentoTrades, 60000);
+
+function toggleCompare() {
+  const btn  = document.getElementById('compareBtn');
+  const body = document.getElementById('compareBody');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  btn.classList.toggle('open', !isOpen);
+  btn.setAttribute('aria-expanded', String(!isOpen));
+}
 </script>
 <script>
   function goToDashboard(e) {
