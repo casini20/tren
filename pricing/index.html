@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Pricing — Tren</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 
     /* Sign In button – injected by add_signin_button.sh */
@@ -49,6 +49,10 @@
   --ts: rgba(240,244,255,0.55);
   --tm: rgba(240,244,255,0.3);
   --td: rgba(240,244,255,0.15);
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --red-bg: rgba(239,68,68,0.1);
+  --red-glow: rgba(239,68,68,0.3);
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 html { scroll-behavior: smooth; }
@@ -62,12 +66,14 @@ body {
 
 /* Animated Background */
 .bg-layer {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  position: fixed; inset: -20px; z-index: 0; pointer-events: none;
   background:
     radial-gradient(ellipse 80% 50% at 50% -10%, rgba(37,99,235,0.12) 0%, transparent 60%),
     radial-gradient(ellipse 60% 40% at 80% 0%, rgba(37,99,235,0.08) 0%, transparent 50%),
     radial-gradient(ellipse 40% 30% at 10% 90%, rgba(16,185,129,0.06) 0%, transparent 50%),
     var(--bg);
+  transition: transform 0.3s ease-out;
+  will-change: transform;
 }
 .grid-bg {
   position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.02;
@@ -95,7 +101,10 @@ nav {
   background: rgba(4,8,15,0.85);
   backdrop-filter: blur(20px) saturate(180%);
   z-index: 1000;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
+nav.nav-scrolled { box-shadow: 0 12px 40px rgba(0,0,0,0.45); border-color: var(--border-b); }
+.section[id] { scroll-margin-top: 90px; }
 .logo {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 22px; font-weight: 800; letter-spacing: -0.03em; color: var(--text);
@@ -363,11 +372,32 @@ h2.section-title em { font-style: normal; color: var(--accent-l); }
   top: 0; left: 0; right: 0;
   height: 1px;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  z-index: 2;
 }
+.price-card {
+  --mx: 50%; --my: 50%;
+}
+.price-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(280px circle at var(--mx) var(--my), rgba(255,255,255,0.07), transparent 70%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  pointer-events: none;
+}
+.price-card:hover::after { opacity: 1; }
 .price-card:hover {
   border-color: var(--border-b);
   transform: translateY(-4px);
   box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.price-card.found-match {
+  animation: pulseRing 1.5s ease-out 2;
+}
+@keyframes pulseRing {
+  0% { box-shadow: 0 0 0 0 rgba(37,99,235,0.55), 0 20px 60px rgba(0,0,0,0.4); }
+  100% { box-shadow: 0 0 0 22px rgba(37,99,235,0), 0 20px 60px rgba(0,0,0,0.4); }
 }
 .price-card.popular {
   border: 2px solid var(--accent);
@@ -742,6 +772,308 @@ footer {
 }
 .nav-affiliate-wrap { position: relative; display: inline-block; }
 .nav-earn-badge { position: absolute; top: -9px; right: -28px; font-size: 8px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #34d399; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.35); border-radius: 4px; padding: 2px 6px; line-height: 1.5; transform: rotate(12deg); pointer-events: none; white-space: nowrap; }
+
+/* ============================================================
+   SIGNAL TICKER — signature element, live-feed terminal strip
+   ============================================================ */
+.ticker-wrap {
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  border-bottom: 1px solid var(--border);
+  background: rgba(8,14,26,0.65);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  height: 38px;
+}
+.ticker-live {
+  flex-shrink: 0;
+  display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em;
+  color: var(--tm); text-transform: uppercase;
+  padding: 0 16px; height: 100%;
+  border-right: 1px solid var(--border);
+  background: var(--bg2);
+  position: relative; z-index: 3;
+}
+.ticker-live .dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+  box-shadow: 0 0 0 0 rgba(16,185,129,0.6);
+  animation: livePulse 1.8s ease-out infinite;
+}
+@keyframes livePulse {
+  0% { box-shadow: 0 0 0 0 rgba(16,185,129,0.55); }
+  70% { box-shadow: 0 0 0 7px rgba(16,185,129,0); }
+  100% { box-shadow: 0 0 0 0 rgba(16,185,129,0); }
+}
+.ticker-viewport { position: relative; flex: 1; overflow: hidden; height: 100%; }
+.ticker-viewport::before, .ticker-viewport::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 60px; z-index: 2; pointer-events: none;
+}
+.ticker-viewport::before { left: 0; background: linear-gradient(90deg, rgba(8,14,26,0.9), transparent); }
+.ticker-viewport::after { right: 0; background: linear-gradient(270deg, rgba(8,14,26,0.9), transparent); }
+.ticker-track {
+  display: flex; align-items: center; gap: 2.25rem;
+  width: max-content;
+  padding-left: 2.25rem;
+  animation: tickerScroll 42s linear infinite;
+  height: 100%;
+}
+.ticker-wrap:hover .ticker-track { animation-play-state: paused; }
+@keyframes tickerScroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.ticker-item {
+  display: flex; align-items: center; gap: 7px;
+  font-family: var(--font-mono); font-size: 12px; white-space: nowrap; color: var(--ts);
+}
+.ticker-item .sym { color: var(--text); font-weight: 700; }
+.ticker-item .side { font-weight: 600; padding: 1px 6px; border-radius: 4px; font-size: 10.5px; letter-spacing: 0.03em; }
+.ticker-item .side.long { color: var(--green); background: var(--green-bg); }
+.ticker-item .side.short { color: var(--red); background: var(--red-bg); }
+.ticker-item .res.win { color: var(--green); font-weight: 600; }
+.ticker-item .res.loss { color: var(--red); font-weight: 600; }
+.ticker-item .sep { color: var(--td); }
+
+/* ============================================================
+   PLAN FINDER — 2-step interactive quiz
+   ============================================================ */
+.finder-box {
+  max-width: 640px; margin: 0 auto 2.75rem; padding: 1.4rem 1.6rem;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 18px;
+  text-align: left;
+}
+.finder-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  cursor: pointer; user-select: none;
+}
+.finder-head-text { display: flex; align-items: center; gap: 10px; }
+.finder-icon {
+  width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
+  background: rgba(37,99,235,0.12); border: 1px solid rgba(37,99,235,0.25);
+  display: flex; align-items: center; justify-content: center; color: var(--accent-l);
+}
+.finder-icon svg { width: 17px; height: 17px; }
+.finder-title { font-size: 14.5px; font-weight: 700; color: var(--text); }
+.finder-sub { font-size: 12.5px; color: var(--tm); margin-top: 1px; }
+.finder-chevron { color: var(--tm); transition: transform 0.3s var(--ease); flex-shrink: 0; }
+.finder-chevron svg { width: 18px; height: 18px; }
+.finder-box.open .finder-chevron { transform: rotate(180deg); }
+.finder-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.4s var(--ease), margin-top 0.4s var(--ease);
+}
+.finder-box.open .finder-body { max-height: 600px; margin-top: 1.25rem; }
+.finder-step { display: none; }
+.finder-step.active { display: block; animation: fadeInUp 0.35s ease; }
+.finder-q { font-size: 13.5px; font-weight: 600; color: var(--ts); margin-bottom: 10px; }
+.finder-options { display: flex; flex-wrap: wrap; gap: 8px; }
+.finder-chip {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px; font-weight: 600; color: var(--ts);
+  background: var(--bg3); border: 1.5px solid var(--border-b);
+  padding: 9px 16px; border-radius: 10px; cursor: pointer;
+  transition: all 0.2s ease;
+}
+.finder-chip:hover { color: var(--text); border-color: var(--accent-l); background: rgba(37,99,235,0.08); }
+.finder-result {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 14px; background: rgba(16,185,129,0.06);
+  border: 1px solid rgba(16,185,129,0.25); border-radius: 12px;
+}
+.finder-result svg { width: 20px; height: 20px; color: var(--green); flex-shrink: 0; }
+.finder-result-text { font-size: 13px; color: var(--ts); }
+.finder-result-text strong { color: var(--text); }
+.finder-back {
+  font-size: 12px; color: var(--tm); cursor: pointer; margin-top: 12px;
+  display: inline-block; text-decoration: underline; text-underline-offset: 2px;
+}
+.finder-back:hover { color: var(--ts); }
+
+/* ============================================================
+   COMPARE LINK
+   ============================================================ */
+.compare-link-row { text-align: center; margin-top: 1.75rem; }
+.compare-link {
+  font-size: 13px; font-weight: 600; color: var(--accent-l);
+  text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+  padding: 8px 4px; border-bottom: 1px solid transparent; transition: all 0.2s ease;
+}
+.compare-link:hover { border-color: var(--accent-l); gap: 9px; }
+.compare-link svg { width: 14px; height: 14px; }
+
+/* ============================================================
+   COMPARISON TABLE
+   ============================================================ */
+.compare-wrap {
+  border: 1px solid var(--border); border-radius: 20px;
+  background: var(--bg2); overflow: auto; max-width: 1160px; margin: 0 auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+table.compare-table { width: 100%; border-collapse: collapse; min-width: 720px; font-size: 13px; }
+.compare-table thead th {
+  position: sticky; top: 0; z-index: 5;
+  background: var(--bg3); backdrop-filter: blur(10px);
+  padding: 18px 14px; text-align: center; font-weight: 700; font-size: 13px;
+  color: var(--text); border-bottom: 1px solid var(--border-b);
+}
+.compare-table thead th:first-child { text-align: left; color: var(--tm); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+.compare-table thead th .th-price {
+  display: block; font-family: var(--font-mono); font-size: 17px; font-weight: 700; margin-top: 4px; color: var(--accent-l);
+}
+.compare-table thead th.popular-col { color: var(--accent-l); }
+.compare-table thead th.gold-col .th-price { color: var(--gold); }
+.compare-table thead th.green-col .th-price { color: var(--green); }
+.compare-table tbody td, .compare-table tbody th {
+  padding: 13px 14px; text-align: center; border-bottom: 1px solid var(--border);
+  color: var(--ts); font-size: 13px;
+}
+.compare-table tbody th {
+  text-align: left; font-weight: 500; color: var(--ts); display: flex; align-items: center; gap: 6px;
+  white-space: nowrap;
+}
+.compare-table tbody tr:last-child td, .compare-table tbody tr:last-child th { border-bottom: none; }
+.compare-table tbody tr:hover td, .compare-table tbody tr:hover th { background: rgba(255,255,255,0.02); }
+.compare-cat-row td, .compare-cat-row th {
+  background: var(--bg3); color: var(--tm); font-size: 10.5px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.08em; padding: 8px 14px; border-bottom: 1px solid var(--border-b);
+}
+.ct-yes { color: var(--green); }
+.ct-no { color: var(--td); }
+.ct-yes svg, .ct-no svg { width: 15px; height: 15px; }
+.ct-tip { position: relative; display: inline-flex; cursor: help; border-bottom: 1px dotted var(--td); }
+.ct-tip::after {
+  content: attr(data-tip);
+  position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
+  width: 200px; background: #0c1525; border: 1px solid var(--border-b); border-radius: 8px;
+  padding: 9px 11px; font-size: 11.5px; line-height: 1.5; color: var(--ts); font-weight: 400;
+  text-transform: none; letter-spacing: normal;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s ease; z-index: 10;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.ct-tip:hover::after { opacity: 1; }
+
+/* ============================================================
+   TESTIMONIALS
+   ============================================================ */
+.testi-note {
+  text-align: center; font-size: 11.5px; color: var(--tm); margin-top: 1.75rem;
+}
+.testi-track {
+  display: flex; gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 6px 2px 20px;
+  scrollbar-width: thin; scrollbar-color: var(--border-b) transparent;
+}
+.testi-track::-webkit-scrollbar { height: 6px; }
+.testi-track::-webkit-scrollbar-thumb { background: var(--border-b); border-radius: 10px; }
+.testi-card {
+  scroll-snap-align: start; flex: 0 0 320px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: 18px;
+  padding: 1.5rem; transition: border-color 0.3s ease, transform 0.3s ease;
+}
+.testi-card:hover { border-color: var(--border-b); transform: translateY(-3px); }
+.testi-stars { display: flex; gap: 2px; margin-bottom: 12px; color: var(--gold); }
+.testi-stars svg { width: 14px; height: 14px; }
+.testi-quote { font-size: 13.5px; color: var(--ts); line-height: 1.65; margin-bottom: 1.25rem; }
+.testi-person { display: flex; align-items: center; gap: 10px; }
+.testi-avatar {
+  width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: #fff;
+}
+.testi-name { font-size: 13px; font-weight: 700; color: var(--text); }
+.testi-role { font-size: 11.5px; color: var(--tm); }
+
+/* ============================================================
+   FAQ ACCORDION
+   ============================================================ */
+.faq-list { max-width: 760px; margin: 0 auto; }
+.faq-item { border-bottom: 1px solid var(--border); }
+.faq-item:first-child { border-top: 1px solid var(--border); }
+.faq-q {
+  width: 100%; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  background: none; border: none; cursor: pointer; padding: 1.25rem 4px;
+  font-family: 'Plus Jakarta Sans', sans-serif; font-size: 15px; font-weight: 600;
+  color: var(--text); text-align: left;
+}
+.faq-q:hover { color: var(--accent-l); }
+.faq-q .faq-plus { flex-shrink: 0; color: var(--tm); transition: transform 0.3s var(--ease); }
+.faq-q .faq-plus svg { width: 18px; height: 18px; display: block; }
+.faq-item.open .faq-q .faq-plus { transform: rotate(45deg); color: var(--accent-l); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.4s var(--ease); }
+.faq-a-inner { padding: 0 4px 1.4rem; font-size: 13.5px; color: var(--ts); line-height: 1.75; max-width: 660px; }
+.faq-a-inner a { color: var(--accent-l); text-decoration: underline; text-underline-offset: 2px; }
+
+/* ============================================================
+   FINAL CTA BANNER
+   ============================================================ */
+.final-cta {
+  max-width: 1160px; margin: 0 auto; padding: 3.25rem 2.5rem;
+  background: linear-gradient(135deg, rgba(37,99,235,0.1), rgba(16,185,129,0.05) 60%, transparent);
+  border: 1px solid var(--border-b); border-radius: 24px;
+  text-align: center; position: relative; overflow: hidden;
+}
+.final-cta::before {
+  content: ''; position: absolute; top: -60%; left: 50%; transform: translateX(-50%);
+  width: 500px; height: 500px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(37,99,235,0.15), transparent 70%);
+  pointer-events: none;
+}
+.final-cta h2 { position: relative; }
+.final-cta p { position: relative; color: var(--ts); font-size: 16px; max-width: 480px; margin: 10px auto 1.75rem; }
+.final-cta-actions { position: relative; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.final-cta-actions a { width: auto; padding-left: 30px; padding-right: 30px; }
+
+/* ============================================================
+   STICKY MINI CTA BAR
+   ============================================================ */
+.sticky-cta {
+  position: fixed; left: 50%; bottom: 18px; z-index: 900;
+  transform: translateX(-50%) translateY(140%);
+  transition: transform 0.45s var(--ease);
+  display: flex; align-items: center; gap: 14px;
+  background: rgba(8,14,26,0.9); backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--border-b); border-radius: 100px;
+  padding: 8px 8px 8px 20px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  max-width: calc(100vw - 32px);
+}
+.sticky-cta.show { transform: translateX(-50%) translateY(0); }
+.sticky-cta-plans { display: flex; gap: 4px; background: var(--bg3); padding: 4px; border-radius: 100px; }
+.sticky-cta-plan {
+  font-size: 12px; font-weight: 600; color: var(--tm); padding: 6px 13px; border-radius: 100px;
+  cursor: pointer; transition: all 0.2s ease; white-space: nowrap;
+}
+.sticky-cta-plan.on { background: var(--accent); color: #fff; }
+.sticky-cta-price { font-family: var(--font-mono); font-size: 13.5px; font-weight: 700; color: var(--text); white-space: nowrap; padding: 0 2px; }
+.sticky-cta-btn {
+  background: var(--accent); color: #fff; font-size: 13px; font-weight: 700;
+  padding: 10px 20px; border-radius: 100px; text-decoration: none; white-space: nowrap;
+  transition: all 0.25s ease;
+}
+.sticky-cta-btn:hover { background: var(--accent-l); box-shadow: 0 6px 20px var(--accent-glow); }
+.sticky-cta-close {
+  width: 26px; height: 26px; border-radius: 50%; border: none; background: rgba(255,255,255,0.06);
+  color: var(--tm); cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.sticky-cta-close:hover { color: var(--text); background: rgba(255,255,255,0.1); }
+.sticky-cta-close svg { width: 13px; height: 13px; }
+
+@media (max-width: 700px) {
+  .sticky-cta-plans { display: none; }
+  .sticky-cta { padding: 8px 8px 8px 16px; gap: 10px; }
+}
+@media (max-width: 900px) {
+  .compare-table thead th { padding: 14px 10px; font-size: 12px; }
+  .compare-table tbody td, .compare-table tbody th { padding: 11px 10px; font-size: 12px; }
+}
+@media (max-width: 640px) {
+  .finder-box { padding: 1.2rem; }
+  .final-cta { padding: 2.25rem 1.5rem; }
+}
 </style>
 </head>
 <body>
@@ -775,12 +1107,59 @@ footer {
   </div>
 </nav>
 
+<!-- SIGNAL TICKER (sample feed, for illustration) -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-live"><span class="dot"></span> Sample feed</div>
+  <div class="ticker-viewport">
+    <div class="ticker-track" id="tickerTrack"></div>
+  </div>
+</div>
+
 <!-- PRICING -->
 <div id="pricing" class="section" style="padding-top:5rem;">
   <div style="text-align:center;max-width:560px;margin:0 auto 3rem" class="animate-in">
     <div class="tag tag-gold">Choose Your Plan</div>
     <h2 style="font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(28px,5vw,44px);font-weight:800;margin-bottom:12px;line-height:1.1;letter-spacing:-0.03em;">Unlock your full potential</h2>
     <p style="color:var(--ts);font-size:16px;line-height:1.7;max-width:460px;margin:0 auto;">Premium signals, unlimited journal, advanced analytics. Cancel anytime — no questions asked.</p>
+  </div>
+
+  <!-- PLAN FINDER -->
+  <div class="finder-box animate-in delay-1" id="finderBox">
+    <div class="finder-head" onclick="toggleFinder()">
+      <div class="finder-head-text">
+        <div class="finder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+        <div>
+          <div class="finder-title">Not sure which plan fits you?</div>
+          <div class="finder-sub">Answer 2 quick questions and we'll point you to one</div>
+        </div>
+      </div>
+      <div class="finder-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+    <div class="finder-body">
+      <div class="finder-step active" data-step="1">
+        <div class="finder-q">1. Do you already trade with NinjaTrader Desktop?</div>
+        <div class="finder-options">
+          <div class="finder-chip" onclick="finderAnswer(1,'no')">Not yet</div>
+          <div class="finder-chip" onclick="finderAnswer(1,'yes')">Yes, I use it</div>
+        </div>
+      </div>
+      <div class="finder-step" data-step="2">
+        <div class="finder-q">2. How hands-on do you want to be with execution?</div>
+        <div class="finder-options">
+          <div class="finder-chip" onclick="finderAnswer(2,'premium')">I'll place trades myself</div>
+          <div class="finder-chip" onclick="finderAnswer(2,'auto')">Auto-copy to my broker</div>
+          <div class="finder-chip" onclick="finderAnswer(2,'bot')">Fully automate it</div>
+        </div>
+        <div class="finder-back" onclick="finderBack()">← back</div>
+      </div>
+      <div class="finder-step" data-step="result">
+        <div class="finder-result">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <div class="finder-result-text" id="finderResultText">Based on your answers, we'd suggest <strong>Premium Signals</strong>.</div>
+        </div>
+        <div class="finder-back" onclick="finderBack()">← start over</div>
+      </div>
+    </div>
   </div>
 
   <div class="pricing-toggle animate-in delay-1">
@@ -794,7 +1173,7 @@ footer {
   <div class="pricing-grid">
 
     <!-- Free -->
-    <div class="price-card animate-in delay-1">
+    <div class="price-card animate-in delay-1" id="free-card">
       <div class="card-header">
         <div class="card-name">Free Signals</div>
         <div class="price-row">
@@ -812,7 +1191,7 @@ footer {
     </div>
 
     <!-- Premium -->
-    <div class="price-card popular animate-in delay-2">
+    <div class="price-card popular animate-in delay-2" id="premium-card">
       <div class="card-badge popular-badge">Most Popular</div>
       <div class="card-header">
         <div class="card-name">Premium Signals</div>
@@ -835,7 +1214,7 @@ footer {
     </div>
 
     <!-- AutoSignals -->
-    <div class="price-card autosignals-card animate-in delay-3">
+    <div class="price-card autosignals-card animate-in delay-3" id="autosignals-card">
       <div class="card-badge auto-badge">AutoSignals</div>
       <div class="card-header">
         <div class="card-name">AutoSignals</div>
@@ -858,7 +1237,7 @@ footer {
     </div>
 
     <!-- TrenBot -->
-    <div class="price-card trenbot-card animate-in delay-4">
+    <div class="price-card trenbot-card animate-in delay-4" id="trenbot-card">
       <div class="card-badge value-badge">Best Value</div>
       <div class="card-header">
         <div class="card-name">TrenBot</div>
@@ -883,6 +1262,10 @@ footer {
 
   </div>
 
+  <div class="compare-link-row animate-in delay-4">
+    <a href="#compare" class="compare-link">See the full feature comparison <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="19 12 12 19 5 12"/><line x1="12" y1="19" x2="12" y2="5"/></svg></a>
+  </div>
+
   <!-- Trust Badges -->
   <div class="trust-badges animate-in delay-4">
     <div class="trust-badge">
@@ -895,8 +1278,81 @@ footer {
     </div>
     <div class="trust-badge">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-      100+ Active Traders
+      <span id="traderCount">0</span>+ Active Traders
     </div>
+  </div>
+</div>
+
+
+<!-- FEATURE COMPARISON -->
+<div id="compare" class="section" style="padding-top:2rem;">
+  <div style="text-align:center;max-width:560px;margin:0 auto 2.5rem" class="animate-in">
+    <div class="tag tag-blue">Side by Side</div>
+    <h2 class="section-title">Every plan, <em>every detail</em></h2>
+    <p class="section-sub" style="margin-left:auto;margin-right:auto;">The exact same four plans above, broken down feature by feature.</p>
+  </div>
+
+  <div class="compare-wrap animate-in delay-1">
+    <table class="compare-table">
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Free Signals<span class="th-price" id="cmp-th-free">$0</span></th>
+          <th class="popular-col">Premium<span class="th-price" id="cmp-th-premium">$25.49/mo</span></th>
+          <th class="green-col">AutoSignals<span class="th-price" id="cmp-th-autosignals">$42.49/mo</span></th>
+          <th class="gold-col">TrenBot<span class="th-price" id="cmp-th-trenbot">$67.99/mo</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="compare-cat-row"><td colspan="5">Signals</td></tr>
+        <tr>
+          <th><span class="ct-tip" data-tip="How long after a signal fires before you see it.">Signal delivery speed</span></th>
+          <td>3 min delayed</td><td>Instant</td><td>Instant</td><td>Instant</td>
+        </tr>
+        <tr>
+          <th>Entry price quality</th>
+          <td>Standard</td><td>Best available</td><td>Best available</td><td>Best available</td>
+        </tr>
+        <tr>
+          <th>Full signal history &amp; alerts</th>
+          <td class="ct-no">—</td><td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+        </tr>
+        <tr class="compare-cat-row"><td colspan="5">Automation</td></tr>
+        <tr>
+          <th><span class="ct-tip" data-tip="Signals are copied straight to your connected broker account — no manual entry.">Auto-copy to broker</span></th>
+          <td class="ct-no">—</td><td class="ct-no">—</td><td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+        </tr>
+        <tr>
+          <th>Full NinjaTrader execution</th>
+          <td class="ct-no">—</td><td class="ct-no">—</td><td class="ct-no">—</td><td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+        </tr>
+        <tr>
+          <th>Position sizing</th>
+          <td class="ct-no">—</td><td class="ct-no">—</td><td>Set once</td><td>Set once</td>
+        </tr>
+        <tr>
+          <th>Custom risk rules per trade</th>
+          <td class="ct-no">—</td><td class="ct-no">—</td><td class="ct-no">—</td><td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+        </tr>
+        <tr>
+          <th>Multi-contract scaling</th>
+          <td class="ct-no">—</td><td class="ct-no">—</td><td class="ct-no">—</td><td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+        </tr>
+        <tr class="compare-cat-row"><td colspan="5">Tools &amp; community</td></tr>
+        <tr>
+          <th>Trading journal &amp; analytics</th>
+          <td class="ct-no">—</td><td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td><td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+        </tr>
+        <tr>
+          <th>Dashboard access</th>
+          <td>Basic</td><td>Full</td><td>Full</td><td>Full</td>
+        </tr>
+        <tr>
+          <th>Discord role</th>
+          <td>Member</td><td>Priority</td><td>Priority</td><td>Priority</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 </div>
 
@@ -929,6 +1385,120 @@ footer {
   </div>
 </div>
 
+
+<!-- TESTIMONIALS -->
+<div class="section" style="padding-top:2rem;">
+  <div style="text-align:center;max-width:560px;margin:0 auto 1.5rem" class="animate-in">
+    <div class="tag tag-blue">Trader Feedback</div>
+    <h2 class="section-title">What traders <em>say</em></h2>
+  </div>
+  <div class="testi-track animate-in delay-1">
+    <div class="testi-card">
+      <div class="testi-stars">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+      </div>
+      <p class="testi-quote">"Switching to instant signals removed the lag I kept losing entries to. The journal makes it easy to see what's actually working."</p>
+      <div class="testi-person">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#2563eb,#3b82f6);">JM</div>
+        <div><div class="testi-name">J. Marsh</div><div class="testi-role">Premium Signals</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+      </div>
+      <p class="testi-quote">"AutoSignals took the hesitation out of my execution. I set position size once and it just copies straight to my broker now."</p>
+      <div class="testi-person">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#10b981,#059669);">RK</div>
+        <div><div class="testi-name">R. Kade</div><div class="testi-role">AutoSignals</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+      </div>
+      <p class="testi-quote">"The custom risk rules in TrenBot are the reason I finally trust automation with size. It scales contracts exactly how I would."</p>
+      <div class="testi-person">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706);">AT</div>
+        <div><div class="testi-name">A. Tran</div><div class="testi-role">TrenBot</div></div>
+      </div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+      </div>
+      <p class="testi-quote">"Started on Free Signals to test the waters in Discord before upgrading. No pressure, and support answered every question I had."</p>
+      <div class="testi-person">
+        <div class="testi-avatar" style="background:linear-gradient(135deg,#64748b,#475569);">SL</div>
+        <div><div class="testi-name">S. Lowe</div><div class="testi-role">Free Signals</div></div>
+      </div>
+    </div>
+  </div>
+  <div class="testi-note">Illustrative feedback shown while we collect verified trader reviews.</div>
+</div>
+
+<!-- FAQ -->
+<div id="faq" class="section" style="padding-top:2rem;">
+  <div style="text-align:center;max-width:560px;margin:0 auto 2rem" class="animate-in">
+    <div class="tag tag-gold">Questions</div>
+    <h2 class="section-title">Frequently <em>asked</em></h2>
+  </div>
+  <div class="faq-list animate-in delay-1">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Can I cancel anytime?<span class="faq-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Yes. Every subscription plan can be cancelled at any time from your dashboard — no questions asked, and you keep access until the end of your current billing period.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">What's the actual difference between Premium, AutoSignals, and TrenBot?<span class="faq-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Premium gives you instant signals that you place yourself. AutoSignals auto-copies those same signals to your connected broker through NinjaTrader Desktop. TrenBot goes further and connects directly to NinjaTrader to execute the full trade for you, including position sizing and risk rules. Each tier includes everything from the one before it.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Do I need NinjaTrader for every plan?<span class="faq-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+      <div class="faq-a"><div class="faq-a-inner">No. Free Signals and Premium Signals just need Discord and any charting/execution setup you already use. AutoSignals and TrenBot require NinjaTrader Desktop, since that's what handles the automated execution.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Is the TradingView indicator the same thing as a subscription?<span class="faq-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+      <div class="faq-a"><div class="faq-a-inner">No — the indicator is a one-time purchase that adds buy/sell labels and TP/SL levels directly onto your own TradingView charts. It doesn't include the signal feed, journal, or automation features from the plans above.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Is there a free trial?<span class="faq-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Yes — use "Start free trial" at the top of the page to try Premium Signals, or join Discord for free access to the delayed signal feed with no commitment at all.</div></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">Where can I find billing and refund details?<span class="faq-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+      <div class="faq-a"><div class="faq-a-inner">Full billing terms are in our <a href="https://trenai.vercel.app/terms-conditions">Terms of Service</a>. Reach out any time through <a href="https://trenai.vercel.app/contact">Contact</a> and a real person will help.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- FINAL CTA -->
+<div class="section" style="padding-top:1rem;">
+  <div class="final-cta animate-in">
+    <div class="tag tag-blue" style="position:relative;">Ready when you are</div>
+    <h2 class="section-title" style="font-size:clamp(28px,5vw,40px);">Start trading with an edge</h2>
+    <p>Instant signals, automated execution, and a community of active traders — cancel anytime.</p>
+    <div class="final-cta-actions">
+      <a href="https://trenai.vercel.app/checkout-premium" class="btn-primary">Start free trial</a>
+      <a href="#compare" class="btn-ghost">Compare plans</a>
+    </div>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer>
@@ -964,6 +1534,20 @@ footer {
   </div>
 </footer>
 
+<!-- STICKY CTA BAR -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="sticky-cta-plans" id="stickyCtaPlans">
+    <span class="sticky-cta-plan on" data-plan="premium" onclick="stickyCtaSelect('premium')">Premium</span>
+    <span class="sticky-cta-plan" data-plan="autosignals" onclick="stickyCtaSelect('autosignals')">AutoSignals</span>
+    <span class="sticky-cta-plan" data-plan="trenbot" onclick="stickyCtaSelect('trenbot')">TrenBot</span>
+  </div>
+  <span class="sticky-cta-price" id="stickyCtaPrice">$25.49/mo</span>
+  <a href="https://trenai.vercel.app/checkout-premium" class="sticky-cta-btn" id="stickyCtaBtn">Subscribe</a>
+  <button class="sticky-cta-close" onclick="stickyCtaClose()" aria-label="Dismiss">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+</div>
+
 </div>
 
 <script>
@@ -997,11 +1581,12 @@ document.addEventListener('click', (e) => {
 
 // Pricing toggle
 const PRICES = {
-  premium:      { monthly: 29.99, yearly: 25.49 },
-  autosignals:  { monthly: 49.99, yearly: 42.49 },
-  trenbot:      { monthly: 79.99, yearly: 67.99 }
+  premium:      { monthly: 29.99, yearly: 25.49, url: 'https://trenai.vercel.app/checkout-premium',     label: 'Premium' },
+  autosignals:  { monthly: 49.99, yearly: 42.49, url: 'https://trenai.vercel.app/checkout-autosignals', label: 'AutoSignals' },
+  trenbot:      { monthly: 79.99, yearly: 67.99, url: 'https://trenai.vercel.app/checkout-trenbot',     label: 'TrenBot' }
 };
 let upgradeBilling = 'yearly';
+let stickyCtaPlan = 'premium';
 
 function fmt(n) { return '$' + n.toFixed(2); }
 
@@ -1062,6 +1647,40 @@ function updateUpgradePrices() {
       if (ppeEl)    ppeEl.textContent = p.desc;
     }
   });
+
+  // Comparison table header prices
+  ['premium','autosignals','trenbot'].forEach(key => {
+    const el = document.getElementById('cmp-th-' + key);
+    if (!el) return;
+    const P = PRICES[key];
+    const val = upgradeBilling === 'yearly' ? P.yearly : P.monthly;
+    el.textContent = fmt(val) + '/mo';
+  });
+
+  updateStickyCta();
+}
+
+function updateStickyCta() {
+  const P = PRICES[stickyCtaPlan];
+  const val = upgradeBilling === 'yearly' ? P.yearly : P.monthly;
+  const priceEl = document.getElementById('stickyCtaPrice');
+  const btnEl = document.getElementById('stickyCtaBtn');
+  if (priceEl) priceEl.textContent = fmt(val) + '/mo';
+  if (btnEl) btnEl.href = P.url;
+}
+
+function stickyCtaSelect(key) {
+  stickyCtaPlan = key;
+  document.querySelectorAll('.sticky-cta-plan').forEach(el => {
+    el.classList.toggle('on', el.dataset.plan === key);
+  });
+  updateStickyCta();
+}
+
+function stickyCtaClose() {
+  const bar = document.getElementById('stickyCta');
+  bar.classList.remove('show');
+  bar.dataset.dismissed = '1';
 }
 
 // Scroll animations
@@ -1080,6 +1699,161 @@ document.querySelectorAll('.animate-in').forEach(el => {
   el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
   observer.observe(el);
 });
+
+// ============================================================
+// SIGNAL TICKER — sample feed, duplicated for a seamless loop
+// ============================================================
+const SAMPLE_SIGNALS = [
+  { sym: 'NQ', side: 'long',  entry: '18,420.25', res: 'win',  label: 'TP2 hit' },
+  { sym: 'ES', side: 'short', entry: '5,512.50',  res: 'win',  label: 'TP1 hit' },
+  { sym: 'GC', side: 'long',  entry: '2,384.10',  res: 'loss', label: 'SL hit' },
+  { sym: 'CL', side: 'short', entry: '78.42',     res: 'win',  label: 'TP3 hit' },
+  { sym: 'YM', side: 'long',  entry: '39,110',    res: 'win',  label: 'TP1 hit' },
+  { sym: 'RTY', side: 'short',entry: '2,041.30',  res: 'loss', label: 'SL hit' },
+  { sym: 'NQ', side: 'short', entry: '18,505.75', res: 'win',  label: 'TP2 hit' },
+  { sym: 'ES', side: 'long',  entry: '5,489.25',  res: 'win',  label: 'TP1 hit' }
+];
+function buildTicker() {
+  const track = document.getElementById('tickerTrack');
+  if (!track) return;
+  const renderOnce = () => SAMPLE_SIGNALS.map(s => `
+    <div class="ticker-item">
+      <span class="sym">${s.sym}</span>
+      <span class="side ${s.side}">${s.side === 'long' ? 'LONG' : 'SHORT'}</span>
+      <span>@ ${s.entry}</span>
+      <span class="sep">·</span>
+      <span class="res ${s.res}">${s.label}</span>
+    </div>`).join('');
+  track.innerHTML = renderOnce() + renderOnce();
+}
+buildTicker();
+
+// ============================================================
+// NAV SCROLL SHADOW + STICKY CTA VISIBILITY + COUNT-UP
+// ============================================================
+const navEl = document.querySelector('nav');
+const stickyCtaEl = document.getElementById('stickyCta');
+const pricingSectionEl = document.getElementById('pricing');
+let traderCounted = false;
+
+function animateCount(el, target, duration) {
+  const start = performance.now();
+  function step(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.round(eased * target);
+    if (progress < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+const countObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && !traderCounted) {
+      traderCounted = true;
+      const el = document.getElementById('traderCount');
+      if (el) animateCount(el, 100, 1200);
+    }
+  });
+}, { threshold: 0.4 });
+const traderCountEl = document.getElementById('traderCount');
+if (traderCountEl) countObserver.observe(traderCountEl);
+
+window.addEventListener('scroll', () => {
+  if (navEl) navEl.classList.toggle('nav-scrolled', window.scrollY > 8);
+  if (stickyCtaEl && pricingSectionEl) {
+    const pastHero = window.scrollY > pricingSectionEl.offsetTop + 260;
+    if (pastHero && stickyCtaEl.dataset.dismissed !== '1') {
+      stickyCtaEl.classList.add('show');
+    } else {
+      stickyCtaEl.classList.remove('show');
+    }
+  }
+}, { passive: true });
+
+// ============================================================
+// PLAN FINDER QUIZ
+// ============================================================
+function toggleFinder() {
+  document.getElementById('finderBox').classList.toggle('open');
+}
+function showFinderStep(step) {
+  document.querySelectorAll('.finder-step').forEach(el => {
+    el.classList.toggle('active', el.dataset.step == step);
+  });
+}
+function finderAnswer(step, value) {
+  if (step === 1) {
+    if (value === 'no') {
+      document.getElementById('finderResultText').innerHTML = 'AutoSignals and TrenBot need NinjaTrader Desktop, so start with <strong>Premium Signals</strong> — instant signals you place yourself, no platform required.';
+      showFinderStep('result');
+      highlightCard('premium-card');
+    } else {
+      showFinderStep(2);
+    }
+  } else if (step === 2) {
+    const map = {
+      premium: { id: 'premium-card', html: 'Based on your answers, we\'d suggest <strong>Premium Signals</strong> — instant signals, no automation.' },
+      auto:    { id: 'autosignals-card', html: 'Based on your answers, we\'d suggest <strong>AutoSignals</strong> — every signal auto-copied to your broker.' },
+      bot:     { id: 'trenbot-card', html: 'Based on your answers, we\'d suggest <strong>TrenBot</strong> — full hands-free execution in NinjaTrader.' }
+    };
+    const m = map[value];
+    document.getElementById('finderResultText').innerHTML = m.html;
+    showFinderStep('result');
+    highlightCard(m.id);
+  }
+}
+function finderBack() {
+  showFinderStep(1);
+}
+function highlightCard(id) {
+  document.querySelectorAll('.price-card').forEach(c => c.classList.remove('found-match'));
+  const card = document.getElementById(id);
+  if (!card) return;
+  setTimeout(() => {
+    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card.classList.add('found-match');
+  }, 250);
+}
+
+// ============================================================
+// FAQ ACCORDION
+// ============================================================
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const answer = item.querySelector('.faq-a');
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => {
+    el.classList.remove('open');
+    el.querySelector('.faq-a').style.maxHeight = null;
+  });
+  if (!wasOpen) {
+    item.classList.add('open');
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+  }
+}
+
+// ============================================================
+// CARD SPOTLIGHT (cursor-follow glow)
+// ============================================================
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (!prefersReducedMotion) {
+  document.querySelectorAll('.price-card').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+    });
+  });
+
+  // Subtle background parallax
+  const bgLayer = document.querySelector('.bg-layer');
+  window.addEventListener('mousemove', (e) => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 14;
+    const y = (e.clientY / window.innerHeight - 0.5) * 14;
+    if (bgLayer) bgLayer.style.transform = `translate(${x}px, ${y}px)`;
+  }, { passive: true });
+}
 
 // Initialize
 updateUpgradePrices();
