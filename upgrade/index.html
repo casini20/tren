@@ -401,12 +401,12 @@ table.compare-table{width:100%;border-collapse:collapse;min-width:680px;font-siz
           <div class="pb pop">Most Popular</div>
           <div class="pn">Premium Signals</div>
           <div class="pp" id="pp-premium">
-            <span class="orig">$29.99</span><sup>$</sup>25.49<span class="per">/mo</span>
-            <span class="ynote">Billed annually — Save 15%</span>
+            <span class="orig" id="pp-premium-strike">$29.99</span><sup>$</sup><span id="pp-premium-amount">25.49</span><span class="per">/mo</span>
+            <span class="ynote" id="pp-premium-ynote">Billed annually — Save 15%</span>
           </div>
           <div class="ppe" id="ppe-premium">
             Instant signals with the best possible entry prices. No delay.
-            <span class="ytotal">$305.88/year</span>
+            <span class="ytotal" id="pp-premium-ytotal">$305.88/year</span>
           </div>
           <div class="pfs">
             <div class="pf"><span class="ck">✓</span> Instant signals — zero delay</div>
@@ -423,12 +423,12 @@ table.compare-table{width:100%;border-collapse:collapse;min-width:680px;font-siz
           <div class="pb grn">AutoSignals</div>
           <div class="pn">AutoSignals</div>
           <div class="pp" id="pp-autosignals">
-            <span class="orig">$49.99</span><sup>$</sup>42.49<span class="per">/mo</span>
-            <span class="ynote" style="color:var(--green);">Billed annually — Save 15%</span>
+            <span class="orig" id="pp-autosignals-strike">$49.99</span><sup>$</sup><span id="pp-autosignals-amount">42.49</span><span class="per">/mo</span>
+            <span class="ynote" id="pp-autosignals-ynote" style="color:var(--green);">Billed annually — Save 15%</span>
           </div>
           <div class="ppe" id="ppe-autosignals">
             Auto-copy every signal to your broker via NinjaTrader Desktop.
-            <span class="ytotal">$509.88/year</span>
+            <span class="ytotal" id="pp-autosignals-ytotal">$509.88/year</span>
           </div>
           <div class="pfs">
             <div class="pf"><span class="ck">✓</span> Everything in Premium</div>
@@ -445,12 +445,12 @@ table.compare-table{width:100%;border-collapse:collapse;min-width:680px;font-siz
           <div class="pb bst">Best Value</div>
           <div class="pn">TrenBot</div>
           <div class="pp" id="pp-trenbot">
-            <span class="orig">$79.99</span><sup>$</sup>67.99<span class="per">/mo</span>
-            <span class="ynote">Billed annually — Save 15%</span>
+            <span class="orig" id="pp-trenbot-strike">$79.99</span><sup>$</sup><span id="pp-trenbot-amount">67.99</span><span class="per">/mo</span>
+            <span class="ynote" id="pp-trenbot-ynote">Billed annually — Save 15%</span>
           </div>
           <div class="ppe" id="ppe-trenbot">
             Fully automated — Tren connects directly to NinjaTrader and executes for you.
-            <span class="ytotal">$815.88/year</span>
+            <span class="ytotal" id="pp-trenbot-ytotal">$815.88/year</span>
           </div>
           <div class="pfs">
             <div class="pf"><span class="ck">✓</span> Everything in AutoSignals</div>
@@ -534,48 +534,102 @@ function toggleSidebar(){document.getElementById('sidebar').classList.toggle('op
 function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sb-overlay').classList.remove('open');}
 
 // ── PRICING LOGIC ─────────────────────────────────────────────────
-const PRICES={
-  premium:   {monthly:29.99, yearly:25.49},
-  autosignals:{monthly:49.99, yearly:42.49},
-  trenbot:   {monthly:79.99, yearly:67.99}
+const PRICES = {
+  premium:     { monthly: 29.99, yearly: 25.49, url: 'https://trenai.vercel.app/checkout-premium',     label: 'Premium' },
+  autosignals: { monthly: 49.99, yearly: 42.49, url: 'https://trenai.vercel.app/checkout-autosignals', label: 'AutoSignals' },
+  trenbot:     { monthly: 79.99, yearly: 67.99, url: 'https://trenai.vercel.app/checkout-trenbot',     label: 'TrenBot' }
 };
-let billing='yearly';
+let billing = 'yearly';
 
-function setBilling(mode){
-  billing=mode;
-  document.getElementById('lbl-mo').classList.toggle('on', mode==='monthly');
-  document.getElementById('lbl-yr').classList.toggle('on', mode==='yearly');
-  document.getElementById('pt-switch').classList.toggle('yearly', mode==='yearly');
+function fmt(n) { return '$' + n.toFixed(2); }
+
+function setBilling(mode) {
+  billing = mode;
+  document.getElementById('lbl-mo').classList.toggle('on', mode === 'monthly');
+  document.getElementById('lbl-yr').classList.toggle('on', mode === 'yearly');
+  document.getElementById('pt-switch').classList.toggle('yearly', mode === 'yearly');
   updatePrices();
 }
-function toggleBilling(){setBilling(billing==='monthly'?'yearly':'monthly');}
+function toggleBilling() { setBilling(billing === 'monthly' ? 'yearly' : 'monthly'); }
 
-function updatePrices(){
-  const plans=[
-    ['premium','pp-premium','ppe-premium','Instant signals with the best possible entry prices. No delay.'],
-    ['autosignals','pp-autosignals','ppe-autosignals','Auto-copy every signal to your broker via NinjaTrader Desktop.'],
-    ['trenbot','pp-trenbot','ppe-trenbot','Fully automated — Tren connects directly to NinjaTrader and executes for you.'],
-  ];
-  plans.forEach(([plan,ppId,ppeId,desc])=>{
-    const pp=document.getElementById(ppId),ppe=document.getElementById(ppeId);
-    if(!pp)return;
-    const P=PRICES[plan];
-    const isAS=plan==='autosignals';
-    const ynoteColor=isAS?'style="color:var(--green);"':'';
-    if(billing==='yearly'){
-      const yr=(P.yearly*12).toFixed(2);
-      pp.innerHTML=`<span class="orig">$${P.monthly.toFixed(2)}</span><sup>$</sup>${P.yearly.toFixed(2)}<span class="per">/mo</span><span class="ynote" ${ynoteColor}>Billed annually — Save 15%</span>`;
-      if(ppe)ppe.innerHTML=`${desc}<span class="ytotal">$${yr}/year</span>`;
-    }else{
-      pp.innerHTML=`<sup>$</sup>${P.monthly.toFixed(2)}<span class="per">/mo</span>`;
-      if(ppe)ppe.textContent=desc;
+function updatePrices() {
+  const plans = [
+    {
+      key:        'premium',
+      strike:     'pp-premium-strike',
+      amount:     'pp-premium-amount',
+      ynote:      'pp-premium-ynote',
+      ytotal:     'pp-premium-ytotal',
+      btn:        'btn-premium',
+      desc:       'Instant signals with the best possible entry prices. No delay.',
+      ynoteColor: null
+    },
+    {
+      key:        'autosignals',
+      strike:     'pp-autosignals-strike',
+      amount:     'pp-autosignals-amount',
+      ynote:      'pp-autosignals-ynote',
+      ytotal:     'pp-autosignals-ytotal',
+      btn:        'btn-autosignals',
+      desc:       'Auto-copy every signal to your broker via NinjaTrader Desktop.',
+      ynoteColor: 'var(--green)'
+    },
+    {
+      key:        'trenbot',
+      strike:     'pp-trenbot-strike',
+      amount:     'pp-trenbot-amount',
+      ynote:      'pp-trenbot-ynote',
+      ytotal:     'pp-trenbot-ytotal',
+      btn:        'btn-trenbot',
+      desc:       'Fully automated — Tren connects directly to NinjaTrader and executes for you.',
+      ynoteColor: null
     }
+  ];
+
+  plans.forEach(p => {
+    const P        = PRICES[p.key];
+    const strikeEl = document.getElementById(p.strike);
+    const amountEl = document.getElementById(p.amount);
+    const ynoteEl  = document.getElementById(p.ynote);
+    const ytotalEl = document.getElementById(p.ytotal);
+    const btnEl    = document.getElementById(p.btn);
+
+    if (billing === 'yearly') {
+      if (strikeEl) { strikeEl.textContent = fmt(P.monthly); strikeEl.style.display = 'inline'; }
+      if (amountEl) amountEl.textContent = P.yearly.toFixed(2);
+      if (ynoteEl)  {
+        ynoteEl.textContent = 'Billed annually — Save 15%';
+        ynoteEl.style.display = 'block';
+        if (p.ynoteColor) ynoteEl.style.color = p.ynoteColor;
+      }
+      if (ytotalEl) { ytotalEl.textContent = fmt(P.yearly * 12) + '/year'; ytotalEl.style.display = 'block'; }
+    } else {
+      if (strikeEl) strikeEl.style.display = 'none';
+      if (amountEl) amountEl.textContent = P.monthly.toFixed(2);
+      if (ynoteEl)  ynoteEl.style.display = 'none';
+      if (ytotalEl) ytotalEl.style.display = 'none';
+    }
+
+    if (btnEl) btnEl.href = P.url;
+  });
+}
+
+// Card spotlight (cursor-follow glow) — matches pricing page
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (!prefersReducedMotion) {
+  document.querySelectorAll('.pc').forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+    });
   });
 }
 
 // ── INIT ──────────────────────────────────────────────────────────
 initUserInfo();
 initSubUI();
+updatePrices();
 </script>
 <script>
   function goToDashboard(e) {
