@@ -161,6 +161,72 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
   .pg{grid-template-columns:1fr;max-width:420px;margin:0 auto;}
 }
 @media(max-width:600px){.page{padding:1rem;}}
+
+/* ── TAG LABELS ── */
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:1.1rem;}
+.tag-blue{background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.25);color:var(--al);}
+.tag-gold{background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:var(--gold);}
+.section-title{font-size:clamp(22px,4vw,32px);font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-bottom:.7rem;}
+.section-title em{font-style:normal;color:var(--al);}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeInUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+.anim{animation:fadeInUp .55s ease forwards;}
+.d1{animation-delay:.08s;opacity:0;}.d2{animation-delay:.16s;opacity:0;}.d3{animation-delay:.24s;opacity:0;}.d4{animation-delay:.32s;opacity:0;}
+
+/* ── TRUST BADGES ── */
+.trust-badges{display:flex;gap:1.4rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--border);flex-wrap:wrap;justify-content:center;}
+.trust-badge{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--sub);}
+.trust-badge svg{width:15px;height:15px;color:var(--green);}
+
+/* ── COMPARE LINK ── */
+.compare-link-row{text-align:center;margin-top:1.2rem;}
+.compare-link{font-size:12.5px;font-weight:600;color:var(--al);text-decoration:none;display:inline-flex;align-items:center;gap:6px;padding:6px 4px;border-bottom:1px solid transparent;transition:all .2s ease;}
+.compare-link:hover{border-color:var(--al);gap:9px;}
+.compare-link svg{width:13px;height:13px;}
+
+/* ── SECTION DIVIDER ── */
+.up-section{margin-top:3rem;}
+
+/* ── TESTIMONIALS ── */
+.testi-track{display:flex;gap:14px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4px 2px 14px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent;}
+.testi-track::-webkit-scrollbar{height:5px;}
+.testi-track::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px;}
+.testi-card{scroll-snap-align:start;flex:0 0 290px;background:var(--bg3);border:1px solid var(--border);border-radius:15px;padding:1.2rem;transition:border-color .2s,transform .2s;}
+.testi-card:hover{border-color:var(--border2);transform:translateY(-3px);}
+.testi-stars{display:flex;gap:2px;margin-bottom:9px;color:var(--gold);}
+.testi-stars svg{width:12px;height:12px;}
+.testi-quote{font-size:12px;color:var(--sub2);line-height:1.65;margin-bottom:.9rem;}
+.testi-person{display:flex;align-items:center;gap:9px;}
+.testi-avatar{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;}
+.testi-name{font-size:12px;font-weight:700;color:var(--text);}
+.testi-role{font-size:10.5px;color:var(--sub);}
+.testi-note{text-align:center;font-size:11px;color:var(--sub);margin-top:1rem;}
+
+/* ── FINAL CTA ── */
+.final-cta{padding:2.2rem 1.8rem;background:linear-gradient(135deg,rgba(37,99,235,.1),rgba(16,185,129,.05) 60%,transparent);border:1px solid var(--border2);border-radius:18px;text-align:center;position:relative;overflow:hidden;margin-top:1rem;}
+.final-cta::before{content:'';position:absolute;top:-50%;left:50%;transform:translateX(-50%);width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(37,99,235,.12),transparent 70%);pointer-events:none;}
+.final-cta h2{position:relative;font-size:clamp(20px,3.5vw,28px);font-weight:800;margin-bottom:8px;letter-spacing:-.03em;}
+.final-cta p{position:relative;color:var(--sub2);font-size:13px;max-width:380px;margin:0 auto 1.4rem;line-height:1.7;}
+.final-cta-actions{position:relative;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.btn-sect-pri{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:#fff;font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;font-weight:600;padding:12px 26px;border-radius:10px;border:none;text-decoration:none;cursor:pointer;transition:all .25s ease;}
+.btn-sect-pri:hover{background:var(--al);transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,99,235,.3);}
+.btn-sect-gho{display:inline-flex;align-items:center;justify-content:center;background:transparent;color:var(--sub2);font-family:'Plus Jakarta Sans',sans-serif;font-size:13.5px;font-weight:600;padding:12px 22px;border-radius:10px;border:1.5px solid var(--border2);text-decoration:none;cursor:pointer;transition:all .25s ease;}
+.btn-sect-gho:hover{color:var(--text);border-color:rgba(255,255,255,.3);transform:translateY(-2px);}
+
+/* ── STICKY CTA ── */
+.sticky-cta{position:fixed;left:50%;bottom:18px;z-index:9500;transform:translateX(-50%) translateY(140%);transition:transform .45s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;gap:14px;background:rgba(8,14,26,.92);backdrop-filter:blur(20px) saturate(180%);border:1px solid var(--border2);border-radius:100px;padding:8px 8px 8px 20px;box-shadow:0 20px 60px rgba(0,0,0,.5);max-width:calc(100vw - 32px);}
+.sticky-cta.show{transform:translateX(-50%) translateY(0);}
+.sticky-cta-plans{display:flex;gap:4px;background:var(--bg3);padding:4px;border-radius:100px;}
+.sticky-cta-plan{font-size:12px;font-weight:600;color:var(--sub);padding:6px 13px;border-radius:100px;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.sticky-cta-plan.on{background:var(--accent);color:#fff;}
+.sticky-cta-price{font-size:13.5px;font-weight:700;color:var(--text);white-space:nowrap;padding:0 2px;font-variant-numeric:tabular-nums;}
+.sticky-cta-btn{background:var(--accent);color:#fff;font-size:13px;font-weight:700;padding:10px 20px;border-radius:100px;text-decoration:none;white-space:nowrap;transition:all .25s ease;}
+.sticky-cta-btn:hover{background:var(--al);box-shadow:0 6px 20px rgba(37,99,235,.4);}
+.sticky-cta-close{width:26px;height:26px;border-radius:50%;border:none;background:rgba(255,255,255,.06);color:var(--sub);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sticky-cta-close:hover{color:var(--text);background:rgba(255,255,255,.1);}
+.sticky-cta-close svg{width:13px;height:13px;}
+@media(max-width:700px){.sticky-cta-plans{display:none;}.sticky-cta{padding:8px 8px 8px 16px;gap:10px;}}
 .nav-affiliate-wrap { position: relative; display: inline-block; }
 .nav-earn-badge { position: absolute; top: -9px; right: -28px; font-size: 8px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #34d399; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.35); border-radius: 4px; padding: 2px 6px; line-height: 1.5; transform: rotate(12deg); pointer-events: none; white-space: nowrap; }
 
@@ -373,6 +439,45 @@ table.compare-table{width:100%;border-collapse:collapse;min-width:680px;font-siz
         <p style="color:var(--sub2);font-size:13px;line-height:1.7;">Premium signals, unlimited journal, advanced analytics. Cancel anytime.</p>
       </div>
 
+      <!-- PLAN FINDER -->
+      <div class="finder-box" id="finderBox">
+        <div class="finder-head" onclick="toggleFinder()">
+          <div class="finder-head-text">
+            <div class="finder-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <div>
+              <div class="finder-title">Not sure which plan fits you?</div>
+              <div class="finder-sub">Answer 2 quick questions and we'll point you to one</div>
+            </div>
+          </div>
+          <div class="finder-chevron"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></div>
+        </div>
+        <div class="finder-body">
+          <div class="finder-step active" data-step="1">
+            <div class="finder-q">1. Do you already trade with NinjaTrader Desktop?</div>
+            <div class="finder-options">
+              <div class="finder-chip" onclick="finderAnswer(1,'no')">Not yet</div>
+              <div class="finder-chip" onclick="finderAnswer(1,'yes')">Yes, I use it</div>
+            </div>
+          </div>
+          <div class="finder-step" data-step="2">
+            <div class="finder-q">2. How hands-on do you want to be with execution?</div>
+            <div class="finder-options">
+              <div class="finder-chip" onclick="finderAnswer(2,'premium')">I'll place trades myself</div>
+              <div class="finder-chip" onclick="finderAnswer(2,'auto')">Auto-copy to my broker</div>
+              <div class="finder-chip" onclick="finderAnswer(2,'bot')">Fully automate it</div>
+            </div>
+            <div class="finder-back" onclick="finderBack()">← back</div>
+          </div>
+          <div class="finder-step" data-step="result">
+            <div class="finder-result">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <div class="finder-result-text" id="finderResultText">Based on your answers, we'd suggest <strong>Premium Signals</strong>.</div>
+            </div>
+            <div class="finder-back" onclick="finderBack()">← start over</div>
+          </div>
+        </div>
+      </div>
+
       <!-- BILLING TOGGLE -->
       <div class="pricing-toggle">
         <span class="pt-label" id="lbl-mo" onclick="setBilling('monthly')">Monthly</span>
@@ -397,7 +502,7 @@ table.compare-table{width:100%;border-collapse:collapse;min-width:680px;font-siz
         </div>
 
         <!-- PREMIUM -->
-        <div class="pc ft">
+        <div class="pc ft" id="premium-card">
           <div class="pb pop">Most Popular</div>
           <div class="pn">Premium Signals</div>
           <div class="pp" id="pp-premium">
@@ -419,7 +524,7 @@ table.compare-table{width:100%;border-collapse:collapse;min-width:680px;font-siz
         </div>
 
         <!-- AUTOSIGNALS -->
-        <div class="pc as">
+        <div class="pc as" id="autosignals-card">
           <div class="pb grn">AutoSignals</div>
           <div class="pn">AutoSignals</div>
           <div class="pp" id="pp-autosignals">
@@ -441,7 +546,7 @@ table.compare-table{width:100%;border-collapse:collapse;min-width:680px;font-siz
         </div>
 
         <!-- TRENBOT -->
-        <div class="pc gd">
+        <div class="pc gd" id="trenbot-card">
           <div class="pb bst">Best Value</div>
           <div class="pn">TrenBot</div>
           <div class="pp" id="pp-trenbot">
@@ -464,9 +569,237 @@ table.compare-table{width:100%;border-collapse:collapse;min-width:680px;font-siz
         </div>
 
       </div><!-- end .pg -->
+
+      <!-- COMPARE LINK -->
+      <div class="compare-link-row">
+        <a href="#compare" class="compare-link">See the full feature comparison <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="19 12 12 19 5 12"/><line x1="12" y1="19" x2="12" y2="5"/></svg></a>
+      </div>
+
+      <!-- TRUST BADGES -->
+      <div class="trust-badges">
+        <div class="trust-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          Secure SSL Checkout
+        </div>
+        <div class="trust-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+          Cancel Anytime
+        </div>
+        <div class="trust-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+          100+ Active Traders
+        </div>
+      </div>
+
+      <!-- FEATURE COMPARISON -->
+      <div id="compare" class="up-section">
+        <div style="text-align:center;max-width:560px;margin:0 auto 1.8rem;">
+          <div class="tag tag-blue">Side by Side</div>
+          <h2 class="section-title">Every plan, <em>every detail</em></h2>
+          <p style="font-size:12.5px;color:var(--sub2);line-height:1.7;">The exact same four plans, broken down feature by feature.</p>
+        </div>
+        <div class="compare-wrap">
+          <table class="compare-table">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Free Signals<span class="th-price">$0</span></th>
+                <th class="popular-col">Premium<span class="th-price" id="cmp-th-premium">$25.49/mo</span></th>
+                <th class="green-col">AutoSignals<span class="th-price" id="cmp-th-autosignals">$42.49/mo</span></th>
+                <th class="gold-col">TrenBot<span class="th-price" id="cmp-th-trenbot">$67.99/mo</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="compare-cat-row"><td colspan="5">Signals</td></tr>
+              <tr>
+                <th><span class="ct-tip" data-tip="How long after a signal fires before you see it.">Signal delivery speed</span></th>
+                <td>3 min delayed</td><td>Instant</td><td>Instant</td><td>Instant</td>
+              </tr>
+              <tr>
+                <th>Entry price quality</th>
+                <td>Standard</td><td>Best available</td><td>Best available</td><td>Best available</td>
+              </tr>
+              <tr>
+                <th>Full signal history &amp; alerts</th>
+                <td class="ct-no">—</td>
+                <td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+                <td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+                <td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+              </tr>
+              <tr class="compare-cat-row"><td colspan="5">Automation</td></tr>
+              <tr>
+                <th><span class="ct-tip" data-tip="Signals are copied straight to your connected broker — no manual entry.">Auto-copy to broker</span></th>
+                <td class="ct-no">—</td><td class="ct-no">—</td>
+                <td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+                <td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+              </tr>
+              <tr>
+                <th>Full NinjaTrader execution</th>
+                <td class="ct-no">—</td><td class="ct-no">—</td><td class="ct-no">—</td>
+                <td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+              </tr>
+              <tr>
+                <th>Position sizing</th>
+                <td class="ct-no">—</td><td class="ct-no">—</td><td>Set once</td><td>Set once</td>
+              </tr>
+              <tr>
+                <th>Custom risk rules per trade</th>
+                <td class="ct-no">—</td><td class="ct-no">—</td><td class="ct-no">—</td>
+                <td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+              </tr>
+              <tr>
+                <th>Multi-contract scaling</th>
+                <td class="ct-no">—</td><td class="ct-no">—</td><td class="ct-no">—</td>
+                <td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+              </tr>
+              <tr class="compare-cat-row"><td colspan="5">Tools &amp; community</td></tr>
+              <tr>
+                <th>Trading journal &amp; analytics</th>
+                <td class="ct-no">—</td>
+                <td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+                <td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+                <td class="ct-yes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></td>
+              </tr>
+              <tr>
+                <th>Dashboard access</th>
+                <td>Basic</td><td>Full</td><td>Full</td><td>Full</td>
+              </tr>
+              <tr>
+                <th>Discord role</th>
+                <td>Member</td><td>Priority</td><td>Priority</td><td>Priority</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TESTIMONIALS -->
+      <div class="up-section">
+        <div style="text-align:center;max-width:560px;margin:0 auto 1.4rem;">
+          <div class="tag tag-blue">Trader Feedback</div>
+          <h2 class="section-title">What traders <em>say</em></h2>
+        </div>
+        <div class="testi-track">
+          <div class="testi-card">
+            <div class="testi-stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+            </div>
+            <p class="testi-quote">"Switching to instant signals removed the lag I kept losing entries to. The journal makes it easy to see what's actually working."</p>
+            <div class="testi-person">
+              <div class="testi-avatar" style="background:linear-gradient(135deg,#2563eb,#3b82f6);">JM</div>
+              <div><div class="testi-name">J. Marsh</div><div class="testi-role">Premium Signals</div></div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <div class="testi-stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+            </div>
+            <p class="testi-quote">"AutoSignals took the hesitation out of my execution. I set position size once and it just copies straight to my broker now."</p>
+            <div class="testi-person">
+              <div class="testi-avatar" style="background:linear-gradient(135deg,#10b981,#059669);">RK</div>
+              <div><div class="testi-name">R. Kade</div><div class="testi-role">AutoSignals</div></div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <div class="testi-stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+            </div>
+            <p class="testi-quote">"The custom risk rules in TrenBot are the reason I finally trust automation with size. Scales contracts exactly how I would."</p>
+            <div class="testi-person">
+              <div class="testi-avatar" style="background:linear-gradient(135deg,#f59e0b,#d97706);">AT</div>
+              <div><div class="testi-name">A. Tran</div><div class="testi-role">TrenBot</div></div>
+            </div>
+          </div>
+          <div class="testi-card">
+            <div class="testi-stars">
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+              <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9"/></svg>
+            </div>
+            <p class="testi-quote">"Started on Free Signals to test the waters before upgrading. No pressure at all — and support answered every question I had."</p>
+            <div class="testi-person">
+              <div class="testi-avatar" style="background:linear-gradient(135deg,#64748b,#475569);">SL</div>
+              <div><div class="testi-name">S. Lowe</div><div class="testi-role">Free Signals</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="testi-note">Illustrative feedback shown while we collect verified trader reviews.</div>
+      </div>
+
+      <!-- FAQ -->
+      <div id="faq" class="up-section">
+        <div style="text-align:center;max-width:560px;margin:0 auto 1.6rem;">
+          <div class="tag tag-gold">Questions</div>
+          <h2 class="section-title">Frequently <em>asked</em></h2>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">Can I cancel anytime?<span class="faq-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+            <div class="faq-a"><div class="faq-a-inner">Yes. Every subscription can be cancelled at any time from your dashboard — no questions asked, and you keep access until the end of your current billing period.</div></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">What's the actual difference between Premium, AutoSignals, and TrenBot?<span class="faq-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+            <div class="faq-a"><div class="faq-a-inner">Premium gives you instant signals that you place yourself. AutoSignals auto-copies those signals to your broker through NinjaTrader Desktop. TrenBot goes further and connects directly to NinjaTrader to execute the full trade for you, including position sizing and risk rules. Each tier includes everything from the one before it.</div></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">Do I need NinjaTrader for every plan?<span class="faq-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+            <div class="faq-a"><div class="faq-a-inner">No. Free Signals and Premium Signals just need Discord and any charting setup you already use. AutoSignals and TrenBot require NinjaTrader Desktop, since that's what handles automated execution.</div></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">Is there a free trial?<span class="faq-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+            <div class="faq-a"><div class="faq-a-inner">Yes — use "Start free trial" on the checkout page to try Premium Signals, or join Discord for free access to the delayed signal feed with no commitment at all.</div></div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" onclick="toggleFaq(this)">Where can I find billing and refund details?<span class="faq-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+            <div class="faq-a"><div class="faq-a-inner">Full billing terms are in our <a href="https://trenai.vercel.app/terms-conditions">Terms of Service</a>. Reach out any time through <a href="https://trenai.vercel.app/contact">Contact</a> and a real person will help.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FINAL CTA -->
+      <div class="up-section" style="padding-bottom:2.5rem;">
+        <div class="final-cta">
+          <div class="tag tag-blue">Ready when you are</div>
+          <h2>Start trading with an edge</h2>
+          <p>Instant signals, automated execution, and a community of active traders — cancel anytime.</p>
+          <div class="final-cta-actions">
+            <a href="https://trenai.vercel.app/checkout-premium" class="btn-sect-pri">Start free trial</a>
+            <a href="#compare" class="btn-sect-gho">Compare plans</a>
+          </div>
+        </div>
+      </div>
+
     </div><!-- end .page -->
   </div><!-- end .main-wrap -->
 </div><!-- end .shell -->
+
+<!-- STICKY CTA BAR -->
+<div class="sticky-cta" id="stickyCta">
+  <div class="sticky-cta-plans">
+    <span class="sticky-cta-plan on" data-plan="premium" onclick="stickyCtaSelect('premium')">Premium</span>
+    <span class="sticky-cta-plan" data-plan="autosignals" onclick="stickyCtaSelect('autosignals')">AutoSignals</span>
+    <span class="sticky-cta-plan" data-plan="trenbot" onclick="stickyCtaSelect('trenbot')">TrenBot</span>
+  </div>
+  <span class="sticky-cta-price" id="stickyCtaPrice">$25.49/mo</span>
+  <a href="https://trenai.vercel.app/checkout-premium" class="sticky-cta-btn" id="stickyCtaBtn">Subscribe</a>
+  <button class="sticky-cta-close" onclick="stickyCtaClose()" aria-label="Dismiss">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+</div>
 
 <script>
 // ── CORE ──────────────────────────────────────────────────────────
