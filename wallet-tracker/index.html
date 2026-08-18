@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/favicon.ico?v=2" sizes="any">
+<link rel="icon" href="/favicon-32x32.png?v=2" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tren – Wallet Tracker</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
+:root{
+  --bg:#04080f;--bg2:#080e1a;--bg3:#0c1525;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --accent:#2563eb;--al:#3b82f6;--green:#10b981;--red:#ef4444;--gold:#f59e0b;
+  --text:#f0f4ff;--sub:rgba(240,244,255,0.45);--sub2:rgba(240,244,255,0.72);
+  --sw:220px;
+}
+/* ── LAYOUT ── */
+.shell{position:fixed;inset:0;display:flex;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--bg);}
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sw);min-width:var(--sw);height:100vh;border-right:1px solid var(--border);background:#060b14;display:flex;flex-direction:column;padding:0;position:relative;z-index:20;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;}
+.sidebar::-webkit-scrollbar{display:none;}
+.s-logo{font-size:17px;font-weight:600;padding:22px 18px 18px;display:flex;align-items:center;gap:9px;text-decoration:none;color:inherit;letter-spacing:-0.4px;}
+.s-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,0.2);flex-shrink:0;}
+.s-logo span{color:var(--al);}
+.s-section-label{font-size:9px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(240,244,255,0.18);padding:12px 18px 4px;}
+.s-nav{flex:1;display:flex;flex-direction:column;padding:0 10px;gap:1px;}
+.s-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;font-size:13px;font-weight:500;color:rgba(240,244,255,0.42);cursor:pointer;transition:background .12s,color .12s;text-decoration:none;position:relative;}
+.s-item:hover{background:rgba(255,255,255,.04);color:rgba(240,244,255,0.8);}
+.s-item.on{background:rgba(37,99,235,.14);color:#e0eaff;}
+.s-item.on::before{content:'';position:absolute;left:-6px;top:50%;transform:translateY(-50%);width:3px;height:16px;border-radius:0 3px 3px 0;background:var(--accent);}
+.s-item.gold{color:var(--gold);}
+.s-item.gold:hover{background:rgba(245,158,11,.06);}
+.s-item.ai-item{color:#a78bfa;}
+.s-item.ai-item:hover{background:rgba(167,139,250,.07);color:#c4b5fd;}
+.s-ic{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;}
+.s-item.on .s-ic{background:rgba(37,99,235,.18);}
+.s-item.gold .s-ic{background:rgba(245,158,11,.08);}
+.s-item.ai-item .s-ic{background:rgba(167,139,250,.1);}
+.s-badge{margin-left:auto;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;background:var(--gold);color:#000;letter-spacing:.03em;}
+.s-beta{margin-left:auto;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:rgba(167,139,250,.15);border:0.5px solid rgba(167,139,250,.3);color:#a78bfa;letter-spacing:.03em;}
+.s-new{margin-left:auto;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:rgba(37,99,235,.18);border:0.5px solid rgba(37,99,235,.35);color:var(--al);letter-spacing:.03em;}
+.s-divider{height:0.5px;background:rgba(255,255,255,.05);margin:4px 10px;}
+.s-bot{padding:10px 10px 14px;flex-shrink:0;border-top:0.5px solid rgba(255,255,255,.05);margin-top:auto;}
+.trial-card{display:none;}
+.u-row{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;cursor:pointer;transition:background .12s;text-decoration:none;border:0.5px solid transparent;}
+.u-row:hover{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.07);}
+.u-av{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;color:#fff;}
+.u-info{min-width:0;flex:1;display:flex;flex-direction:column;gap:1px;}
+.u-name{font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.u-email{font-size:10px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sub-status-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;margin-top:3px;letter-spacing:.03em;}
+.sub-status-badge.trial{background:rgba(245,158,11,.1);border:0.5px solid rgba(245,158,11,.22);color:var(--gold);}
+.sub-status-badge.premium{background:rgba(37,99,235,.12);border:0.5px solid rgba(37,99,235,.28);color:var(--al);}
+.sub-status-badge.automated{background:rgba(245,158,11,.1);border:0.5px solid rgba(245,158,11,.22);color:var(--gold);}
+.sub-status-badge.autosignals{background:rgba(16,185,129,.12);border:0.5px solid rgba(16,185,129,.28);color:var(--green);}
+.s-logout{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:7px;font-size:11.5px;font-weight:500;color:rgba(239,68,68,.45);cursor:pointer;transition:all .12s;margin-top:2px;}
+.s-logout:hover{background:rgba(239,68,68,.07);color:var(--red);}
+.live-dot-nav{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);animation:flicker 3.5s infinite;box-shadow:0 0 5px var(--green);}
+@keyframes flicker{0%,100%{opacity:1;transform:scale(1);}15%{opacity:.88;transform:scale(.95);}30%{opacity:1;transform:scale(1.03);}45%{opacity:.92;transform:scale(.97);}60%{opacity:1;transform:scale(1.06);}75%{opacity:.9;transform:scale(.94);}90%{opacity:1;transform:scale(1.02);}}
+/* ── MAIN ── */
+.main-wrap{flex:1;display:flex;flex-direction:column;min-width:0;height:100vh;overflow:hidden;}
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.4rem;border-bottom:1px solid var(--border);background:rgba(4,8,15,.88);backdrop-filter:blur(20px);flex-shrink:0;position:relative;z-index:10;}
+.tb-title{font-size:17px;font-weight:700;}
+.tb-right{display:flex;align-items:center;gap:11px;}
+.t-pill{display:flex;align-items:center;gap:5px;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.25);color:var(--gold);font-size:11.5px;font-weight:600;padding:5px 13px;border-radius:20px;}
+.t-pill.premium{background:rgba(37,99,235,.12);border-color:rgba(37,99,235,.3);color:var(--al);}
+.t-pill.autosignals{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.3);color:var(--green);}
+.t-pill.automated{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3);color:var(--gold);}
+.nb{width:33px;height:33px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;position:relative;transition:border-color .2s;}
+.nb:hover{border-color:var(--border2);}
+.prof-wrap{position:relative;}
+.prof-av{width:33px;height:33px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;cursor:pointer;border:2px solid transparent;transition:border-color .2s;color:#fff;}
+.prof-av:hover{border-color:rgba(255,255,255,.2);}
+.prof-av.open{border-color:var(--al);}
+.prof-menu{position:absolute;top:calc(100% + 10px);right:0;background:linear-gradient(145deg,#0d1628,#080e1a);border:1px solid rgba(255,255,255,.12);border-radius:13px;padding:6px;min-width:190px;z-index:200;box-shadow:0 12px 40px rgba(0,0,0,.55);display:none;}
+.prof-menu.open{display:block;animation:pf .2s ease;}
+@keyframes pf{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.prof-menu-header{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:5px;}
+.prof-menu-name{font-size:13px;font-weight:700;color:var(--text);}
+.prof-menu-email{font-size:11px;color:var(--sub);margin-top:2px;}
+.prof-menu-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;font-size:13px;font-weight:500;color:var(--sub2);cursor:pointer;transition:all .15s;}
+.prof-menu-item:hover{background:rgba(255,255,255,.06);color:var(--text);}
+.prof-menu-item.danger{color:rgba(239,68,68,.75);}
+.prof-menu-item.danger:hover{background:rgba(239,68,68,.09);color:var(--red);}
+/* ── PAGE ── */
+.page{flex:1;overflow-y:auto;padding:1.8rem 2.4rem;scrollbar-width:none;}
+.page::-webkit-scrollbar{display:none;}
+.sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;}
+.st{font-size:14.5px;font-weight:700;}
+.sc{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:1.1rem 1.3rem;transition:border-color .18s;}
+.sc:hover{border-color:var(--border2);}
+.toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:linear-gradient(145deg,var(--bg3),var(--bg2));border:1px solid var(--border2);border-radius:14px;padding:1.1rem 1.4rem;box-shadow:0 12px 40px rgba(0,0,0,.4);display:flex;align-items:center;gap:12px;animation:toastIn .4s ease;max-width:380px;}
+@keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+.toast-icon{font-size:24px;}
+.toast-body{flex:1;}
+.toast-title{font-size:14px;font-weight:700;margin-bottom:2px;}
+.toast-msg{font-size:12px;color:var(--sub2);}
+.toast-close{background:none;border:none;color:var(--sub);cursor:pointer;font-size:16px;padding:4px;}
+/* ── MOBILE ── */
+.mobile-toggle{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;flex-shrink:0;}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:19;}
+@media(max-width:850px){
+  .mobile-toggle{display:flex;}
+  .sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:20;box-shadow:4px 0 30px rgba(0,0,0,.5);}
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-overlay.open{display:block;}
+  .main-wrap{width:100%;}
+  .topbar{padding:1rem 1.2rem;}
+  .page{padding:1.2rem 1.4rem;}
+  .t-pill{display:none;}
+}
+@media(max-width:600px){.page{padding:1rem;}.wt-grid{grid-template-columns:1fr!important;}}
+
+/* ── WALLET TRACKER STYLES ── */
+.wt-add-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:9px;background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.28);color:var(--al);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif;}
+.wt-add-btn:hover{background:rgba(37,99,235,.22);border-color:rgba(59,130,246,.5);}
+.wt-discord-row{display:flex;align-items:center;gap:8px;padding:9px 12px;background:rgba(88,101,242,.07);border:1px solid rgba(88,101,242,.18);border-radius:10px;margin-bottom:1.4rem;}
+.wt-discord-dot{width:7px;height:7px;border-radius:50%;background:#5865f2;flex-shrink:0;}
+.wt-discord-label{font-size:11.5px;color:rgba(240,244,255,.55);flex:1;}
+.wt-discord-status{font-size:10px;font-weight:700;}
+.wt-discord-status.on{color:#5865f2;}
+.wt-discord-status.off{color:var(--sub);}
+.wt-setup-btn{font-size:10.5px;color:var(--al);cursor:pointer;padding:3px 9px;border-radius:6px;background:rgba(37,99,235,.1);font-weight:700;transition:background .12s;flex-shrink:0;border:none;font-family:'Plus Jakarta Sans',sans-serif;}
+.wt-setup-btn:hover{background:rgba(37,99,235,.2);}
+/* cards */
+.wt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;margin-bottom:1.6rem;}
+.wt-card{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:1.2rem 1.4rem;transition:border-color .18s;position:relative;overflow:hidden;}
+.wt-card:hover{border-color:var(--border2);}
+.wt-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);}
+.wt-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
+.wt-card-left{display:flex;align-items:center;gap:10px;min-width:0;}
+.wt-avatar{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(37,99,235,.35),rgba(59,130,246,.12));border:1px solid rgba(37,99,235,.28);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.wt-name{font-size:13.5px;font-weight:700;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px;}
+.wt-addr{font-size:10px;color:var(--sub);font-family:monospace;letter-spacing:.02em;}
+.wt-addr a{color:inherit;text-decoration:none;transition:color .12s;}
+.wt-addr a:hover{color:var(--al);}
+.wt-card-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;}
+.wt-chain-tag{font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:.04em;background:rgba(37,99,235,.12);border:0.5px solid rgba(37,99,235,.25);color:var(--al);}
+.wt-chain-tag.sol{background:rgba(153,69,255,.12);border-color:rgba(153,69,255,.3);color:#b97dff;}
+.wt-chain-tag.eth{background:rgba(99,125,234,.12);border-color:rgba(99,125,234,.3);color:#8fa4f8;}
+.wt-chain-tag.base{background:rgba(0,82,255,.12);border-color:rgba(0,82,255,.3);color:#6699ff;}
+.wt-chain-tag.multi{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.25);color:var(--gold);}
+.wt-remove-btn{width:26px;height:26px;border-radius:7px;background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.14);color:rgba(239,68,68,.4);font-size:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0;}
+.wt-remove-btn:hover{background:rgba(239,68,68,.15);border-color:rgba(239,68,68,.35);color:var(--red);}
+.wt-stats-row{display:flex;gap:7px;margin-bottom:12px;}
+.wt-stat{flex:1;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05);border-radius:9px;padding:8px 10px;}
+.wt-stat-lbl{font-size:9px;color:var(--sub);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;}
+.wt-stat-val{font-size:13.5px;font-weight:700;}
+.wt-stat-val.live{font-size:11px;display:flex;align-items:center;gap:4px;color:var(--green);}
+.wt-stat-val.discord-on{font-size:11px;color:#5865f2;}
+.wt-stat-val.discord-off{font-size:11px;color:var(--sub);}
+/* feed */
+.wt-feed-label{font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;margin-bottom:7px;}
+.wt-feed{display:flex;flex-direction:column;gap:5px;}
+.wt-tx{display:flex;align-items:center;gap:9px;padding:7px 10px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.045);border-radius:8px;transition:background .12s;}
+.wt-tx:hover{background:rgba(255,255,255,.05);}
+.wt-tx-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.wt-tx-dot.buy{background:var(--green);box-shadow:0 0 5px rgba(16,185,129,.5);}
+.wt-tx-dot.sell{background:var(--red);box-shadow:0 0 5px rgba(239,68,68,.5);}
+.wt-tx-dot.transfer{background:var(--gold);}
+.wt-tx-body{flex:1;min-width:0;}
+.wt-tx-action{font-size:11.5px;font-weight:700;}
+.wt-tx-action.buy{color:var(--green);}
+.wt-tx-action.sell{color:var(--red);}
+.wt-tx-action.transfer{color:var(--gold);}
+.wt-tx-time{font-size:10px;color:var(--sub);}
+.wt-tx-val{font-size:11.5px;font-weight:600;flex-shrink:0;text-align:right;color:var(--sub2);}
+.wt-tx-link{font-size:10px;color:rgba(59,130,246,.5);text-decoration:none;flex-shrink:0;transition:color .12s;}
+.wt-tx-link:hover{color:var(--al);}
+/* empty + waiting */
+.wt-waiting{display:flex;align-items:center;gap:7px;padding:.6rem 0;color:var(--sub);font-size:11.5px;}
+.wt-spin{display:inline-block;width:13px;height:13px;border-radius:50%;border:2px solid rgba(255,255,255,.1);border-top-color:var(--al);animation:wtspin .65s linear infinite;flex-shrink:0;}
+@keyframes wtspin{to{transform:rotate(360deg)}}
+/* empty state */
+.wt-empty-state{background:var(--bg3);border:1px dashed rgba(255,255,255,.08);border-radius:13px;padding:3rem 1.5rem;text-align:center;display:none;}
+.wt-empty-state.show{display:block;}
+.wt-empty-icon{font-size:36px;margin-bottom:14px;opacity:.55;}
+.wt-empty-title{font-size:15px;font-weight:800;margin-bottom:7px;}
+.wt-empty-sub{font-size:12.5px;color:var(--sub);line-height:1.65;max-width:320px;margin:0 auto 20px;}
+/* modal */
+.wt-modal-bg{position:fixed;inset:0;z-index:9000;background:rgba(2,6,14,.65);backdrop-filter:blur(16px);display:none;align-items:center;justify-content:center;padding:20px;}
+.wt-modal-bg.open{display:flex;animation:wtFd .2s ease;}
+@keyframes wtFd{from{opacity:0}to{opacity:1}}
+.wt-modal{background:linear-gradient(145deg,#0d1628,#080e1a);border:1px solid rgba(255,255,255,.13);border-radius:18px;padding:28px 28px 24px;width:100%;max-width:470px;animation:wtSlide .22s cubic-bezier(.16,1,.3,1);}
+@keyframes wtSlide{from{transform:translateY(12px);opacity:0}to{transform:none;opacity:1}}
+.wt-modal-title{font-size:16px;font-weight:800;margin-bottom:5px;letter-spacing:-.3px;}
+.wt-modal-sub{font-size:12px;color:var(--sub);margin-bottom:22px;line-height:1.55;}
+.wt-field-label{font-size:10.5px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;}
+.wt-input{width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:11px 14px;font-size:13px;font-weight:500;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;outline:none;transition:border-color .15s;margin-bottom:15px;box-sizing:border-box;}
+.wt-input:focus{border-color:rgba(59,130,246,.5);background:rgba(37,99,235,.05);}
+.wt-input::placeholder{color:rgba(240,244,255,.2);}
+.wt-chain-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;}
+.wt-chain-btn{padding:6px 12px;border-radius:8px;font-size:11.5px;font-weight:700;cursor:pointer;transition:all .15s;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);color:var(--sub);font-family:'Plus Jakarta Sans',sans-serif;}
+.wt-chain-btn.sel{background:rgba(37,99,235,.18);border-color:rgba(59,130,246,.4);color:var(--al);}
+.wt-chain-btn:hover:not(.sel){background:rgba(255,255,255,.07);color:var(--sub2);}
+.wt-modal-actions{display:flex;gap:10px;}
+.wt-modal-cancel{flex:1;padding:11px;border-radius:10px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);color:var(--sub2);font-size:13px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;}
+.wt-modal-cancel:hover{background:rgba(255,255,255,.09);}
+.wt-modal-save{flex:2;padding:11px;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--al));border:none;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:opacity .15s;}
+.wt-modal-save:hover{opacity:.88;}
+/* alert drawer */
+.wt-bell-count{position:absolute;top:-4px;right:-4px;width:16px;height:16px;border-radius:50%;background:var(--red);color:#fff;font-size:9px;font-weight:800;display:none;align-items:center;justify-content:center;border:2px solid var(--bg);}
+.wt-bell-count.show{display:flex;}
+.wt-alert-drawer{position:fixed;top:0;right:0;bottom:0;width:340px;background:linear-gradient(145deg,#0d1628,#080e1a);border-left:1px solid rgba(255,255,255,.1);z-index:8000;transform:translateX(100%);transition:transform .3s cubic-bezier(.16,1,.3,1);display:flex;flex-direction:column;box-shadow:-8px 0 40px rgba(0,0,0,.4);}
+.wt-alert-drawer.open{transform:translateX(0);}
+.wt-drawer-head{padding:18px 18px 14px;border-bottom:1px solid rgba(255,255,255,.06);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.wt-drawer-title{font-size:14px;font-weight:800;}
+.wt-clear-btn{font-size:10.5px;color:var(--sub);cursor:pointer;padding:3px 8px;border-radius:5px;transition:all .12s;border:none;background:none;font-family:'Plus Jakarta Sans',sans-serif;}
+.wt-clear-btn:hover{background:rgba(255,255,255,.07);color:var(--sub2);}
+.wt-drawer-close{width:28px;height:28px;border-radius:7px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);color:var(--sub);font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;}
+.wt-drawer-close:hover{background:rgba(255,255,255,.1);color:var(--text);}
+.wt-drawer-body{flex:1;overflow-y:auto;padding:12px;scrollbar-width:none;display:flex;flex-direction:column;gap:7px;}
+.wt-drawer-body::-webkit-scrollbar{display:none;}
+.wt-notif{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:10px;padding:11px 13px;animation:notifIn .25s ease;}
+@keyframes notifIn{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+.wt-notif-top{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+.wt-notif-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.wt-notif-wallet{font-size:12px;font-weight:700;}
+.wt-notif-time{font-size:10px;color:var(--sub);margin-left:auto;}
+.wt-notif-body{font-size:11.5px;color:var(--sub2);line-height:1.5;}
+.wt-notif-link{font-size:10px;color:rgba(59,130,246,.55);text-decoration:none;transition:color .12s;}
+.wt-notif-link:hover{color:var(--al);}
+.wt-drawer-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--sub);font-size:12px;text-align:center;}
+</style>
+</head>
+<body>
+
+<!-- ── AUTH ── -->
+<script>
+(function(){
+  var S='https://sjntsmzbiqvtstvofcnx.supabase.co';
+  var K='sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg';
+  var CK='tren_session';
+  var CHECKOUT_URL='https://trenai.vercel.app/checkout-premium';
+  var PRICING_URL='https://trenai.vercel.app/pricing';
+  // session recovery from URL param
+  try{var p=new URLSearchParams(window.location.search),t=p.get('_t');if(t){var ex=localStorage.getItem(CK);if(!ex){localStorage.setItem(CK,JSON.stringify(JSON.parse(atob(decodeURIComponent(t)))));}window.history.replaceState({},'',window.location.pathname);}}catch(e){}
+  function E(){try{var s=JSON.parse(localStorage.getItem(CK)||'null');return s&&s.user&&s.user.email?s.user.email:null;}catch(e){return null;}}
+  async function A(){
+    var e=E();if(!e)return false;
+    try{var x=JSON.parse(localStorage.getItem('tren_sub')||'null');if(x&&x.status==='active'&&x.plan==='premium')return true;var y=JSON.parse(localStorage.getItem('tren_trenbot_sub')||'null');if(y&&y.status==='active'&&y.plan==='trenbot')return true;var z=JSON.parse(localStorage.getItem('tren_autosignals_sub')||'null');if(z&&z.status==='active'&&z.plan==='auto')return true;}catch(e){}
+    var plans=[['premium','premium'],['trenbot','trenbot'],['auto','auto']];
+    for(var i=0;i<plans.length;i++){try{var r=await fetch(S+'/rest/v1/subscribers?email=eq.'+encodeURIComponent(e.toLowerCase().trim())+'&plan=eq.'+plans[i][1]+'&status=eq.active&select=*',{headers:{'apikey':K,'Authorization':'Bearer '+K}});var w=await r.json();if(w&&w.length>0&&w[0].status==='active')return true;}catch(e){}}
+    return false;
+  }
+  function W(){
+    if(document.getElementById('__pw'))return;
+    var st=document.createElement('style');
+    st.id='__pw_st';
+    st.textContent="@keyframes pwG{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}@keyframes pwFd{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}@keyframes pwSh{from{transform:translateX(-250%)}to{transform:translateX(500%)}}#__pw .pw-c{animation:pwFd .35s cubic-bezier(.16,1,.3,1) forwards}#__pw .pw-g{background:linear-gradient(135deg,#1d4ed8,#7c3aed,#06b6d4,#1d4ed8);background-size:300% 300%;animation:pwG 6s ease infinite}#__pw .pw-b{display:block;width:100%;padding:15px 24px;border-radius:13px;background:linear-gradient(90deg,#1d4ed8,#3b82f6);color:#fff;font-size:14px;font-weight:700;text-decoration:none;text-align:center;box-sizing:border-box;position:relative;overflow:hidden;transition:transform .15s,box-shadow .15s}#__pw .pw-b:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(59,130,246,.45)}#__pw .pw-b::after{content:'';position:absolute;top:0;left:0;width:30%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transform:translateX(-250%);animation:pwSh 3.5s ease 2s infinite}#__pw .pw-f{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:16px 10px;text-align:center;transition:border-color .2s,background .2s}#__pw .pw-f:hover{background:rgba(37,99,235,.08);border-color:rgba(37,99,235,.3)}";
+    document.head.appendChild(st);
+    var d=document.createElement('div');
+    d.id='__pw';
+    d.innerHTML='<div style="position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;font-family:Plus Jakarta Sans,sans-serif;padding:20px;box-sizing:border-box;"><div style="position:fixed;inset:0;background:rgba(2,6,14,.35);backdrop-filter:blur(52px);"></div><div class="pw-c" style="position:relative;z-index:1;width:100%;max-width:476px;"><div class="pw-g" style="position:absolute;inset:-1.5px;border-radius:26px;opacity:.95;"></div><div style="position:relative;background:rgba(6,13,26,.75);border-radius:24px;padding:40px 36px 32px;overflow:hidden;"><h2 style="font-size:26px;font-weight:800;color:#f0f4ff;margin:0 0 10px;letter-spacing:-.5px;line-height:1.25;text-align:center;">Your edge is locked.<br><span style="background:linear-gradient(90deg,#60a5fa,#818cf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Unlock it today.</span></h2><p style="font-size:13px;color:rgba(240,244,255,.45);line-height:1.65;text-align:center;margin:0 0 24px;">Get real-time wallet tracking, NQ signals, AI analysis and automated bots.</p><div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:20px;"><div class="pw-f"><div style="font-size:20px;margin-bottom:6px;">&#128179;</div><div style="font-size:11px;font-weight:700;color:#f0f4ff;margin-bottom:3px;">Wallet Tracker</div><div style="font-size:10px;color:rgba(240,244,255,.38);">Track any wallet</div></div><div class="pw-f"><div style="font-size:20px;margin-bottom:6px;">&#128225;</div><div style="font-size:11px;font-weight:700;color:#f0f4ff;margin-bottom:3px;">Live Signals</div><div style="font-size:10px;color:rgba(240,244,255,.38);">Real-time NQ alerts</div></div><div class="pw-f"><div style="font-size:20px;margin-bottom:6px;">&#9889;</div><div style="font-size:11px;font-weight:700;color:#f0f4ff;margin-bottom:3px;">Auto Trading</div><div style="font-size:10px;color:rgba(240,244,255,.38);">Set-and-forget bots</div></div></div><a href="'+CHECKOUT_URL+'" class="pw-b">Start Free Trial &#8594;</a><div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-top:14px;"><a href="'+PRICING_URL+'" style="font-size:12px;color:#3b82f6;text-decoration:none;font-weight:600;">View all plans</a><span style="color:rgba(240,244,255,.15);">&#183;</span><a href="https://trenai.vercel.app/login-page" style="font-size:12px;color:rgba(240,244,255,.3);text-decoration:none;">Sign in</a></div></div></div></div>';
+    document.body.appendChild(d);document.body.style.overflow='hidden';
+  }
+  (async function(){var e=E();if(!e){window.location.href='https://trenai.vercel.app/login-page';return;}var h=await A();if(!h)W();})();
+})();
+</script>
+
+<div class="shell">
+  <div class="sidebar-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar" id="sidebar">
+    <a class="s-logo" href="https://trenai.vercel.app" style="text-decoration:none;color:inherit;">
+      <span class="s-logo-dot"></span>tren<span>.</span>
+    </a>
+    <div class="s-nav">
+      <div class="s-section-label">Trading</div>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/live-signals')">
+        <span class="s-ic"><span class="live-dot-nav"></span></span><span>Live Signals</span>
+      </a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/overview')">
+        <span class="s-ic">&#x1F4CA;</span><span>Overview</span>
+      </a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/signals')">
+        <span class="s-ic">&#x26A1;</span><span>Recent Trades</span>
+      </a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/journal')">
+        <span class="s-ic">&#x1F4D3;</span><span>Journal</span>
+      </a>
+      <div class="s-divider"></div>
+      <div class="s-section-label">Tools</div>
+      <a class="s-item ai-item" onclick="navTo('https://trenai.vercel.app/ai-analysis')">
+        <span class="s-ic">&#x2728;</span><span>AI Analysis</span>
+        <span class="s-beta">BETA</span>
+      </a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/trenbot')">
+        <span class="s-ic">&#x1F916;</span><span>TrenBot</span>
+      </a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/autosignals')">
+        <span class="s-ic">&#x26A1;</span><span>AutoSignals</span>
+      </a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/indicator')">
+        <span class="s-ic">&#x1F4C8;</span><span>Indicator</span>
+      </a>
+      <a class="s-item on" onclick="navTo('https://trenai.vercel.app/wallet-tracker')">
+        <span class="s-ic">&#x1F45B;</span><span>Wallet Tracker</span>
+        <span class="s-new">NEW</span>
+      </a>
+      <div class="s-divider"></div>
+      <div class="s-section-label">Misc</div>
+      <a class="s-item gold" onclick="navTo('https://trenai.vercel.app/upgrade')">
+        <span class="s-ic">&#x1F451;</span><span>Upgrade</span>
+        <span class="s-badge">PRO</span>
+      </a>
+      <a class="s-item" onclick="navTo('https://trenai.vercel.app/settings')">
+        <span class="s-ic">&#x2699;&#xFE0F;</span><span>Settings</span>
+      </a>
+    </div>
+    <div class="s-bot">
+      <a class="u-row" onclick="navTo('https://trenai.vercel.app/settings')">
+        <div class="u-av" id="s-av">T</div>
+        <div class="u-info">
+          <div class="u-name" id="s-nm">Trader</div>
+          <div class="u-email" id="s-email-display">&#x2014;</div>
+          <span class="sub-status-badge trial" id="sidebar-plan-badge">&#x26A1; Trial</span>
+        </div>
+      </a>
+      <div class="s-logout" onclick="doLogout()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign out
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main-wrap">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="mobile-toggle" onclick="toggleSidebar()">&#x2630;</button>
+        <div class="tb-title">Wallet Tracker</div>
+        <span style="font-size:9px;font-weight:700;padding:2px 8px;border-radius:5px;background:rgba(37,99,235,.15);border:0.5px solid rgba(37,99,235,.3);color:var(--al);letter-spacing:.05em;">NEW</span>
+      </div>
+      <div class="tb-right">
+        <div class="t-pill" id="trial-pill">&#x23F1; <span id="pill-days">7</span> days left in trial</div>
+        <!-- Bell / alert drawer trigger -->
+        <div style="position:relative;">
+          <div class="nb" id="wt-bell-btn" onclick="wtToggleDrawer()" title="Wallet alerts" style="cursor:pointer;">&#x1F514;</div>
+          <div class="wt-bell-count" id="wt-bell-count"></div>
+        </div>
+        <div class="prof-wrap">
+          <div class="prof-av" id="prof-av-btn" onclick="toggleProfileMenu()">T</div>
+          <div class="prof-menu" id="prof-menu">
+            <div class="prof-menu-header">
+              <div class="prof-menu-name" id="prof-menu-name">Trader</div>
+              <div class="prof-menu-email" id="prof-menu-email">&#x2014;</div>
+            </div>
+            <a class="prof-menu-item" onclick="navTo('https://trenai.vercel.app/settings')">&#x1F464; Profile settings</a>
+            <div class="prof-menu-item danger" onclick="doLogout()">&#x2192; Sign out</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE CONTENT -->
+    <div class="page">
+
+      <!-- Header row -->
+      <div class="sh">
+        <div>
+          <div class="st" style="margin-bottom:3px;">Track wallets in real time</div>
+          <div style="font-size:12px;color:var(--sub);">Get in-app &amp; Discord alerts the moment a tracked wallet makes a trade</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div id="wt-count-pill" style="font-size:11px;color:var(--sub);display:none;"></div>
+          <button class="wt-add-btn" onclick="wtOpenModal()">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Track Wallet
+          </button>
+        </div>
+      </div>
+
+      <!-- Discord webhook bar -->
+      <div class="wt-discord-row" id="wt-discord-row">
+        <div class="wt-discord-dot"></div>
+        <div class="wt-discord-label" id="wt-discord-label">No Discord webhook set — alerts will only appear in-app.</div>
+        <div class="wt-discord-status off" id="wt-discord-status">Discord off</div>
+        <button class="wt-setup-btn" onclick="wtOpenModal(true)">Set up</button>
+      </div>
+
+      <!-- Wallet cards -->
+      <div class="wt-grid" id="wt-grid"></div>
+
+      <!-- Empty state -->
+      <div class="wt-empty-state" id="wt-empty-state">
+        <div class="wt-empty-icon">&#x1F45B;</div>
+        <div class="wt-empty-title">No wallets tracked yet</div>
+        <div class="wt-empty-sub">Add any on-chain wallet to monitor their trades in real time and receive instant alerts when they make a move.</div>
+        <button class="wt-add-btn" style="margin:0 auto;display:inline-flex;" onclick="wtOpenModal()">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Track your first wallet
+        </button>
+      </div>
+
+    </div><!-- end .page -->
+  </div><!-- end .main-wrap -->
+</div><!-- end .shell -->
+
+<!-- ADD WALLET MODAL -->
+<div class="wt-modal-bg" id="wt-modal-bg" onclick="if(event.target===this)wtCloseModal()">
+  <div class="wt-modal">
+    <div class="wt-modal-title">Track a wallet</div>
+    <div class="wt-modal-sub">Paste any on-chain address — Ethereum, Solana, Base, BSC, Arbitrum, Polygon. Tren auto-detects the chain.</div>
+    <div class="wt-field-label">Wallet address</div>
+    <input class="wt-input" id="wt-input-addr" placeholder="0x… or a Solana address" oninput="wtAutoChain(this.value)" autocomplete="off" spellcheck="false">
+    <div class="wt-field-label">Nickname <span style="font-weight:500;text-transform:none;letter-spacing:0;color:rgba(240,244,255,.25);">(optional)</span></div>
+    <input class="wt-input" id="wt-input-name" placeholder="e.g. Whale #1, Smart Money, Insider">
+    <div class="wt-field-label">Chain</div>
+    <div class="wt-chain-row">
+      <button class="wt-chain-btn sel" data-chain="auto" onclick="wtPickChain(this)">Auto-detect</button>
+      <button class="wt-chain-btn" data-chain="ethereum" onclick="wtPickChain(this)">Ethereum</button>
+      <button class="wt-chain-btn" data-chain="solana" onclick="wtPickChain(this)">Solana</button>
+      <button class="wt-chain-btn" data-chain="base" onclick="wtPickChain(this)">Base</button>
+      <button class="wt-chain-btn" data-chain="bsc" onclick="wtPickChain(this)">BSC</button>
+      <button class="wt-chain-btn" data-chain="arbitrum" onclick="wtPickChain(this)">Arbitrum</button>
+      <button class="wt-chain-btn" data-chain="polygon" onclick="wtPickChain(this)">Polygon</button>
+    </div>
+    <div class="wt-field-label">Discord webhook URL <span style="font-weight:500;text-transform:none;letter-spacing:0;color:rgba(240,244,255,.25);">(optional)</span></div>
+    <input class="wt-input" id="wt-input-webhook" placeholder="https://discord.com/api/webhooks/…" style="margin-bottom:4px;">
+    <div style="font-size:10px;color:var(--sub);margin-bottom:18px;">Leave blank to use the global webhook, or set a per-wallet one here.</div>
+    <div class="wt-modal-actions">
+      <button class="wt-modal-cancel" onclick="wtCloseModal()">Cancel</button>
+      <button class="wt-modal-save" onclick="wtSaveWallet()">Start tracking &#x2192;</button>
+    </div>
+  </div>
+</div>
+
+<!-- ALERT DRAWER -->
+<div class="wt-alert-drawer" id="wt-alert-drawer">
+  <div class="wt-drawer-head">
+    <div class="wt-drawer-title">&#x1F514; Wallet Alerts</div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button class="wt-clear-btn" onclick="wtClearNotifs()">Clear all</button>
+      <div class="wt-drawer-close" onclick="wtToggleDrawer()">&#x2715;</div>
+    </div>
+  </div>
+  <div class="wt-drawer-body" id="wt-drawer-body">
+    <div class="wt-drawer-empty" id="wt-drawer-empty">
+      <div style="font-size:28px;opacity:.35;">&#x1F515;</div>
+      <div style="font-weight:600;">No alerts yet</div>
+      <div style="font-size:11px;line-height:1.6;max-width:200px;">Alerts appear here the moment a tracked wallet makes a trade.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── CORE UTILS ──
+const SESSION_KEY='tren_session';
+const SUPABASE_AUTH_URL='https://sjntsmzbiqvtstvofcnx.supabase.co';
+const SUPABASE_AUTH_KEY='sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg';
+let _navLock=false;
+let _session=(()=>{try{const r=localStorage.getItem(SESSION_KEY);return r?JSON.parse(r):null;}catch{return null;}})();
+let _subData=null,_autoSubData=null,_autoSignalsSubData=null;
+try{_subData=JSON.parse(localStorage.getItem('tren_sub')||'null');}catch(e){}
+try{_autoSubData=JSON.parse(localStorage.getItem('tren_trenbot_sub')||'null');}catch(e){}
+try{_autoSignalsSubData=JSON.parse(localStorage.getItem('tren_autosignals_sub')||'null');}catch(e){}
+function getSessionEmail(){return _session&&_session.user&&_session.user.email?_session.user.email:'—';}
+function getSessionFullName(){if(_session&&_session.user){const m=_session.user.user_metadata||{};if(m.full_name)return m.full_name;if(m.name)return m.name;if(_session.user.email)return _session.user.email.split('@')[0].replace(/[._]/g,' ').replace(/\b\w/g,c=>c.toUpperCase());}return'Trader';}
+function getUserDisplayName(){const e=getSessionEmail(),p=JSON.parse(localStorage.getItem('tren_prefs')||'{}'),u=p.display_names||{};return u[e]||getSessionFullName();}
+function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function navTo(url){if(_navLock)return;_navLock=true;setTimeout(()=>{_navLock=false;},800);try{const s=localStorage.getItem(SESSION_KEY);if(s){const enc=encodeURIComponent(btoa(s));url+=(url.includes('?')?'&':'?')+'_t='+enc;}}catch(e){}window.location.href=url;}
+function showToast(icon,title,msg){const ex=document.querySelector('.toast');if(ex)ex.remove();const t=document.createElement('div');t.className='toast';t.innerHTML=`<div class="toast-icon">${icon}</div><div class="toast-body"><div class="toast-title">${escHtml(title)}</div><div class="toast-msg">${escHtml(msg)}</div></div><button class="toast-close" onclick="this.parentElement.remove()">&#x2715;</button>`;document.body.appendChild(t);setTimeout(()=>{if(t.parentElement)t.remove();},5000);}
+async function doLogout(){const tok=_session?_session.access_token:'';localStorage.removeItem(SESSION_KEY);['tren_sub','tren_prefs','tren_auto_sub','tren_autosignals_sub','tren_trenbot_sub'].forEach(k=>localStorage.removeItem(k));try{fetch(`${SUPABASE_AUTH_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':'Bearer '+tok}}).catch(()=>{});}catch(e){}window.location.href='https://trenai.vercel.app/login-page';}
+function initUserInfo(){const name=getUserDisplayName(),email=getSessionEmail(),init=name.charAt(0).toUpperCase();['s-nm','prof-menu-name'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=name;});['s-av','prof-av-btn'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=init;});const se=document.getElementById('s-email-display');if(se)se.textContent=email;const pe=document.getElementById('prof-menu-email');if(pe)pe.textContent=email;}
+async function checkPremiumAccess(){const email=getSessionEmail();if(!email||email==='—')return false;if(_subData?.status==='active'&&_subData?.plan==='premium')return true;try{const r=await fetch(`${SUPABASE_AUTH_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&plan=eq.premium&status=eq.active&select=*`,{headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}});const rows=await r.json();if(rows&&rows.length>0&&rows[0].status==='active'){_subData=rows[0];localStorage.setItem('tren_sub',JSON.stringify(_subData));return true;}}catch(e){}return false;}
+async function checkTrenBotAccess(){const email=getSessionEmail();if(!email||email==='—')return false;if(_autoSubData?.status==='active'&&_autoSubData?.plan==='trenbot')return true;try{const r=await fetch(`${SUPABASE_AUTH_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&plan=eq.trenbot&status=eq.active&select=*`,{headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}});const rows=await r.json();if(rows&&rows.length>0){_autoSubData=rows[0];localStorage.setItem('tren_trenbot_sub',JSON.stringify(_autoSubData));return true;}}catch(e){}return false;}
+async function checkAutoSignalsAccess(){const email=getSessionEmail();if(!email||email==='—')return false;if(_autoSignalsSubData?.status==='active'&&_autoSignalsSubData?.plan==='auto')return true;try{const r=await fetch(`${SUPABASE_AUTH_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&plan=eq.auto&status=eq.active&select=*`,{headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}});const rows=await r.json();if(rows&&rows.length>0){_autoSignalsSubData=rows[0];localStorage.setItem('tren_autosignals_sub',JSON.stringify(_autoSignalsSubData));return true;}}catch(e){}return false;}
+function applySubUI(hasTB,hasAS,hasP){const tc=document.getElementById('trial-card'),tp=document.getElementById('trial-pill'),sb=document.getElementById('sidebar-plan-badge');if(hasTB||hasAS||hasP){if(tc)tc.style.display='none';let lbl='&#x26A1; Premium',cls='premium';if(hasTB){lbl='&#x26A1; TrenBot';cls='automated';}else if(hasAS){lbl='&#x26A1; AutoSignals';cls='autosignals';}if(tp){tp.innerHTML=lbl+' Active';tp.className='t-pill '+cls;}if(sb){sb.innerHTML=lbl;sb.className='sub-status-badge '+cls;}}else{if(tc)tc.style.display='';if(tp){tp.innerHTML='&#x23F1; <span id="pill-days">7</span> days left in trial';tp.className='t-pill';}if(sb){sb.textContent='&#x26A1; Trial';sb.className='sub-status-badge trial';}}}
+function toggleProfileMenu(){const m=document.getElementById('prof-menu'),b=document.getElementById('prof-av-btn');const o=m.classList.contains('open');m.classList.toggle('open',!o);b.classList.toggle('open',!o);}
+document.addEventListener('click',e=>{const pw=document.querySelector('.prof-wrap');if(pw&&!pw.contains(e.target)){document.getElementById('prof-menu').classList.remove('open');document.getElementById('prof-av-btn').classList.remove('open');}const sb=document.getElementById('sidebar'),tog=document.querySelector('.mobile-toggle');if(window.innerWidth<=850&&sb.classList.contains('open')&&!sb.contains(e.target)&&e.target!==tog)closeSidebar();});
+function toggleSidebar(){const sb=document.getElementById('sidebar'),ov=document.getElementById('sb-overlay');sb.classList.toggle('open');ov.classList.toggle('open');}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sb-overlay').classList.remove('open');}
+// Init shared UI
+initUserInfo();
+const cachedTB=_autoSubData?.status==='active'&&_autoSubData?.plan==='trenbot';
+const cachedAS=_autoSignalsSubData?.status==='active'&&_autoSignalsSubData?.plan==='auto';
+const cachedP=_subData?.status&&_subData.status!=='inactive'&&_subData.status!=='cancelled';
+applySubUI(cachedTB,cachedAS,cachedP);
+(async()=>{const [hasTB,hasAS,hasP]=await Promise.all([checkTrenBotAccess(),checkAutoSignalsAccess(),checkPremiumAccess()]);applySubUI(hasTB,hasAS,hasP);})();
+</script>
+
+<script>
+/* ── WALLET TRACKER ── */
+(function(){
+  'use strict';
+  const LS_WALLETS='wt_wallets_v2',LS_WEBHOOK='wt_webhook_v2',LS_NOTIFS='wt_notifs_v2',POLL_MS=30000;
+  let wallets=JSON.parse(localStorage.getItem(LS_WALLETS)||'[]');
+  let webhook=localStorage.getItem(LS_WEBHOOK)||'';
+  let notifs=JSON.parse(localStorage.getItem(LS_NOTIFS)||'[]');
+  let unread=0,pollTimer=null;
+
+  // ── HELPERS ──
+  function detectChain(a){a=(a||'').trim();if(/^0x[0-9a-fA-F]{40}$/.test(a))return'ethereum';if(/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(a))return'solana';return'auto';}
+  function resolveChain(w){return w.chain==='auto'?detectChain(w.address):w.chain;}
+  function chainLabel(c){return{ethereum:'ETH',solana:'SOL',base:'BASE',bsc:'BSC',arbitrum:'ARB',polygon:'POL',auto:'MULTI'}[c]||c.toUpperCase();}
+  function chainClass(c){if(c==='solana')return'sol';if(c==='ethereum')return'eth';if(c==='base')return'base';return'multi';}
+  function explorerUrl(a,c){const m={ethereum:'https://etherscan.io/address/',solana:'https://solscan.io/account/',base:'https://basescan.org/address/',bsc:'https://bscscan.com/address/',arbitrum:'https://arbiscan.io/address/',polygon:'https://polygonscan.com/address/'};return(m[c]||m.ethereum)+a;}
+  function txUrl(h,c){const m={ethereum:'https://etherscan.io/tx/',solana:'https://solscan.io/tx/',base:'https://basescan.org/tx/',bsc:'https://bscscan.com/tx/',arbitrum:'https://arbiscan.io/tx/',polygon:'https://polygonscan.com/tx/'};return(m[c]||m.ethereum)+h;}
+  function shortAddr(a){return a.slice(0,6)+'\u2026'+a.slice(-4);}
+  function timeAgo(t){if(!t)return'';const s=Math.floor((Date.now()-t)/1000);if(s<60)return s+'s ago';if(s<3600)return Math.floor(s/60)+'m ago';if(s<86400)return Math.floor(s/3600)+'h ago';return Math.floor(s/86400)+'d ago';}
+  function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function saveWallets(){localStorage.setItem(LS_WALLETS,JSON.stringify(wallets));}
+
+  // ── FETCH TXS ──
+  async function fetchTxs(w){
+    const chain=resolveChain(w);
+    try{
+      if(chain==='solana'){
+        const r=await fetch('https://public-api.solscan.io/account/transactions?account='+w.address+'&limit=10',{headers:{accept:'application/json'}});
+        if(!r.ok)return[];const d=await r.json();if(!Array.isArray(d))return[];
+        return d.slice(0,8).map(t=>({hash:t.txHash,action:'transfer',token:'SOL',value:t.lamport?(t.lamport/1e9).toFixed(4):'0',timestamp:(t.blockTime||0)*1000}));
+      }else{
+        const apis={ethereum:'https://api.etherscan.io/api',base:'https://api.basescan.org/api',bsc:'https://api.bscscan.com/api',arbitrum:'https://api.arbiscan.io/api',polygon:'https://api.polygonscan.com/api'};
+        const base=apis[chain]||apis.ethereum;
+        const r=await fetch(base+'?module=account&action=tokentx&address='+w.address+'&sort=desc&offset=10&page=1');
+        if(!r.ok)return[];const d=await r.json();if(!Array.isArray(d.result))return[];
+        return d.result.slice(0,8).map(t=>({hash:t.hash,action:t.from.toLowerCase()===w.address.toLowerCase()?'sell':'buy',token:t.tokenSymbol||'?',value:(parseFloat(t.value)/Math.pow(10,parseInt(t.tokenDecimal||18))).toLocaleString(undefined,{maximumFractionDigits:4}),timestamp:parseInt(t.timeStamp)*1000}));
+      }
+    }catch(e){return[];}
+  }
+
+  // ── DISCORD ──
+  async function sendDiscord(w,tx){
+    const wh=w.webhook||webhook;if(!wh)return;
+    const chain=resolveChain(w);
+    const color=tx.action==='buy'?0x10b981:tx.action==='sell'?0xef4444:0xf59e0b;
+    const emoji=tx.action==='buy'?'\uD83D\uDFE2':tx.action==='sell'?'\uD83D\uDD34':'\uD83D\uDD01';
+    try{await fetch(wh,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:'Tren Wallet Tracker',avatar_url:'https://trenai.vercel.app/apple-touch-icon.png',embeds:[{title:emoji+' '+tx.action.toUpperCase()+' \u2014 '+(w.name||shortAddr(w.address)),color,fields:[{name:'Token',value:tx.token,inline:true},{name:'Amount',value:String(tx.value),inline:true},{name:'Chain',value:chainLabel(chain),inline:true},{name:'Wallet',value:'`'+shortAddr(w.address)+'`',inline:false},{name:'Explorer',value:'[View tx]('+txUrl(tx.hash,chain)+')',inline:true}],footer:{text:'Tren Wallet Tracker \u00B7 trenai.vercel.app'},timestamp:new Date(tx.timestamp||Date.now()).toISOString()}]})});}catch(e){}
+  }
+
+  // ── NOTIFICATIONS ──
+  function pushNotif(w,tx){
+    const chain=resolveChain(w);
+    const n={id:Math.random().toString(36).slice(2),walletId:w.id,walletName:w.name||shortAddr(w.address),chain,action:tx.action,token:tx.token,value:tx.value,hash:tx.hash,timestamp:tx.timestamp||Date.now()};
+    notifs.unshift(n);if(notifs.length>200)notifs=notifs.slice(0,200);
+    localStorage.setItem(LS_NOTIFS,JSON.stringify(notifs));
+    unread++;renderBell();renderDrawer();sendDiscord(w,tx);
+  }
+
+  // ── POLL ──
+  async function pollAll(){
+    for(const w of wallets){
+      const txs=await fetchTxs(w);if(!txs.length)continue;
+      const newTxs=txs.filter(t=>(t.timestamp||0)>(w.lastSeen||0));
+      if(newTxs.length){
+        for(const tx of newTxs)pushNotif(w,tx);
+        w.lastSeen=txs[0].timestamp||0;w.recentTxs=txs.slice(0,5);w.txCount=(w.txCount||0)+newTxs.length;
+        saveWallets();renderCard(w);
+      }
+    }
+  }
+  function startPolling(){if(pollTimer)clearInterval(pollTimer);pollAll();pollTimer=setInterval(pollAll,POLL_MS);}
+
+  // ── RENDER BELL ──
+  function renderBell(){
+    const el=document.getElementById('wt-bell-count');if(!el)return;
+    if(unread>0){el.textContent=unread>9?'9+':String(unread);el.classList.add('show');}
+    else el.classList.remove('show');
+  }
+
+  // ── RENDER DRAWER ──
+  function renderDrawer(){
+    const body=document.getElementById('wt-drawer-body'),empty=document.getElementById('wt-drawer-empty');if(!body)return;
+    [...body.querySelectorAll('.wt-notif')].forEach(n=>n.remove());
+    if(!notifs.length){if(empty)empty.style.display='flex';return;}
+    if(empty)empty.style.display='none';
+    notifs.slice(0,50).forEach(n=>{
+      const color=n.action==='buy'?'var(--green)':n.action==='sell'?'var(--red)':'var(--gold)';
+      const emoji=n.action==='buy'?'\uD83D\uDFE2':n.action==='sell'?'\uD83D\uDD34':'\uD83D\uDD01';
+      const el=document.createElement('div');el.className='wt-notif';
+      el.innerHTML='<div class="wt-notif-top"><div class="wt-notif-dot" style="background:'+color+';"></div><div class="wt-notif-wallet">'+esc(n.walletName)+'</div><div class="wt-notif-time">'+timeAgo(n.timestamp)+'</div></div><div class="wt-notif-body">'+emoji+' <strong>'+n.action.toUpperCase()+'</strong> '+esc(String(n.value))+' '+esc(n.token)+(n.hash?'&nbsp;&nbsp;<a href="'+txUrl(n.hash,n.chain)+'" target="_blank" rel="noopener" class="wt-notif-link">View \u2197</a>':'')+'</div>';
+      body.insertBefore(el,body.firstChild);
+    });
+  }
+
+  // ── BUILD CARD HTML ──
+  function buildCardHTML(w){
+    const chain=resolveChain(w);
+    const txs=w.recentTxs||[];
+    const hasWh=!!(w.webhook||webhook);
+    const feedHTML=txs.length
+      ? '<div class="wt-feed-label">Recent activity</div><div class="wt-feed">'+txs.map(tx=>{
+          const dot=tx.action==='buy'?'buy':tx.action==='sell'?'sell':'transfer';
+          return '<div class="wt-tx"><div class="wt-tx-dot '+dot+'"></div><div class="wt-tx-body"><div class="wt-tx-action '+dot+'">'+dot.toUpperCase()+' '+esc(tx.token)+'</div><div class="wt-tx-time">'+timeAgo(tx.timestamp)+'</div></div><div class="wt-tx-val">'+esc(String(tx.value))+'</div>'+(tx.hash?'<a href="'+txUrl(tx.hash,chain)+'" target="_blank" rel="noopener" class="wt-tx-link">\u2197</a>':'')+'</div>';
+        }).join('')+'</div>'
+      : '<div class="wt-feed-label">Recent activity</div><div class="wt-waiting"><span class="wt-spin"></span> Waiting for on-chain activity\u2026</div>';
+    return '<div class="wt-card" id="wt-card-'+w.id+'">'
+      +'<div class="wt-card-top">'
+        +'<div class="wt-card-left">'
+          +'<div class="wt-avatar">&#x1F45B;</div>'
+          +'<div style="min-width:0;">'
+            +'<div class="wt-name">'+esc(w.name||shortAddr(w.address))+'</div>'
+            +'<div class="wt-addr"><a href="'+explorerUrl(w.address,chain)+'" target="_blank" rel="noopener">'+shortAddr(w.address)+' \u2197</a></div>'
+          +'</div>'
+        +'</div>'
+        +'<div class="wt-card-actions">'
+          +'<span class="wt-chain-tag '+chainClass(chain)+'">'+chainLabel(chain)+'</span>'
+          +'<div class="wt-remove-btn" onclick="wtRemove(\''+w.id+'\')" title="Stop tracking">\u2715</div>'
+        +'</div>'
+      +'</div>'
+      +'<div class="wt-stats-row">'
+        +'<div class="wt-stat"><div class="wt-stat-lbl">Trades caught</div><div class="wt-stat-val">'+(w.txCount||0)+'</div></div>'
+        +'<div class="wt-stat"><div class="wt-stat-lbl">Status</div><div class="wt-stat-val live"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0;box-shadow:0 0 4px var(--green);"></span>Live</div></div>'
+        +'<div class="wt-stat"><div class="wt-stat-lbl">Discord</div><div class="wt-stat-val '+(hasWh?'discord-on':'discord-off')+'">'+(hasWh?'On':'Off')+'</div></div>'
+      +'</div>'
+      +feedHTML
+      +'</div>';
+  }
+
+  function renderCard(w){const c=document.getElementById('wt-card-'+w.id),h=buildCardHTML(w);if(c)c.outerHTML=h;else{const g=document.getElementById('wt-grid');if(g)g.insertAdjacentHTML('afterbegin',h);}}
+
+  function renderAll(){
+    const grid=document.getElementById('wt-grid');
+    const empty=document.getElementById('wt-empty-state');
+    const countPill=document.getElementById('wt-count-pill');
+    if(!grid)return;
+    grid.innerHTML=wallets.map(buildCardHTML).join('');
+    if(empty){empty.classList.toggle('show',wallets.length===0);}
+    if(countPill){
+      if(wallets.length>0){countPill.textContent=wallets.length===1?'1 wallet tracked':wallets.length+' wallets tracked';countPill.style.display='';}
+      else countPill.style.display='none';
+    }
+    // Discord bar
+    const label=document.getElementById('wt-discord-label'),status=document.getElementById('wt-discord-status');
+    if(label&&status){if(webhook){label.textContent='Discord alerts active \u2014 trades will be posted to your webhook.';status.textContent='Discord on';status.className='wt-discord-status on';}else{label.textContent='No Discord webhook set \u2014 alerts will only appear in-app.';status.textContent='Discord off';status.className='wt-discord-status off';}}
+  }
+
+  // ── MODAL ──
+  window.wtOpenModal=function(webhookFocus){
+    document.getElementById('wt-modal-bg').classList.add('open');
+    document.getElementById('wt-input-addr').value='';
+    document.getElementById('wt-input-name').value='';
+    document.getElementById('wt-input-webhook').value=webhook||'';
+    document.querySelectorAll('.wt-chain-btn').forEach(b=>b.classList.remove('sel'));
+    document.querySelector('.wt-chain-btn[data-chain="auto"]').classList.add('sel');
+    setTimeout(()=>(document.getElementById(webhookFocus?'wt-input-webhook':'wt-input-addr')).focus(),80);
+  };
+  window.wtCloseModal=function(){document.getElementById('wt-modal-bg').classList.remove('open');};
+  window.wtAutoChain=function(val){
+    const c=detectChain(val);
+    if(c!=='auto'){
+      document.querySelectorAll('.wt-chain-btn').forEach(b=>b.classList.remove('sel'));
+      const b=document.querySelector('.wt-chain-btn[data-chain="'+c+'"]');
+      if(b)b.classList.add('sel');
+    }
+  };
+  window.wtPickChain=function(btn){document.querySelectorAll('.wt-chain-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');};
+  window.wtSaveWallet=function(){
+    const addr=(document.getElementById('wt-input-addr').value||'').trim();
+    const name=(document.getElementById('wt-input-name').value||'').trim();
+    const wh=(document.getElementById('wt-input-webhook').value||'').trim();
+    const chainEl=document.querySelector('.wt-chain-btn.sel');
+    const chain=chainEl?chainEl.dataset.chain:'auto';
+    if(wh){webhook=wh;localStorage.setItem(LS_WEBHOOK,wh);}
+    if(!addr){showToast('&#x26A0;&#xFE0F;','Address required','Paste a wallet address to track.');document.getElementById('wt-input-addr').focus();return;}
+    if(wallets.find(w=>w.address.toLowerCase()===addr.toLowerCase())){showToast('&#x2139;&#xFE0F;','Already tracked','This wallet is already in your tracker.');window.wtCloseModal();return;}
+    const w={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),address:addr,name,chain,webhook:wh,txCount:0,lastSeen:0,recentTxs:[],addedAt:Date.now()};
+    wallets.unshift(w);saveWallets();renderAll();window.wtCloseModal();
+    showToast('\uD83D\uDCF6','Tracking started','Monitoring '+esc(w.name||shortAddr(w.address))+'…');
+    fetchTxs(w).then(txs=>{if(txs.length){w.recentTxs=txs.slice(0,5);w.lastSeen=txs[0].timestamp||0;saveWallets();renderCard(w);}});
+    startPolling();
+  };
+  window.wtRemove=function(id){
+    const w=wallets.find(x=>x.id===id);
+    wallets=wallets.filter(x=>x.id!==id);saveWallets();renderAll();
+    if(w)showToast('\uD83D\uDDD1\uFE0F','Stopped tracking',esc(w.name||shortAddr(w.address)));
+  };
+  window.wtToggleDrawer=function(){
+    const d=document.getElementById('wt-alert-drawer');d.classList.toggle('open');
+    if(d.classList.contains('open')){unread=0;renderBell();renderDrawer();}
+  };
+  window.wtClearNotifs=function(){notifs=[];localStorage.setItem(LS_NOTIFS,JSON.stringify(notifs));unread=0;renderBell();renderDrawer();};
+
+  // ── INIT ──
+  renderAll();renderBell();renderDrawer();
+  if(wallets.length)startPolling();
+})();
+</script>
+</body>
+</html>
