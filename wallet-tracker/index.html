@@ -94,13 +94,15 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .st{font-size:14.5px;font-weight:700;}
 .sc{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:1.1rem 1.3rem;transition:border-color .18s;}
 .sc:hover{border-color:var(--border2);}
-.toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:linear-gradient(145deg,var(--bg3),var(--bg2));border:1px solid var(--border2);border-radius:14px;padding:1.1rem 1.4rem;box-shadow:0 12px 40px rgba(0,0,0,.4);display:flex;align-items:center;gap:12px;animation:toastIn .4s ease;max-width:380px;}
-@keyframes toastIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
-.toast-icon{font-size:24px;}
-.toast-body{flex:1;}
-.toast-title{font-size:14px;font-weight:700;margin-bottom:2px;}
-.toast-msg{font-size:12px;color:var(--sub2);}
-.toast-close{background:none;border:none;color:var(--sub);cursor:pointer;font-size:16px;padding:4px;}
+.toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:linear-gradient(145deg,#0d1628,#080e1a);border:1px solid rgba(255,255,255,.13);border-radius:13px;padding:13px 16px;box-shadow:0 16px 48px rgba(0,0,0,.55);display:flex;align-items:center;gap:11px;animation:toastIn .35s cubic-bezier(.16,1,.3,1);max-width:340px;min-width:240px;}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:none}}
+.toast-body{flex:1;min-width:0;}
+.toast-title{font-size:13px;font-weight:700;color:#f0f4ff;margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.toast-msg{font-size:11px;color:rgba(240,244,255,.5);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.toast-bar{position:absolute;bottom:0;left:0;height:2px;border-radius:0 0 13px 13px;background:linear-gradient(90deg,var(--accent),var(--al));animation:toastBar 4.5s linear forwards;}
+@keyframes toastBar{from{width:100%}to{width:0%}}
+.toast-close{background:none;border:none;color:rgba(240,244,255,.3);cursor:pointer;font-size:15px;padding:2px;flex-shrink:0;transition:color .12s;}
+.toast-close:hover{color:var(--text);}
 /* ── MOBILE ── */
 .mobile-toggle{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:var(--bg3);border:1px solid var(--border);color:var(--text);font-size:18px;cursor:pointer;flex-shrink:0;}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);z-index:19;}
@@ -116,6 +118,66 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 }
 @media(max-width:600px){.page{padding:1rem;}.wt-grid{grid-template-columns:1fr!important;}}
 
+
+/* ── WALLET TRACKER EXTRA FEATURES ── */
+/* Stats bar */
+.wt-stats-bar{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:1.4rem;}
+.wt-stat-box{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:1rem 1.2rem;position:relative;overflow:hidden;}
+.wt-stat-box::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;}
+.wt-stat-box.blue::before{background:linear-gradient(90deg,var(--accent),transparent);}
+.wt-stat-box.green::before{background:linear-gradient(90deg,var(--green),transparent);}
+.wt-stat-box.gold::before{background:linear-gradient(90deg,var(--gold),transparent);}
+.wt-stat-box.purple::before{background:linear-gradient(90deg,#a78bfa,transparent);}
+.wt-stat-box-lbl{font-size:10px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px;}
+.wt-stat-box-val{font-size:20px;font-weight:800;letter-spacing:-.5px;}
+.wt-stat-box-sub{font-size:10.5px;color:var(--sub);margin-top:3px;}
+/* sort + filter bar */
+.wt-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:1.1rem;flex-wrap:wrap;}
+.wt-sort-btn{padding:5px 12px;border-radius:7px;font-size:11.5px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);color:var(--sub);font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;}
+.wt-sort-btn.active{background:rgba(37,99,235,.16);border-color:rgba(59,130,246,.35);color:var(--al);}
+.wt-sort-btn:hover:not(.active){background:rgba(255,255,255,.07);color:var(--sub2);}
+.wt-filter-sep{width:1px;height:20px;background:rgba(255,255,255,.07);margin:0 2px;}
+/* enhanced cards */
+.wt-card-pnl{font-size:15px;font-weight:800;letter-spacing:-.3px;}
+.wt-card-pnl.pos{color:var(--green);}
+.wt-card-pnl.neg{color:var(--red);}
+.wt-card-pnl.neu{color:var(--sub2);}
+.wt-winrate-bar{height:4px;border-radius:4px;background:rgba(255,255,255,.06);margin-top:4px;overflow:hidden;}
+.wt-winrate-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--green),#34d399);transition:width .6s cubic-bezier(.16,1,.3,1);}
+/* smart money label */
+.wt-label{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;padding:2px 7px;border-radius:5px;letter-spacing:.04em;}
+.wt-label.whale{background:rgba(59,130,246,.12);border:0.5px solid rgba(59,130,246,.28);color:#60a5fa;}
+.wt-label.smart{background:rgba(167,139,250,.12);border:0.5px solid rgba(167,139,250,.28);color:#a78bfa;}
+.wt-label.degen{background:rgba(245,158,11,.1);border:0.5px solid rgba(245,158,11,.25);color:var(--gold);}
+.wt-label.insider{background:rgba(16,185,129,.1);border:0.5px solid rgba(16,185,129,.25);color:var(--green);}
+/* activity feed tab */
+.wt-feed-tabs{display:flex;gap:4px;margin-bottom:10px;}
+.wt-feed-tab{padding:4px 10px;border-radius:6px;font-size:10.5px;font-weight:600;cursor:pointer;border:1px solid transparent;color:var(--sub);transition:all .12s;background:none;}
+.wt-feed-tab.on{background:rgba(37,99,235,.14);border-color:rgba(59,130,246,.25);color:var(--al);}
+/* global live feed */
+.wt-live-feed{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:1.1rem 1.3rem;margin-bottom:1.4rem;}
+.wt-live-feed-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.wt-live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.6;transform:scale(.85);}}
+.wt-feed-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.wt-feed-row:last-child{border-bottom:none;padding-bottom:0;}
+.wt-feed-row-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.wt-feed-row-dot.buy{background:var(--green);}
+.wt-feed-row-dot.sell{background:var(--red);}
+.wt-feed-row-dot.transfer{background:var(--gold);}
+.wt-feed-wallet{font-size:11.5px;font-weight:700;flex-shrink:0;}
+.wt-feed-desc{font-size:11.5px;color:var(--sub2);flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wt-feed-time{font-size:10px;color:var(--sub);flex-shrink:0;}
+/* label picker in modal */
+.wt-label-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;}
+.wt-label-btn{padding:5px 12px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;border:1px solid rgba(255,255,255,.09);background:rgba(255,255,255,.04);color:var(--sub);font-family:'Plus Jakarta Sans',sans-serif;}
+.wt-label-btn.sel.whale{background:rgba(59,130,246,.14);border-color:rgba(59,130,246,.35);color:#60a5fa;}
+.wt-label-btn.sel.smart{background:rgba(167,139,250,.14);border-color:rgba(167,139,250,.35);color:#a78bfa;}
+.wt-label-btn.sel.degen{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3);color:var(--gold);}
+.wt-label-btn.sel.insider{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.3);color:var(--green);}
+.wt-label-btn:hover:not(.sel){background:rgba(255,255,255,.07);color:var(--sub2);}
+@media(max-width:750px){.wt-stats-bar{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.wt-stats-bar{grid-template-columns:1fr;}}
 /* ── WALLET TRACKER STYLES ── */
 .wt-add-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:9px;background:rgba(37,99,235,.12);border:1px solid rgba(37,99,235,.28);color:var(--al);font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;font-family:'Plus Jakarta Sans',sans-serif;}
 .wt-add-btn:hover{background:rgba(37,99,235,.22);border-color:rgba(59,130,246,.5);}
@@ -363,13 +425,12 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
     <div class="page">
 
       <!-- Header row -->
-      <div class="sh">
+      <div class="sh" style="margin-bottom:1.2rem;">
         <div>
-          <div class="st" style="margin-bottom:3px;">Track wallets in real time</div>
-          <div style="font-size:12px;color:var(--sub);">Get in-app &amp; Discord alerts the moment a tracked wallet makes a trade</div>
+          <div class="st" style="margin-bottom:3px;">Wallet Tracker</div>
+          <div style="font-size:12px;color:var(--sub);">Monitor smart money in real time &mdash; PnL, win rate, alerts &amp; more</div>
         </div>
         <div style="display:flex;align-items:center;gap:8px;">
-          <div id="wt-count-pill" style="font-size:11px;color:var(--sub);display:none;"></div>
           <button class="wt-add-btn" onclick="wtOpenModal()">
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Track Wallet
@@ -377,12 +438,64 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         </div>
       </div>
 
+      <!-- Summary stats bar -->
+      <div class="wt-stats-bar" id="wt-stats-bar">
+        <div class="wt-stat-box blue">
+          <div class="wt-stat-box-lbl">Wallets Tracked</div>
+          <div class="wt-stat-box-val" id="wsb-count">0</div>
+          <div class="wt-stat-box-sub">across all chains</div>
+        </div>
+        <div class="wt-stat-box green">
+          <div class="wt-stat-box-lbl">Trades Caught</div>
+          <div class="wt-stat-box-val" id="wsb-trades">0</div>
+          <div class="wt-stat-box-sub">total this session</div>
+        </div>
+        <div class="wt-stat-box gold">
+          <div class="wt-stat-box-lbl">Avg Win Rate</div>
+          <div class="wt-stat-box-val" id="wsb-wr">&mdash;</div>
+          <div class="wt-stat-box-sub">across tracked wallets</div>
+        </div>
+        <div class="wt-stat-box purple">
+          <div class="wt-stat-box-lbl">Alerts Sent</div>
+          <div class="wt-stat-box-val" id="wsb-alerts">0</div>
+          <div class="wt-stat-box-sub">in-app &amp; Discord</div>
+        </div>
+      </div>
+
       <!-- Discord webhook bar -->
-      <div class="wt-discord-row" id="wt-discord-row">
+      <div class="wt-discord-row" id="wt-discord-row" style="margin-bottom:1.2rem;">
         <div class="wt-discord-dot"></div>
-        <div class="wt-discord-label" id="wt-discord-label">No Discord webhook set — alerts will only appear in-app.</div>
+        <div class="wt-discord-label" id="wt-discord-label">No Discord webhook set &mdash; alerts will only appear in-app.</div>
         <div class="wt-discord-status off" id="wt-discord-status">Discord off</div>
         <button class="wt-setup-btn" onclick="wtOpenModal(true)">Set up</button>
+      </div>
+
+      <!-- Global live feed (shown when wallets exist) -->
+      <div class="wt-live-feed" id="wt-live-feed" style="display:none;">
+        <div class="wt-live-feed-head">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div class="wt-live-dot"></div>
+            <div style="font-size:13px;font-weight:700;">Live Activity Feed</div>
+          </div>
+          <div style="font-size:11px;color:var(--sub);" id="wt-feed-last">Polling every 30s</div>
+        </div>
+        <div id="wt-global-feed">
+          <div style="font-size:11.5px;color:var(--sub);padding:.4rem 0;">Waiting for on-chain activity&hellip;</div>
+        </div>
+      </div>
+
+      <!-- Sort / filter toolbar -->
+      <div class="wt-toolbar" id="wt-toolbar" style="display:none;">
+        <div style="font-size:11px;color:var(--sub);font-weight:600;margin-right:2px;">Sort:</div>
+        <button class="wt-sort-btn active" data-sort="added" onclick="wtSetSort(this,'added')">Date Added</button>
+        <button class="wt-sort-btn" data-sort="trades" onclick="wtSetSort(this,'trades')">Most Trades</button>
+        <button class="wt-sort-btn" data-sort="winrate" onclick="wtSetSort(this,'winrate')">Win Rate</button>
+        <div class="wt-filter-sep"></div>
+        <div style="font-size:11px;color:var(--sub);font-weight:600;margin-right:2px;">Filter:</div>
+        <button class="wt-sort-btn" data-filter="all" onclick="wtSetFilter(this,'all')" style="background:rgba(37,99,235,.16);border-color:rgba(59,130,246,.35);color:var(--al);">All</button>
+        <button class="wt-sort-btn" data-filter="whale" onclick="wtSetFilter(this,'whale')">&#x1F433; Whale</button>
+        <button class="wt-sort-btn" data-filter="smart" onclick="wtSetFilter(this,'smart')">&#x1F9E0; Smart Money</button>
+        <button class="wt-sort-btn" data-filter="insider" onclick="wtSetFilter(this,'insider')">&#x26A1; Insider</button>
       </div>
 
       <!-- Wallet cards -->
@@ -390,9 +503,15 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 
       <!-- Empty state -->
       <div class="wt-empty-state" id="wt-empty-state">
-        <div class="wt-empty-icon">&#x1F45B;</div>
+        <div class="wt-empty-icon">&#x1F4E1;</div>
         <div class="wt-empty-title">No wallets tracked yet</div>
-        <div class="wt-empty-sub">Add any on-chain wallet to monitor their trades in real time and receive instant alerts when they make a move.</div>
+        <div class="wt-empty-sub">Add any on-chain wallet to monitor smart money movements, track PnL &amp; win rate, and get instant alerts on every trade.</div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:20px;">
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px 16px;font-size:11px;color:var(--sub2);text-align:center;min-width:110px;">&#x1F4C8;<br><strong style="color:var(--text);font-size:12px;">PnL Tracking</strong><br>Estimated gains &amp; losses</div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px 16px;font-size:11px;color:var(--sub2);text-align:center;min-width:110px;">&#x1F3AF;<br><strong style="color:var(--text);font-size:12px;">Win Rate</strong><br>Buy vs sell accuracy</div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px 16px;font-size:11px;color:var(--sub2);text-align:center;min-width:110px;">&#x1F514;<br><strong style="color:var(--text);font-size:12px;">Instant Alerts</strong><br>In-app &amp; Discord</div>
+          <div style="background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px 16px;font-size:11px;color:var(--sub2);text-align:center;min-width:110px;">&#x1F9E0;<br><strong style="color:var(--text);font-size:12px;">Smart Labels</strong><br>Whale, Insider &amp; more</div>
+        </div>
         <button class="wt-add-btn" style="margin:0 auto;display:inline-flex;" onclick="wtOpenModal()">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Track your first wallet
@@ -405,11 +524,11 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 
 <!-- ADD WALLET MODAL -->
 <div class="wt-modal-bg" id="wt-modal-bg" onclick="if(event.target===this)wtCloseModal()">
-  <div class="wt-modal">
-    <div class="wt-modal-title" style="font-family:'Plus Jakarta Sans',sans-serif;background:linear-gradient(90deg,#f0f4ff 60%,#93c5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Track a wallet</div>
-    <div class="wt-modal-sub">Paste any on-chain address — Ethereum, Solana, Base, BSC, Arbitrum, Polygon. Tren auto-detects the chain.</div>
+  <div class="wt-modal" style="max-height:90vh;overflow-y:auto;scrollbar-width:none;">
+    <div class="wt-modal-title" style="background:linear-gradient(90deg,#f0f4ff 60%,#93c5fd);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Track a wallet</div>
+    <div class="wt-modal-sub">Paste any on-chain address &mdash; Ethereum, Solana, Base, BSC, Arbitrum, Polygon. Tren auto-detects the chain.</div>
     <div class="wt-field-label">Wallet address</div>
-    <input class="wt-input" id="wt-input-addr" placeholder="0x… or a Solana address" oninput="wtAutoChain(this.value)" autocomplete="off" spellcheck="false">
+    <input class="wt-input" id="wt-input-addr" placeholder="0x&#x2026; or a Solana address" oninput="wtAutoChain(this.value)" autocomplete="off" spellcheck="false">
     <div class="wt-field-label">Nickname <span style="font-weight:500;text-transform:none;letter-spacing:0;color:rgba(240,244,255,.25);">(optional)</span></div>
     <input class="wt-input" id="wt-input-name" placeholder="e.g. Whale #1, Smart Money, Insider">
     <div class="wt-field-label">Chain</div>
@@ -422,8 +541,18 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
       <button class="wt-chain-btn" data-chain="arbitrum" onclick="wtPickChain(this)">Arbitrum</button>
       <button class="wt-chain-btn" data-chain="polygon" onclick="wtPickChain(this)">Polygon</button>
     </div>
+    <div class="wt-field-label">Smart money label <span style="font-weight:500;text-transform:none;letter-spacing:0;color:rgba(240,244,255,.25);">(optional)</span></div>
+    <div class="wt-label-row" id="wt-label-row">
+      <button class="wt-label-btn" data-lbl="" onclick="wtPickLabel(this)">None</button>
+      <button class="wt-label-btn whale" data-lbl="whale" onclick="wtPickLabel(this)">&#x1F433; Whale</button>
+      <button class="wt-label-btn smart" data-lbl="smart" onclick="wtPickLabel(this)">&#x1F9E0; Smart Money</button>
+      <button class="wt-label-btn degen" data-lbl="degen" onclick="wtPickLabel(this)">&#x1F3B2; Degen</button>
+      <button class="wt-label-btn insider" data-lbl="insider" onclick="wtPickLabel(this)">&#x26A1; Insider</button>
+    </div>
+    <div class="wt-field-label">Notes <span style="font-weight:500;text-transform:none;letter-spacing:0;color:rgba(240,244,255,.25);">(optional)</span></div>
+    <input class="wt-input" id="wt-input-notes" placeholder="Why are you tracking this wallet?">
     <div class="wt-field-label">Discord webhook URL <span style="font-weight:500;text-transform:none;letter-spacing:0;color:rgba(240,244,255,.25);">(optional)</span></div>
-    <input class="wt-input" id="wt-input-webhook" placeholder="https://discord.com/api/webhooks/…" style="margin-bottom:4px;">
+    <input class="wt-input" id="wt-input-webhook" placeholder="https://discord.com/api/webhooks/&#x2026;" style="margin-bottom:4px;">
     <div style="font-size:10px;color:var(--sub);margin-bottom:18px;">Leave blank to use the global webhook, or set a per-wallet one here.</div>
     <div class="wt-modal-actions">
       <button class="wt-modal-cancel" onclick="wtCloseModal()">Cancel</button>
@@ -466,7 +595,7 @@ function getSessionFullName(){if(_session&&_session.user){const m=_session.user.
 function getUserDisplayName(){const e=getSessionEmail(),p=JSON.parse(localStorage.getItem('tren_prefs')||'{}'),u=p.display_names||{};return u[e]||getSessionFullName();}
 function escHtml(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function navTo(url){if(_navLock)return;_navLock=true;setTimeout(()=>{_navLock=false;},800);try{const s=localStorage.getItem(SESSION_KEY);if(s){const enc=encodeURIComponent(btoa(s));url+=(url.includes('?')?'&':'?')+'_t='+enc;}}catch(e){}window.location.href=url;}
-function showToast(icon,title,msg){const ex=document.querySelector('.toast');if(ex)ex.remove();const t=document.createElement('div');t.className='toast';t.innerHTML=`<div class="toast-icon">${icon}</div><div class="toast-body"><div class="toast-title">${escHtml(title)}</div><div class="toast-msg">${escHtml(msg)}</div></div><button class="toast-close" onclick="this.parentElement.remove()">&#x2715;</button>`;document.body.appendChild(t);setTimeout(()=>{if(t.parentElement)t.remove();},5000);}
+function showToast(colorBar,title,msg){const ex=document.querySelector('.toast');if(ex)ex.remove();const t=document.createElement('div');t.className='toast';t.style.position='relative';t.style.overflow='hidden';const bar=colorBar||'linear-gradient(90deg,var(--accent),var(--al))';t.innerHTML='<div class="toast-body"><div class="toast-title">'+escHtml(title)+'</div><div class="toast-msg">'+escHtml(msg)+'</div></div><button class="toast-close" onclick="this.closest(\'.toast\').remove()">✕</button><div class="toast-bar" style="background:'+bar+';"></div>';document.body.appendChild(t);setTimeout(()=>{if(t.parentElement)t.remove();},4800);}
 async function doLogout(){const tok=_session?_session.access_token:'';localStorage.removeItem(SESSION_KEY);['tren_sub','tren_prefs','tren_auto_sub','tren_autosignals_sub','tren_trenbot_sub'].forEach(k=>localStorage.removeItem(k));try{fetch(`${SUPABASE_AUTH_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':'Bearer '+tok}}).catch(()=>{});}catch(e){}window.location.href='https://trenai.vercel.app/login-page';}
 function initUserInfo(){const name=getUserDisplayName(),email=getSessionEmail(),init=name.charAt(0).toUpperCase();['s-nm','prof-menu-name'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=name;});['s-av','prof-av-btn'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=init;});const se=document.getElementById('s-email-display');if(se)se.textContent=email;const pe=document.getElementById('prof-menu-email');if(pe)pe.textContent=email;}
 async function checkPremiumAccess(){const email=getSessionEmail();if(!email||email==='—')return false;if(_subData?.status==='active'&&_subData?.plan==='premium')return true;try{const r=await fetch(`${SUPABASE_AUTH_URL}/rest/v1/subscribers?email=eq.${encodeURIComponent(email.toLowerCase().trim())}&plan=eq.premium&status=eq.active&select=*`,{headers:{'apikey':SUPABASE_AUTH_KEY,'Authorization':`Bearer ${SUPABASE_AUTH_KEY}`}});const rows=await r.json();if(rows&&rows.length>0&&rows[0].status==='active'){_subData=rows[0];localStorage.setItem('tren_sub',JSON.stringify(_subData));return true;}}catch(e){}return false;}
@@ -490,11 +619,12 @@ applySubUI(cachedTB,cachedAS,cachedP);
 /* ── WALLET TRACKER ── */
 (function(){
   'use strict';
-  const LS_WALLETS='wt_wallets_v2',LS_WEBHOOK='wt_webhook_v2',LS_NOTIFS='wt_notifs_v2',POLL_MS=30000;
+  const LS_WALLETS='wt_wallets_v3',LS_WEBHOOK='wt_webhook_v2',LS_NOTIFS='wt_notifs_v2',POLL_MS=30000;
   let wallets=JSON.parse(localStorage.getItem(LS_WALLETS)||'[]');
   let webhook=localStorage.getItem(LS_WEBHOOK)||'';
   let notifs=JSON.parse(localStorage.getItem(LS_NOTIFS)||'[]');
-  let unread=0,pollTimer=null;
+  let unread=0,pollTimer=null,_sortMode='added',_filterMode='all';
+  let globalFeedItems=[];
 
   // ── HELPERS ──
   function detectChain(a){a=(a||'').trim();if(/^0x[0-9a-fA-F]{40}$/.test(a))return'ethereum';if(/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(a))return'solana';return'auto';}
@@ -541,6 +671,10 @@ applySubUI(cachedTB,cachedAS,cachedP);
     const n={id:Math.random().toString(36).slice(2),walletId:w.id,walletName:w.name||shortAddr(w.address),chain,action:tx.action,token:tx.token,value:tx.value,hash:tx.hash,timestamp:tx.timestamp||Date.now()};
     notifs.unshift(n);if(notifs.length>200)notifs=notifs.slice(0,200);
     localStorage.setItem(LS_NOTIFS,JSON.stringify(notifs));
+    // global feed
+    globalFeedItems.unshift({walletName:w.name||shortAddr(w.address),action:tx.action,token:tx.token,value:tx.value,timestamp:tx.timestamp||Date.now()});
+    if(globalFeedItems.length>30)globalFeedItems=globalFeedItems.slice(0,30);
+    updateGlobalFeed();
     unread++;renderBell();renderDrawer();sendDiscord(w,tx);
   }
 
@@ -616,20 +750,50 @@ applySubUI(cachedTB,cachedAS,cachedP);
 
   function renderCard(w){const c=document.getElementById('wt-card-'+w.id),h=buildCardHTML(w);if(c)c.outerHTML=h;else{const g=document.getElementById('wt-grid');if(g)g.insertAdjacentHTML('afterbegin',h);}}
 
+  function getSortedFiltered(){
+    let list=[...wallets];
+    if(_filterMode&&_filterMode!=='all') list=list.filter(w=>w.label===_filterMode);
+    if(_sortMode==='trades') list.sort((a,b)=>(b.txCount||0)-(a.txCount||0));
+    else if(_sortMode==='winrate'){
+      list.sort((a,b)=>{
+        const aw=calcWinRate(a)??-1,bw=calcWinRate(b)??-1;return bw-aw;
+      });
+    }
+    return list;
+  }
   function renderAll(){
     const grid=document.getElementById('wt-grid');
     const empty=document.getElementById('wt-empty-state');
-    const countPill=document.getElementById('wt-count-pill');
+    const toolbar=document.getElementById('wt-toolbar');
+    const liveFeed=document.getElementById('wt-live-feed');
     if(!grid)return;
-    grid.innerHTML=wallets.map(buildCardHTML).join('');
+    const list=getSortedFiltered();
+    grid.innerHTML=list.map(buildCardHTML).join('');
     if(empty){empty.classList.toggle('show',wallets.length===0);}
-    if(countPill){
-      if(wallets.length>0){countPill.textContent=wallets.length===1?'1 wallet tracked':wallets.length+' wallets tracked';countPill.style.display='';}
-      else countPill.style.display='none';
-    }
+    if(toolbar)toolbar.style.display=wallets.length?'flex':'none';
+    if(liveFeed)liveFeed.style.display=wallets.length?'block':'none';
+    // Stats bar
+    const totalTrades=wallets.reduce((s,w)=>s+(w.txCount||0),0);
+    const wrs=wallets.map(w=>calcWinRate(w)).filter(x=>x!==null);
+    const avgWr=wrs.length?Math.round(wrs.reduce((a,b)=>a+b,0)/wrs.length):null;
+    const el=id=>document.getElementById(id);
+    if(el('wsb-count'))el('wsb-count').textContent=wallets.length;
+    if(el('wsb-trades'))el('wsb-trades').textContent=totalTrades;
+    if(el('wsb-wr'))el('wsb-wr').textContent=avgWr!==null?avgWr+'%':'—';
+    if(el('wsb-alerts'))el('wsb-alerts').textContent=notifs.length;
     // Discord bar
     const label=document.getElementById('wt-discord-label'),status=document.getElementById('wt-discord-status');
-    if(label&&status){if(webhook){label.textContent='Discord alerts active \u2014 trades will be posted to your webhook.';status.textContent='Discord on';status.className='wt-discord-status on';}else{label.textContent='No Discord webhook set \u2014 alerts will only appear in-app.';status.textContent='Discord off';status.className='wt-discord-status off';}}
+    if(label&&status){if(webhook){label.textContent='Discord alerts active — trades will be posted to your webhook.';status.textContent='Discord on';status.className='wt-discord-status on';}else{label.textContent='No Discord webhook set — alerts will only appear in-app.';status.textContent='Discord off';status.className='wt-discord-status off';}}
+  }
+  function updateGlobalFeed(){
+    const el=document.getElementById('wt-global-feed');if(!el)return;
+    if(!globalFeedItems.length){el.innerHTML='<div style="font-size:11.5px;color:var(--sub);padding:.4rem 0;">Waiting for on-chain activity…</div>';return;}
+    el.innerHTML=globalFeedItems.slice(0,8).map(item=>{
+      const dot=item.action==='buy'?'buy':item.action==='sell'?'sell':'transfer';
+      return'<div class="wt-feed-row"><div class="wt-feed-row-dot '+dot+'"></div><div class="wt-feed-wallet">'+esc(item.walletName)+'</div><div class="wt-feed-desc">&nbsp;—&nbsp;'+item.action.toUpperCase()+' '+esc(item.token)+(item.value?' &middot; '+esc(String(item.value)):'')+'</div><div class="wt-feed-time">'+timeAgo(item.timestamp)+'</div></div>';
+    }).join('');
+    const last=document.getElementById('wt-feed-last');
+    if(last)last.textContent='Updated '+timeAgo(Date.now()-1000);
   }
 
   // ── MODAL ──
@@ -637,11 +801,17 @@ applySubUI(cachedTB,cachedAS,cachedP);
     document.getElementById('wt-modal-bg').classList.add('open');
     document.getElementById('wt-input-addr').value='';
     document.getElementById('wt-input-name').value='';
+    document.getElementById('wt-input-notes').value='';
     document.getElementById('wt-input-webhook').value=webhook||'';
     document.querySelectorAll('.wt-chain-btn').forEach(b=>b.classList.remove('sel'));
     document.querySelector('.wt-chain-btn[data-chain="auto"]').classList.add('sel');
+    document.querySelectorAll('.wt-label-btn').forEach(b=>b.classList.remove('sel'));
+    document.querySelector('.wt-label-btn[data-lbl=""]').classList.add('sel');
     setTimeout(()=>(document.getElementById(webhookFocus?'wt-input-webhook':'wt-input-addr')).focus(),80);
   };
+  window.wtPickLabel=function(btn){document.querySelectorAll('.wt-label-btn').forEach(b=>b.classList.remove('sel'));btn.classList.add('sel');};
+  window.wtSetSort=function(btn,mode){_sortMode=mode;document.querySelectorAll('.wt-sort-btn[data-sort]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderAll();};
+  window.wtSetFilter=function(btn,mode){_filterMode=mode;document.querySelectorAll('.wt-sort-btn[data-filter]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderAll();};
   window.wtCloseModal=function(){document.getElementById('wt-modal-bg').classList.remove('open');};
   window.wtAutoChain=function(val){
     const c=detectChain(val);
@@ -670,7 +840,7 @@ applySubUI(cachedTB,cachedAS,cachedP);
   window.wtRemove=function(id){
     const w=wallets.find(x=>x.id===id);
     wallets=wallets.filter(x=>x.id!==id);saveWallets();renderAll();
-    if(w)showToast('\uD83D\uDDD1\uFE0F','Stopped tracking',esc(w.name||shortAddr(w.address)));
+    if(w)showToast('linear-gradient(90deg,rgba(239,68,68,.8),rgba(239,68,68,.4))','Stopped tracking',w.name||shortAddr(w.address));
   };
   window.wtToggleDrawer=function(){
     const d=document.getElementById('wt-alert-drawer');d.classList.toggle('open');
@@ -679,7 +849,7 @@ applySubUI(cachedTB,cachedAS,cachedP);
   window.wtClearNotifs=function(){notifs=[];localStorage.setItem(LS_NOTIFS,JSON.stringify(notifs));unread=0;renderBell();renderDrawer();};
 
   // ── INIT ──
-  renderAll();renderBell();renderDrawer();
+  renderAll();renderBell();renderDrawer();updateGlobalFeed();
   if(wallets.length)startPolling();
 })();
 </script>
