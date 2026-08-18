@@ -288,6 +288,24 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .wt-notif-link{font-size:10px;color:rgba(59,130,246,.55);text-decoration:none;transition:color .12s;}
 .wt-notif-link:hover{color:var(--al);}
 .wt-drawer-empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--sub);font-size:12px;text-align:center;}
+/* ── DIRECTORY ── */
+.dir-card{background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:11px 13px;display:flex;align-items:center;gap:10px;transition:border-color .15s,background .15s;}
+.dir-card:hover{background:rgba(255,255,255,.045);border-color:rgba(255,255,255,.1);}
+.dir-av{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.dir-info{flex:1;min-width:0;}
+.dir-name{font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.dir-addr{font-size:10px;color:var(--sub);font-family:monospace;margin-top:1px;}
+.dir-tags{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;}
+.dir-tag{font-size:8.5px;font-weight:700;padding:1px 5px;border-radius:4px;letter-spacing:.04em;}
+.dir-tag.whale{background:rgba(59,130,246,.12);color:#60a5fa;}
+.dir-tag.founder{background:rgba(167,139,250,.12);color:#a78bfa;}
+.dir-tag.exchange{background:rgba(245,158,11,.1);color:var(--gold);}
+.dir-tag.eth{background:rgba(99,125,234,.12);color:#8fa4f8;}
+.dir-tag.sol{background:rgba(153,69,255,.12);color:#b97dff;}
+.dir-tag.base{background:rgba(0,82,255,.12);color:#6699ff;}
+.dir-add-btn{width:28px;height:28px;border-radius:7px;background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.22);color:var(--al);font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0;}
+.dir-add-btn:hover{background:rgba(37,99,235,.22);border-color:rgba(59,130,246,.5);}
+.dir-add-btn.added{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.28);color:var(--green);cursor:default;}
 </style>
 </head>
 <body>
@@ -496,6 +514,31 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <button class="wt-sort-btn" data-filter="whale" onclick="wtSetFilter(this,'whale')">&#x1F433; Whale</button>
         <button class="wt-sort-btn" data-filter="smart" onclick="wtSetFilter(this,'smart')">&#x1F9E0; Smart Money</button>
         <button class="wt-sort-btn" data-filter="insider" onclick="wtSetFilter(this,'insider')">&#x26A1; Insider</button>
+      </div>
+
+      <!-- Smart Money Directory -->
+      <div class="sc" style="margin-bottom:1.4rem;" id="wt-directory-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:14px;font-weight:700;">&#x1F9E0; Smart Money Directory</span>
+            <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(167,139,250,.13);border:0.5px solid rgba(167,139,250,.3);color:#a78bfa;letter-spacing:.04em;" id="dir-count-badge">54 WALLETS</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <input id="dir-search" oninput="filterDirectory(this.value)" placeholder="&#x1F50D; Search wallets…" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:8px;padding:5px 10px;font-size:11.5px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;outline:none;width:170px;" />
+            <button onclick="toggleDirectory()" id="dir-toggle-btn" style="font-size:10.5px;color:var(--sub);cursor:pointer;padding:4px 9px;border-radius:6px;background:rgba(255,255,255,.05);font-weight:600;transition:background .12s;border:1px solid rgba(255,255,255,.08);font-family:'Plus Jakarta Sans',sans-serif;">Hide</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;" id="dir-filter-tabs">
+          <button class="wt-sort-btn active" data-dfilter="all" onclick="setDirFilter(this,'all')">All</button>
+          <button class="wt-sort-btn" data-dfilter="eth" onclick="setDirFilter(this,'eth')">&#x1FA99; ETH</button>
+          <button class="wt-sort-btn" data-dfilter="sol" onclick="setDirFilter(this,'sol')">&#x2600; SOL</button>
+          <button class="wt-sort-btn" data-dfilter="whale" onclick="setDirFilter(this,'whale')">&#x1F433; Whale</button>
+          <button class="wt-sort-btn" data-dfilter="founder" onclick="setDirFilter(this,'founder')">&#x1F451; Founder</button>
+          <button class="wt-sort-btn" data-dfilter="exchange" onclick="setDirFilter(this,'exchange')">&#x1F3E6; Exchange</button>
+          <button class="wt-sort-btn" data-dfilter="smart" onclick="setDirFilter(this,'smart')">&#x1F9E0; Smart Money</button>
+        </div>
+        <div id="wt-directory-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:8px;"></div>
+        <div id="dir-empty" style="display:none;font-size:12px;color:var(--sub);padding:.5rem 0;">No wallets match your search.</div>
       </div>
 
       <!-- Wallet cards -->
@@ -781,6 +824,8 @@ applySubUI(cachedTB,cachedAS,cachedP);
     if(el('wsb-trades'))el('wsb-trades').textContent=totalTrades;
     if(el('wsb-wr'))el('wsb-wr').textContent=avgWr!==null?avgWr+'%':'—';
     if(el('wsb-alerts'))el('wsb-alerts').textContent=notifs.length;
+    // Refresh directory add-buttons
+    if(typeof renderDirectory==='function')renderDirectory();
     // Discord bar
     const label=document.getElementById('wt-discord-label'),status=document.getElementById('wt-discord-status');
     if(label&&status){if(webhook){label.textContent='Discord alerts active — trades will be posted to your webhook.';status.textContent='Discord on';status.className='wt-discord-status on';}else{label.textContent='No Discord webhook set — alerts will only appear in-app.';status.textContent='Discord off';status.className='wt-discord-status off';}}
@@ -847,6 +892,122 @@ applySubUI(cachedTB,cachedAS,cachedP);
     if(d.classList.contains('open')){unread=0;renderBell();renderDrawer();}
   };
   window.wtClearNotifs=function(){notifs=[];localStorage.setItem(LS_NOTIFS,JSON.stringify(notifs));unread=0;renderBell();renderDrawer();};
+
+  // ── SMART MONEY DIRECTORY ──
+  const DIRECTORY=[
+    // ── ETH FOUNDERS / KNOWN INDIVIDUALS ──
+    {name:'Vitalik Buterin',desc:'Ethereum co-founder',address:'0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045',chain:'ethereum',label:'founder',tags:['founder','eth'],icon:'&#x1F9D1;&#x200D;&#x1F4BB;'},
+    {name:'Hayden Adams',desc:'Uniswap creator',address:'0x11E4857Bb9993a50c685A79AFad4E6F65D518DDa',chain:'ethereum',label:'founder',tags:['founder','eth'],icon:'&#x1F98E;'},
+    {name:'Brian Armstrong',desc:'Coinbase CEO',address:'0x5b76f5B8fc9D700624F78208132f91AD4e61a1f0',chain:'ethereum',label:'founder',tags:['whale','eth'],icon:'&#x1F4BC;'},
+    {name:'Mark Cuban',desc:'Billionaire investor',address:'0x293Ed38530005620e4B28600f196a97E1125dAAc',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F3C0;'},
+    {name:'Mark Cuban (Alt)',desc:'Secondary wallet',address:'0xa679c6154b8d4619Af9F83f0bF9a13A680e01eCF',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F3C0;'},
+    {name:'Ethereum Foundation',desc:'ETH dev fund',address:'0xde0B295669a9FD93d5F28D9Ec85E40f4cb697BAe',chain:'ethereum',label:'founder',tags:['founder','eth'],icon:'&#x1F4A0;'},
+    {name:'Ethereum Foundation 2',desc:'ETH operational wallet',address:'0x9eD4307B4dB9c1c5a59D2640a7D829fAC85c4DB2',chain:'ethereum',label:'founder',tags:['founder','eth'],icon:'&#x1F4A0;'},
+    {name:'Shaquille O\'Neal',desc:'NBA legend & NFT collector',address:'0x3C6aEFF92b4B35C2e1b196B57d0f8FFB56884A17',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F3C6;'},
+    {name:'Stephen Curry',desc:'NBA star & NFT collector',address:'0x3bEcf83939f34311b6bEe143197872d877501B11',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F3C0;'},
+    {name:'Justin Bieber',desc:'Pop star & NFT collector',address:'0xE21DC18513e3e68a52F9fcDaCfD56948d43a11c6',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F3A4;'},
+    {name:'Polychain Capital',desc:'Top crypto VC fund',address:'0xbcd5000f5c522856e710c5d274bb672b2f2eefbf',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F4B9;'},
+    {name:'Jump Trading',desc:'Crypto market maker',address:'0x46340b20830761efd32832A74d7169B29FEB9758',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F98A;'},
+    {name:'Jump Trading (Alt)',desc:'Secondary trading wallet',address:'0xf584F8728B874a6a5c7A8d4d387C9aae9172D621',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F98A;'},
+    {name:'a16z (Andreessen)',desc:'Crypto VC — a16z fund',address:'0x05e793ce0c6027323ac150f6d45c2344d28b6019',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F3DB;'},
+    {name:'Paradigm Capital',desc:'Crypto VC fund',address:'0xa9C125BF4C8bB26f299c00969532B66732b1F758',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F3DB;'},
+    {name:'Alameda Research',desc:'Former FTX trading arm',address:'0xBF72Da2Bd84c5170618Fbe5914B0ECA9638d5eb5',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x26A0;&#xFE0F;'},
+    {name:'DWF Labs',desc:'Market maker & investor',address:'0x059A94A72951c0ae1cc1CE3BF0dB52421bbE8210',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F4CA;'},
+    {name:'Wintermute',desc:'Algorithmic market maker',address:'0x4f3a120E72C76c22ae802D129F599BFDbc31cb81',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x2744;&#xFE0F;'},
+    {name:'Wintermute (Ops)',desc:'Wintermute ops wallet',address:'0x00000000AE347930bD1E7B0F35588b92280f9e75',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x2744;&#xFE0F;'},
+    {name:'BlackRock IBIT',desc:'Bitcoin ETF custodian',address:'0x56eddb7aa87536c09ccc2793473599fd21a8b17f',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F5FF;'},
+    {name:'Fidelity FBTC',desc:'Fidelity BTC ETF wallet',address:'0xa9d1e08C7793af67e9d92fe308d5697FB81d3E43',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F3E6;'},
+    {name:'Grayscale GBTC',desc:'Grayscale trust wallet',address:'0x9617e7e8bB4a23DF64d8b1b4562f3e1C1dbF65a5',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F4B0;'},
+    // ── ETH EXCHANGES ──
+    {name:'Coinbase Cold Wallet',desc:'Coinbase reserve wallet',address:'0x71660c4005BA85c37ccec55d0C4493E66Fe775d3',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F535;'},
+    {name:'Coinbase Hot Wallet',desc:'Coinbase operational',address:'0x503828976D22510aad0201ac7EC88293211D23Da',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F535;'},
+    {name:'Coinbase 2',desc:'Coinbase secondary wallet',address:'0xddfAbCdc4D8FfC6d5beaf154f18B778f892A0740',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F535;'},
+    {name:'Binance Hot Wallet',desc:'Binance main hot wallet',address:'0xBE0eB53F46cd790Cd13851d5EFf43D12404d33E8',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F7E1;'},
+    {name:'Binance 2',desc:'Binance secondary wallet',address:'0xF977814e90dA44bFA03b6295A0616a897441aceC',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F7E1;'},
+    {name:'Binance 3',desc:'Binance operational wallet',address:'0x8894E0a0c962CB723c1976a4421c95949bE2D4E3',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F7E1;'},
+    {name:'Kraken 1',desc:'Kraken cold wallet',address:'0x267be1C1D684F78cb4F6a176C4911b741E4Ffdc0',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F419;'},
+    {name:'Kraken 2',desc:'Kraken hot wallet',address:'0x2910543Af39aba0Cd09dbb2d50200b3E800A63D2',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F419;'},
+    {name:'OKX Exchange',desc:'OKX main ETH wallet',address:'0x6cC5F688a315f3dC28A7781717a9A798a59fDA7b',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x26AB;'},
+    {name:'Gemini Exchange',desc:'Gemini cold wallet',address:'0xd24400ae8BFEBb18cA49Be86258a3C749cf46853',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x264A;'},
+    {name:'Bitfinex 1',desc:'Bitfinex ETH wallet',address:'0x742d35Cc6634C0532925a3b844Bc454e4438f44e',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F4B1;'},
+    {name:'Bitfinex 2',desc:'Bitfinex reserve wallet',address:'0x876EabF441B2EE5B5b0554Fd502a8E0600950cFa',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F4B1;'},
+    {name:'HTX (Huobi)',desc:'HTX/Huobi cold wallet',address:'0xdC76CD25977E0a5Ae17155770273aD58648900D3',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F525;'},
+    {name:'Gate.io',desc:'Gate.io main ETH wallet',address:'0x1c4b70a3968436b9a0a9cf5205c787eb81bb558c',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F6AA;'},
+    {name:'Robinhood',desc:'Robinhood crypto wallet',address:'0x22F9dCF4647084d6C31b2765F6910cd85C178C18',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F426;'},
+    {name:'Upbit Exchange',desc:'South Korea top exchange',address:'0x1Db3439a222C519ab44bb1144fC28167b4Fa6EE6',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F1F0;&#x1F1F7;'},
+    {name:'Bybit Exchange',desc:'Bybit main wallet',address:'0xf89d7b9c864f589bbF53a82105107622B35EaA40',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F4B8;'},
+    {name:'KuCoin Exchange',desc:'KuCoin hot wallet',address:'0xD6216fC19DB775Df9774a6E33526131dA7D19a2c',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F3AF;'},
+    {name:'Poloniex',desc:'Poloniex ETH wallet',address:'0x32Be343B94f860124dC4fEe278FDCBD38C102D88',chain:'ethereum',label:'exchange',tags:['exchange','eth'],icon:'&#x1F535;'},
+    // ── ETH PROTOCOL / BRIDGE ──
+    {name:'Arbitrum Bridge',desc:'Arbitrum L2 bridge',address:'0x8315177aB297bA92A06054cE80a67Ed4DBd7ed3a',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F309;'},
+    {name:'Base Portal',desc:'Base L2 bridge',address:'0x49048044D57e1C92A77f79988d21Fa8fAF74E97c',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F535;'},
+    {name:'Lido Staking',desc:'ETH liquid staking protocol',address:'0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84',chain:'ethereum',label:'whale',tags:['whale','eth'],icon:'&#x1F30A;'},
+    // ── SOLANA ──
+    {name:'Ansem',desc:'Solana alpha caller',address:'GNhvLMGBB57CtYpSJNMzSzBLfWEPw7Sxf3wj7WfcBFb',chain:'solana',label:'whale',tags:['whale','sol'],icon:'&#x1F40B;'},
+    {name:'Murad Mahmudov',desc:'Memecoin maximalist',address:'AoqHK58JKLS3XtBNeKfSUDXXoeiZGzHnF5PuTH2VeMp2',chain:'solana',label:'whale',tags:['whale','sol'],icon:'&#x1F4B0;'},
+    {name:'Solana Foundation',desc:'SOL dev fund',address:'GdnSyH3YtwcxFvQrVVJMm1JhTS4QVX7MFsX56uJLUfiZ',chain:'solana',label:'founder',tags:['founder','sol'],icon:'&#x2600;&#xFE0F;'},
+    {name:'Alameda SOL Wallet',desc:'Historical SOL whale',address:'CuieVDEDtLo7FypjyQUsjeadGomZos68LqEMNLTjvDBe',chain:'solana',label:'whale',tags:['whale','sol'],icon:'&#x1F4A5;'},
+    {name:'SOL Smart Money #1',desc:'High win-rate SOL trader',address:'AVAZvHLR2PcWpDf8BXY4rVxNHYRBytycHkcB5z5QNXYm',chain:'solana',label:'smart',tags:['whale','sol'],icon:'&#x1F9E0;'},
+    {name:'SOL Smart Money #2',desc:'Consistent 50x Raydium flipper',address:'4Be9CvxqHW6BYiRAxW9Q3xu1ycTMWaL5z8NX4HR3ha7t',chain:'solana',label:'smart',tags:['whale','sol'],icon:'&#x1F9E0;'},
+    {name:'SOL Smart Money #3',desc:'Insider signal tracker',address:'8zFZHuSRuDpuAR7J6FzwyF3vKNx4CVW3DFHJerQhc7Zd',chain:'solana',label:'smart',tags:['whale','sol'],icon:'&#x1F9E0;'},
+    {name:'SOL Smart Money #4',desc:'Whale-level low-rug trader',address:'H72yLkhTnoBfhBTXXaj1RBXuirm8s8G5fcVh2XpQLggM',chain:'solana',label:'smart',tags:['whale','sol'],icon:'&#x1F9E0;'},
+    {name:'SOL AI Trader',desc:'AI token specialist, 61% win rate',address:'77n6X7LtGy5AZprsvjZu1eaekJpxqLeVRZLPJZdBYyg9',chain:'solana',label:'smart',tags:['whale','sol'],icon:'&#x1F916;'},
+    {name:'TRUMP Whale',desc:'$10.7M PnL on TRUMP trade',address:'AX3nBrfPECgSBREJv8CNkE6kmNwJKGqDU73KerU3KRMA',chain:'solana',label:'whale',tags:['whale','sol'],icon:'&#x1F4B0;'},
+    {name:'Binance SOL Wallet',desc:'Binance Solana holdings',address:'2QwUbEACJ3ppwfyH19QCSVvNrRzfuK5mNVNDsDMsZKMh',chain:'solana',label:'exchange',tags:['exchange','sol'],icon:'&#x1F7E1;'},
+    {name:'Coinbase SOL Wallet',desc:'Coinbase Solana holdings',address:'DUru5ZfCdCnjPFuY7NPniV3hhZqNJLgn2sBZJGaMc2Sj',chain:'solana',label:'exchange',tags:['exchange','sol'],icon:'&#x1F535;'},
+  ];
+
+  let _dirFilter='all',_dirSearch='',_dirVisible=true;
+
+  window.filterDirectory=function(q){_dirSearch=q.toLowerCase();renderDirectory();};
+  window.setDirFilter=function(btn,f){_dirFilter=f;document.querySelectorAll('[data-dfilter]').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderDirectory();};
+  window.toggleDirectory=function(){
+    _dirVisible=!_dirVisible;
+    document.getElementById('wt-directory-grid').style.display=_dirVisible?'grid':'none';
+    document.getElementById('dir-filter-tabs').style.display=_dirVisible?'flex':'none';
+    document.getElementById('dir-search').style.display=_dirVisible?'':'none';
+    document.getElementById('dir-toggle-btn').textContent=_dirVisible?'Hide':'Show';
+  };
+
+  function isTracked(addr){return wallets.some(w=>w.address.toLowerCase()===addr.toLowerCase());}
+
+  function renderDirectory(){
+    const grid=document.getElementById('wt-directory-grid');
+    const empty=document.getElementById('dir-empty');
+    if(!grid)return;
+    let list=DIRECTORY.filter(d=>{
+      if(_dirFilter!=='all'&&!d.tags.includes(_dirFilter))return false;
+      if(_dirSearch&&!d.name.toLowerCase().includes(_dirSearch)&&!d.address.toLowerCase().includes(_dirSearch)&&!d.desc.toLowerCase().includes(_dirSearch))return false;
+      return true;
+    });
+    if(!list.length){grid.innerHTML='';empty.style.display='block';return;}
+    empty.style.display='none';
+    grid.innerHTML=list.map(d=>{
+      const tracked=isTracked(d.address);
+      const tagHTML=d.tags.map(t=>'<span class="dir-tag '+t+'">'+t.toUpperCase()+'</span>').join('');
+      return '<div class="dir-card">'
+        +'<div class="dir-av" style="background:rgba(255,255,255,.04);">'+d.icon+'</div>'
+        +'<div class="dir-info">'
+          +'<div class="dir-name">'+esc(d.name)+'</div>'
+          +'<div class="dir-addr">'+d.address.slice(0,8)+'&hellip;'+d.address.slice(-5)+'</div>'
+          +'<div class="dir-tags">'+tagHTML+'</div>'
+        +'</div>'
+        +'<div class="dir-add-btn'+(tracked?' added':'')+'" onclick="dirTrack(\''+d.address+'\',\''+d.name+'\',\''+d.chain+'\',\''+d.label+'\')" title="'+(tracked?'Already tracking':'Add to tracker')+'">'+( tracked?'&#x2713;':'+')+'</div>'
+        +'</div>';
+    }).join('');
+  }
+
+  window.dirTrack=function(addr,name,chain,label){
+    if(isTracked(addr)){showToast('linear-gradient(90deg,rgba(16,185,129,.8),rgba(16,185,129,.4))','Already tracking',name+' is already in your tracker.');return;}
+    const w={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),address:addr,name,chain,label,webhook:'',txCount:0,lastSeen:0,recentTxs:[],addedAt:Date.now()};
+    wallets.unshift(w);saveWallets();renderAll();renderDirectory();
+    showToast('linear-gradient(90deg,var(--accent),var(--al))','Tracking started','Now monitoring '+esc(name)+'…');
+    fetchTxs(w).then(txs=>{if(txs.length){w.recentTxs=txs.slice(0,5);w.lastSeen=txs[0].timestamp||0;saveWallets();renderCard(w);}});
+    startPolling();
+  };
+
+  const badge=document.getElementById('dir-count-badge');if(badge)badge.textContent=DIRECTORY.length+' WALLETS';
+  renderDirectory();
 
   // ── INIT ──
   renderAll();renderBell();renderDrawer();updateGlobalFeed();
