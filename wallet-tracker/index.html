@@ -485,6 +485,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <div class="wt-discord-dot"></div>
         <div class="wt-discord-label" id="wt-discord-label">No Discord webhook set &mdash; alerts will only appear in-app.</div>
         <div class="wt-discord-status off" id="wt-discord-status">Discord off</div>
+        <button class="wt-setup-btn" id="wt-discord-toggle-btn" onclick="wtToggleDiscord()" style="display:none;">Disable</button>
         <button class="wt-setup-btn" onclick="wtOpenModal(true)">Set up</button>
       </div>
 
@@ -827,8 +828,24 @@ applySubUI(cachedTB,cachedAS,cachedP);
     // Refresh directory add-buttons
     if(typeof renderDirectory==='function')renderDirectory();
     // Discord bar
-    const label=document.getElementById('wt-discord-label'),status=document.getElementById('wt-discord-status');
-    if(label&&status){if(webhook){label.textContent='Discord alerts active — trades will be posted to your webhook.';status.textContent='Discord on';status.className='wt-discord-status on';}else{label.textContent='No Discord webhook set — alerts will only appear in-app.';status.textContent='Discord off';status.className='wt-discord-status off';}}
+    const label=document.getElementById('wt-discord-label'),status=document.getElementById('wt-discord-status'),toggleBtn=document.getElementById('wt-discord-toggle-btn');
+    const discordPaused=localStorage.getItem('wt_discord_paused')==='1';
+    if(label&&status){
+      if(webhook){
+        if(discordPaused){
+          label.textContent='Discord alerts paused — trades will not be posted to your webhook.';
+          status.textContent='Discord paused';status.className='wt-discord-status off';
+        }else{
+          label.textContent='Discord alerts active — trades will be posted to your webhook.';
+          status.textContent='Discord on';status.className='wt-discord-status on';
+        }
+        if(toggleBtn){toggleBtn.style.display='';toggleBtn.textContent=discordPaused?'Enable':'Disable';}
+      }else{
+        label.textContent='No Discord webhook set — alerts will only appear in-app.';
+        status.textContent='Discord off';status.className='wt-discord-status off';
+        if(toggleBtn)toggleBtn.style.display='none';
+      }
+    }
   }
   function updateGlobalFeed(){
     const el=document.getElementById('wt-global-feed');if(!el)return;
