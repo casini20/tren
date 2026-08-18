@@ -516,31 +516,6 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
         <button class="wt-sort-btn" data-filter="insider" onclick="wtSetFilter(this,'insider')">&#x26A1; Insider</button>
       </div>
 
-      <!-- Smart Money Directory -->
-      <div class="sc" style="margin-bottom:1.4rem;" id="wt-directory-section">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="font-size:14px;font-weight:700;">&#x1F9E0; Smart Money Directory</span>
-            <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(167,139,250,.13);border:0.5px solid rgba(167,139,250,.3);color:#a78bfa;letter-spacing:.04em;" id="dir-count-badge">54 WALLETS</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:6px;">
-            <input id="dir-search" oninput="filterDirectory(this.value)" placeholder="&#x1F50D; Search wallets…" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:8px;padding:5px 10px;font-size:11.5px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;outline:none;width:170px;" />
-            <button onclick="toggleDirectory()" id="dir-toggle-btn" style="font-size:10.5px;color:var(--sub);cursor:pointer;padding:4px 9px;border-radius:6px;background:rgba(255,255,255,.05);font-weight:600;transition:background .12s;border:1px solid rgba(255,255,255,.08);font-family:'Plus Jakarta Sans',sans-serif;">Hide</button>
-          </div>
-        </div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;" id="dir-filter-tabs">
-          <button class="wt-sort-btn active" data-dfilter="all" onclick="setDirFilter(this,'all')">All</button>
-          <button class="wt-sort-btn" data-dfilter="eth" onclick="setDirFilter(this,'eth')">&#x1FA99; ETH</button>
-          <button class="wt-sort-btn" data-dfilter="sol" onclick="setDirFilter(this,'sol')">&#x2600; SOL</button>
-          <button class="wt-sort-btn" data-dfilter="whale" onclick="setDirFilter(this,'whale')">&#x1F433; Whale</button>
-          <button class="wt-sort-btn" data-dfilter="founder" onclick="setDirFilter(this,'founder')">&#x1F451; Founder</button>
-          <button class="wt-sort-btn" data-dfilter="exchange" onclick="setDirFilter(this,'exchange')">&#x1F3E6; Exchange</button>
-          <button class="wt-sort-btn" data-dfilter="smart" onclick="setDirFilter(this,'smart')">&#x1F9E0; Smart Money</button>
-        </div>
-        <div id="wt-directory-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:8px;"></div>
-        <div id="dir-empty" style="display:none;font-size:12px;color:var(--sub);padding:.5rem 0;">No wallets match your search.</div>
-      </div>
-
       <!-- Wallet cards -->
       <div class="wt-grid" id="wt-grid"></div>
 
@@ -559,6 +534,31 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Track your first wallet
         </button>
+      </div>
+
+      <!-- Smart Money Directory -->
+      <div class="sc" style="margin-top:1.4rem;" id="wt-directory-section">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:14px;font-weight:700;">&#x1F9E0; Smart Money Directory</span>
+            <span style="font-size:9px;font-weight:700;padding:2px 7px;border-radius:4px;background:rgba(167,139,250,.13);border:0.5px solid rgba(167,139,250,.3);color:#a78bfa;letter-spacing:.04em;" id="dir-count-badge">50+ WALLETS</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <input id="dir-search" oninput="filterDirectory(this.value)" placeholder="&#x1F50D; Search wallets…" style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);border-radius:8px;padding:5px 10px;font-size:11.5px;color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;outline:none;width:170px;" />
+            <button onclick="toggleDirectory()" id="dir-toggle-btn" style="font-size:10.5px;color:var(--sub);cursor:pointer;padding:4px 9px;border-radius:6px;background:rgba(255,255,255,.05);font-weight:600;transition:background .12s;border:1px solid rgba(255,255,255,.08);font-family:'Plus Jakarta Sans',sans-serif;">Hide</button>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;" id="dir-filter-tabs">
+          <button class="wt-sort-btn active" data-dfilter="all" onclick="setDirFilter(this,'all')">All</button>
+          <button class="wt-sort-btn" data-dfilter="eth" onclick="setDirFilter(this,'eth')">&#x1FA99; ETH</button>
+          <button class="wt-sort-btn" data-dfilter="sol" onclick="setDirFilter(this,'sol')">&#x2600; SOL</button>
+          <button class="wt-sort-btn" data-dfilter="whale" onclick="setDirFilter(this,'whale')">&#x1F433; Whale</button>
+          <button class="wt-sort-btn" data-dfilter="founder" onclick="setDirFilter(this,'founder')">&#x1F451; Founder</button>
+          <button class="wt-sort-btn" data-dfilter="exchange" onclick="setDirFilter(this,'exchange')">&#x1F3E6; Exchange</button>
+          <button class="wt-sort-btn" data-dfilter="smart" onclick="setDirFilter(this,'smart')">&#x1F9E0; Smart Money</button>
+        </div>
+        <div id="wt-directory-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:8px;"></div>
+        <div id="dir-empty" style="display:none;font-size:12px;color:var(--sub);padding:.5rem 0;">No wallets match your search.</div>
       </div>
 
     </div><!-- end .page -->
@@ -1006,7 +1006,6 @@ applySubUI(cachedTB,cachedAS,cachedP);
     startPolling();
   };
 
-  const badge=document.getElementById('dir-count-badge');if(badge)badge.textContent=DIRECTORY.length+' WALLETS';
   renderDirectory();
 
   // ── INIT ──
