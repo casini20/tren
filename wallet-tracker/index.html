@@ -702,6 +702,7 @@ applySubUI(cachedTB,cachedAS,cachedP);
 
   // ── DISCORD ──
   async function sendDiscord(w,tx){
+    if(localStorage.getItem('wt_discord_paused')==='1')return;
     const wh=w.webhook||webhook;if(!wh)return;
     const chain=resolveChain(w);
     const color=tx.action==='buy'?0x10b981:tx.action==='sell'?0xef4444:0xf59e0b;
@@ -909,6 +910,17 @@ applySubUI(cachedTB,cachedAS,cachedP);
     if(d.classList.contains('open')){unread=0;renderBell();renderDrawer();}
   };
   window.wtClearNotifs=function(){notifs=[];localStorage.setItem(LS_NOTIFS,JSON.stringify(notifs));unread=0;renderBell();renderDrawer();};
+  window.wtToggleDiscord=function(){
+    const paused=localStorage.getItem('wt_discord_paused')==='1';
+    if(paused){
+      localStorage.removeItem('wt_discord_paused');
+      showToast('linear-gradient(90deg,rgba(88,101,242,.8),rgba(88,101,242,.4))','Discord enabled','Alerts will now be posted to your webhook.');
+    }else{
+      localStorage.setItem('wt_discord_paused','1');
+      showToast('linear-gradient(90deg,rgba(100,100,100,.6),rgba(60,60,60,.4))','Discord paused','Alerts are paused. Hit Enable to resume.');
+    }
+    renderAll();
+  };
 
   // ── SMART MONEY DIRECTORY ──
   const DIRECTORY=[
