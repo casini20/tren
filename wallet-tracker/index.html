@@ -190,15 +190,94 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .wt-setup-btn{font-size:10.5px;color:var(--al);cursor:pointer;padding:3px 9px;border-radius:6px;background:rgba(37,99,235,.1);font-weight:700;transition:background .12s;flex-shrink:0;border:none;font-family:'Plus Jakarta Sans',sans-serif;}
 .wt-setup-btn:hover{background:rgba(37,99,235,.2);}
 /* cards */
-.wt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;margin-bottom:1.6rem;}
-.wt-card{background:var(--bg3);border:1px solid var(--border);border-radius:13px;padding:1.2rem 1.4rem;transition:border-color .18s;position:relative;overflow:hidden;}
-.wt-card:hover{border-color:var(--border2);}
-.wt-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--accent),transparent);}
-.wt-card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;}
-.wt-card-left{display:flex;align-items:center;gap:10px;min-width:0;}
-.wt-avatar{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(37,99,235,.35),rgba(59,130,246,.12));border:1px solid rgba(37,99,235,.28);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
-.wt-name{font-size:13.5px;font-weight:700;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:170px;}
+.wt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:16px;margin-bottom:1.6rem;}
+
+/* ── ADVANCED CARD ── */
+.wt-card{background:var(--bg3);border:1px solid var(--border);border-radius:15px;padding:0;transition:border-color .2s,box-shadow .2s;position:relative;overflow:hidden;}
+.wt-card:hover{border-color:var(--border2);box-shadow:0 8px 32px rgba(0,0,0,.35);}
+.wt-card-accent{position:absolute;top:0;left:0;right:0;height:2px;}
+.wt-card-accent.whale{background:linear-gradient(90deg,#3b82f6,transparent);}
+.wt-card-accent.smart{background:linear-gradient(90deg,#a78bfa,transparent);}
+.wt-card-accent.insider{background:linear-gradient(90deg,#10b981,transparent);}
+.wt-card-accent.degen{background:linear-gradient(90deg,#f59e0b,transparent);}
+.wt-card-accent.default{background:linear-gradient(90deg,var(--accent),transparent);}
+/* Card header */
+.wt-card-header{display:flex;align-items:flex-start;justify-content:space-between;padding:1.2rem 1.3rem .9rem;gap:10px;}
+.wt-card-left{display:flex;align-items:flex-start;gap:11px;min-width:0;flex:1;}
+.wt-avatar{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;border:1px solid rgba(255,255,255,.1);}
+.wt-avatar.whale{background:linear-gradient(135deg,rgba(59,130,246,.25),rgba(37,99,235,.1));}
+.wt-avatar.smart{background:linear-gradient(135deg,rgba(167,139,250,.25),rgba(139,92,246,.1));}
+.wt-avatar.insider{background:linear-gradient(135deg,rgba(16,185,129,.25),rgba(5,150,105,.1));}
+.wt-avatar.degen{background:linear-gradient(135deg,rgba(245,158,11,.2),rgba(217,119,6,.08));}
+.wt-avatar.default{background:linear-gradient(135deg,rgba(37,99,235,.25),rgba(59,130,246,.1));}
+.wt-card-identity{min-width:0;flex:1;}
+.wt-name{font-size:14px;font-weight:700;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.wt-addr-row{display:flex;align-items:center;gap:5px;margin-bottom:5px;}
 .wt-addr{font-size:10px;color:var(--sub);font-family:monospace;letter-spacing:.02em;}
+.wt-copy-btn{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:4px;background:rgba(255,255,255,.06);border:none;color:var(--sub);cursor:pointer;font-size:9px;transition:all .12s;flex-shrink:0;}
+.wt-copy-btn:hover{background:rgba(255,255,255,.12);color:var(--text);}
+.wt-badge-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;}
+.wt-card-right{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+.wt-remove-btn{width:24px;height:24px;border-radius:6px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.15);color:rgba(239,68,68,.5);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:11px;transition:all .15s;}
+.wt-remove-btn:hover{background:rgba(239,68,68,.18);color:var(--red);border-color:rgba(239,68,68,.4);}
+/* Stats mini-grid */
+.wt-card-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.05);border-top:1px solid rgba(255,255,255,.05);border-bottom:1px solid rgba(255,255,255,.05);}
+.wt-mini-stat{padding:.65rem .9rem;background:var(--bg3);display:flex;flex-direction:column;gap:3px;}
+.wt-mini-stat:first-child{border-radius:0;}
+.wt-mini-stat-lbl{font-size:9px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.06em;}
+.wt-mini-stat-val{font-size:13px;font-weight:800;letter-spacing:-.3px;}
+.wt-mini-stat-val.green{color:var(--green);}
+.wt-mini-stat-val.red{color:var(--red);}
+.wt-mini-stat-val.gold{color:var(--gold);}
+.wt-mini-stat-val.blue{color:var(--al);}
+/* Win rate bar */
+.wt-wr-bar{height:3px;border-radius:3px;background:rgba(255,255,255,.06);margin-top:3px;overflow:hidden;}
+.wt-wr-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--green),#34d399);transition:width .7s cubic-bezier(.16,1,.3,1);}
+/* Buy/sell breakdown */
+.wt-buysell{display:flex;align-items:center;gap:4px;padding:.65rem 1.3rem;background:rgba(255,255,255,.015);border-bottom:1px solid rgba(255,255,255,.05);}
+.wt-bs-label{font-size:10px;font-weight:600;color:var(--sub);margin-right:4px;}
+.wt-bs-bar{flex:1;height:5px;border-radius:5px;background:rgba(239,68,68,.25);overflow:hidden;}
+.wt-bs-fill{height:100%;border-radius:5px;background:var(--green);transition:width .6s;}
+.wt-bs-stat{font-size:10px;font-weight:700;white-space:nowrap;}
+.wt-bs-stat.buy{color:var(--green);}
+.wt-bs-stat.sell{color:var(--red);}
+/* Volume / PnL row */
+.wt-card-meta{display:flex;align-items:center;gap:0;border-bottom:1px solid rgba(255,255,255,.05);}
+.wt-meta-item{flex:1;padding:.6rem 1.3rem;display:flex;flex-direction:column;gap:2px;}
+.wt-meta-item+.wt-meta-item{border-left:1px solid rgba(255,255,255,.05);}
+.wt-meta-lbl{font-size:9px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.06em;}
+.wt-meta-val{font-size:12px;font-weight:700;}
+/* Activity feed */
+.wt-feed-section{padding:.8rem 1.3rem;}
+.wt-feed-label{font-size:9.5px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px;}
+.wt-feed{display:flex;flex-direction:column;gap:4px;}
+.wt-tx{display:flex;align-items:center;gap:8px;padding:5px 8px;border-radius:7px;background:rgba(255,255,255,.025);transition:background .12s;}
+.wt-tx:hover{background:rgba(255,255,255,.045);}
+.wt-tx-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.wt-tx-dot.buy{background:var(--green);box-shadow:0 0 4px rgba(16,185,129,.5);}
+.wt-tx-dot.sell{background:var(--red);box-shadow:0 0 4px rgba(239,68,68,.5);}
+.wt-tx-dot.transfer{background:var(--gold);}
+.wt-tx-body{flex:1;min-width:0;display:flex;align-items:center;gap:6px;}
+.wt-tx-action{font-size:10.5px;font-weight:700;}
+.wt-tx-action.buy{color:var(--green);}
+.wt-tx-action.sell{color:var(--red);}
+.wt-tx-action.transfer{color:var(--gold);}
+.wt-tx-time{font-size:9.5px;color:var(--sub);margin-left:auto;}
+.wt-tx-val{font-size:10.5px;font-weight:600;color:var(--sub2);margin-left:4px;white-space:nowrap;}
+.wt-tx-link{font-size:10px;color:var(--al);text-decoration:none;opacity:.6;transition:opacity .12s;flex-shrink:0;}
+.wt-tx-link:hover{opacity:1;}
+.wt-waiting{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--sub);padding:4px 0;}
+/* Card footer actions */
+.wt-card-footer{display:flex;align-items:center;gap:6px;padding:.75rem 1.3rem;border-top:1px solid rgba(255,255,255,.05);}
+.wt-foot-btn{display:flex;align-items:center;gap:4px;padding:4px 9px;border-radius:6px;font-size:10.5px;font-weight:600;cursor:pointer;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.04);color:var(--sub2);transition:all .13s;text-decoration:none;font-family:'Plus Jakarta Sans',sans-serif;}
+.wt-foot-btn:hover{background:rgba(255,255,255,.08);color:var(--text);border-color:rgba(255,255,255,.15);}
+.wt-foot-btn.active{background:rgba(88,101,242,.12);border-color:rgba(88,101,242,.28);color:#818cf8;}
+.wt-foot-spacer{flex:1;}
+.wt-live-badge{display:inline-flex;align-items:center;gap:4px;font-size:9.5px;font-weight:700;color:var(--green);background:rgba(16,185,129,.1);border:0.5px solid rgba(16,185,129,.25);border-radius:5px;padding:2px 7px;}
+.wt-notes-strip{margin:0 1.3rem .65rem;padding:7px 10px;border-radius:7px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);font-size:10.5px;color:var(--sub2);font-style:italic;display:flex;align-items:center;gap:5px;}
+
+/* keep old wt-avatar name just in case */
+
 .wt-addr a{color:inherit;text-decoration:none;transition:color .12s;}
 .wt-addr a:hover{color:var(--al);}
 .wt-card-actions{display:flex;align-items:center;gap:6px;flex-shrink:0;}
@@ -759,37 +838,141 @@ applySubUI(cachedTB,cachedAS,cachedP);
     });
   }
 
-  // ── BUILD CARD HTML ──
+  // ── HELPERS ──
+  function calcBuySell(w){const txs=w.recentTxs||[];const buys=txs.filter(t=>t.action==='buy').length;const sells=txs.filter(t=>t.action==='sell').length;return{buys,sells,total:txs.length};}
+  function calcWinRate(w){const {buys,sells,total}=calcBuySell(w);if(!total)return null;return Math.round((buys/total)*100);}
+  function labelEmoji(lbl){return{whale:'🐋',smart:'🧠',insider:'⚡',degen:'🎲',founder:'👑',exchange:'🏦'}[lbl]||'👛';}
+  function labelAccentClass(lbl){return{whale:'whale',smart:'smart',insider:'insider',degen:'degen'}[lbl]||'default';}
+  window.wtCopy=function(addr){try{navigator.clipboard.writeText(addr).then(()=>showToast('','Copied','Address copied to clipboard.'));}catch(e){showToast('','Copied','Address: '+addr);}}
+
+  // ── BUILD CARD HTML (ADVANCED) ──
   function buildCardHTML(w){
     const chain=resolveChain(w);
     const txs=w.recentTxs||[];
     const hasWh=!!(w.webhook||webhook);
+    const lbl=w.label||'';
+    const accentCls=labelAccentClass(lbl);
+    const avi=labelEmoji(lbl);
+    const wr=calcWinRate(w);
+    const {buys,sells}=calcBuySell(w);
+    const totalBuySell=buys+sells||1;
+    const buyPct=Math.round((buys/totalBuySell)*100);
+
+    // Volume (sum of numeric values in txs)
+    let vol=0;txs.forEach(t=>{const v=parseFloat(t.value);if(!isNaN(v))vol+=v;});
+    const volStr=vol>0?(vol>1000?(vol/1000).toFixed(1)+'K':vol.toFixed(2)):'\u2014';
+
+    // Last seen
+    const lastSeenStr=w.lastSeen?timeAgo(w.lastSeen):'\u2014';
+
+    // Added
+    const addedStr=w.addedAt?new Date(w.addedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'}):'\u2014';
+
+    // Label badge
+    const lblBadge=lbl?'<span class="wt-label '+lbl+'">'+labelEmoji(lbl)+' '+lbl.charAt(0).toUpperCase()+lbl.slice(1)+'</span>':'';
+
+    // Chain badge
+    const chainBadge='<span class="wt-chain-tag '+chainClass(chain)+'">'+chainLabel(chain)+'</span>';
+
+    // Win rate display
+    const wrDisplay=wr!==null?wr+'%':'\u2014';
+    const wrBarHTML=wr!==null
+      ?'<div class="wt-wr-bar"><div class="wt-wr-fill" style="width:'+wr+'%;"></div></div>'
+      :'<div class="wt-wr-bar"><div class="wt-wr-fill" style="width:0%;"></div></div>';
+
+    // Notes strip
+    const notesHTML=w.notes?'<div class="wt-notes-strip">&#x1F4CB; '+esc(w.notes)+'</div>':'';
+
+    // Feed
     const feedHTML=txs.length
-      ? '<div class="wt-feed-label">Recent activity</div><div class="wt-feed">'+txs.map(tx=>{
+      ?'<div class="wt-feed">'+txs.slice(0,4).map(tx=>{
           const dot=tx.action==='buy'?'buy':tx.action==='sell'?'sell':'transfer';
-          return '<div class="wt-tx"><div class="wt-tx-dot '+dot+'"></div><div class="wt-tx-body"><div class="wt-tx-action '+dot+'">'+dot.toUpperCase()+' '+esc(tx.token)+'</div><div class="wt-tx-time">'+timeAgo(tx.timestamp)+'</div></div><div class="wt-tx-val">'+esc(String(tx.value))+'</div>'+(tx.hash?'<a href="'+txUrl(tx.hash,chain)+'" target="_blank" rel="noopener" class="wt-tx-link">\u2197</a>':'')+'</div>';
+          const actionIcon=tx.action==='buy'?'\uD83D\uDFE2':tx.action==='sell'?'\uD83D\uDD34':'\uD83D\uDD01';
+          return'<div class="wt-tx"><div class="wt-tx-dot '+dot+'"></div>'
+            +'<div class="wt-tx-body"><span class="wt-tx-action '+dot+'">'+actionIcon+' '+dot.toUpperCase()+'</span><span style="font-size:10.5px;color:var(--sub2);margin-left:3px;">'+esc(tx.token)+'</span>'
+            +'<span class="wt-tx-time">'+timeAgo(tx.timestamp)+'</span></div>'
+            +'<div class="wt-tx-val">'+esc(String(tx.value))+'</div>'
+            +(tx.hash?'<a href="'+txUrl(tx.hash,chain)+'" target="_blank" rel="noopener" class="wt-tx-link">\u2197</a>':'')
+            +'</div>';
         }).join('')+'</div>'
-      : '<div class="wt-feed-label">Recent activity</div><div class="wt-waiting"><span class="wt-spin"></span> Waiting for on-chain activity\u2026</div>';
+      :'<div class="wt-waiting"><span class="wt-spin"></span> Waiting for on-chain activity\u2026</div>';
+
     return '<div class="wt-card" id="wt-card-'+w.id+'">'
-      +'<div class="wt-card-top">'
+
+      // accent line
+      +'<div class="wt-card-accent '+accentCls+'"></div>'
+
+      // header
+      +'<div class="wt-card-header">'
         +'<div class="wt-card-left">'
-          +'<div class="wt-avatar">&#x1F45B;</div>'
-          +'<div style="min-width:0;">'
+          +'<div class="wt-avatar '+accentCls+'">'+avi+'</div>'
+          +'<div class="wt-card-identity">'
             +'<div class="wt-name">'+esc(w.name||shortAddr(w.address))+'</div>'
-            +'<div class="wt-addr"><a href="'+explorerUrl(w.address,chain)+'" target="_blank" rel="noopener">'+shortAddr(w.address)+' \u2197</a></div>'
+            +'<div class="wt-addr-row">'
+              +'<span class="wt-addr">'+shortAddr(w.address)+'</span>'
+              +'<button class="wt-copy-btn" onclick="wtCopy(\''+w.address+'\')" title="Copy address">&#x2398;</button>'
+              +'<a href="'+explorerUrl(w.address,chain)+'" target="_blank" rel="noopener" style="font-size:9px;color:var(--al);text-decoration:none;opacity:.7;">&#x2197;</a>'
+            +'</div>'
+            +'<div class="wt-badge-row">'+chainBadge+lblBadge
+              +'<div class="wt-live-badge"><span style="width:5px;height:5px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse 2s infinite;"></span>Live</div>'
+            +'</div>'
           +'</div>'
         +'</div>'
-        +'<div class="wt-card-actions">'
-          +'<span class="wt-chain-tag '+chainClass(chain)+'">'+chainLabel(chain)+'</span>'
+        +'<div class="wt-card-right">'
           +'<div class="wt-remove-btn" onclick="wtRemove(\''+w.id+'\')" title="Stop tracking">\u2715</div>'
+          +'<div style="font-size:9px;color:var(--sub);margin-top:2px;">Added '+addedStr+'</div>'
         +'</div>'
       +'</div>'
-      +'<div class="wt-stats-row">'
-        +'<div class="wt-stat"><div class="wt-stat-lbl">Trades caught</div><div class="wt-stat-val">'+(w.txCount||0)+'</div></div>'
-        +'<div class="wt-stat"><div class="wt-stat-lbl">Status</div><div class="wt-stat-val live"><span style="width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;flex-shrink:0;box-shadow:0 0 4px var(--green);"></span>Live</div></div>'
-        +'<div class="wt-stat"><div class="wt-stat-lbl">Discord</div><div class="wt-stat-val '+(hasWh?'discord-on':'discord-off')+'">'+(hasWh?'On':'Off')+'</div></div>'
+
+      // notes
+      +notesHTML
+
+      // 4-stat mini grid
+      +'<div class="wt-card-stats">'
+        +'<div class="wt-mini-stat">'
+          +'<div class="wt-mini-stat-lbl">Trades</div>'
+          +'<div class="wt-mini-stat-val blue">'+(w.txCount||0)+'</div>'
+        +'</div>'
+        +'<div class="wt-mini-stat">'
+          +'<div class="wt-mini-stat-lbl">Win Rate</div>'
+          +'<div class="wt-mini-stat-val '+(wr!==null?(wr>=55?'green':wr>=40?'gold':'red'):'')+'">'+wrDisplay+'</div>'
+          +wrBarHTML
+        +'</div>'
+        +'<div class="wt-mini-stat">'
+          +'<div class="wt-mini-stat-lbl">Volume</div>'
+          +'<div class="wt-mini-stat-val">'+volStr+'</div>'
+        +'</div>'
+        +'<div class="wt-mini-stat">'
+          +'<div class="wt-mini-stat-lbl">Last Active</div>'
+          +'<div class="wt-mini-stat-val" style="font-size:11px;">'+lastSeenStr+'</div>'
+        +'</div>'
       +'</div>'
-      +feedHTML
+
+      // buy/sell breakdown bar
+      +(buys+sells>0
+        ?'<div class="wt-buysell">'
+          +'<span class="wt-bs-label">B/S</span>'
+          +'<span class="wt-bs-stat buy">'+buys+'B</span>'
+          +'<div class="wt-bs-bar"><div class="wt-bs-fill" style="width:'+buyPct+'%;"></div></div>'
+          +'<span class="wt-bs-stat sell">'+sells+'S</span>'
+          +'<span style="font-size:9px;color:var(--sub);margin-left:6px;">'+buyPct+'% buy rate</span>'
+        +'</div>'
+        :'')
+
+      // activity feed
+      +'<div class="wt-feed-section">'
+        +'<div class="wt-feed-label">Recent Activity</div>'
+        +feedHTML
+      +'</div>'
+
+      // footer actions
+      +'<div class="wt-card-footer">'
+        +'<a class="wt-foot-btn" href="'+explorerUrl(w.address,chain)+'" target="_blank" rel="noopener">&#x1F50E; Explorer</a>'
+        +'<button class="wt-foot-btn '+(hasWh?'active':'')+'" onclick="showToast(\'\',\'Discord\',\''+(hasWh?'Alerts active for this wallet':'Set up a webhook in settings.')+'\')" title="Discord status">&#x1F4AC; Discord</button>'
+        +'<div class="wt-foot-spacer"></div>'
+        +'<button class="wt-foot-btn" onclick="wtRemove(\''+w.id+'\')" style="color:rgba(239,68,68,.5);border-color:rgba(239,68,68,.12);" title="Remove wallet">&#x1F5D1; Remove</button>'
+      +'</div>'
+
       +'</div>';
   }
 
@@ -806,6 +989,17 @@ applySubUI(cachedTB,cachedAS,cachedP);
     }
     return list;
   }
+  function updateStatsBar(){
+    const totalTrades=wallets.reduce((s,w)=>s+(w.txCount||0),0);
+    const wrs=wallets.map(w=>calcWinRate(w)).filter(x=>x!==null);
+    const avgWr=wrs.length?Math.round(wrs.reduce((a,b)=>a+b,0)/wrs.length):null;
+    const el=id=>document.getElementById(id);
+    if(el('wsb-count'))el('wsb-count').textContent=wallets.length;
+    if(el('wsb-trades'))el('wsb-trades').textContent=totalTrades;
+    if(el('wsb-wr'))el('wsb-wr').textContent=avgWr!==null?avgWr+'%':'—';
+    if(el('wsb-alerts'))el('wsb-alerts').textContent=notifs.length;
+  }
+
   function renderAll(){
     const grid=document.getElementById('wt-grid');
     const empty=document.getElementById('wt-empty-state');
@@ -817,15 +1011,9 @@ applySubUI(cachedTB,cachedAS,cachedP);
     if(empty){empty.classList.toggle('show',wallets.length===0);}
     if(toolbar)toolbar.style.display=wallets.length?'flex':'none';
     if(liveFeed)liveFeed.style.display=wallets.length?'block':'none';
-    // Stats bar
-    const totalTrades=wallets.reduce((s,w)=>s+(w.txCount||0),0);
-    const wrs=wallets.map(w=>calcWinRate(w)).filter(x=>x!==null);
-    const avgWr=wrs.length?Math.round(wrs.reduce((a,b)=>a+b,0)/wrs.length):null;
-    const el=id=>document.getElementById(id);
-    if(el('wsb-count'))el('wsb-count').textContent=wallets.length;
-    if(el('wsb-trades'))el('wsb-trades').textContent=totalTrades;
-    if(el('wsb-wr'))el('wsb-wr').textContent=avgWr!==null?avgWr+'%':'—';
-    if(el('wsb-alerts'))el('wsb-alerts').textContent=notifs.length;
+    // Stats bar — force update synchronously AND after paint
+    updateStatsBar();
+    requestAnimationFrame(()=>updateStatsBar());
     // Refresh directory add-buttons
     if(typeof renderDirectory==='function')renderDirectory();
     // Discord bar
@@ -895,9 +1083,9 @@ applySubUI(cachedTB,cachedAS,cachedP);
     if(!addr){showToast('&#x26A0;&#xFE0F;','Address required','Paste a wallet address to track.');document.getElementById('wt-input-addr').focus();return;}
     if(wallets.find(w=>w.address.toLowerCase()===addr.toLowerCase())){showToast('&#x2139;&#xFE0F;','Already tracked','This wallet is already in your tracker.');window.wtCloseModal();return;}
     const w={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),address:addr,name,chain,webhook:wh,txCount:0,lastSeen:0,recentTxs:[],addedAt:Date.now()};
-    wallets.unshift(w);saveWallets();renderAll();window.wtCloseModal();
+    wallets.unshift(w);saveWallets();renderAll();updateStatsBar();window.wtCloseModal();
     showToast('\uD83D\uDCF6','Tracking started','Monitoring '+esc(w.name||shortAddr(w.address))+'…');
-    fetchTxs(w).then(txs=>{if(txs.length){w.recentTxs=txs.slice(0,5);w.lastSeen=txs[0].timestamp||0;saveWallets();renderCard(w);}});
+    fetchTxs(w).then(txs=>{if(txs.length){w.recentTxs=txs.slice(0,5);w.lastSeen=txs[0].timestamp||0;saveWallets();renderCard(w);updateStatsBar();}});
     startPolling();
   };
   window.wtRemove=function(id){
@@ -1029,9 +1217,9 @@ applySubUI(cachedTB,cachedAS,cachedP);
   window.dirTrack=function(addr,name,chain,label){
     if(isTracked(addr)){showToast('linear-gradient(90deg,rgba(16,185,129,.8),rgba(16,185,129,.4))','Already tracking',name+' is already in your tracker.');return;}
     const w={id:Date.now().toString(36)+Math.random().toString(36).slice(2,6),address:addr,name,chain,label,webhook:'',txCount:0,lastSeen:0,recentTxs:[],addedAt:Date.now()};
-    wallets.unshift(w);saveWallets();renderAll();renderDirectory();
+    wallets.unshift(w);saveWallets();renderAll();updateStatsBar();renderDirectory();
     showToast('linear-gradient(90deg,var(--accent),var(--al))','Tracking started','Now monitoring '+esc(name)+'…');
-    fetchTxs(w).then(txs=>{if(txs.length){w.recentTxs=txs.slice(0,5);w.lastSeen=txs[0].timestamp||0;saveWallets();renderCard(w);}});
+    fetchTxs(w).then(txs=>{if(txs.length){w.recentTxs=txs.slice(0,5);w.lastSeen=txs[0].timestamp||0;saveWallets();renderCard(w);updateStatsBar();}});
     startPolling();
   };
 
