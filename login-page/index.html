@@ -605,7 +605,7 @@ function setLoading(btnId, loading) {
 async function doGoogleLogin() {
   const { error } = await sb.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: 'https://trenai.vercel.app/overview' }
+    options: { redirectTo: 'https://trenai.vercel.app/login-page' }
   });
   if (error) alert('Google sign-in failed: ' + error.message);
 }
