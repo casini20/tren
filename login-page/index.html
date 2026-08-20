@@ -182,6 +182,7 @@ body{
 /* ── CARD ── */
 .cards-wrapper{
   width:100%;
+  max-width:340px;
   position:relative;
   z-index:2;
 }
@@ -347,8 +348,9 @@ body{
         <div class="group">
           <label class="label">Password</label>
           <input class="input" id="login-password" type="password" placeholder="••••••••">
-
         </div>
+
+        <div class="forgot-inline"><a onclick="show('forgot')">Forgot password?</a></div>
 
         <button class="btn" id="btn-login" onclick="doLogin()">Sign in</button>
         <div class="footer">Don't have an account? <a onclick="show('signup')">Sign up</a></div>
