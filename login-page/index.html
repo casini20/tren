@@ -7,18 +7,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tren — Auth</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet">
 
-<!-- ─── SCROLLBAR & FRAMER FIXES ───────────────────────────────────────────── -->
 <style>
-  /* Kill all scrollbars everywhere */
   html, body, div, nav, aside, main, section, article, iframe {
     scrollbar-width: none !important;
     -ms-overflow-style: none !important;
   }
   ::-webkit-scrollbar { display: none !important; width: 0 !important; height: 0 !important; }
-  
-  /* Hide Framer watermark/badge elements */
+
   .framer-badge, .framer-canvas, .framer-watermark,
   [class*="framer-badge"], [class*="Watermark"], [class*="watermark"],
   [class*="framer-branding"], [class*="framer-footer"],
@@ -36,254 +33,356 @@
     width: 0 !important;
     position: absolute !important;
   }
-.nav-affiliate-wrap { position: relative; display: inline-block; }
-.nav-earn-badge { position: absolute; top: -9px; right: -28px; font-size: 8px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #34d399; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.35); border-radius: 4px; padding: 2px 6px; line-height: 1.5; transform: rotate(12deg); pointer-events: none; white-space: nowrap; }
 </style>
 
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 
 :root {
-  --bg:#04080f;
-  --bg2:#080e1a;
-  --border:rgba(255,255,255,0.07);
-  --accent:#2563eb;
-  --accent-l:#3b82f6;
-  --text:#f0f4ff;
-  --sub:rgba(240,244,255,0.6);
-  --error:#ef4444;
-  --success:#10b981;
+  --bg: #050a14;
+  --bg2: #080e1a;
+  --border: rgba(255,255,255,0.08);
+  --border-focus: rgba(99,140,255,0.55);
+  --accent: #2558e8;
+  --accent-l: #4b7bff;
+  --accent-glow: rgba(37,88,232,0.28);
+  --text: #eef2ff;
+  --sub: rgba(200,210,255,0.55);
+  --input-bg: rgba(8,16,36,0.9);
+  --card-bg: rgba(7,13,26,0.92);
+  --error: #ef4444;
+  --success: #10b981;
+  --google-border: rgba(255,255,255,0.12);
 }
 
 body {
-  font-family:'DM Sans',sans-serif;
-  background:var(--bg);
-  color:var(--text);
-  min-height:100vh;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  overflow:hidden;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
+/* ── BACKGROUND ── */
 .bg-layer {
-  position:fixed;
-  inset:0;
+  position: fixed; inset: 0;
   background:
-    radial-gradient(ellipse 70% 50% at 75% 5%, rgba(37,99,235,0.15), transparent 60%),
-    radial-gradient(ellipse 40% 40% at 15% 85%, rgba(16,185,129,0.08), transparent 55%),
+    radial-gradient(ellipse 80% 55% at 72% -5%, rgba(37,88,232,0.18), transparent 62%),
+    radial-gradient(ellipse 45% 45% at 12% 90%, rgba(16,185,129,0.09), transparent 55%),
+    radial-gradient(ellipse 35% 35% at 50% 50%, rgba(37,88,232,0.04), transparent 70%),
     var(--bg);
 }
 
 .grid-bg {
-  position:fixed;
-  inset:0;
-  opacity:0.03;
+  position: fixed; inset: 0;
+  opacity: 0.028;
   background-image:
     linear-gradient(rgba(255,255,255,1) 1px, transparent 1px),
     linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px);
-  background-size:60px 60px;
+  background-size: 56px 56px;
 }
 
+/* Floating orbs */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  animation: drift 14s ease-in-out infinite alternate;
+}
+.orb-1 {
+  width: 340px; height: 340px;
+  background: rgba(37,88,232,0.07);
+  top: -80px; right: 10%;
+  animation-delay: 0s;
+}
+.orb-2 {
+  width: 260px; height: 260px;
+  background: rgba(16,185,129,0.05);
+  bottom: -60px; left: 5%;
+  animation-delay: -5s;
+}
+@keyframes drift {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(20px, 30px) scale(1.06); }
+}
+
+/* ── CARD ── */
 .cards-wrapper {
-  position:relative;
-  z-index:2;
-  width:360px;
+  position: relative;
+  z-index: 2;
+  width: 400px;
 }
 
 .card {
-  width:100%;
-  padding:2.2rem;
-  border-radius:16px;
-  background:rgba(8,14,26,0.88);
-  backdrop-filter:blur(18px);
-  border:1px solid var(--border);
-  box-shadow:0 0 40px rgba(37,99,235,0.15);
-  animation: fadeUp 0.35s ease both;
+  width: 100%;
+  padding: 2.4rem 2.6rem;
+  border-radius: 20px;
+  background: var(--card-bg);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid var(--border);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.03) inset,
+    0 32px 64px rgba(0,0,0,0.5),
+    0 0 60px var(--accent-glow);
+  animation: fadeUp 0.38s cubic-bezier(0.22,1,0.36,1) both;
 }
 
 @keyframes fadeUp {
-  from { opacity:0; transform:translateY(16px); }
-  to   { opacity:1; transform:translateY(0); }
+  from { opacity:0; transform:translateY(22px) scale(0.98); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
 }
 
+/* ── LOGO ── */
 .logo {
-  font-family:'Syne',sans-serif;
-  font-size:26px;
-  font-weight:800;
-  text-align:center;
-  margin-bottom:1.2rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: -0.5px;
+  margin-bottom: 0.3rem;
 }
-.logo span { color:var(--accent-l); }
+.logo span { color: var(--accent-l); }
 
 .title {
-  text-align:center;
-  font-size:20px;
-  font-weight:600;
+  text-align: center;
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  margin-bottom: 3px;
 }
 .sub {
-  text-align:center;
-  font-size:13px;
-  color:var(--sub);
-  margin-bottom:1.8rem;
-  margin-top:4px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--sub);
+  margin-bottom: 1.8rem;
 }
 
-.group { margin-bottom:1rem; }
+/* ── GOOGLE BUTTON ── */
+.btn-google {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 11px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--google-border);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.18s, border-color 0.18s, box-shadow 0.18s;
+  letter-spacing: 0.1px;
+}
+.btn-google:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: rgba(255,255,255,0.2);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.3);
+}
+.btn-google:active { opacity: 0.85; }
+.btn-google svg { flex-shrink: 0; }
+
+/* ── DIVIDER ── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 1.3rem 0;
+}
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+.divider-text {
+  font-size: 11.5px;
+  color: var(--sub);
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* ── INPUTS ── */
+.group { margin-bottom: 1rem; }
 
 .label {
-  font-size:12px;
-  color:var(--sub);
-  margin-bottom:6px;
-  display:block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--sub);
+  margin-bottom: 6px;
+  display: block;
+  letter-spacing: 0.02em;
 }
 
 .input {
-  width:100%;
-  padding:11px;
-  border-radius:8px;
-  border:1px solid var(--border);
-  background:#0c1525;
-  color:var(--text);
-  outline:none;
-  font-family:'DM Sans',sans-serif;
-  font-size:14px;
-  transition: border-color 0.2s;
-}
-.input::placeholder { color: rgba(240,244,255,0.3); }
-.input:focus { border-color:var(--accent); }
-.input.error-field { border-color:var(--error); }
-
-.btn {
-  width:100%;
-  margin-top:10px;
-  padding:12px;
-  border:none;
-  border-radius:8px;
-  background:linear-gradient(90deg,var(--accent),var(--accent-l));
-  color:#fff;
-  font-weight:600;
-  font-size:14px;
-  font-family:'DM Sans',sans-serif;
-  cursor:pointer;
-  transition: box-shadow 0.2s, opacity 0.2s;
-  letter-spacing:0.3px;
-}
-.btn:hover { box-shadow:0 0 20px rgba(37,99,235,0.45); }
-.btn:active { opacity:0.88; }
-.btn:disabled { opacity:0.5; cursor:default; box-shadow:none; }
-
-.footer {
-  margin-top:1.3rem;
-  text-align:center;
-  font-size:12px;
-  color:var(--sub);
-  line-height:2;
-}
-.footer a {
-  color:var(--accent-l);
-  text-decoration:none;
-  cursor:pointer;
-}
-.footer a:hover { text-decoration:underline; }
-
-.alert {
-  border-radius:8px;
-  padding:10px 12px;
-  font-size:12.5px;
-  margin-bottom:1rem;
-  display:none;
-}
-.alert.show { display:block; }
-.alert-error { background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3); color:#fca5a5; }
-.alert-success { background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.3); color:#6ee7b7; }
-
-.strength-bar {
-  height:3px;
-  border-radius:2px;
-  background:rgba(255,255,255,0.08);
-  margin-top:6px;
-  overflow:hidden;
-}
-.strength-fill {
-  height:100%;
-  border-radius:2px;
-  transition:width 0.3s, background 0.3s;
-  width:0%;
-}
-
-#dashboard {
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:50;
-  background:var(--bg);
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:1.5rem;
-  animation:fadeUp 0.4s ease both;
-}
-#dashboard.show { display:flex; }
-
-.dash-logo {
-  font-family:'Syne',sans-serif;
-  font-size:32px;
-  font-weight:800;
-}
-.dash-logo span { color:var(--accent-l); }
-
-.dash-welcome { text-align:center; }
-.dash-welcome h2 { font-size:22px; font-weight:600; margin-bottom:6px; }
-.dash-welcome p { color:var(--sub); font-size:14px; }
-
-.dash-card {
-  background:rgba(8,14,26,0.88);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:1.5rem 2rem;
-  text-align:center;
-  min-width:280px;
-}
-
-.dash-email { font-size:13px; color:var(--sub); margin-top:4px; }
-
-.btn-outline {
-  background:transparent;
-  border:1px solid var(--border);
-  color:var(--text);
-  font-family:'DM Sans',sans-serif;
-  padding:10px 28px;
-  border-radius:8px;
-  cursor:pointer;
-  font-size:14px;
+  width: 100%;
+  padding: 11px 13px;
+  border-radius: 9px;
+  border: 1px solid var(--border);
+  background: var(--input-bg);
+  color: var(--text);
+  outline: none;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
-.btn-outline:hover { border-color:var(--accent-l); box-shadow:0 0 12px rgba(37,99,235,0.2); }
-
-.hint { font-size:11px; color:var(--sub); margin-top:4px; }
-
-/* Loading spinner inside button */
-.btn .spinner {
-  display:inline-block;
-  width:13px; height:13px;
-  border:2px solid rgba(255,255,255,0.3);
-  border-top-color:#fff;
-  border-radius:50%;
-  animation:spin 0.6s linear infinite;
-  vertical-align:middle;
-  margin-right:6px;
+.input::placeholder { color: rgba(200,210,255,0.22); }
+.input:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(75,123,255,0.12);
 }
-@keyframes spin { to { transform:rotate(360deg); } }
-.nav-affiliate-wrap { position: relative; display: inline-block; }
-.nav-earn-badge { position: absolute; top: -9px; right: -28px; font-size: 8px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #34d399; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.35); border-radius: 4px; padding: 2px 6px; line-height: 1.5; transform: rotate(12deg); pointer-events: none; white-space: nowrap; }
-</style>
+.input.error-field { border-color: var(--error); }
 
+/* ── PRIMARY BUTTON ── */
+.btn {
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-l) 100%);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: box-shadow 0.2s, opacity 0.15s, transform 0.1s;
+  letter-spacing: 0.2px;
+  position: relative;
+  overflow: hidden;
+}
+.btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+  pointer-events: none;
+}
+.btn:hover { box-shadow: 0 4px 24px var(--accent-glow); transform: translateY(-1px); }
+.btn:active { opacity: 0.88; transform: translateY(0); }
+.btn:disabled { opacity: 0.48; cursor: default; box-shadow: none; transform: none; }
+
+/* ── FOOTER LINKS ── */
+.footer {
+  margin-top: 1.4rem;
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--sub);
+  line-height: 2;
+}
+.footer a {
+  color: var(--accent-l);
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+.footer a:hover { text-decoration: underline; }
+
+/* ── ALERTS ── */
+.alert {
+  border-radius: 9px;
+  padding: 10px 13px;
+  font-size: 12.5px;
+  margin-bottom: 1rem;
+  display: none;
+  line-height: 1.5;
+}
+.alert.show { display: block; }
+.alert-error   { background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.28); color: #fca5a5; }
+.alert-success { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.28); color: #6ee7b7; }
+
+/* ── STRENGTH BAR ── */
+.strength-bar {
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255,255,255,0.07);
+  margin-top: 7px;
+  overflow: hidden;
+}
+.strength-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width 0.3s, background 0.3s;
+  width: 0%;
+}
+.hint { font-size: 11px; color: var(--sub); margin-top: 4px; }
+
+/* ── SPINNER ── */
+.btn .spinner {
+  display: inline-block;
+  width: 13px; height: 13px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  vertical-align: middle;
+  margin-right: 6px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── DASHBOARD ── */
+#dashboard {
+  display: none;
+  position: fixed; inset: 0;
+  z-index: 50;
+  background: var(--bg);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  animation: fadeUp 0.4s ease both;
+}
+#dashboard.show { display: flex; }
+
+.dash-logo { font-family: 'Syne',sans-serif; font-size: 32px; font-weight: 800; }
+.dash-logo span { color: var(--accent-l); }
+.dash-welcome { text-align: center; }
+.dash-welcome h2 { font-size: 22px; font-weight: 600; margin-bottom: 6px; }
+.dash-welcome p { color: var(--sub); font-size: 14px; }
+
+.dash-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem 2rem;
+  text-align: center;
+  min-width: 280px;
+}
+.dash-email { font-size: 13px; color: var(--sub); margin-top: 4px; }
+
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  padding: 10px 28px;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.btn-outline:hover { border-color: var(--accent-l); box-shadow: 0 0 14px rgba(37,88,232,0.22); }
+
+/* Mobile */
+@media (max-width: 440px) {
+  .cards-wrapper { width: calc(100vw - 32px); }
+  .card { padding: 1.8rem 1.6rem; }
+}
+</style>
 </head>
 <body>
 
 <div class="bg-layer"></div>
 <div class="grid-bg"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
 
 <!-- ===== DASHBOARD ===== -->
 <div id="dashboard">
@@ -306,7 +405,24 @@ body {
   <div id="card-login" class="card">
     <div class="logo">tren<span>.</span></div>
     <div class="title">Welcome back</div>
-    <div class="sub">Login to access your dashboard</div>
+    <div class="sub">Sign in to access your dashboard</div>
+
+    <!-- Google -->
+    <button class="btn-google" onclick="doGoogleLogin()">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.64 9.205c0-.639-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z" fill="#4285F4"/>
+        <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z" fill="#34A853"/>
+        <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z" fill="#FBBC05"/>
+        <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58Z" fill="#EA4335"/>
+      </svg>
+      Continue with Google
+    </button>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <span class="divider-text">or</span>
+      <div class="divider-line"></div>
+    </div>
 
     <div class="alert alert-error" id="login-error"></div>
 
@@ -319,11 +435,14 @@ body {
       <input class="input" id="login-password" type="password" placeholder="••••••••">
     </div>
 
-    <button class="btn" id="btn-login" onclick="doLogin()">Login</button>
+    <div style="text-align:right; margin-top:-4px; margin-bottom:2px;">
+      <a class="footer" style="font-size:12px;" onclick="show('forgot')">Forgot password?</a>
+    </div>
+
+    <button class="btn" id="btn-login" onclick="doLogin()">Sign in</button>
 
     <div class="footer">
-      Don't have an account? <a onclick="show('signup')">Sign up</a><br>
-      <a onclick="show('forgot')">Forgot password?</a>
+      Don't have an account? <a onclick="show('signup')">Create one</a>
     </div>
   </div>
 
@@ -332,6 +451,23 @@ body {
     <div class="logo">tren<span>.</span></div>
     <div class="title">Create account</div>
     <div class="sub">Join tren and start tracking</div>
+
+    <!-- Google -->
+    <button class="btn-google" onclick="doGoogleLogin()">
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M17.64 9.205c0-.639-.057-1.252-.164-1.841H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z" fill="#4285F4"/>
+        <path d="M9 18c2.43 0 4.467-.806 5.956-2.18l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18Z" fill="#34A853"/>
+        <path d="M3.964 10.71A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.71V4.958H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.042l3.007-2.332Z" fill="#FBBC05"/>
+        <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.958L3.964 7.29C4.672 5.163 6.656 3.58 9 3.58Z" fill="#EA4335"/>
+      </svg>
+      Sign up with Google
+    </button>
+
+    <div class="divider">
+      <div class="divider-line"></div>
+      <span class="divider-text">or</span>
+      <div class="divider-line"></div>
+    </div>
 
     <div class="alert alert-error" id="signup-error"></div>
     <div class="alert alert-success" id="signup-success"></div>
@@ -358,7 +494,7 @@ body {
     <button class="btn" id="btn-signup" onclick="doSignup()">Create Account</button>
 
     <div class="footer">
-      Already have an account? <a onclick="show('login')">Login</a>
+      Already have an account? <a onclick="show('login')">Sign in</a>
     </div>
   </div>
 
@@ -379,11 +515,11 @@ body {
     <button class="btn" id="btn-forgot" onclick="doForgot()">Send Reset Link</button>
 
     <div class="footer">
-      <a onclick="show('login')">← Back to login</a>
+      <a onclick="show('login')">← Back to sign in</a>
     </div>
   </div>
 
-  <!-- RESET PASSWORD (Supabase redirects here with #access_token in URL) -->
+  <!-- RESET PASSWORD -->
   <div id="card-reset" class="card" style="display:none;">
     <div class="logo">tren<span>.</span></div>
     <div class="title">New password</div>
@@ -410,29 +546,23 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-// ─── CAPTURE HASH IMMEDIATELY before Framer wipes it ─────────────────────────
 const _savedHash = window.location.hash;
 if (_savedHash.includes('access_token')) {
   localStorage.setItem('tren_reset_hash', _savedHash);
 }
 
-// ─── ⚙️  CONFIGURATION ────────────────────────────────────────────────────────
 const SUPABASE_URL  = 'https://sjntsmzbiqvtstvofcnx.supabase.co';
 const SUPABASE_ANON = 'sb_publishable_n0q0FsM9hZARXxKKIDprFw_O6GJfRAg';
-// ─────────────────────────────────────────────────────────────────────────────
 
 const { createClient } = supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON, {
-  auth: {
-    persistSession: false,
-    autoRefreshToken: false
-  }
+  auth: { persistSession: false, autoRefreshToken: false }
 });
 
 const SESSION_KEY = 'tren_session';
 const DASHBOARD_URL = 'https://trenai.vercel.app/overview';
 
-// ─── CARD SWITCHER ────────────────────────────────────────────────────────────
+// ── CARD SWITCHER ──
 function show(card) {
   ['login','signup','forgot','reset'].forEach(id => {
     const el = document.getElementById('card-' + id);
@@ -443,7 +573,7 @@ function show(card) {
   const target = document.getElementById('card-' + card);
   target.style.display = 'block';
   void target.offsetWidth;
-  target.style.animation = 'fadeUp 0.32s ease both';
+  target.style.animation = 'fadeUp 0.32s cubic-bezier(0.22,1,0.36,1) both';
 }
 
 function clearAlerts() {
@@ -471,16 +601,25 @@ function setLoading(btnId, loading) {
   }
 }
 
-// ─── PASSWORD STRENGTH ────────────────────────────────────────────────────────
+// ── GOOGLE LOGIN ──
+async function doGoogleLogin() {
+  const { error } = await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: 'https://trenai.vercel.app/overview' }
+  });
+  if (error) alert('Google sign-in failed: ' + error.message);
+}
+
+// ── PASSWORD STRENGTH ──
 function checkStrength(val) {
   const fill  = document.getElementById('strength-fill');
   const label = document.getElementById('strength-label');
   if (!val) { fill.style.width='0%'; label.textContent=''; return; }
   let score = 0;
-  if (val.length >= 8)           score++;
-  if (/[A-Z]/.test(val))         score++;
-  if (/[0-9]/.test(val))         score++;
-  if (/[^A-Za-z0-9]/.test(val))  score++;
+  if (val.length >= 8)          score++;
+  if (/[A-Z]/.test(val))        score++;
+  if (/[0-9]/.test(val))        score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
   const levels = [
     {w:'15%', bg:'#ef4444', t:'Too short'},
     {w:'35%', bg:'#f97316', t:'Weak'},
@@ -495,29 +634,24 @@ function checkStrength(val) {
   label.style.color  = l.bg;
 }
 
-// ─── LOGIN ────────────────────────────────────────────────────────────────────
+// ── LOGIN ──
 async function doLogin() {
   const email    = document.getElementById('login-email').value.trim().toLowerCase();
   const password = document.getElementById('login-password').value;
-
   if (!email || !password) return showAlert('login-error', 'Please fill in all fields.');
-
   setLoading('btn-login', true);
   const { data, error } = await sb.auth.signInWithPassword({ email, password });
   setLoading('btn-login', false);
-
   if (error) return showAlert('login-error', error.message);
-
   showDashboard(data.session);
 }
 
-// ─── SIGN UP ──────────────────────────────────────────────────────────────────
+// ── SIGN UP ──
 async function doSignup() {
-  const name     = document.getElementById('signup-name').value.trim();
-  const email    = document.getElementById('signup-email').value.trim().toLowerCase();
-  const password = document.getElementById('signup-password').value;
-  const confirm  = document.getElementById('signup-confirm').value;
-
+  const name    = document.getElementById('signup-name').value.trim();
+  const email   = document.getElementById('signup-email').value.trim().toLowerCase();
+  const password= document.getElementById('signup-password').value;
+  const confirm = document.getElementById('signup-confirm').value;
   if (!name || !email || !password || !confirm)
     return showAlert('signup-error', 'Please fill in all fields.');
   if (!email.includes('@') || !email.includes('.'))
@@ -526,62 +660,45 @@ async function doSignup() {
     return showAlert('signup-error', 'Password must be at least 8 characters.');
   if (password !== confirm)
     return showAlert('signup-error', 'Passwords do not match.');
-
   setLoading('btn-signup', true);
-
   const { data, error } = await sb.auth.signUp({
-    email,
-    password,
+    email, password,
     options: { data: { full_name: name } }
   });
-
   setLoading('btn-signup', false);
-
   if (error) return showAlert('signup-error', error.message);
-
   if (data.session) {
     showDashboard(data.session);
   } else {
-    showAlert('signup-success', '✓ Account created! Check your email to confirm your address, then log in.');
+    showAlert('signup-success', '✓ Account created! Check your email to confirm, then sign in.');
     setTimeout(() => show('login'), 3000);
   }
 }
 
-// ─── FORGOT PASSWORD ──────────────────────────────────────────────────────────
+// ── FORGOT PASSWORD ──
 async function doForgot() {
   const email = document.getElementById('forgot-email').value.trim().toLowerCase();
   if (!email) return showAlert('forgot-error', 'Please enter your email address.');
-
   setLoading('btn-forgot', true);
-
   const { error } = await sb.auth.resetPasswordForEmail(email, {
     redirectTo: 'https://trenai.vercel.app/login-page'
   });
-
   setLoading('btn-forgot', false);
-
   if (error) return showAlert('forgot-error', error.message);
-
   showAlert('forgot-success', '✓ Reset link sent! Check your inbox.');
 }
 
-// ─── RESET PASSWORD ───────────────────────────────────────────────────────────
+// ── RESET PASSWORD ──
 async function doReset() {
   const password = document.getElementById('reset-password').value;
   const confirm  = document.getElementById('reset-confirm').value;
-
   if (!password || !confirm) return showAlert('reset-error', 'Please fill in both fields.');
   if (password.length < 8)   return showAlert('reset-error', 'Password must be at least 8 characters.');
   if (password !== confirm)  return showAlert('reset-error', 'Passwords do not match.');
-
   setLoading('btn-reset', true);
-
   const { data, error } = await sb.auth.updateUser({ password });
-
   setLoading('btn-reset', false);
-
   if (error) return showAlert('reset-error', error.message);
-
   showAlert('reset-success', '✓ Password updated! Redirecting...');
   setTimeout(() => {
     sb.auth.getSession().then(({ data: { session } }) => {
@@ -591,19 +708,19 @@ async function doReset() {
   }, 1500);
 }
 
-// ─── DASHBOARD ────────────────────────────────────────────────────────────────
+// ── DASHBOARD ──
 function showDashboard(session) {
-  const sessionPayload = {
+  const payload = {
     access_token: session.access_token,
     refresh_token: session.refresh_token,
-    expires_at: session.expires_at, // unix seconds when access_token expires
+    expires_at: session.expires_at,
     user: {
       email: session.user?.email || '',
       id: session.user?.id || '',
       user_metadata: session.user?.user_metadata || {}
     }
   };
-  localStorage.setItem(SESSION_KEY, JSON.stringify(sessionPayload));
+  localStorage.setItem(SESSION_KEY, JSON.stringify(payload));
   window.location.replace(DASHBOARD_URL);
 }
 
@@ -616,7 +733,7 @@ async function logout() {
   document.getElementById('login-password').value = '';
 }
 
-// ─── ENTER KEY ────────────────────────────────────────────────────────────────
+// ── ENTER KEY ──
 document.addEventListener('keydown', e => {
   if (e.key !== 'Enter') return;
   if (document.getElementById('card-login').style.display  !== 'none') doLogin();
@@ -625,7 +742,7 @@ document.addEventListener('keydown', e => {
   else if (document.getElementById('card-reset').style.display  !== 'none') doReset();
 });
 
-// ─── AUTH STATE LISTENER ──────────────────────────────────────────────────────
+// ── AUTH STATE LISTENER ──
 sb.auth.onAuthStateChange((event, session) => {
   if (event === 'PASSWORD_RECOVERY') {
     show('reset');
@@ -637,27 +754,20 @@ sb.auth.onAuthStateChange((event, session) => {
   }
 });
 
-// ─── INIT ─────────────────────────────────────────────────────────────────────
+// ── INIT ──
 (async function init() {
-  // Read hash from localStorage (saved at top of script) or directly from URL
   const hash = localStorage.getItem('tren_reset_hash') || window.location.hash;
   localStorage.removeItem('tren_reset_hash');
-
   if (hash && hash.includes('access_token')) {
     const params = new URLSearchParams(hash.substring(1));
-    const access_token = params.get('access_token');
+    const access_token  = params.get('access_token');
     const refresh_token = params.get('refresh_token');
     const type = params.get('type');
-
     if (type === 'recovery' && access_token) {
       const { data, error } = await sb.auth.setSession({ access_token, refresh_token });
-      if (!error && data.session) {
-        show('reset');
-        return;
-      }
+      if (!error && data.session) { show('reset'); return; }
     }
   }
-
   const { data: { session } } = await sb.auth.getSession();
   if (session) showDashboard(session);
 })();
