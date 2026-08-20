@@ -991,6 +991,116 @@ function navTo(url){
   window.location.href=url;
 }</script>
 <script defer src="/_vercel/insights/script.js"></script>
+
+<script>
+// ── PLAN FINDER ──────────────────────────────────────────────────
+function toggleFinder() {
+  const box = document.getElementById('finderBox');
+  box.classList.toggle('open');
+}
+
+let finderNTAnswer = null;
+
+function finderAnswer(step, val) {
+  if (step === 1) {
+    finderNTAnswer = val;
+    if (val === 'no') {
+      // No NinjaTrader → only Premium makes sense
+      showFinderResult('premium');
+    } else {
+      // Has NinjaTrader → ask Q2
+      showFinderStep(2);
+    }
+  } else if (step === 2) {
+    if (val === 'premium')     showFinderResult('premium');
+    else if (val === 'auto')   showFinderResult('autosignals');
+    else if (val === 'bot')    showFinderResult('trenbot');
+  }
+}
+
+function showFinderStep(n) {
+  document.querySelectorAll('.finder-step').forEach(s => s.classList.remove('active'));
+  const target = document.querySelector(`.finder-step[data-step="${n}"]`);
+  if (target) target.classList.add('active');
+}
+
+function showFinderResult(plan) {
+  const labels = { premium: 'Premium Signals', autosignals: 'AutoSignals', trenbot: 'TrenBot' };
+  document.getElementById('finderResultText').innerHTML =
+    `Based on your answers, we'd suggest <strong>${labels[plan] || plan}</strong>.`;
+  showFinderStep('result');
+  // Highlight the matching card
+  const cardMap = { premium: 'premium-card', autosignals: 'autosignals-card', trenbot: 'trenbot-card' };
+  const cardId = cardMap[plan];
+  if (cardId) {
+    const card = document.getElementById(cardId);
+    if (card) {
+      card.classList.add('found-match');
+      setTimeout(() => card.classList.remove('found-match'), 4000);
+    }
+  }
+}
+
+function finderBack() {
+  finderNTAnswer = null;
+  showFinderStep(1);
+}
+
+// ── FAQ ──────────────────────────────────────────────────────────
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const answer = item.querySelector('.faq-a');
+  const isOpen = item.classList.contains('open');
+
+  // Close all open items first
+  document.querySelectorAll('.faq-item.open').forEach(el => {
+    el.classList.remove('open');
+    el.querySelector('.faq-a').style.maxHeight = '0';
+  });
+
+  // Open this one if it was closed
+  if (!isOpen) {
+    item.classList.add('open');
+    answer.style.maxHeight = answer.scrollHeight + 'px';
+  }
+}
+
+// ── STICKY CTA ───────────────────────────────────────────────────
+let stickyCtaDismissed = false;
+let stickyCtaCurrent = 'premium';
+
+function stickyCtaSelect(plan) {
+  stickyCtaCurrent = plan;
+  document.querySelectorAll('.sticky-cta-plan').forEach(el => {
+    el.classList.toggle('on', el.dataset.plan === plan);
+  });
+  const P = PRICES[plan];
+  const price = billing === 'yearly' ? P.yearly : P.monthly;
+  document.getElementById('stickyCtaPrice').textContent = '$' + price.toFixed(2) + '/mo';
+  const btn = document.getElementById('stickyCtaBtn');
+  if (btn) btn.href = P.url;
+}
+
+function stickyCtaClose() {
+  stickyCtaDismissed = true;
+  document.getElementById('stickyCta').classList.remove('show');
+}
+
+// Show sticky CTA after scrolling down a bit
+(function() {
+  const cta = document.getElementById('stickyCta');
+  const page = document.querySelector('.page');
+  if (!cta || !page) return;
+  page.addEventListener('scroll', function() {
+    if (stickyCtaDismissed) return;
+    if (page.scrollTop > 320) {
+      cta.classList.add('show');
+    } else {
+      cta.classList.remove('show');
+    }
+  });
+})();
+</script>
 <!-- GC_REFRESH_MARKER: TREN SESSION AUTO-REFRESH
   Keeps 'tren_session' alive by refreshing the access_token
   before it expires, using the refresh_token saved at login.
