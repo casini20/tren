@@ -309,12 +309,12 @@ h1 em { font-style: normal; color: var(--accent-l); }
 .billing-label.active { color: var(--text); }
 .billing-save-badge { font-size: 10px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; padding: 3px 9px; border-radius: 100px; background: rgba(16,185,129,0.12); border: 1px solid rgba(16,185,129,0.3); color: #34d399; }
 
-.pricing-stage { position: relative; }
+.pricing-stage { position: relative; overflow: hidden; }
 .pricing-stage::before {
   content: '';
   position: absolute;
   top: 30%; left: 50%;
-  width: 780px; height: 460px;
+  width: min(780px, 100%); height: 460px; overflow: hidden;
   transform: translate(-50%, -50%);
   background: radial-gradient(ellipse, rgba(16,185,129,0.08), transparent 65%);
   pointer-events: none;
