@@ -19,7 +19,7 @@
 <link rel="prefetch" href="https://trenai.vercel.app/indicator">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
+html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}html{overflow-x:hidden;}
 :root{
   --bg:#04080f;--bg2:#080e1a;--bg3:#0c1525;
   --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
@@ -32,7 +32,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .shell{position:fixed;inset:0;display:flex;font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--bg);}
 
 /* ── SIDEBAR ── */
-.sidebar{width:var(--sw);min-width:var(--sw);height:100vh;border-right:1px solid var(--border);background:#060b14;display:flex;flex-direction:column;padding:0;position:relative;z-index:20;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;}
+.sidebar{width:var(--sw);min-width:var(--sw);height:100vh;padding-bottom:env(safe-area-inset-bottom,20px);border-right:1px solid var(--border);background:#060b14;display:flex;flex-direction:column;padding:0;position:relative;z-index:20;overflow-y:auto;overflow-x:hidden;scrollbar-width:none;}
 .sidebar::-webkit-scrollbar{display:none;}
 .s-logo{font-size:17px;font-weight:600;padding:22px 18px 18px;display:flex;align-items:center;gap:9px;text-decoration:none;color:inherit;letter-spacing:-0.4px;}
 .s-logo-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,0.2);flex-shrink:0;}
