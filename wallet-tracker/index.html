@@ -5,7 +5,7 @@
 <link rel="icon" href="/favicon-32x32.png?v=2" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=2">
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Tren – Wallet Tracker</title>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -385,28 +385,6 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}
 .dir-add-btn{width:28px;height:28px;border-radius:7px;background:rgba(37,99,235,.1);border:1px solid rgba(37,99,235,.22);color:var(--al);font-size:15px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0;}
 .dir-add-btn:hover{background:rgba(37,99,235,.22);border-color:rgba(59,130,246,.5);}
 .dir-add-btn.added{background:rgba(16,185,129,.1);border-color:rgba(16,185,129,.28);color:var(--green);cursor:default;}
-</style>
-<style id="mobile-zoom-fix">
-  /* Prevent pinch-zoom gesture at the browser level */
-  html { touch-action: pan-x pan-y; }
-  * { touch-action: pan-x pan-y; }
-
-  /* Prevent any content from bleeding wider than the screen */
-  html, body { max-width: 100%; overflow-x: hidden; }
-
-  /* Fix sticky nav: 100vw can exceed the visible width on mobile (includes
-     scrollbar). Using width:100% + box-sizing keeps it flush to the screen. */
-  nav {
-    left: 0 !important;
-    right: 0 !important;
-    width: 100% !important;
-    margin-left: 0 !important;
-    max-width: 100vw !important;
-    box-sizing: border-box !important;
-  }
-
-  /* Prevent images / svgs from overflowing */
-  img, svg, video, iframe { max-width: 100%; }
 </style>
 </head>
 <body>
