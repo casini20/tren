@@ -1,103 +1,87 @@
 #!/bin/bash
 
-# fix_zoom.sh — disables all zoom and fixes sticky nav on mobile
-# Run from root of repo: bash fix_zoom.sh
+# fix_zoom.sh — mobile-only zoom disable, safe for all page structures
+# Run from repo root: bash fix_zoom.sh
 
 set -e
 
 GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
 CYAN='\033[0;36m'
 NC='\033[0m'
 
 FIXED=0
 SKIPPED=0
 
+# The JS snippet: detects touch device and rewrites the viewport meta at runtime.
+# This means desktop users are completely unaffected.
+# It runs immediately (no DOMContentLoaded delay) to avoid flash of zoomable state.
+SNIPPET='<script>
+(function(){
+  var isTouchDevice = (navigator.maxTouchPoints > 0 || "ontouchstart" in window);
+  if (isTouchDevice) {
+    var vp = document.querySelector("meta[name=viewport]");
+    if (vp) {
+      vp.setAttribute("content", "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no");
+    } else {
+      var m = document.createElement("meta");
+      m.name = "viewport";
+      m.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no";
+      document.head && document.head.appendChild(m);
+    }
+  }
+})();
+</script>'
+
 fix_file() {
   local file="$1"
-  local changed=false
-
   [[ "$file" == *.bak ]] && return
 
   echo -e "\n${CYAN}→ $file${NC}"
 
-  python3 - "$file" << 'PY'
-import sys, re
+  python3 << PYEOF
+import re, sys
 
-file_path = sys.argv[1]
+path = "$file"
 
-with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
+with open(path, 'r', encoding='utf-8', errors='replace') as f:
     content = f.read()
 
 original = content
 
-# ── 1. Fix/add viewport (no zoom, no scale) ──────────────────────────────────
-correct_viewport = '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">'
+snippet = """$SNIPPET"""
 
-# Replace any existing viewport tag
-vp_pattern = re.compile(r'<meta\s[^>]*name=["\']viewport["\'][^>]*/?>',re.IGNORECASE)
-if vp_pattern.search(content):
-    content = vp_pattern.sub(correct_viewport, content)
-    print("  ~ viewport: replaced with no-zoom version")
+# Skip if already patched
+if 'user-scalable=no' in content or 'mobile-zoom-fix' in content or 'maxTouchPoints' in content:
+    print("  ✓ already patched — skipping")
+    sys.exit(1)
+
+# Try to insert right after <head> opening tag (best position — runs before anything else)
+head_open = re.compile(r'(<head(?:\s[^>]*)?>)', re.IGNORECASE)
+m = head_open.search(content)
+if m:
+    insert_at = m.end()
+    content = content[:insert_at] + '\n' + snippet + content[insert_at:]
+    print("  + snippet injected after <head>")
 else:
-    # Insert after <head>
-    head_pat = re.compile(r'(<head(?:\s[^>]*)?>)', re.IGNORECASE)
-    content, n = head_pat.subn(r'\1\n  ' + correct_viewport, content, count=1)
-    if n:
-        print("  + viewport: added (no-zoom)")
+    # No <head> — try before first <script> or <style>
+    first_tag = re.compile(r'(<(?:script|style|link|meta)[\s>])', re.IGNORECASE)
+    m = first_tag.search(content)
+    if m:
+        insert_at = m.start()
+        content = content[:insert_at] + snippet + '\n' + content[insert_at:]
+        print("  + snippet injected before first script/style tag")
     else:
-        print("  ! could not find <head> to insert viewport")
+        print("  ! could not find safe injection point — skipping")
+        sys.exit(1)
 
-# ── 2. Fix sticky nav: use 100dvw instead of 100vw, add touch-action ─────────
-# The nav uses `width: 100vw` and `margin-left: calc(-50vw + 50%)`
-# On mobile, 100vw includes scrollbar width and can exceed the viewport.
-# 100dvw (dynamic viewport width) = always the actual visible width.
+with open(path, 'w', encoding='utf-8') as f:
+    f.write(content)
+print("  ✓ saved")
+sys.exit(0)
+PYEOF
 
-# Replace nav CSS width tricks with safe mobile values
-nav_fix = '''
-/* ── mobile-nav-fix ── */
-nav {
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
-  margin-left: 0 !important;
-  max-width: 100vw !important;
-  box-sizing: border-box !important;
-}
-/* Prevent pinch-zoom from breaking layout */
-* { touch-action: pan-x pan-y; }
-html { touch-action: pan-x pan-y; }
-/* Prevent content from ever being wider than the screen */
-html, body { max-width: 100%; overflow-x: hidden; }
-'''
-
-# Inject before </head>
-if 'mobile-nav-fix' not in content:
-    head_close = re.compile(r'</head>', re.IGNORECASE)
-    content, n = head_close.subn('<style>' + nav_fix + '</style>\n</head>', content, count=1)
-    if n:
-        print("  + nav fix: injected")
-    else:
-        print("  ! could not find </head> for nav fix")
-else:
-    print("  ✓ nav fix already present")
-
-if content != original:
-    with open(file_path, 'w', encoding='utf-8') as f:
-        f.write(content)
-    print("  ✓ saved")
-    sys.exit(0)  # changed
-else:
-    print("  - no changes needed")
-    sys.exit(1)  # unchanged
-PY
-
-  local exit_code=$?
-  if [ $exit_code -eq 0 ]; then
-    FIXED=$((FIXED + 1))
-  else
-    SKIPPED=$((SKIPPED + 1))
-  fi
+  local code=$?
+  [ $code -eq 0 ] && FIXED=$((FIXED+1)) || SKIPPED=$((SKIPPED+1))
 }
 
 echo ""
@@ -128,15 +112,16 @@ done
 
 echo ""
 echo "══════════════════════════════════════"
-echo -e "  Done! ${GREEN}Fixed: $FIXED${NC} · Skipped: $SKIPPED"
+echo -e "  ${GREEN}Fixed: $FIXED${NC}  ·  Skipped: $SKIPPED"
 echo "══════════════════════════════════════"
 echo ""
-echo "Changes applied to each page:"
-echo "  • viewport: maximum-scale=1.0, user-scalable=no  → kills all pinch zoom"
-echo "  • touch-action: pan-x pan-y                      → allows scroll, blocks zoom gesture"
-echo "  • nav width: 100% + box-sizing                   → sticky bar fills screen properly"
-echo "  • overflow-x: hidden                             → no horizontal bleed"
+echo "How it works:"
+echo "  • Injects a tiny JS snippet into each page"
+echo "  • On page load it checks: is this a touch device?"
+echo "  • If yes → sets maximum-scale=1.0, user-scalable=no on the viewport"
+echo "  • If no  → viewport is untouched, desktop zoom works normally"
+echo "  • Does NOT inject any CSS or modify page layout"
 echo ""
-echo "Push:"
-echo "  git add -A && git commit -m 'fix: disable mobile zoom, fix sticky nav' && git push"
+echo "Now push:"
+echo "  git add -A && git commit -m 'fix: disable zoom on mobile/tablet only' && git push"
 echo ""
