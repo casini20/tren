@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# fix_zoom.sh — disables all zoom and fixes sticky nav on mobile
-# Run from root of repo: bash fix_zoom.sh
+# fix_zoom.sh — disable all mobile zoom + fix sticky nav overflow
+# Run from repo root: bash fix_zoom.sh
 
 set -e
 
@@ -15,95 +15,101 @@ SKIPPED=0
 
 fix_file() {
   local file="$1"
-  local changed=false
-
   [[ "$file" == *.bak ]] && return
 
   echo -e "\n${CYAN}→ $file${NC}"
 
-  python3 - "$file" << 'PY'
-import sys, re
+  python3 << PYEOF
+import re, sys
 
-file_path = sys.argv[1]
+file_path = "$file"
 
 with open(file_path, 'r', encoding='utf-8', errors='replace') as f:
     content = f.read()
 
 original = content
 
-# ── 1. Fix/add viewport (no zoom, no scale) ──────────────────────────────────
-correct_viewport = '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">'
+# ── 1. Viewport: always replace with the strict no-zoom version ───────────────
+# We unconditionally replace whatever is there — this catches files that have
+# initial-scale=1.0 but are missing maximum-scale and user-scalable.
+correct_vp = '<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">'
 
-# Replace any existing viewport tag
-vp_pattern = re.compile(r'<meta\s[^>]*name=["\']viewport["\'][^>]*/?>',re.IGNORECASE)
-if vp_pattern.search(content):
-    content = vp_pattern.sub(correct_viewport, content)
-    print("  ~ viewport: replaced with no-zoom version")
+vp_pat = re.compile(r'<meta\s+name=["\']viewport["\'][^>]*/?>',re.IGNORECASE)
+if vp_pat.search(content):
+    new = vp_pat.sub(correct_vp, content)
+    if new != content:
+        content = new
+        print("  ~ viewport updated (added maximum-scale=1.0 user-scalable=no)")
+    else:
+        print("  ✓ viewport already correct")
 else:
-    # Insert after <head>
+    # No viewport tag at all — inject after <head>
     head_pat = re.compile(r'(<head(?:\s[^>]*)?>)', re.IGNORECASE)
-    content, n = head_pat.subn(r'\1\n  ' + correct_viewport, content, count=1)
+    content, n = head_pat.subn(r'\1\n  ' + correct_vp, content, count=1)
     if n:
-        print("  + viewport: added (no-zoom)")
+        print("  + viewport added")
     else:
-        print("  ! could not find <head> to insert viewport")
+        print("  ! no <head> tag found — skipping viewport")
 
-# ── 2. Fix sticky nav: use 100dvw instead of 100vw, add touch-action ─────────
-# The nav uses `width: 100vw` and `margin-left: calc(-50vw + 50%)`
-# On mobile, 100vw includes scrollbar width and can exceed the viewport.
-# 100dvw (dynamic viewport width) = always the actual visible width.
+# ── 2. Nav + overflow CSS — inject once before </head> ────────────────────────
+nav_css = """<style id="mobile-zoom-fix">
+  /* Prevent pinch-zoom gesture at the browser level */
+  html { touch-action: pan-x pan-y; }
+  * { touch-action: pan-x pan-y; }
 
-# Replace nav CSS width tricks with safe mobile values
-nav_fix = '''
-/* ── mobile-nav-fix ── */
-nav {
-  left: 0 !important;
-  right: 0 !important;
-  width: 100% !important;
-  margin-left: 0 !important;
-  max-width: 100vw !important;
-  box-sizing: border-box !important;
-}
-/* Prevent pinch-zoom from breaking layout */
-* { touch-action: pan-x pan-y; }
-html { touch-action: pan-x pan-y; }
-/* Prevent content from ever being wider than the screen */
-html, body { max-width: 100%; overflow-x: hidden; }
-'''
+  /* Prevent any content from bleeding wider than the screen */
+  html, body { max-width: 100%; overflow-x: hidden; }
 
-# Inject before </head>
-if 'mobile-nav-fix' not in content:
-    head_close = re.compile(r'</head>', re.IGNORECASE)
-    content, n = head_close.subn('<style>' + nav_fix + '</style>\n</head>', content, count=1)
+  /* Fix sticky nav: 100vw can exceed the visible width on mobile (includes
+     scrollbar). Using width:100% + box-sizing keeps it flush to the screen. */
+  nav {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    max-width: 100vw !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Prevent images / svgs from overflowing */
+  img, svg, video, iframe { max-width: 100%; }
+</style>"""
+
+if 'id="mobile-zoom-fix"' not in content:
+    head_close = re.compile(r'(</head>)', re.IGNORECASE)
+    content, n = head_close.subn(nav_css + r'\n\1', content, count=1)
     if n:
-        print("  + nav fix: injected")
+        print("  + mobile CSS injected")
     else:
-        print("  ! could not find </head> for nav fix")
+        # No </head>? Try before </body>
+        body_close = re.compile(r'(</body>)', re.IGNORECASE)
+        content, n = body_close.subn(nav_css + r'\n\1', content, count=1)
+        if n:
+            print("  + mobile CSS injected (before </body>)")
+        else:
+            content += '\n' + nav_css
+            print("  + mobile CSS appended at end")
 else:
-    print("  ✓ nav fix already present")
+    print("  ✓ mobile CSS already present")
 
 if content != original:
     with open(file_path, 'w', encoding='utf-8') as f:
         f.write(content)
     print("  ✓ saved")
-    sys.exit(0)  # changed
+    sys.exit(0)
 else:
-    print("  - no changes needed")
-    sys.exit(1)  # unchanged
-PY
+    print("  - no changes made")
+    sys.exit(1)
+PYEOF
 
-  local exit_code=$?
-  if [ $exit_code -eq 0 ]; then
-    FIXED=$((FIXED + 1))
-  else
-    SKIPPED=$((SKIPPED + 1))
-  fi
+  local code=$?
+  [ $code -eq 0 ] && FIXED=$((FIXED+1)) || SKIPPED=$((SKIPPED+1))
 }
 
 echo ""
-echo "══════════════════════════════════════"
+echo "══════════════════════════════════════════"
 echo "  fix_zoom.sh · casini20/tren"
-echo "══════════════════════════════════════"
+echo "══════════════════════════════════════════"
 echo ""
 
 mapfile -t HTML_FILES < <(find . \
@@ -127,16 +133,16 @@ for file in "${HTML_FILES[@]}"; do
 done
 
 echo ""
-echo "══════════════════════════════════════"
-echo -e "  Done! ${GREEN}Fixed: $FIXED${NC} · Skipped: $SKIPPED"
-echo "══════════════════════════════════════"
+echo "══════════════════════════════════════════"
+echo -e "  ${GREEN}Fixed: $FIXED${NC}  ·  Already OK: $SKIPPED"
+echo "══════════════════════════════════════════"
 echo ""
-echo "Changes applied to each page:"
-echo "  • viewport: maximum-scale=1.0, user-scalable=no  → kills all pinch zoom"
-echo "  • touch-action: pan-x pan-y                      → allows scroll, blocks zoom gesture"
-echo "  • nav width: 100% + box-sizing                   → sticky bar fills screen properly"
-echo "  • overflow-x: hidden                             → no horizontal bleed"
+echo "What was applied to every page:"
+echo "  • maximum-scale=1.0, user-scalable=no  → kills pinch zoom"
+echo "  • touch-action: pan-x pan-y            → blocks zoom gesture at OS level"
+echo "  • nav width: 100% + box-sizing         → sticky bar fits screen correctly"
+echo "  • overflow-x: hidden on html/body      → no horizontal bleed"
 echo ""
-echo "Push:"
-echo "  git add -A && git commit -m 'fix: disable mobile zoom, fix sticky nav' && git push"
+echo "Now push:"
+echo "  git pull --rebase && git add -A && git commit -m 'fix: disable zoom, fix sticky nav' && git push"
 echo ""
