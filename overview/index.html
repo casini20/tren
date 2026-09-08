@@ -75,7 +75,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}html{overfl
 @keyframes flicker{0%,100%{opacity:1;transform:scale(1);}15%{opacity:.88;transform:scale(.95);}30%{opacity:1;transform:scale(1.03);}45%{opacity:.92;transform:scale(.97);}60%{opacity:1;transform:scale(1.06);}75%{opacity:.9;transform:scale(.94);}90%{opacity:1;transform:scale(1.02);}}
 
 /* ── MAIN AREA ── */
-.main-wrap{flex:1;display:flex;flex-direction:column;min-width:0;height:100vh;overflow:hidden;}
+.main-wrap{flex:1;display:flex;flex-direction:column;min-width:0;height:100dvh;overflow:hidden;}
 
 /* ── TOPBAR ── */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:1.1rem 2.4rem;border-bottom:1px solid var(--border);background:rgba(4,8,15,.88);backdrop-filter:blur(20px);flex-shrink:0;position:relative;z-index:10;}
@@ -103,7 +103,7 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}html{overfl
 .prof-menu-item.danger:hover{background:rgba(239,68,68,.09);color:var(--red);}
 
 /* ── PAGE CONTENT ── */
-.page{flex:1;overflow-y:auto;padding:1.8rem 2.4rem;scrollbar-width:none;}
+.page{flex:1;overflow-y:auto;overflow-x:hidden;padding:1.8rem 2.4rem;scrollbar-width:none;}
 .page::-webkit-scrollbar{display:none;}
 
 /* ── TIMEFRAME SELECTOR ── */
@@ -296,6 +296,8 @@ html,body{width:100%;height:100%;background:#04080f;overflow:hidden;}html{overfl
 .fs-tbtn.active{background:rgba(255,255,255,.08);color:#f0f4ff;}
 .nav-affiliate-wrap { position: relative; display: inline-block; }
 .nav-earn-badge { position: absolute; top: -9px; right: -28px; font-size: 8px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #34d399; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.35); border-radius: 4px; padding: 2px 6px; line-height: 1.5; transform: rotate(12deg); pointer-events: none; white-space: nowrap; }
+
+@media(max-width:480px){.sig-card{min-width:0;width:100%;box-sizing:border-box;}.page{overflow-x:hidden;}.shell{overflow:hidden;}}
 </style>
 
 
