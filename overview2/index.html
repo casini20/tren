@@ -81,41 +81,70 @@ html,body{width:100%;height:100%;background:#060a14;overflow:hidden;}html{overfl
   display:flex;flex-direction:column;position:relative;z-index:20;
   overflow-y:auto;overflow-x:hidden;scrollbar-width:none;padding-bottom:env(safe-area-inset-bottom,20px);}
 .sidebar::-webkit-scrollbar{display:none;}
-.s-logo{font-size:15.5px;font-weight:700;padding:22px 20px 18px;display:flex;align-items:center;gap:9px;text-decoration:none;color:inherit;letter-spacing:-.2px;}
-.s-logo-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 3px rgba(37,99,235,.2);flex-shrink:0;}
-.s-logo span{color:var(--al);}
-.s-section-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(150,180,255,.2);padding:12px 20px 4px;}
-.s-nav{flex:1;display:flex;flex-direction:column;padding:0 10px;gap:1px;}
-.s-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;font-size:13px;font-weight:500;color:rgba(150,180,255,.38);cursor:pointer;transition:background .14s,color .14s;text-decoration:none;position:relative;}
-.s-item:hover{background:rgba(56,189,248,.08);color:rgba(200,225,255,.82);}
-.s-item.on{background:linear-gradient(90deg,rgba(56,189,248,.18),rgba(37,99,235,.06));color:#bfdbfe;border:1px solid rgba(96,165,250,.25);}
-.s-item.on::before{content:'';position:absolute;left:-7px;top:50%;transform:translateY(-50%);width:3px;height:18px;border-radius:0 3px 3px 0;background:linear-gradient(180deg,#7dd3fc,var(--al));}
-.s-item.gold{color:rgba(245,158,11,.7);}.s-item.gold:hover{background:rgba(245,158,11,.07);color:var(--gold);}
+.s-logo{font-size:15px;font-weight:700;padding:20px 16px 14px;display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;letter-spacing:-.2px;}
+.s-logo-mark{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;color:#fff;flex-shrink:0;box-shadow:0 2px 10px rgba(37,99,235,.35);}
+.s-logo-text{font-size:15px;font-weight:800;letter-spacing:-.3px;}
+.s-logo-dot{display:none;}
+
+/* search bar */
+.s-search{display:flex;align-items:center;gap:8px;margin:0 10px 6px;padding:7px 11px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.07);font-size:12.5px;color:rgba(150,180,255,.4);cursor:pointer;transition:all .15s;}
+.s-search:hover{background:rgba(255,255,255,.07);border-color:rgba(96,165,250,.18);color:rgba(185,210,255,.7);}
+.s-search svg{flex-shrink:0;opacity:.5;}
+.s-search-kbd{margin-left:auto;font-size:10px;font-weight:600;padding:1px 5px;border-radius:5px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:rgba(150,180,255,.35);}
+
+.s-section-label{font-size:9.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(150,180,255,.22);padding:10px 14px 4px;}
+.s-nav{flex:1;display:flex;flex-direction:column;padding:0 8px;gap:1px;}
+
+/* nav items */
+.s-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;font-size:13px;font-weight:500;color:rgba(150,180,255,.45);cursor:pointer;transition:background .14s,color .14s;text-decoration:none;position:relative;}
+.s-item:hover{background:rgba(255,255,255,.05);color:rgba(200,225,255,.8);}
+.s-item.on{background:rgba(255,255,255,.09);color:#e2eeff;font-weight:600;}
+.s-item.on .s-ic{color:#fff;opacity:.9;}
+.s-item.gold{color:rgba(251,191,36,.65);}.s-item.gold:hover{background:rgba(245,158,11,.07);color:var(--gold);}
 .s-item.ai-item{color:rgba(167,139,250,.7);}.s-item.ai-item:hover{background:rgba(167,139,250,.07);color:#c4b5fd;}
-.s-ic{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:13px;}
-.s-item.on .s-ic{background:rgba(37,99,235,.16);}
+
+/* icon container */
+.s-ic{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.05);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:inherit;transition:background .14s;}
+.s-item:hover .s-ic{background:rgba(255,255,255,.08);}
+.s-item.on .s-ic{background:rgba(255,255,255,.12);}
 .s-item.gold .s-ic{background:rgba(245,158,11,.08);}
 .s-item.ai-item .s-ic{background:rgba(167,139,250,.1);}
-.s-badge{margin-left:auto;font-size:9px;padding:2px 6px;border-radius:4px;font-weight:700;background:var(--gold);color:#000;}
-.s-beta{margin-left:auto;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:rgba(167,139,250,.14);border:.5px solid rgba(167,139,250,.3);color:#a78bfa;}
-.s-divider{height:.5px;background:rgba(255,255,255,.04);margin:5px 10px;}
-.s-bot{padding:10px 10px 14px;flex-shrink:0;border-top:.5px solid rgba(255,255,255,.05);margin-top:auto;}
+
+/* badges */
+.s-badge{margin-left:auto;font-size:9px;padding:2px 6px;border-radius:5px;font-weight:700;background:rgba(251,191,36,.15);border:1px solid rgba(251,191,36,.25);color:#fbbf24;letter-spacing:.03em;}
+.s-beta{margin-left:auto;font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(167,139,250,.12);border:1px solid rgba(167,139,250,.22);color:#a78bfa;}
+.s-new-badge{margin-left:auto;font-size:9px;font-weight:700;padding:2px 6px;border-radius:5px;background:rgba(37,99,235,.15);border:1px solid rgba(96,165,250,.22);color:var(--al);}
+.s-live-pip{margin-left:auto;}
+.s-divider{height:.5px;background:rgba(255,255,255,.06);margin:5px 4px;}
+
+/* plan upgrade card */
+.s-plan-card{margin:0 8px 8px;padding:14px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);position:relative;overflow:hidden;}
+.s-plan-card::before{content:'';position:absolute;bottom:-30px;right:-20px;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,.25) 0%,transparent 65%);pointer-events:none;}
+.s-plan-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,rgba(99,102,241,.3),rgba(167,139,250,.2));border:1px solid rgba(167,139,250,.2);display:flex;align-items:center;justify-content:center;color:#a78bfa;margin-bottom:10px;}
+.s-plan-text{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.s-plan-sub{font-size:11px;color:var(--sub);line-height:1.4;margin-bottom:12px;}
+.s-plan-btn{width:100%;padding:8px;border:none;border-radius:9px;background:rgba(255,255,255,.08);color:var(--text);font-size:12px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:background .15s;border:1px solid rgba(255,255,255,.1);}
+.s-plan-btn:hover{background:rgba(255,255,255,.13);}
+
+/* user row */
+.s-bot{padding:8px 8px 12px;flex-shrink:0;border-top:.5px solid rgba(255,255,255,.06);margin-top:auto;}
 .trial-card{display:none;}
 .up-mini{width:100%;padding:8px;border:none;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--al));color:#fff;font-size:11.5px;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:opacity .15s;}
 .up-mini:hover{opacity:.88;}
 .u-row{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;cursor:pointer;transition:background .12s;text-decoration:none;border:.5px solid transparent;}
-.u-row:hover{background:rgba(255,255,255,.04);border-color:rgba(255,255,255,.06);}
-.u-av{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;color:#fff;}
-.u-info{min-width:0;flex:1;display:flex;flex-direction:column;gap:1px;}
+.u-row:hover{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.06);}
+.u-av{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--accent),var(--al));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;flex-shrink:0;color:#fff;}
+.u-info{min-width:0;flex:1;display:flex;flex-direction:column;gap:3px;}
 .u-name{font-size:12.5px;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .u-email{font-size:10px;color:var(--sub);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.sub-status-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;margin-top:3px;letter-spacing:.03em;}
+.s-logout-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;color:rgba(150,180,255,.3);transition:all .15s;flex-shrink:0;}
+.s-logout-icon:hover{background:rgba(239,68,68,.1);color:var(--red);}
+.s-logout{display:none;}
+.sub-status-badge{display:inline-flex;align-items:center;gap:3px;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;letter-spacing:.03em;}
 .sub-status-badge.trial{background:rgba(245,158,11,.1);border:.5px solid rgba(245,158,11,.22);color:var(--gold);}
 .sub-status-badge.premium{background:rgba(37,99,235,.12);border:.5px solid rgba(37,99,235,.28);color:var(--al);}
 .sub-status-badge.automated{background:rgba(245,158,11,.1);border:.5px solid rgba(245,158,11,.22);color:var(--gold);}
 .sub-status-badge.autosignals{background:rgba(16,185,129,.12);border:.5px solid rgba(16,185,129,.28);color:var(--green);}
-.s-logout{display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:7px;font-size:11.5px;font-weight:500;color:rgba(239,68,68,.4);cursor:pointer;transition:all .12s;margin-top:2px;}
-.s-logout:hover{background:rgba(239,68,68,.07);color:var(--red);}
 .live-dot-nav{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--green);animation:flicker 3.5s infinite;box-shadow:0 0 5px var(--green);}
 @keyframes flicker{0%,100%{opacity:1;transform:scale(1);}15%{opacity:.88;transform:scale(.95);}30%{opacity:1;transform:scale(1.03);}45%{opacity:.92;transform:scale(.97);}60%{opacity:1;transform:scale(1.06);}75%{opacity:.9;transform:scale(.94);}90%{opacity:1;transform:scale(1.02);}}
 
@@ -482,73 +511,112 @@ html,body{width:100%;height:100%;background:#060a14;overflow:hidden;}html{overfl
 
             <!-- SIDEBAR -->
   <nav class="sidebar" id="sidebar">
+
+    <!-- logo -->
     <a class="s-logo" href="https://trenai.vercel.app" style="text-decoration:none;color:inherit;">
-      <span class="s-logo-dot"></span>
-      tren<span>.</span>
+      <div class="s-logo-mark">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+      </div>
+      <span class="s-logo-text">tren<span style="color:var(--al);">.</span>ai</span>
     </a>
 
-    <div class="s-nav"><div class="s-section-label">Trading</div>
+    <!-- search -->
+    <div class="s-search" onclick="navTo('https://trenai.vercel.app/search')">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <span>Search</span>
+      <span class="s-search-kbd">⌘K</span>
+    </div>
+
+    <div class="s-nav">
+      <div class="s-section-label">Trading</div>
+
       <a class="s-item" onclick="navTo('https://trenai.vercel.app/live-signals')">
-        <span class="s-ic"><span class="live-dot-nav"></span></span><span>Live Signals</span>
+        <span class="s-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 0 20M12 6a6 6 0 0 1 0 12"/></svg></span>
+        <span>Live Signals</span>
+        <span class="s-live-pip"><span class="live-dot-nav"></span></span>
       </a>
       <a class="s-item on" onclick="navTo('https://trenai.vercel.app/overview')">
-        <span class="s-ic">📊</span><span>Overview</span>
+        <span class="s-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></span>
+        <span>Overview</span>
       </a>
       <a class="s-item" onclick="navTo('https://trenai.vercel.app/signals')">
-        <span class="s-ic">⚡</span><span>Recent Trades</span>
+        <span class="s-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></span>
+        <span>Recent Trades</span>
       </a>
       <a class="s-item" onclick="navTo('https://trenai.vercel.app/journal')">
-        <span class="s-ic">📓</span><span>Journal</span>
+        <span class="s-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></span>
+        <span>Journal</span>
       </a>
 
       <div class="s-divider"></div>
       <div class="s-section-label">Tools</div>
+
       <a class="s-item ai-item" onclick="navTo('https://trenai.vercel.app/ai-analysis')">
-        <span class="s-ic">✨</span><span>AI Analysis</span>
+        <span class="s-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><path d="M12 3l2.5 5.5L20 11l-5.5 2.5L12 19l-2.5-5.5L4 11l5.5-2.5z"/><path d="M19 3l1 2 2 1-2 1-1 2-1-2-2-1 2-1z"/></svg></span>
+        <span>AI Analysis</span>
         <span class="s-beta">BETA</span>
       </a>
       <a class="s-item" onclick="navTo('https://trenai.vercel.app/trenbot')">
-        <span class="s-ic">🤖</span><span>TrenBot</span>
+        <span class="s-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="15" x2="8" y2="15"/><line x1="16" y1="15" x2="16" y2="15"/></svg></span>
+        <span>TrenBot</span>
       </a>
       <a class="s-item" onclick="navTo('https://trenai.vercel.app/autosignals')">
-        <span class="s-ic">⚡</span><span>AutoSignals</span>
+        <span class="s-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
+        <span>AutoSignals</span>
       </a>
       <a class="s-item" onclick="navTo('https://trenai.vercel.app/indicator')">
-        <span class="s-ic">📈</span><span>Indicator</span>
+        <span class="s-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+        <span>Indicator</span>
       </a>
       <a class="s-item" onclick="navTo('https://trenai.vercel.app/wallet-tracker')">
-        <span class="s-ic">&#x1F45B;</span><span>Wallet Tracker</span>
-        <span style="margin-left:auto;font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:rgba(37,99,235,.18);border:0.5px solid rgba(37,99,235,.35);color:var(--al);">NEW</span>
+        <span class="s-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 11h2"/><circle cx="17" cy="11" r="1" fill="currentColor"/></svg></span>
+        <span>Wallet Tracker</span>
+        <span class="s-new-badge">NEW</span>
       </a>
 
       <div class="s-divider"></div>
-      <div class="s-section-label">Misc</div>
+      <div class="s-section-label">Account</div>
+
       <a class="s-item gold" onclick="navTo('https://trenai.vercel.app/upgrade')">
-        <span class="s-ic">👑</span><span>Upgrade</span>
+        <span class="s-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+        <span>Upgrade</span>
         <span class="s-badge">PRO</span>
       </a>
       <a class="s-item" onclick="navTo('https://trenai.vercel.app/settings')">
-        <span class="s-ic">⚙️</span><span>Settings</span>
+        <span class="s-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+        <span>Settings</span>
       </a>
       <a class="s-item" onclick="document.getElementById('gc-fab').click();return false;">
-        <span class="s-ic">💬</span><span>Global Chat</span>
+        <span class="s-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+        <span>Community Chat</span>
       </a>
     </div>
 
+    <!-- user + plan card -->
     <div class="s-bot">
+      <!-- plan upgrade card (like Taskplus reference) -->
+      <div class="s-plan-card" id="s-plan-card">
+        <div class="s-plan-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <div class="s-plan-text">Upgrade to Pro</div>
+        <div class="s-plan-sub">Unlock all signals &amp; automation</div>
+        <button class="s-plan-btn" onclick="navTo('https://trenai.vercel.app/upgrade')">Upgrade Now</button>
+      </div>
+
+      <!-- user row -->
       <a class="u-row" onclick="navTo('https://trenai.vercel.app/settings')">
         <div class="u-av" id="s-av">T</div>
         <div class="u-info">
           <div class="u-name" id="s-nm">Trader</div>
-          <div class="u-email" id="s-email-display">—</div>
           <span class="sub-status-badge trial" id="sidebar-plan-badge">⚡ Trial</span>
         </div>
+        <div class="s-logout-icon" onclick="event.stopPropagation();doLogout();" title="Sign out">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </div>
       </a>
-      <div class="s-logout" onclick="doLogout()">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-        Sign out
-      </div>
     </div>
+
   </nav>
 
   <!-- MAIN -->
