@@ -724,7 +724,7 @@ html,body{width:100%;height:100%;background:#060a14;overflow:hidden;}html{overfl
           <!-- canvas -->
           <div style="position:relative;flex:1;" id="nq-canvas-wrap">
             <canvas id="nq-canvas" style="width:100%;display:block;cursor:crosshair;"></canvas>
-            <div id="nq-tooltip" style="display:none;position:absolute;pointer-events:none;background:rgba(4,8,18,.96);border:1px solid rgba(91,143,249,.22);border-radius:11px;padding:8px 13px;font-size:11px;font-weight:600;white-space:nowrap;z-index:20;line-height:1.9;backdrop-filter:blur(16px);color:rgba(185,210,255,.92);box-shadow:0 4px 24px rgba(0,0,0,.5);"></div>
+            <div id="nq-tooltip" style="display:none;position:absolute;pointer-events:none;background:rgba(5,11,24,.96);border:1px solid rgba(96,165,250,.2);border-radius:14px;padding:13px 15px;font-size:11px;font-weight:500;white-space:nowrap;z-index:20;backdrop-filter:blur(24px);color:rgba(185,210,255,.95);box-shadow:0 8px 40px rgba(0,0,0,.65),0 0 0 1px rgba(96,165,250,.06);"></div>
             <div id="nq-price-tag" style="display:none;position:absolute;right:0;pointer-events:none;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:5px;white-space:nowrap;z-index:15;"></div>
             <div id="nq-cv" style="display:none;position:absolute;top:0;bottom:0;width:1px;background:rgba(91,143,249,.18);pointer-events:none;border-left:1px dashed rgba(91,143,249,.25);"></div>
             <div id="nq-ch" style="display:none;position:absolute;left:0;right:0;height:1px;background:rgba(91,143,249,.18);pointer-events:none;border-top:1px dashed rgba(91,143,249,.25);"></div>
@@ -1185,26 +1185,46 @@ function nqDraw(data) {
 
   // ── CHART: LINE or CANDLE ──
   if (_nqChartType === 'line') {
-    // gradient fill under line
+    // ── smooth bezier helper ──
+    const pts = bars.map((b, i) => ({ x: toX(i), y: toY(b.c) }));
+    const T   = 0.3;
+    function smoothBez(p) {
+      if (p.length < 2) { if (p.length) ctx.moveTo(p[0].x, p[0].y); return; }
+      ctx.moveTo(p[0].x, p[0].y);
+      for (let i = 0; i < p.length - 1; i++) {
+        const a = p[Math.max(0, i-1)], b = p[i], d = p[i+1], e = p[Math.min(p.length-1, i+2)];
+        ctx.bezierCurveTo(b.x+(d.x-a.x)*T, b.y+(d.y-a.y)*T, d.x-(e.x-b.x)*T, d.y-(e.y-b.y)*T, d.x, d.y);
+      }
+    }
+
+    // gradient fill
     const grad = ctx.createLinearGradient(0, PAD_T, 0, PAD_T + chartH);
-    grad.addColorStop(0,   isUp ? 'rgba(16,185,129,0.38)' : 'rgba(239,68,68,0.32)');
-    grad.addColorStop(0.45,isUp ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.10)');
-    grad.addColorStop(1,   'rgba(0,0,0,0)');
+    grad.addColorStop(0,    isUp ? 'rgba(52,211,153,0.38)' : 'rgba(248,113,113,0.32)');
+    grad.addColorStop(0.55, isUp ? 'rgba(52,211,153,0.07)' : 'rgba(248,113,113,0.06)');
+    grad.addColorStop(1,    'rgba(0,0,0,0)');
+    ctx.save();
     ctx.beginPath();
-    ctx.moveTo(toX(0), PAD_T + chartH);
-    bars.forEach((b, i) => ctx.lineTo(toX(i), toY(b.c)));
-    ctx.lineTo(toX(bars.length - 1), PAD_T + chartH);
+    ctx.moveTo(pts[0].x, PAD_T + chartH);
+    ctx.lineTo(pts[0].x, pts[0].y);
+    for (let i = 0; i < pts.length - 1; i++) {
+      const a=pts[Math.max(0,i-1)],b=pts[i],d=pts[i+1],e=pts[Math.min(pts.length-1,i+2)];
+      ctx.bezierCurveTo(b.x+(d.x-a.x)*T,b.y+(d.y-a.y)*T,d.x-(e.x-b.x)*T,d.y-(e.y-b.y)*T,d.x,d.y);
+    }
+    ctx.lineTo(pts[pts.length-1].x, PAD_T + chartH);
     ctx.closePath();
     ctx.fillStyle = grad;
     ctx.fill();
-    // line
+    ctx.restore();
+
+    // smooth line
     ctx.beginPath();
-    ctx.strokeStyle = lineColor;
-    ctx.lineWidth = 2.5;
-    ctx.lineJoin = 'round';
-    ctx.shadowColor = lineColor;
-    ctx.shadowBlur = 14;
-    bars.forEach((b, i) => i === 0 ? ctx.moveTo(toX(i), toY(b.c)) : ctx.lineTo(toX(i), toY(b.c)));
+    ctx.strokeStyle = isUp ? '#34d399' : '#f87171';
+    ctx.lineWidth   = 2.2;
+    ctx.lineJoin    = 'round';
+    ctx.lineCap     = 'round';
+    ctx.shadowColor = isUp ? '#34d399' : '#f87171';
+    ctx.shadowBlur  = 16;
+    smoothBez(pts);
     ctx.stroke();
     ctx.shadowBlur = 0;
 
@@ -1279,12 +1299,8 @@ function nqDraw(data) {
     ctx.shadowColor = '#f59e0b';
     ctx.shadowBlur = 4;
     ctx.setLineDash([]);
-    let started = false;
-    ema9.forEach((v, i) => {
-      if (v == null) return;
-      started ? ctx.lineTo(toX(i), toY(v)) : ctx.moveTo(toX(i), toY(v));
-      started = true;
-    });
+    const e9pts = ema9.map((v,i) => v != null ? {x:toX(i),y:toY(v)} : null).filter(Boolean);
+    if (e9pts.length) smoothBez(e9pts);
     ctx.stroke();
     ctx.shadowBlur = 0;
     // label at end
@@ -1307,12 +1323,8 @@ function nqDraw(data) {
     ctx.shadowColor = '#818cf8';
     ctx.shadowBlur = 3;
     ctx.setLineDash([4, 3]);
-    let started = false;
-    ema21.forEach((v, i) => {
-      if (v == null) return;
-      started ? ctx.lineTo(toX(i), toY(v)) : ctx.moveTo(toX(i), toY(v));
-      started = true;
-    });
+    const e21pts = ema21.map((v,i) => v != null ? {x:toX(i),y:toY(v)} : null).filter(Boolean);
+    if (e21pts.length) smoothBez(e21pts);
     ctx.stroke();
     ctx.shadowBlur = 0;
     ctx.setLineDash([]);
@@ -1426,35 +1438,71 @@ function nqDraw(data) {
     if(sv) sv.textContent  = nqFmtK(b.v);
 
     if (tip) {
-      const chgBar = b.c - b.o;
+      const chgBar    = b.c - b.o;
       const chgBarPct = b.o ? (chgBar / b.o * 100) : 0;
+      const chgFirst  = bars[0] ? b.c - bars[0].c : 0;
+      const chgFPct   = bars[0] && bars[0].c ? (chgFirst / bars[0].c * 100) : 0;
+      const badgeCol  = isUp ? '#10b981' : '#ef4444';
+      const badgeBg   = isUp ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.12)';
+      const pctStr    = (chgBarPct >= 0 ? '+' : '') + chgBarPct.toFixed(2) + '%';
       tip.style.display = 'block';
       tip.innerHTML =
-        `<div style="color:var(--sub);font-size:10px;margin-bottom:3px;">${b.label || ''}</div>` +
-        `<div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;">` +
-        `<span style="color:var(--sub)">Open</span><span>${nqFmt(b.o)}</span>` +
-        `<span style="color:var(--sub)">High</span><span style="color:#10b981">${nqFmt(b.h)}</span>` +
-        `<span style="color:var(--sub)">Low</span><span style="color:#ef4444">${nqFmt(b.l)}</span>` +
-        `<span style="color:var(--sub)">Close</span><span style="color:${col};font-weight:700">${nqFmt(b.c)}</span>` +
-        `<span style="color:var(--sub)">Chg</span><span style="color:${col}">${chgBar >= 0 ? '+' : ''}${chgBar.toFixed(2)} (${chgBarPct.toFixed(2)}%)</span>` +
-        (b.v ? `<span style="color:var(--sub)">Vol</span><span>${nqFmtK(b.v)}</span>` : '') +
+        `<div style="display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:10px;">` +
+          `<div style="font-size:11px;font-weight:600;color:rgba(185,210,255,0.55);">${b.label || ''}</div>` +
+          `<div style="font-size:9px;color:rgba(185,210,255,0.3);letter-spacing:.05em;">NASDAQ NQ=F</div>` +
+        `</div>` +
+        `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">` +
+          `<div style="font-size:20px;font-weight:800;letter-spacing:-.5px;color:#e4eeff;">${nqFmt(b.c)}</div>` +
+          `<div style="display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:7px;background:${badgeBg};border:1px solid ${badgeCol}33;">` +
+            `<span style="font-size:11px;font-weight:700;color:${badgeCol};">${pctStr}</span>` +
+          `</div>` +
+        `</div>` +
+        `<div style="height:1px;background:rgba(96,165,250,0.12);margin-bottom:8px;"></div>` +
+        `<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 20px;font-size:11px;">` +
+          `<span style="color:rgba(150,185,255,0.45);">Open</span><span style="font-weight:600">${nqFmt(b.o)}</span>` +
+          `<span style="color:rgba(150,185,255,0.45);">High</span><span style="color:#34d399;font-weight:600">${nqFmt(b.h)}</span>` +
+          `<span style="color:rgba(150,185,255,0.45);">Low</span><span style="color:#f87171;font-weight:600">${nqFmt(b.l)}</span>` +
+          `<span style="color:rgba(150,185,255,0.45);">Chg</span><span style="color:${badgeCol};font-weight:600">${chgBar >= 0 ? '+' : ''}${chgBar.toFixed(2)}</span>` +
         `</div>`;
-      // position tooltip — avoid edges
-      const TW = 210, TH = 130;
-      let tx = cx + 14, ty = cy - TH / 2;
-      if (tx + TW > rect.width - 10) tx = cx - TW - 10;
+      const TW = 230, TH = 160;
+      let tx = cx + 16, ty = cy - TH / 2;
+      if (tx + TW > rect.width - 10) tx = cx - TW - 12;
       if (ty < 8) ty = 8;
       if (ty + TH > rect.height - 8) ty = rect.height - TH - 8;
       tip.style.left = tx + 'px';
       tip.style.top  = ty + 'px';
     }
-    if (cv) { cv.style.display = 'block'; cv.style.left = cx + 'px'; }
+    if (cv) {
+      cv.style.display = 'block';
+      cv.style.left    = cx + 'px';
+      cv.style.top     = '0';
+      cv.style.bottom  = '0';
+      cv.style.borderLeft = '1px dashed rgba(96,165,250,0.3)';
+      cv.style.width   = '1px';
+      cv.style.background = 'none';
+    }
+    // draw hover dot via a positioned div
+    let hd = document.getElementById('nq-hover-dot');
+    if (!hd) {
+      hd = document.createElement('div');
+      hd.id = 'nq-hover-dot';
+      hd.style.cssText = 'position:absolute;pointer-events:none;z-index:25;transform:translate(-50%,-50%);';
+      document.getElementById('nq-canvas-wrap').appendChild(hd);
+    }
+    hd.style.display = 'block';
+    hd.style.left = cx + 'px';
+    hd.style.top  = cy + 'px';
+    hd.style.width  = '16px';
+    hd.style.height = '16px';
+    hd.style.borderRadius = '50%';
+    hd.style.background = col;
+    hd.style.boxShadow  = '0 0 0 4px ' + (isUp ? 'rgba(52,211,153,0.25)' : 'rgba(248,113,113,0.22)') + ', 0 0 12px ' + col;
     if (ch) { ch.style.display = 'block'; ch.style.top  = cy + 'px'; }
     // live price tag follows hover
     if (tag) { tag.textContent = nqFmt(b.c); tag.style.top = (cy - 9) + 'px'; tag.style.background = col; }
   }
   function onLeave() {
-    ['nq-tooltip','nq-cv','nq-ch'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
+    ['nq-tooltip','nq-cv','nq-ch','nq-hover-dot'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none'; });
     const tag = document.getElementById('nq-price-tag');
     // restore to last close
     if (_nqData && _nqData.bars) {
