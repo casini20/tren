@@ -39,34 +39,27 @@ html,body{width:100%;height:100%;background:#060a14;overflow:hidden;}html{overfl
   overflow:hidden;
 }
 
-/* ── visible blue dot grid ── */
+/* ── no dot grid — bubble glows only ── */
 .shell::before{
   content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
-  background-image:radial-gradient(rgba(96,165,250,.22) 1px, transparent 1px);
-  background-size:24px 24px;
-  /* fade out at very edges only */
-  mask-image:radial-gradient(ellipse 95% 95% at 50% 50%, black 50%, transparent 100%);
-  -webkit-mask-image:radial-gradient(ellipse 95% 95% at 50% 50%, black 50%, transparent 100%);
+  /* soft top-center light source */
+  background:radial-gradient(ellipse 85% 45% at 50% -5%, rgba(37,99,235,.18) 0%, transparent 65%);
 }
 
-/* ── vivid colour blobs ── */
+/* ── dark ambient bubble glows ── */
 .shell::after{
   content:'';position:absolute;inset:0;z-index:0;pointer-events:none;
   background:
-    /* top-center: bright cyan sweep */
-    radial-gradient(ellipse 110% 38% at 50%  -8%,  rgba(56,189,248,.22)  0%, transparent 65%),
-    /* top-left: strong blue anchor */
-    radial-gradient(ellipse 80%  60% at -8%   2%,  rgba(37,99,235,.55)   0%, rgba(29,78,216,.18) 48%, transparent 72%),
-    /* top-right: cyan pop */
-    radial-gradient(ellipse 52%  38% at 108%  2%,  rgba(56,189,248,.32)  0%, transparent 58%),
-    /* mid-left: indigo wash */
-    radial-gradient(ellipse 48%  42% at -5%  58%,  rgba(99,102,241,.24)  0%, transparent 62%),
-    /* bottom-right: blue anchor */
-    radial-gradient(ellipse 68%  52% at 108% 100%, rgba(37,99,235,.38)   0%, transparent 66%),
-    /* bottom-left: soft purple */
-    radial-gradient(ellipse 42%  32% at -4%  98%,  rgba(124,58,237,.18)  0%, transparent 58%),
-    /* center warmth: very faint deep blue */
-    radial-gradient(ellipse 50%  40% at 55%  45%,  rgba(37,99,235,.07)   0%, transparent 70%);
+    /* top-left deep blue bubble */
+    radial-gradient(ellipse 65% 55% at -5%  0%,   rgba(29,78,216,.28)   0%, rgba(29,78,216,.06) 55%, transparent 75%),
+    /* top-right small cyan bubble */
+    radial-gradient(ellipse 38% 30% at 102% 0%,   rgba(56,189,248,.14)  0%, transparent 60%),
+    /* mid-left indigo bubble */
+    radial-gradient(ellipse 42% 40% at -4%  55%,  rgba(79,70,229,.18)   0%, transparent 65%),
+    /* bottom-right blue bubble */
+    radial-gradient(ellipse 55% 48% at 102% 100%, rgba(29,78,216,.22)   0%, transparent 65%),
+    /* bottom-left soft violet */
+    radial-gradient(ellipse 36% 30% at -2%  100%, rgba(109,40,217,.12)  0%, transparent 60%);
 }
 
 .sidebar,.main-wrap{position:relative;z-index:1;}
@@ -1104,7 +1097,7 @@ function nqDraw(data) {
 
   // split into price pane + optional volume pane
   const hasVol = _nqIndicators.vol && bars.some(b => b.v > 0);
-  const TOTAL_H = 290;
+  const TOTAL_H = 300;
   const VOL_H   = hasVol ? 44 : 0;
   const PRICE_H = TOTAL_H - VOL_H;
 
@@ -1135,52 +1128,35 @@ function nqDraw(data) {
   const GREEN = '#10b981', RED = '#ef4444';
   const lineColor = isUp ? GREEN : RED;
 
-  // ── BACKGROUND ──
-  const bgGrad = ctx.createLinearGradient(0, 0, 0, TOTAL_H);
-  bgGrad.addColorStop(0, '#0b1a30');
-  bgGrad.addColorStop(1, '#060d1c');
-  ctx.fillStyle = bgGrad;
+  // ── BACKGROUND — near black ──
+  ctx.fillStyle = '#0b0e1a';
   ctx.fillRect(0, 0, W, TOTAL_H);
-  // subtle left-edge glow
-  const edgeGlow = ctx.createLinearGradient(0, 0, 120, 0);
-  edgeGlow.addColorStop(0, 'rgba(37,99,235,0.08)');
-  edgeGlow.addColorStop(1, 'rgba(0,0,0,0)');
-  ctx.fillStyle = edgeGlow;
-  ctx.fillRect(0, 0, 120, PRICE_H);
 
-  // ── GRID + Y-AXIS (left & right) ──
+  // ── Y-AXIS labels only — no grid lines ──
   const gridCount = 5;
-  ctx.font = '10px Plus Jakarta Sans, sans-serif';
+  ctx.font = '11px Plus Jakarta Sans, sans-serif';
   ctx.textBaseline = 'middle';
   for (let i = 0; i <= gridCount; i++) {
-    const y = PAD_T + (chartH / gridCount) * i;
+    const y     = PAD_T + (chartH / gridCount) * i;
     const price = maxP - (pRange / gridCount) * i;
-    // grid line
-    ctx.strokeStyle = i === 0 ? 'rgba(96,165,250,0.12)' : 'rgba(96,165,250,0.06)';
-    ctx.lineWidth = 1;
-    ctx.setLineDash([3, 6]);
-    ctx.beginPath(); ctx.moveTo(PAD_L, y); ctx.lineTo(W - PAD_R, y); ctx.stroke();
+    // barely visible ghost grid line
+    ctx.strokeStyle = 'rgba(255,255,255,0.04)';
+    ctx.lineWidth   = 1;
     ctx.setLineDash([]);
-    // left label
-    ctx.fillStyle = 'rgba(185,210,255,0.45)';
-    ctx.textAlign = 'right';
-    ctx.fillText(price.toLocaleString('en-US', {maximumFractionDigits:0}), PAD_L - 6, y);
-    // right label
-    ctx.textAlign = 'left';
-    ctx.fillText(price.toLocaleString('en-US', {maximumFractionDigits:0}), W - PAD_R + 6, y);
+    ctx.beginPath(); ctx.moveTo(PAD_L, y); ctx.lineTo(W - PAD_R, y); ctx.stroke();
+    // left label — shorthand (200k, 150k…)
+    ctx.fillStyle  = 'rgba(150,175,220,0.38)';
+    ctx.textAlign  = 'right';
+    ctx.fillText(nqFmtK(price), PAD_L - 8, y);
   }
 
-  // ── X-AXIS ticks ──
+  // ── X-AXIS — clean month labels, no tick marks ──
   const labelEvery = Math.max(1, Math.ceil(bars.length / 8));
-  ctx.fillStyle = 'rgba(185,210,255,0.45)';
-  ctx.textAlign = 'center';
+  ctx.fillStyle    = 'rgba(150,175,220,0.38)';
+  ctx.textAlign    = 'center';
   ctx.textBaseline = 'top';
   for (let i = 0; i < bars.length; i += labelEvery) {
-    const x = toX(i);
-    ctx.fillText(bars[i].label || '', x, PAD_T + chartH + 5);
-    ctx.strokeStyle = 'rgba(96,165,250,0.12)';
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(x, PAD_T + chartH); ctx.lineTo(x, PAD_T + chartH + 3); ctx.stroke();
+    ctx.fillText(bars[i].label || '', toX(i), PAD_T + chartH + 7);
   }
 
   // ── CHART: LINE or CANDLE ──
@@ -1197,11 +1173,11 @@ function nqDraw(data) {
       }
     }
 
-    // gradient fill
+    // gradient fill — very subtle, like the reference
     const grad = ctx.createLinearGradient(0, PAD_T, 0, PAD_T + chartH);
-    grad.addColorStop(0,    isUp ? 'rgba(52,211,153,0.38)' : 'rgba(248,113,113,0.32)');
-    grad.addColorStop(0.55, isUp ? 'rgba(52,211,153,0.07)' : 'rgba(248,113,113,0.06)');
-    grad.addColorStop(1,    'rgba(0,0,0,0)');
+    grad.addColorStop(0,   isUp ? 'rgba(167,139,250,0.22)' : 'rgba(248,113,113,0.18)');
+    grad.addColorStop(0.5, isUp ? 'rgba(167,139,250,0.05)' : 'rgba(248,113,113,0.04)');
+    grad.addColorStop(1,   'rgba(0,0,0,0)');
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(pts[0].x, PAD_T + chartH);
@@ -1216,14 +1192,15 @@ function nqDraw(data) {
     ctx.fill();
     ctx.restore();
 
-    // smooth line
+    // smooth line — consistent elegant color
+    const lineCol = isUp ? '#a78bfa' : '#f87171';
     ctx.beginPath();
-    ctx.strokeStyle = isUp ? '#34d399' : '#f87171';
-    ctx.lineWidth   = 2.2;
+    ctx.strokeStyle = lineCol;
+    ctx.lineWidth   = 2;
     ctx.lineJoin    = 'round';
     ctx.lineCap     = 'round';
-    ctx.shadowColor = isUp ? '#34d399' : '#f87171';
-    ctx.shadowBlur  = 16;
+    ctx.shadowColor = lineCol;
+    ctx.shadowBlur  = 10;
     smoothBez(pts);
     ctx.stroke();
     ctx.shadowBlur = 0;
@@ -1232,10 +1209,10 @@ function nqDraw(data) {
     const lastBar  = bars[bars.length - 1];
     const priceY   = toY(lastBar.c);
     ctx.save();
-    ctx.strokeStyle = lineColor;
+    ctx.strokeStyle = lineCol;
     ctx.lineWidth   = 1;
-    ctx.globalAlpha = 0.35;
-    ctx.setLineDash([4, 5]);
+    ctx.globalAlpha = 0.3;
+    ctx.setLineDash([3, 5]);
     ctx.beginPath(); ctx.moveTo(PAD_L, priceY); ctx.lineTo(W - PAD_R, priceY); ctx.stroke();
     ctx.setLineDash([]);
     ctx.globalAlpha = 1;
@@ -1245,20 +1222,20 @@ function nqDraw(data) {
     const lx = toX(bars.length - 1), ly = toY(bars[bars.length-1].c);
     // outer ring
     ctx.beginPath(); ctx.arc(lx, ly, 9, 0, Math.PI * 2);
-    ctx.fillStyle = isUp ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.08)';
+    ctx.fillStyle = isUp ? 'rgba(167,139,250,0.14)' : 'rgba(248,113,113,0.12)';
     ctx.fill();
     // mid ring
     ctx.beginPath(); ctx.arc(lx, ly, 6, 0, Math.PI * 2);
-    ctx.fillStyle = isUp ? 'rgba(16,185,129,0.22)' : 'rgba(239,68,68,0.18)';
+    ctx.fillStyle = isUp ? 'rgba(167,139,250,0.28)' : 'rgba(248,113,113,0.22)';
     ctx.fill();
     // core dot
     ctx.beginPath(); ctx.arc(lx, ly, 3.5, 0, Math.PI * 2);
-    ctx.fillStyle = lineColor;
-    ctx.shadowColor = lineColor;
+    ctx.fillStyle = lineCol;
+    ctx.shadowColor = lineCol;
     ctx.shadowBlur  = 8;
     ctx.fill();
     ctx.shadowBlur = 0;
-    ctx.strokeStyle = '#060d1c';
+    ctx.strokeStyle = '#0b0e1a';
     ctx.lineWidth   = 1.5;
     ctx.stroke();
 
@@ -1360,7 +1337,7 @@ function nqDraw(data) {
       const x  = toX(i);
       const h  = Math.max(1, (b.v / maxVol) * volH);
       const co = b.c >= b.o;
-      ctx.fillStyle = co ? 'rgba(52,211,153,0.65)' : 'rgba(248,113,113,0.6)';
+      ctx.fillStyle = co ? 'rgba(167,139,250,0.4)' : 'rgba(248,113,113,0.35)';
       ctx.fillRect(x - barW/2, volTop + volH - h, barW, h);
     });
     // max vol label
@@ -1373,7 +1350,7 @@ function nqDraw(data) {
   // ── LAST PRICE LINE ──
   const lastClose = bars[bars.length-1].c;
   const lastY = toY(lastClose);
-  ctx.strokeStyle = isUp ? 'rgba(16,185,129,0.6)' : 'rgba(239,68,68,0.6)';
+  ctx.strokeStyle = isUp ? 'rgba(167,139,250,0.5)' : 'rgba(248,113,113,0.5)';
   ctx.lineWidth = 1;
   ctx.setLineDash([3, 4]);
   ctx.beginPath(); ctx.moveTo(PAD_L, lastY); ctx.lineTo(W - PAD_R, lastY); ctx.stroke();
@@ -1384,7 +1361,7 @@ function nqDraw(data) {
     tag.style.display = 'block';
     tag.textContent = lastClose.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
     tag.style.top = (lastY - 9) + 'px';
-    tag.style.background = isUp ? '#10b981' : '#ef4444';
+    tag.style.background = isUp ? '#7c3aed' : '#dc2626';
   }
 
   // ── HEADER STATS ──
@@ -1495,8 +1472,9 @@ function nqDraw(data) {
     hd.style.width  = '16px';
     hd.style.height = '16px';
     hd.style.borderRadius = '50%';
-    hd.style.background = col;
-    hd.style.boxShadow  = '0 0 0 4px ' + (isUp ? 'rgba(52,211,153,0.25)' : 'rgba(248,113,113,0.22)') + ', 0 0 12px ' + col;
+    const hCol = isUp ? '#a78bfa' : '#f87171';
+    hd.style.background = hCol;
+    hd.style.boxShadow  = '0 0 0 5px ' + (isUp ? 'rgba(167,139,250,0.22)' : 'rgba(248,113,113,0.2)') + ', 0 0 14px ' + hCol;
     if (ch) { ch.style.display = 'block'; ch.style.top  = cy + 'px'; }
     // live price tag follows hover
     if (tag) { tag.textContent = nqFmt(b.c); tag.style.top = (cy - 9) + 'px'; tag.style.background = col; }
