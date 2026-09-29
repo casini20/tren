@@ -1104,7 +1104,7 @@ function nqDraw(data) {
 
   // split into price pane + optional volume pane
   const hasVol = _nqIndicators.vol && bars.some(b => b.v > 0);
-  const TOTAL_H = 220;
+  const TOTAL_H = 290;
   const VOL_H   = hasVol ? 44 : 0;
   const PRICE_H = TOTAL_H - VOL_H;
 
@@ -1136,8 +1136,17 @@ function nqDraw(data) {
   const lineColor = isUp ? GREEN : RED;
 
   // ── BACKGROUND ──
-  ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg3').trim() || '#0c1525';
+  const bgGrad = ctx.createLinearGradient(0, 0, 0, TOTAL_H);
+  bgGrad.addColorStop(0, '#0b1a30');
+  bgGrad.addColorStop(1, '#060d1c');
+  ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, W, TOTAL_H);
+  // subtle left-edge glow
+  const edgeGlow = ctx.createLinearGradient(0, 0, 120, 0);
+  edgeGlow.addColorStop(0, 'rgba(37,99,235,0.08)');
+  edgeGlow.addColorStop(1, 'rgba(0,0,0,0)');
+  ctx.fillStyle = edgeGlow;
+  ctx.fillRect(0, 0, 120, PRICE_H);
 
   // ── GRID + Y-AXIS (left & right) ──
   const gridCount = 5;
@@ -1147,13 +1156,13 @@ function nqDraw(data) {
     const y = PAD_T + (chartH / gridCount) * i;
     const price = maxP - (pRange / gridCount) * i;
     // grid line
-    ctx.strokeStyle = 'rgba(255,255,255,0.045)';
+    ctx.strokeStyle = i === 0 ? 'rgba(96,165,250,0.12)' : 'rgba(96,165,250,0.06)';
     ctx.lineWidth = 1;
-    ctx.setLineDash([4, 6]);
+    ctx.setLineDash([3, 6]);
     ctx.beginPath(); ctx.moveTo(PAD_L, y); ctx.lineTo(W - PAD_R, y); ctx.stroke();
     ctx.setLineDash([]);
     // left label
-    ctx.fillStyle = 'rgba(240,244,255,0.3)';
+    ctx.fillStyle = 'rgba(185,210,255,0.45)';
     ctx.textAlign = 'right';
     ctx.fillText(price.toLocaleString('en-US', {maximumFractionDigits:0}), PAD_L - 6, y);
     // right label
@@ -1163,13 +1172,13 @@ function nqDraw(data) {
 
   // ── X-AXIS ticks ──
   const labelEvery = Math.max(1, Math.ceil(bars.length / 8));
-  ctx.fillStyle = 'rgba(240,244,255,0.3)';
+  ctx.fillStyle = 'rgba(185,210,255,0.45)';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'top';
   for (let i = 0; i < bars.length; i += labelEvery) {
     const x = toX(i);
     ctx.fillText(bars[i].label || '', x, PAD_T + chartH + 5);
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.strokeStyle = 'rgba(96,165,250,0.12)';
     ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(x, PAD_T + chartH); ctx.lineTo(x, PAD_T + chartH + 3); ctx.stroke();
   }
@@ -1178,8 +1187,9 @@ function nqDraw(data) {
   if (_nqChartType === 'line') {
     // gradient fill under line
     const grad = ctx.createLinearGradient(0, PAD_T, 0, PAD_T + chartH);
-    grad.addColorStop(0, isUp ? 'rgba(16,185,129,0.15)' : 'rgba(239,68,68,0.12)');
-    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    grad.addColorStop(0,   isUp ? 'rgba(16,185,129,0.38)' : 'rgba(239,68,68,0.32)');
+    grad.addColorStop(0.45,isUp ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.10)');
+    grad.addColorStop(1,   'rgba(0,0,0,0)');
     ctx.beginPath();
     ctx.moveTo(toX(0), PAD_T + chartH);
     bars.forEach((b, i) => ctx.lineTo(toX(i), toY(b.c)));
@@ -1190,21 +1200,46 @@ function nqDraw(data) {
     // line
     ctx.beginPath();
     ctx.strokeStyle = lineColor;
-    ctx.lineWidth = 2;
+    ctx.lineWidth = 2.5;
     ctx.lineJoin = 'round';
     ctx.shadowColor = lineColor;
-    ctx.shadowBlur = 6;
+    ctx.shadowBlur = 14;
     bars.forEach((b, i) => i === 0 ? ctx.moveTo(toX(i), toY(b.c)) : ctx.lineTo(toX(i), toY(b.c)));
     ctx.stroke();
     ctx.shadowBlur = 0;
-    // last price dot
+
+    // horizontal dashed line at current price
+    const lastBar  = bars[bars.length - 1];
+    const priceY   = toY(lastBar.c);
+    ctx.save();
+    ctx.strokeStyle = lineColor;
+    ctx.lineWidth   = 1;
+    ctx.globalAlpha = 0.35;
+    ctx.setLineDash([4, 5]);
+    ctx.beginPath(); ctx.moveTo(PAD_L, priceY); ctx.lineTo(W - PAD_R, priceY); ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.globalAlpha = 1;
+    ctx.restore();
+
+    // last price dot — glowing rings
     const lx = toX(bars.length - 1), ly = toY(bars[bars.length-1].c);
-    ctx.beginPath();
-    ctx.arc(lx, ly, 4, 0, Math.PI * 2);
-    ctx.fillStyle = lineColor;
+    // outer ring
+    ctx.beginPath(); ctx.arc(lx, ly, 9, 0, Math.PI * 2);
+    ctx.fillStyle = isUp ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.08)';
     ctx.fill();
-    ctx.strokeStyle = '#0c1525';
-    ctx.lineWidth = 2;
+    // mid ring
+    ctx.beginPath(); ctx.arc(lx, ly, 6, 0, Math.PI * 2);
+    ctx.fillStyle = isUp ? 'rgba(16,185,129,0.22)' : 'rgba(239,68,68,0.18)';
+    ctx.fill();
+    // core dot
+    ctx.beginPath(); ctx.arc(lx, ly, 3.5, 0, Math.PI * 2);
+    ctx.fillStyle = lineColor;
+    ctx.shadowColor = lineColor;
+    ctx.shadowBlur  = 8;
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.strokeStyle = '#060d1c';
+    ctx.lineWidth   = 1.5;
     ctx.stroke();
 
   } else {
@@ -1238,9 +1273,11 @@ function nqDraw(data) {
   if (_nqIndicators.ema9) {
     const ema9 = nqEMA(bars.map(b => b.c), 9);
     ctx.beginPath();
-    ctx.strokeStyle = '#f59e0b';
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = '#fbbf24';
+    ctx.lineWidth = 1.8;
     ctx.lineJoin = 'round';
+    ctx.shadowColor = '#f59e0b';
+    ctx.shadowBlur = 4;
     ctx.setLineDash([]);
     let started = false;
     ema9.forEach((v, i) => {
@@ -1249,6 +1286,7 @@ function nqDraw(data) {
       started = true;
     });
     ctx.stroke();
+    ctx.shadowBlur = 0;
     // label at end
     const lastEma9 = ema9.filter(v => v != null).pop();
     if (lastEma9) {
@@ -1264,8 +1302,10 @@ function nqDraw(data) {
   if (_nqIndicators.ema21) {
     const ema21 = nqEMA(bars.map(b => b.c), 21);
     ctx.beginPath();
-    ctx.strokeStyle = '#818cf8';
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = '#a5b4fc';
+    ctx.lineWidth = 1.8;
+    ctx.shadowColor = '#818cf8';
+    ctx.shadowBlur = 3;
     ctx.setLineDash([4, 3]);
     let started = false;
     ema21.forEach((v, i) => {
@@ -1274,6 +1314,7 @@ function nqDraw(data) {
       started = true;
     });
     ctx.stroke();
+    ctx.shadowBlur = 0;
     ctx.setLineDash([]);
     const lastEma21 = ema21.filter(v => v != null).pop();
     if (lastEma21) {
@@ -1293,11 +1334,11 @@ function nqDraw(data) {
     const maxVol  = Math.max(...volumes, 1);
     const barW    = Math.max(1, chartW / bars.length * 0.65);
     // separator
-    ctx.strokeStyle = 'rgba(255,255,255,0.07)';
+    ctx.strokeStyle = 'rgba(96,165,250,0.12)';
     ctx.lineWidth = 1;
     ctx.beginPath(); ctx.moveTo(PAD_L, PRICE_H); ctx.lineTo(W - PAD_R, PRICE_H); ctx.stroke();
     // Vol label
-    ctx.fillStyle = 'rgba(240,244,255,0.25)';
+    ctx.fillStyle = 'rgba(185,210,255,0.4)';
     ctx.font = '9px Plus Jakarta Sans, sans-serif';
     ctx.textAlign = 'right';
     ctx.textBaseline = 'top';
@@ -1307,7 +1348,7 @@ function nqDraw(data) {
       const x  = toX(i);
       const h  = Math.max(1, (b.v / maxVol) * volH);
       const co = b.c >= b.o;
-      ctx.fillStyle = co ? 'rgba(16,185,129,0.45)' : 'rgba(239,68,68,0.4)';
+      ctx.fillStyle = co ? 'rgba(52,211,153,0.65)' : 'rgba(248,113,113,0.6)';
       ctx.fillRect(x - barW/2, volTop + volH - h, barW, h);
     });
     // max vol label
