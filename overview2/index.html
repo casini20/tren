@@ -533,10 +533,33 @@ html,body{width:100%;height:100%;background:#060a14;overflow:hidden;}html{overfl
     </a>
 
     <!-- search -->
-    <div class="s-search" onclick="navTo('https://trenai.vercel.app/search')">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" ><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <div class="s-search" id="s-search-bar" onclick="openSearch()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;opacity:.5;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <span>Search</span>
       <span class="s-search-kbd">⌘K</span>
+    </div>
+
+    <!-- search overlay -->
+    <div id="s-search-overlay" style="display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);" onclick="closeSearch()">
+      <div id="s-search-modal" onclick="event.stopPropagation()" style="position:absolute;top:18%;left:50%;transform:translateX(-50%);width:min(560px,90vw);background:rgba(8,14,28,.97);border:1px solid rgba(96,165,250,.22);border-radius:18px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.7);">
+        <!-- input -->
+        <div style="display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid rgba(96,165,250,.1);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(150,185,255,.55)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="s-search-input" type="text" placeholder="Search pages, tools…" autocomplete="off"
+            style="flex:1;background:none;border:none;outline:none;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:500;color:#e4eeff;caret-color:var(--al);"
+            oninput="filterSearch(this.value)"
+            onkeydown="searchKey(event)" />
+          <kbd onclick="closeSearch()" style="font-size:11px;padding:2px 7px;border-radius:6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(150,185,255,.5);cursor:pointer;">ESC</kbd>
+        </div>
+        <!-- results -->
+        <div id="s-search-results" style="padding:8px;max-height:360px;overflow-y:auto;scrollbar-width:thin;"></div>
+        <!-- footer -->
+        <div style="padding:8px 16px;border-top:1px solid rgba(96,165,250,.08);display:flex;align-items:center;gap:12px;">
+          <span style="font-size:10px;color:rgba(150,185,255,.3);">↑↓ navigate</span>
+          <span style="font-size:10px;color:rgba(150,185,255,.3);">↵ open</span>
+          <span style="font-size:10px;color:rgba(150,185,255,.3);">ESC close</span>
+        </div>
+      </div>
     </div>
 
     <div class="s-nav">
@@ -3806,6 +3829,122 @@ KEY LINKS:
   // Fallback attach
   setTimeout(function(){ attachObserver(); sync(); }, 2000);
 })();
+</script>
+<script>
+// ── QUICK SEARCH ─────────────────────────────────────────────────
+const SEARCH_ITEMS = [
+  { label:'Overview',        icon:'📊', url:'https://trenai.vercel.app/overview',       group:'Trading' },
+  { label:'Live Signals',    icon:'🟢', url:'https://trenai.vercel.app/live-signals',   group:'Trading' },
+  { label:'Recent Trades',   icon:'📈', url:'https://trenai.vercel.app/signals',        group:'Trading' },
+  { label:'Journal',         icon:'📓', url:'https://trenai.vercel.app/journal',        group:'Trading' },
+  { label:'AI Analysis',     icon:'✨', url:'https://trenai.vercel.app/ai-analysis',    group:'Tools'   },
+  { label:'TrenBot',         icon:'🤖', url:'https://trenai.vercel.app/trenbot',        group:'Tools'   },
+  { label:'AutoSignals',     icon:'⚡', url:'https://trenai.vercel.app/autosignals',    group:'Tools'   },
+  { label:'Indicator',       icon:'📉', url:'https://trenai.vercel.app/indicator',      group:'Tools'   },
+  { label:'Wallet Tracker',  icon:'💼', url:'https://trenai.vercel.app/wallet-tracker', group:'Tools'   },
+  { label:'All Plans',       icon:'⭐', url:'https://trenai.vercel.app/upgrade',        group:'Account' },
+  { label:'Settings',        icon:'⚙️', url:'https://trenai.vercel.app/settings',       group:'Account' },
+  { label:'Community Chat',  icon:'💬', url:'#',                                        group:'Account', fn:'document.getElementById("gc-fab").click()' },
+];
+
+let _searchIdx = -1;
+
+function openSearch() {
+  const ov = document.getElementById('s-search-overlay');
+  const inp = document.getElementById('s-search-input');
+  if (!ov) return;
+  ov.style.display = 'block';
+  setTimeout(() => { inp && inp.focus(); }, 60);
+  filterSearch('');
+}
+
+function closeSearch() {
+  const ov = document.getElementById('s-search-overlay');
+  const inp = document.getElementById('s-search-input');
+  if (ov) ov.style.display = 'none';
+  if (inp) inp.value = '';
+  _searchIdx = -1;
+}
+
+function filterSearch(q) {
+  const box = document.getElementById('s-search-results');
+  if (!box) return;
+  _searchIdx = -1;
+  const query = q.trim().toLowerCase();
+  const hits = query
+    ? SEARCH_ITEMS.filter(i => i.label.toLowerCase().includes(query) || i.group.toLowerCase().includes(query))
+    : SEARCH_ITEMS;
+
+  if (!hits.length) {
+    box.innerHTML = '<div style="padding:28px;text-align:center;font-size:13px;color:rgba(150,185,255,.35);">No results for "' + q + '"</div>';
+    return;
+  }
+
+  // group by section
+  const groups = {};
+  hits.forEach(item => { (groups[item.group] = groups[item.group] || []).push(item); });
+
+  let html = '';
+  Object.entries(groups).forEach(([grp, items]) => {
+    html += `<div style="font-size:9.5px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:rgba(150,185,255,.28);padding:8px 10px 4px;">${grp}</div>`;
+    items.forEach(item => {
+      html += `<div class="s-search-hit" data-url="${item.url}" data-fn="${item.fn||''}"
+        style="display:flex;align-items:center;gap:11px;padding:9px 12px;border-radius:10px;cursor:pointer;transition:background .12s;font-size:13px;font-weight:500;color:rgba(185,210,255,.82);"
+        onmouseenter="highlightSearch(this)"
+        onclick="runSearchItem(this)">
+        <span style="font-size:15px;width:22px;text-align:center;">${item.icon}</span>
+        <span>${item.label}</span>
+        <span style="margin-left:auto;font-size:11px;color:rgba(150,185,255,.3);">${grp}</span>
+      </div>`;
+    });
+  });
+  box.innerHTML = html;
+}
+
+function highlightSearch(el) {
+  document.querySelectorAll('.s-search-hit').forEach(h => h.style.background = '');
+  el.style.background = 'rgba(96,165,250,.1)';
+  const els = [...document.querySelectorAll('.s-search-hit')];
+  _searchIdx = els.indexOf(el);
+}
+
+function runSearchItem(el) {
+  const fn = el.dataset.fn;
+  const url = el.dataset.url;
+  closeSearch();
+  if (fn) { try { eval(fn); } catch(e){} }
+  else if (url && url !== '#') navTo(url);
+}
+
+function searchKey(e) {
+  const hits = [...document.querySelectorAll('.s-search-hit')];
+  if (!hits.length) return;
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    _searchIdx = Math.min(_searchIdx + 1, hits.length - 1);
+    hits.forEach((h,i) => h.style.background = i === _searchIdx ? 'rgba(96,165,250,.1)' : '');
+    hits[_searchIdx].scrollIntoView({ block:'nearest' });
+  } else if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    _searchIdx = Math.max(_searchIdx - 1, 0);
+    hits.forEach((h,i) => h.style.background = i === _searchIdx ? 'rgba(96,165,250,.1)' : '');
+    hits[_searchIdx].scrollIntoView({ block:'nearest' });
+  } else if (e.key === 'Enter') {
+    if (_searchIdx >= 0 && hits[_searchIdx]) runSearchItem(hits[_searchIdx]);
+  } else if (e.key === 'Escape') {
+    closeSearch();
+  }
+}
+
+// ⌘K / Ctrl+K global shortcut
+document.addEventListener('keydown', e => {
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+    e.preventDefault();
+    const ov = document.getElementById('s-search-overlay');
+    ov && ov.style.display !== 'none' ? closeSearch() : openSearch();
+  }
+  if (e.key === 'Escape') closeSearch();
+});
 </script>
 </body>
 </html>
