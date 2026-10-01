@@ -473,12 +473,123 @@ html,body{width:100%;height:100%;background:#060a14;overflow:hidden;}html{overfl
 /* ── Mobile ── */
 .mobile-toggle{display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;background:rgba(12,20,36,.8);border:1px solid rgba(96,165,250,.14);color:var(--text);font-size:18px;cursor:pointer;flex-shrink:0;}
 .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);z-index:19;}
-@media(max-width:1100px){.ov-grid{grid-template-columns:240px 1fr 260px;}}
-@media(max-width:900px){.ov-grid{grid-template-columns:1fr 1fr;}.ov-left{grid-column:1;}.nq-card{grid-column:1 / -1;order:-1;}.stats-panel{grid-column:2;}}
-@media(max-width:850px){.mobile-toggle{display:flex;}.sidebar{position:fixed;left:0;top:0;transform:translateX(-100%);transition:transform .35s cubic-bezier(.4,0,.2,1);z-index:20;box-shadow:4px 0 32px rgba(0,0,0,.5);}.sidebar.open{transform:translateX(0);}.sidebar-overlay.open{display:block;}.main-wrap{width:100%;}.topbar{padding:0 1.2rem;}.page{padding:1.2rem;}}
-@media(max-width:720px){.ov-grid{grid-template-columns:1fr;}.stats-panel{grid-column:1;}.edge-grid{grid-template-columns:repeat(2,1fr);}.intel-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:600px){.sg{grid-template-columns:1fr 1fr;}.sig-grid{grid-template-columns:1fr;}.edge-grid{grid-template-columns:1fr 1fr;}.intel-grid{grid-template-columns:1fr;}.dow-card{min-width:60px;}.sp-grid{grid-template-columns:1fr 1fr;}}
-@media(max-width:480px){.sig-card{min-width:0;width:100%;box-sizing:border-box;}.page{overflow-x:hidden;}.shell{overflow:hidden;}}
+
+/* ══════════════════════════════════════════
+   RESPONSIVE — all breakpoints
+══════════════════════════════════════════ */
+
+/* ── Large laptop: shrink grid cols a bit ── */
+@media(max-width:1280px){
+  .ov-grid{grid-template-columns:248px 1fr 268px;}
+}
+
+/* ── Small laptop / large tablet (landscape) ── */
+@media(max-width:1100px){
+  .ov-grid{grid-template-columns:220px 1fr 240px;}
+  .edge-grid{grid-template-columns:repeat(2,1fr);}
+}
+
+/* ── Tablet landscape / small laptop ── */
+@media(max-width:960px){
+  /* Stack left + stats beside, NQ full width on top */
+  .ov-grid{
+    grid-template-columns:1fr 1fr;
+    grid-template-rows:auto auto;
+  }
+  .ov-left{grid-column:1;grid-row:2;}
+  .nq-card{grid-column:1 / -1;grid-row:1;}
+  .stats-panel{grid-column:2;grid-row:2;}
+  .intel-grid{grid-template-columns:1fr 1fr;}
+}
+
+/* ── Tablet portrait — sidebar becomes drawer ── */
+@media(max-width:850px){
+  /* sidebar drawer */
+  .mobile-toggle{display:flex;}
+  .sidebar{
+    position:fixed;left:0;top:0;height:100dvh;
+    transform:translateX(-100%);
+    transition:transform .32s cubic-bezier(.4,0,.2,1);
+    z-index:100;
+    box-shadow:6px 0 40px rgba(0,0,0,.6);
+  }
+  .sidebar.open{transform:translateX(0);}
+  .sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(3px);z-index:99;}
+  .sidebar-overlay.open{display:block;}
+  .main-wrap{width:100%;}
+  /* topbar */
+  .topbar{padding:0 1rem;height:52px;}
+  .tb-title{font-size:14px;}
+  .t-pill{display:none;}
+  /* page */
+  .page{padding:1.2rem 1.2rem 2rem;}
+  /* 2-col grid stays */
+  .ov-grid{gap:10px;}
+}
+
+/* ── Tablet small / large phone landscape ── */
+@media(max-width:720px){
+  /* single column overview */
+  .ov-grid{grid-template-columns:1fr;gap:10px;}
+  .ov-left{grid-column:1;grid-row:auto;}
+  .nq-card{grid-column:1;grid-row:auto;order:0;}
+  .stats-panel{grid-column:1;grid-row:auto;}
+  /* hero card row layout on small screens */
+  .ov-left{flex-direction:row;flex-wrap:wrap;}
+  .hero-card{flex:1 1 calc(50% - 5px);min-width:200px;}
+  .ai-promo-card{flex:1 1 calc(50% - 5px);min-width:200px;}
+  /* stats 2x2 stays */
+  .sp-grid{grid-template-columns:1fr 1fr;}
+  /* section grids */
+  .edge-grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .intel-grid{grid-template-columns:1fr 1fr;gap:10px;}
+  .sig-grid{grid-template-columns:1fr 1fr;}
+  /* controls row wraps */
+  .page > div:first-child{flex-direction:column;align-items:flex-start;gap:8px;}
+}
+
+/* ── Phone landscape / small phone ── */
+@media(max-width:600px){
+  .page{padding:1rem 1rem 2rem;}
+  /* single column everything */
+  .ov-grid{grid-template-columns:1fr;}
+  .ov-left{flex-direction:column;}
+  .hero-card{flex:none;width:100%;}
+  .ai-promo-card{flex:none;width:100%;}
+  .sp-grid{grid-template-columns:1fr 1fr;}
+  .edge-grid{grid-template-columns:1fr 1fr;}
+  .intel-grid{grid-template-columns:1fr;}
+  .sig-grid{grid-template-columns:1fr;}
+  .dow-grid{flex-wrap:wrap;}
+  .dow-card{min-width:calc(25% - 6px);flex:1;}
+  /* topbar controls */
+  .tb-right > *:not(.nb):not(.prof-wrap){display:none;}
+  /* search modal full width */
+  #s-search-modal{width:95vw !important;top:8% !important;}
+}
+
+/* ── Phone portrait ── */
+@media(max-width:420px){
+  .page{padding:.85rem .85rem 2rem;}
+  .topbar{padding:0 .85rem;height:50px;}
+  .sp-grid{grid-template-columns:1fr 1fr;}
+  .edge-grid{grid-template-columns:1fr 1fr;}
+  .dow-card{min-width:calc(33% - 5px);}
+  .pnl-card,.ca,.nq-card,.hero-card,.ai-promo-card,.stats-panel{border-radius:16px;}
+  .sc,.sig-card,.sp-card{border-radius:12px;}
+  /* hero value smaller */
+  .hc-val{font-size:30px;}
+  /* chart controls wrap & shrink */
+  .tf-btn{padding:4px 8px;font-size:10.5px;}
+  .src-btn{padding:5px 10px;font-size:11px;}
+}
+
+/* Safety — no overflow on any size */
+@media(max-width:850px){
+  .shell{overflow:hidden;}
+  .page{overflow-x:hidden;}
+  .sig-card{min-width:0;box-sizing:border-box;}
+}
 </style>
 
 
@@ -529,7 +640,7 @@ html,body{width:100%;height:100%;background:#060a14;overflow:hidden;}html{overfl
       <div class="s-logo-mark">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
       </div>
-      <span class="s-logo-text">tren<span style="color:var(--al);">.</span>ai</span>
+      <span class="s-logo-text">tren</span>
     </a>
 
     <!-- search -->
@@ -1786,12 +1897,31 @@ document.addEventListener('click',e=>{
 
 function toggleSidebar(){
   const sb=document.getElementById('sidebar'),ov=document.getElementById('sb-overlay');
-  sb.classList.toggle('open');ov.classList.toggle('open');
+  const opening = !sb.classList.contains('open');
+  sb.classList.toggle('open'); ov.classList.toggle('open');
+  document.body.style.overflow = opening ? 'hidden' : '';
 }
 function closeSidebar(){
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('sb-overlay').classList.remove('open');
+  document.body.style.overflow = '';
 }
+
+// ── Swipe-left to close sidebar on mobile ──────────────────────
+(function(){
+  let startX=0, startY=0;
+  const sb = () => document.getElementById('sidebar');
+  document.addEventListener('touchstart', e => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+  }, {passive:true});
+  document.addEventListener('touchend', e => {
+    if (!sb() || !sb().classList.contains('open')) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    const dy = Math.abs(e.changedTouches[0].clientY - startY);
+    if (dx < -48 && dy < 60) closeSidebar();
+  }, {passive:true});
+})();
 
 // ── SIGNAL CARD ───────────────────────────────────────────────────
 function getJournalTrades(){
